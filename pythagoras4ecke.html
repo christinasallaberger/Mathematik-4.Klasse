@@ -68,7 +68,7 @@ svg{width:100%;height:auto;display:block}
 .merke span{background:var(--marker);color:var(--ink);padding:1px 6px;border-radius:3px}
 .way-title{margin:18px 0 4px;font-size:15px;color:var(--muted)}
 .way{font-family:"Patrick Hand",cursive;font-size:25px;line-height:1.55;color:var(--pen);min-height:44px;border-left:3px solid var(--red);padding-left:14px}
-.way:empty::before{content:"Hier entsteht dein Rechenweg.";color:var(--muted);font-size:19px}
+.wayinner:empty::before{content:"Hier entsteht dein Rechenweg.";color:var(--muted);font-size:19px}
 .wline{animation:write .35s ease-out}
 @keyframes write{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
 .wline.final{display:inline-block;border-bottom:3px double var(--pen);margin-top:2px}
@@ -151,6 +151,16 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pen);outline-of
 .dim{stroke:var(--muted);stroke-width:1.5}
 .vtx{font-size:13px;fill:var(--muted);pointer-events:none}
 .n.expr{width:150px}
+.tasknav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.tnav{font:inherit;font-size:15px;font-weight:700;min-width:44px;padding:6px 10px;border:2px solid var(--ink);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer}
+.tnav.solved{border-color:var(--green);color:var(--green);background:var(--green-soft)}
+.tnav.skipped{border-color:var(--ink);background:var(--marker);color:var(--ink)}
+.tnav.cur{outline:3px solid var(--pen);outline-offset:1px}
+.tnav.sum{font-weight:400}
+.tnav:disabled{opacity:.4;cursor:default}
+.latetag{font-size:13px;color:var(--muted)}
+.sumbtns{display:flex;flex-wrap:wrap;gap:10px}
+.next.ghost{background:transparent;color:var(--ink);border:2px solid var(--ink)}
 .skip{font:inherit;font-size:15px;margin-top:12px;background:none;border:2px dashed var(--line);color:var(--muted);border-radius:10px;padding:8px 14px;cursor:pointer}
 .skip:hover{color:var(--ink);border-color:var(--ink)}
 tr.skiprow td{color:var(--muted)}
@@ -171,6 +181,7 @@ tr.skiprow td:first-child{box-shadow:inset 4px 0 var(--marker)}
       <div class="namerow"><input id="name" class="namein" autocomplete="off" placeholder="Vor- und Nachname"><button class="next" id="nameOk">Los geht's</button></div>
     </div>
   </div>
+  <div class="tasknav" id="tasknav"></div>
   <p class="score" id="score">Gelöst: 0 von 6, davon ohne Fehler: 0</p>
   <div class="grid">
     <div class="sheet">
@@ -205,11 +216,10 @@ function parseNum(s){s=String(s).trim().replace(',','.');if(s==='')return NaN;re
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function norm(s){return String(s).toLowerCase().replace(/\s+/g,'').replace(/[−–]/g,'-').replace(/[:÷]/g,'/').replace(/₁/g,'1').replace(/[*·]/g,'').replace(/,/g,'.');}
 function nextTriple(){if(!bag.length){bag=shuffle(TRIPLES);if(bag[bag.length-1]===lastT)bag.reverse();}lastT=bag.pop();return lastT;}
-function updateScore(){const n=$('#name').value.trim();$('#score').textContent=(n?n+': ':'')+`Gelöst: ${state.solved} von ${ROUND}, davon ohne Fehler: ${state.perfect}`+(state.skipped?`, übersprungen: ${state.skipped}`:'');}
 const par=e=>/[+\-−\/ ]/.test(e)?`(${e})`:e;
 
-function newTask(){
-  const [fig,find]=PLAN[state.idx%ROUND];state.idx++;
+function makeTask(i){
+  const [fig,find]=PLAN[i];
   let t0=nextTriple();if(fig==='para1'&&Math.max(t0[0],t0[1])<12){const k=Math.ceil(12/Math.max(t0[0],t0[1]));t0=t0.map(v=>v*k);}
   const lo=Math.min(t0[0],t0[1]),hi=Math.max(t0[0],t0[1]),Hv=t0[2];
   let T;
@@ -244,14 +254,89 @@ function newTask(){
   T.known=find==='leg'?(T.unkLeg==='legH'?T.legV:T.legH):null;
   T.sq=find==='hyp'?T.legH.val**2+T.legV.val**2:Hv**2-T.known.val**2;
   T.ans=Math.sqrt(T.sq);
-  task=T;
-  $('#steps').innerHTML='';$('#way').innerHTML='';$('#done').hidden=true;
-  $('#taskText').innerHTML=`<span class="tag">Aufgabe ${(state.idx-1)%ROUND+1} von ${ROUND} · ${T.figName}</span><br>Im ${T.figName==='Deltoid'?'Deltoid':T.figName==='Parallelogramm'?'Parallelogramm':'gleichschenkligen Trapez'} ist ein rechtwinkliges Dreieck eingefärbt. Berechne ${T.desc}.`;
-  draw();
-  $('#skipBtn').hidden=!state.nameLocked;
-  if(!state.nameLocked){T.waiting=true;$('#steps').innerHTML='<div class="step"><p>Gib oben zuerst deinen Namen ein und tippe auf „Los geht\'s“. Der Name kann danach nicht mehr geändert werden.</p></div>';return;}
-  stepIdentify();
+  T.no=i+1;T.status='open';T.started=false;T.wasSkipped=false;
+  T.stepsEl=document.createElement('div');T.stepsEl.className='steps';T.stepsEl.hidden=true;$('#steps').appendChild(T.stepsEl);
+  T.wayEl=document.createElement('div');T.wayEl.className='wayinner';T.wayEl.hidden=true;$('#way').appendChild(T.wayEl);
+  return T;
 }
+function newRound(){
+  $('#steps').innerHTML='';$('#way').innerHTML='';
+  state.tasks=[];for(let i=0;i<ROUND;i++)state.tasks.push(makeTask(i));
+  showTask(0);
+}
+const figIn=t=>t.figName==='Deltoid'?'Deltoid':t.figName==='Parallelogramm'?'Parallelogramm':'gleichschenkligen Trapez';
+function showTask(i){
+  state.cur=i;task=state.tasks[i];
+  state.tasks.forEach(t=>{t.stepsEl.hidden=t!==task;t.wayEl.hidden=t!==task;});
+  $('#taskText').innerHTML=`<span class="tag">Aufgabe ${task.no} von ${ROUND} · ${task.figName}</span>${task.status==='skipped'?' <span class="skiptag">übersprungen</span>':''}<br>Im ${figIn(task)} ist ein rechtwinkliges Dreieck eingefärbt. Berechne ${task.desc}.`;
+  draw();
+  if(!state.nameLocked){task.waiting=true;task.stepsEl.innerHTML='<div class="step"><p>Gib oben zuerst deinen Namen ein und tippe auf „Los geht\'s“. Der Name kann danach nicht mehr geändert werden.</p></div>';}
+  else if(!task.started){task.waiting=false;task.started=true;task.stepsEl.innerHTML='';stepIdentify();}
+  $('#skipBtn').hidden=!state.nameLocked||task.status==='solved';
+  updateDone();renderNav();updateScore();
+}
+function nextOpen(){const n=state.tasks.length;for(let k=1;k<=n;k++){const j=(state.cur+k)%n;if(state.tasks[j].status==='open')return j;}return -1;}
+const allDone=()=>state.tasks.every(t=>t.status!=='open');
+function updateDone(){
+  if(task.status!=='solved'){$('#done').hidden=true;return;}
+  $('#doneText').innerHTML=task.doneHTML;
+  $('#nextBtn').textContent=nextOpen()>=0?'Nächste Aufgabe':'Zur Zusammenfassung';
+  $('#done').hidden=false;
+}
+function renderNav(){
+  const nav=$('#tasknav');
+  nav.innerHTML=state.tasks.map((t,i)=>`<button class="tnav ${t.status}${i===state.cur?' cur':''}" data-i="${i}" aria-label="Aufgabe ${i+1}${t.status==='solved'?', gelöst':t.status==='skipped'?', übersprungen':''}">${i+1}${t.status==='solved'?' ✓':t.status==='skipped'?' ⏭':''}</button>`).join('')
+    +`<button class="tnav sum" id="navSum" ${allDone()?'':'disabled'}>📋 Zusammenfassung</button>`;
+  nav.querySelectorAll('.tnav[data-i]').forEach(b=>b.onclick=()=>{if(state.nameLocked)showTask(+b.dataset.i);});
+  $('#navSum').onclick=()=>{if(allDone())showSummary();};
+}
+function updateScore(){
+  const T=state.tasks||[],n=$('#name').value.trim();
+  const solved=T.filter(t=>t.status==='solved').length,perfect=T.filter(t=>t.status==='solved'&&t.errors===0).length,sk=T.filter(t=>t.status==='skipped').length;
+  $('#score').textContent=(n?n+': ':'')+`Gelöst: ${solved} von ${ROUND}, davon ohne Fehler: ${perfect}`+(sk?`, übersprungen: ${sk}`:'');
+}
+function finish(){
+  const t=task;t.status='solved';$('#skipBtn').hidden=true;
+  t.doneHTML=(t.errors===0?'Fehlerfrei gelöst – stark!':`Geschafft! (${t.errors} ${t.errors===1?'Fehlversuch':'Fehlversuche'})`)+'<br><strong>✏️ Übertrage jetzt den ganzen Rechenweg in dein Hausübungsheft.</strong><br><span style="font-size:15px">Du findest ihn oben unter „Rechenweg“.</span>';
+  updateDone();renderNav();updateScore();
+  $('#nextBtn').focus({preventScroll:true});
+  if($('#done').scrollIntoView)$('#done').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function setMain(show){document.querySelector('.grid').hidden=!show;document.querySelector('.controls').hidden=!show;$('#score').hidden=!show;$('#tasknav').hidden=!show;$('#summary').hidden=show;}
+function showSummary(){
+  const L=state.tasks,name=$('#name').value.trim()||'–';
+  const solvedL=L.filter(t=>t.status==='solved'),skL=L.filter(t=>t.status==='skipped');
+  const perfect=solvedL.filter(t=>t.errors===0).length,errs=L.reduce((s,t)=>s+t.errors,0),shown=L.reduce((s,t)=>s+t.shown,0);
+  const now=new Date();
+  const dt=now.toLocaleDateString('de-AT')+', '+now.toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'});
+  const given=t=>t.given.map(([n,v])=>`${n} = ${fmt(v)} cm`).join(', ');
+  const ges=t=>`${t.unknown} (${t.find==='hyp'?'Hypotenuse':'Kathete'})`;
+  const rows=L.map((t,i)=>t.status==='skipped'
+    ?`<tr class="skiprow"><td>${i+1}</td><td>${t.figName}</td><td>${ges(t)}</td><td>${given(t)}</td><td>–</td><td colspan="3"><span class="skiptag">⏭ übersprungen</span></td></tr>`
+    :`<tr class="${t.errors===0?'okrow':t.shown?'errrow':''}"><td>${i+1}</td><td>${t.figName}</td><td>${ges(t)}</td><td>${given(t)}</td><td>${t.unknown} = ${fmt(t.ans)} cm${t.wasSkipped?'<br><span class="latetag">zuerst übersprungen, später gelöst</span>':''}</td><td>${t.errors}</td><td>${t.shown?'ja ('+t.shown+'×)':'nein'}</td><td>${t.errSteps.size?esc([...t.errSteps].join(', ')):'–'}</td></tr>`).join('');
+  const s=$('#summary');
+  s.innerHTML=`<h2>Zusammenfassung für die Lehrkraft</h2>
+    <div class="sumhead"><div><span>Name</span><b>${esc(name)}</b></div><div><span>Datum</span><b>${dt}</b></div><div><span>Übung</span><b>Pythagoras in Vierecken</b></div></div>
+    <div class="sumstats"><div><b>${perfect} / ${L.length}</b><span>ohne Fehler</span></div><div><b>${errs}</b><span>Fehlversuche gesamt</span></div><div><b>${shown}</b><span>Lösungen angezeigt</span></div><div><b>${skL.length}</b><span>übersprungen</span></div></div>
+    <div class="tablewrap"><table><thead><tr><th>Nr.</th><th>Figur</th><th>Gesucht</th><th>Gegeben</th><th>Ergebnis</th><th>Fehlversuche</th><th>Lösung gezeigt</th><th>Fehler bei Schritt</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <p class="sumnote">Zeige diese Seite deiner Lehrkraft. Die Rechenwege stehen in deinem Hausübungsheft.</p>
+    <div class="sumbtns">${skL.length?'<button class="next" id="backSkip">↩ Übersprungene Aufgaben lösen</button>':''}<button class="next ghost" id="newRound">Neue Runde starten</button></div>`;
+  setMain(false);window.scrollTo({top:0});
+  if(skL.length)$('#backSkip').onclick=()=>{setMain(true);skL.forEach(t=>t.status='open');showTask(state.tasks.indexOf(skL[0]));};
+  $('#newRound').onclick=()=>{if(!confirm('Neue Runde starten? Die Zusammenfassung wird dabei gelöscht.'))return;setMain(true);newRound();};
+}
+function lockName(){const n=$('#name');if(state.nameLocked)return;if(!n.value.trim()){n.focus();return;}
+  n.value=n.value.trim();n.readOnly=true;n.classList.add('locked');n.setAttribute('aria-readonly','true');$('#nameOk').hidden=true;state.nameLocked=true;
+  state.tasks.forEach(t=>{if(!t.started)t.stepsEl.innerHTML='';});showTask(state.cur);}
+$('#nameOk').onclick=lockName;
+$('#name').addEventListener('keydown',e=>{if(e.key==='Enter')lockName();});
+$('#nextBtn').onclick=()=>{const j=nextOpen();if(j>=0)showTask(j);else showSummary();};
+$('#skipBtn').onclick=()=>{if(!task||task.waiting||task.status==='solved')return;
+  if(!confirm('Diese Aufgabe überspringen? Du kannst später über die Aufgabenleiste wieder zurückkommen.'))return;
+  task.status='skipped';task.wasSkipped=true;
+  const j=nextOpen();if(j>=0)showTask(j);else showSummary();};
+newRound();
+
 
 function geom(t){
   const g=t.geo,P={},seg=[],labels=[],dims=[];let tri,others;
@@ -334,7 +419,7 @@ function unit(p,q){const dx=q[0]-p[0],dy=q[1]-p[1],l=Math.hypot(dx,dy)||1;return
 function addStep(num,title,body){
   const d=document.createElement('section');d.className='step';
   d.innerHTML=`<div class="step-head"><span class="num">${num}</span><h3>${title}</h3></div><div class="body">${body}</div><div class="fb" aria-live="polite"></div>`;
-  $('#steps').appendChild(d);
+  task.stepsEl.appendChild(d);
   const first=d.querySelector('input');if(first&&num>1)first.focus({preventScroll:true});
   if(num>1&&d.scrollIntoView)d.scrollIntoView({behavior:'smooth',block:'nearest'});
   return d;
@@ -347,7 +432,7 @@ function wrong(d,msg,solve){
 function note(d,msg){const fb=d.querySelector('.fb');fb.className='fb bad';fb.textContent=msg;}
 function right(d,msg){d.classList.add('solved');const fb=d.querySelector('.fb');fb.className='fb ok';fb.textContent='✓ '+msg;
   d.querySelectorAll('input,button,select').forEach(e=>e.disabled=true);}
-function addWay(html,cls){const el=document.createElement('div');el.className='wline'+(cls?' '+cls:'');el.innerHTML=html;$('#way').appendChild(el);}
+function addWay(html,cls){const el=document.createElement('div');el.className='wline'+(cls?' '+cls:'');el.innerHTML=html;task.wayEl.appendChild(el);}
 function bindCheck(d,fn){d.querySelector('.check').onclick=fn;d.querySelectorAll('input').forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter')fn()}));}
 
 // Schritt 1: Antippen
@@ -505,49 +590,6 @@ function stepRoot(){
   });
 }
 
-function finish(){
-  const t=task;state.solved++;if(t.errors===0)state.perfect++;$('#skipBtn').hidden=true;
-  state.log.push({fig:t.figName,find:t.find,unknown:t.unknown,given:t.given.map(([n,v])=>`${n} = ${fmt(v)} cm`).join(', '),
-    result:`${t.unknown} = ${fmt(t.ans)} cm`,errors:t.errors,shown:t.shown,errSteps:t.errSteps.size?[...t.errSteps].join(', '):'–'});
-  updateScore();
-  $('#doneText').innerHTML=(t.errors===0?'Fehlerfrei gelöst – stark!':`Geschafft! (${t.errors} ${t.errors===1?'Fehlversuch':'Fehlversuche'})`)+'<br><strong>✏️ Übertrage jetzt den ganzen Rechenweg in dein Hausübungsheft.</strong><br><span style="font-size:15px">Du findest ihn oben unter „Rechenweg“.</span>';
-  $('#nextBtn').textContent=state.log.length>=ROUND?'Zur Zusammenfassung':'Nächste Aufgabe';
-  $('#done').hidden=false;$('#nextBtn').focus({preventScroll:true});
-  if($('#done').scrollIntoView)$('#done').scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-function showSummary(){
-  const L=state.log,name=$('#name').value.trim()||'–';
-  const perfect=L.filter(r=>!r.skipped&&r.errors===0).length,errs=L.reduce((s,r)=>s+r.errors,0),shown=L.reduce((s,r)=>s+r.shown,0);
-  const now=new Date();
-  const dt=now.toLocaleDateString('de-AT')+', '+now.toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'});
-  const rows=L.map((r,i)=>r.skipped?`<tr class="skiprow"><td>${i+1}</td><td>${r.fig}</td><td>${r.unknown} (${r.find==='hyp'?'Hypotenuse':'Kathete'})</td><td>${r.given}</td><td>–</td><td colspan="3"><span class="skiptag">⏭ übersprungen</span></td></tr>`:`<tr class="${r.errors===0?'okrow':r.shown?'errrow':''}"><td>${i+1}</td><td>${r.fig}</td><td>${r.unknown} (${r.find==='hyp'?'Hypotenuse':'Kathete'})</td><td>${r.given}</td><td>${r.result}</td><td>${r.errors}</td><td>${r.shown?'ja ('+r.shown+'×)':'nein'}</td><td>${esc(r.errSteps)}</td></tr>`).join('');
-  const s=$('#summary');
-  s.innerHTML=`<h2>Zusammenfassung für die Lehrkraft</h2>
-    <div class="sumhead"><div><span>Name</span><b>${esc(name)}</b></div><div><span>Datum</span><b>${dt}</b></div><div><span>Übung</span><b>Pythagoras in Vierecken</b></div></div>
-    <div class="sumstats"><div><b>${perfect} / ${L.length}</b><span>ohne Fehler</span></div><div><b>${errs}</b><span>Fehlversuche gesamt</span></div><div><b>${shown}</b><span>Lösungen angezeigt</span></div><div><b>${L.filter(r=>r.skipped).length}</b><span>übersprungen</span></div></div>
-    <div class="tablewrap"><table><thead><tr><th>Nr.</th><th>Figur</th><th>Gesucht</th><th>Gegeben</th><th>Ergebnis</th><th>Fehlversuche</th><th>Lösung gezeigt</th><th>Fehler bei Schritt</th></tr></thead><tbody>${rows}</tbody></table></div>
-    <p class="sumnote">Zeige diese Seite deiner Lehrkraft. Die Rechenwege stehen in deinem Hausübungsheft.</p>
-    <button class="next" id="newRound">Neue Runde starten</button>`;
-  document.querySelector('.grid').hidden=true;document.querySelector('.controls').hidden=true;$('#score').hidden=true;s.hidden=false;
-  window.scrollTo({top:0});
-  $('#newRound').onclick=()=>{if(!confirm('Neue Runde starten? Die Zusammenfassung wird dabei gelöscht.'))return;
-    state.log=[];state.solved=0;state.perfect=0;state.skipped=0;s.hidden=true;
-    document.querySelector('.grid').hidden=false;document.querySelector('.controls').hidden=false;$('#score').hidden=false;
-    updateScore();newTask();};
-}
-function lockName(){const n=$('#name');if(state.nameLocked)return;if(!n.value.trim()){n.focus();return;}
-  n.value=n.value.trim();n.readOnly=true;n.classList.add('locked');n.setAttribute('aria-readonly','true');$('#nameOk').hidden=true;state.nameLocked=true;updateScore();
-  if(task&&task.waiting){task.waiting=false;$('#steps').innerHTML='';$('#skipBtn').hidden=false;stepIdentify();}}
-$('#nameOk').onclick=lockName;
-$('#name').addEventListener('keydown',e=>{if(e.key==='Enter')lockName();});
-$('#nextBtn').onclick=()=>state.log.length>=ROUND?showSummary():newTask();
-$('#skipBtn').onclick=()=>{if(!task||task.waiting)return;
-  if(!confirm('Diese Aufgabe wirklich überspringen? Sie wird in der Zusammenfassung als übersprungen markiert.'))return;
-  const t=task;state.skipped++;
-  state.log.push({skipped:true,fig:t.figName,find:t.find,unknown:t.unknown,given:t.given.map(([n,v])=>`${n} = ${fmt(v)} cm`).join(', '),errors:t.errors,shown:t.shown,errSteps:'–'});
-  updateScore();$('#skipBtn').hidden=true;
-  if(state.log.length>=ROUND)showSummary();else newTask();};
-newTask();
 </script>
 </body>
 </html>
