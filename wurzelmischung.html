@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wurzeln ziehen – Mischübung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#fbfcfe; --grid:#d6def0; --ink:#20408f; --text:#1d2433; --muted:#5b6478;
+  --red:#c61f2e; --green:#1d7a3a; --line:#b9c4de; --field:#ffffff; --bar:#eef2fb;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#18202d; --grid:#253046; --ink:#a9bdff; --text:#e6eaf3; --muted:#9aa3b8;
+    --red:#ff7b7b; --green:#6fd38f; --line:#3a4763; --field:#1f2939; --bar:#1d2636;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#18202d; --grid:#253046; --ink:#a9bdff; --text:#e6eaf3; --muted:#9aa3b8;
+  --red:#ff7b7b; --green:#6fd38f; --line:#3a4763; --field:#1f2939; --bar:#1d2636;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; color:var(--text); background-color:var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:24px 24px;
+  font-family:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  font-size:18px; line-height:1.5;
+  padding-bottom:84px;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bar)}
+main{max-width:860px;margin:0 auto;padding:24px 16px}
+h1{font-family:Kalam,"Comic Sans MS",cursive;color:var(--red);font-size:2.4rem;line-height:1.1;margin:8px 0 6px;font-weight:700}
+.intro{max-width:62ch;color:var(--text);margin:0 0 16px}
+.intro b{color:var(--ink)}
+.head{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bar);border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-bottom:18px}
+.score{font-weight:700;font-size:1.1rem}
+.prog{flex:1 1 160px;height:10px;background:var(--grid);border-radius:5px;overflow:hidden;min-width:120px}
+.prog i{display:block;height:100%;width:0;background:var(--green);transition:width .3s}
+.head label{display:flex;gap:6px;align-items:center;font-size:.95rem;cursor:pointer}
+button{font:inherit;cursor:pointer}
+.btn{border:1.5px solid var(--ink);color:var(--ink);background:var(--field);border-radius:8px;padding:4px 12px;font-size:.95rem}
+.btn:hover{background:var(--grid)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+
+ol.tasks{list-style:none;margin:0;padding:0}
+.task{background:color-mix(in srgb, var(--paper) 88%, transparent);border-left:4px solid transparent;padding:10px 10px 10px 8px;margin:0 0 6px;display:grid;grid-template-columns:2.6em 1fr;gap:4px 8px}
+.task .nr{color:var(--muted);font-size:.9rem;padding-top:.6em;text-align:right}
+.task .nr .st{color:var(--red)}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
+.prob{font-size:1.45rem;color:var(--ink);font-family:"Cambria Math","STIX Two Math",Cambria,Georgia,serif;white-space:nowrap}
+.eq{font-size:1.4rem;color:var(--ink)}
+.ans{display:inline-flex;align-items:center;gap:2px;white-space:nowrap}
+input.f{font:inherit;font-size:1.2rem;width:4.6em;padding:4px 6px;border:1.5px solid var(--line);border-radius:6px;background:var(--field);color:var(--text);text-align:center}
+.task.ok{border-left-color:var(--green)}
+.task.bad{border-left-color:var(--red)}
+.task.ok input.f{border-color:var(--green)}
+.fb{grid-column:2;font-size:.98rem;min-height:0}
+.fb.ok{color:var(--green);font-weight:700}
+.fb.bad{color:var(--red);font-family:Kalam,"Comic Sans MS",cursive;font-size:1.1rem}
+.fb.sol{color:var(--muted)}
+.fb .prob{font-size:1.15rem}
+.small{font-size:.9rem;padding:3px 10px}
+.link{background:none;border:none;color:var(--muted);text-decoration:underline;font-size:.9rem;padding:2px 4px}
+
+.step-lbl{font-size:.9rem;color:var(--muted);width:100%}
+.row.s2{margin-top:6px}
+.row.s2.locked{opacity:.4}
+.row.s2 .eq.lead{margin-left:3.2em}
+input.f.p{width:3.6em}
+.task.splitdone .row.s1 input.f{border-color:var(--green)}
+.fb1{font-size:.98rem}
+.opts{display:flex;flex-wrap:wrap;gap:8px;width:100%;margin-top:2px}
+.opt{font-family:"Cambria Math","STIX Two Math",Cambria,Georgia,serif;font-size:1.2rem;color:var(--ink);background:var(--field);border:1.5px solid var(--line);border-radius:8px;padding:4px 14px;min-width:5.5em}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt.wrong{border-color:var(--red);color:var(--red);text-decoration:line-through}
+.opt.right{border-color:var(--green);color:var(--green);font-weight:700}
+.opt:disabled{cursor:default}
+.ph{display:inline-block;min-width:3.5em;text-align:center;color:var(--muted)}
+select.btn{padding:3px 6px}
+.fb1.ok{color:var(--green);font-weight:700}
+.fb1.bad{color:var(--red);font-family:Kalam,"Comic Sans MS",cursive;font-size:1.1rem}
+@media (max-width:520px){.row.s2 .eq.lead{margin-left:1.5em}}
+/* Wurzel-Darstellung */
+.rt{display:inline-flex;align-items:stretch;vertical-align:middle}
+.rt .sy{font-size:1.15em;line-height:1;padding-top:.05em;margin-right:-.02em;align-self:flex-end;transform-origin:bottom;transform:scaleY(1.25)}
+.rt .ri{border-top:2px solid currentColor;padding:.08em .18em 0 .12em;margin-top:.05em;display:inline-flex;align-items:center}
+.rt.tall .sy{transform:scaleY(2.1)}
+.ans .rt .sy{font-size:1.5rem;color:var(--ink)}
+.ans .rt .ri{border-top-color:var(--ink);padding-top:4px}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.15;font-size:.85em;margin:0 .1em}
+.fr>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .2em}
+.fr>span:last-child{padding:0 .2em}
+sup{font-size:.6em;line-height:0}
+
+.pad{position:fixed;left:0;right:0;bottom:0;background:var(--bar);border-top:1px solid var(--line);padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));display:flex;gap:6px;justify-content:center;flex-wrap:wrap;z-index:6}
+.pad button{min-width:42px;padding:6px 10px;border:1.5px solid var(--line);border-radius:8px;background:var(--field);color:var(--text);font-size:1.1rem}
+.pad button:active{background:var(--grid)}
+.done{font-family:Kalam,cursive;color:var(--green);font-size:1.6rem;text-align:center;margin:20px 0;display:none}
+@media (max-width:520px){
+  h1{font-size:2rem}
+  .task{grid-template-columns:2em 1fr}
+  .prob{font-size:1.3rem}
+}
+@media (prefers-reduced-motion: reduce){.prog i{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Wurzeln ziehen – Mischübung</h1>
+  <p class="intro">Zieh die Wurzel so weit wie möglich. Ins <b>erste Feld</b> kommt, was vor der Wurzel steht. Ins <b>Feld unter der Wurzel</b> kommt, was drinnen bleibt – <b>bleibt keine Wurzel übrig, lass es leer!</b> Alle Variablen sind positiv. Schreib x² als <b>x^2</b> oder nutze die Tasten unten. Brüche mit <b>/</b>, also z.&nbsp;B. 4/5.</p>
+  <p class="intro">Bei großen Zahlen zerlegst du zuerst in ein Produkt: <b>Quadratzahl · Rest</b>. Du kannst die Zerlegung auswählen oder selbst eintragen. Nimm dafür die größte Quadratzahl, die drinsteckt (4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144 …).</p>
+
+  <div class="head">
+    <span class="score" id="score">Richtig: 0 von 0</span>
+    <span class="prog"><i id="bar"></i></span>
+    <label><input type="checkbox" id="stars" checked> ★-Aufgaben</label>
+    <label>Zerlegen:
+      <select id="mode" class="btn small">
+        <option value="choice">auswählen</option>
+        <option value="type">selbst eintragen</option>
+      </select></label>
+    <button class="btn" id="mix">Neu mischen</button>
+  </div>
+
+  <ol class="tasks" id="list"></ol>
+  <p class="done" id="done">Alles geschafft – super!</p>
+</main>
+
+<div class="pad" id="pad" aria-label="Eingabehilfe">
+  <button data-k="x">x</button><button data-k="a">a</button><button data-k="y">y</button>
+  <button data-k="^2">²</button><button data-k="^3">³</button><button data-k="^4">⁴</button>
+  <button data-k="/">/</button><button data-k="(">(</button><button data-k=")">)</button>
+  <button data-k="back" aria-label="Löschen">⌫</button>
+</div>
+
+<script>
+// [Ausdruck unter der Wurzel, vor der Wurzel, unter der Wurzel (leer = keine), ★]
+const RAW = [];
+// 1) Quadratzahlen
+[36,64,100,81,16,49,121,144,169,196,225,400,625,900,1600,10000].forEach(n=>RAW.push([String(n),String(Math.sqrt(n)),""]));
+[256,289,324,361].forEach(n=>RAW.push([String(n),String(Math.sqrt(n)),"",1]));
+// 2) Teilweise Wurzelziehen aus Zahlen
+[["75","5","3"],["12","2","3"],["18","3","2"],["50","5","2"],["8","2","2"],["20","2","5"],["27","3","3"],
+ ["32","4","2"],["45","3","5"],["48","4","3"],["72","6","2"],["98","7","2"],["200","10","2"],["300","10","3"],
+ ["28","2","7"],["63","3","7"],["80","4","5"],["125","5","5"],["24","2","6"],["40","2","10"],["54","3","6"],["99","3","11"],
+ ["180","6","5",1],["162","9","2",1],["128","8","2",1],["242","11","2",1],
+ ["147","7","3"],["192","8","3"],["245","7","5"],["500","10","5"],["288","12","2",1],["363","11","3",1]].forEach(t=>RAW.push(t));
+// 3) Produkte unter der Wurzel
+[["2*36","6","2"],["100*7","10","7"],["3*25","5","3"],["5*49","7","5"],["16*11","4","11"],["81*2","9","2"],
+ ["4*13","2","13"],["9*6","3","6"],["64*3","8","3"],["144*5","12","5"],
+ ["2*50","10",""],["3*12","6",""],["8*2","4",""],["5*20","10","",1],["2*18","6","",1]].forEach(t=>RAW.push(t));
+// 4) Mit Variablen
+[["9x","3","x"],["25x","5","x"],["7*x^2","x","7"],["16x^2","4x",""],["a^4","a^2",""],["49a^2","7a",""],
+ ["x^6","x^3",""],["36y","6","y"],["3*a^2","a","3"],["4x^4","2x^2",""],["x^2","x",""],["100a","10","a"],
+ ["81x^2","9x",""],["5*y^2","y","5"],["64a^4","8a^2",""],["2*x^2","x","2"],["121y^2","11y",""],["a^8","a^4",""],
+ ["x^3","x","x",1],["12x^2","2x","3",1],["50a^2","5a","2",1],["18x^2","3x","2",1],["9a^3","3a","a",1],["25x^4y","5x^2","y",1]].forEach(t=>RAW.push(t));
+// 5) Brüche
+[["16/25","4/5",""],["25/x^2","5/x",""],["9/49","3/7",""],["1/4","1/2",""],["36/a^2","6/a",""],["x^2/16","x/4",""],
+ ["81/100","9/10",""],["4/9","2/3",""],["64/81","8/9",""],["1/x^2","1/x",""],["49/y^2","7/y",""],["a^2/25","a/5",""],
+ ["121/144","11/12",""],["a^4/9","a^2/3","",1],["100/x^4","10/x^2","",1],["9x^2/16","3x/4","",1]].forEach(t=>RAW.push(t));
+
+// ---------- Darstellung ----------
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+function fmt(s){ return esc(s).replace(/\*/g,"·").replace(/\^(\d+)/g,"<sup>$1</sup>"); }
+function fracOrPlain(s){
+  if(s.includes("/")){ const [n,d]=s.split("/"); return `<span class="fr"><span>${fmt(n)}</span><span>${fmt(d)}</span></span>`; }
+  return fmt(s);
+}
+function root(inner, tall){ return `<span class="rt${tall?" tall":""}"><span class="sy">√</span><span class="ri">${inner}</span></span>`; }
+function solutionHTML(out, rad){
+  let h = out ? fracOrPlain(out) : "";
+  if(rad) h += (out?"·":"") + root(fmt(rad));
+  return `<span class="prob">${h}</span>`;
+}
+
+// ---------- Parser für Schülereingaben ----------
+function normalize(s){
+  return s.toLowerCase()
+    .replace(/[²]/g,"^2").replace(/[³]/g,"^3").replace(/[⁴]/g,"^4").replace(/[⁵]/g,"^5")
+    .replace(/[⁶]/g,"^6").replace(/[⁸]/g,"^8")
+    .replace(/[·×∙•]/g,"*").replace(/:/g,"/").replace(/,/g,".").replace(/\s+/g,"");
+}
+function parse(src){
+  const s = normalize(src); let i = 0;
+  const peek = () => s[i];
+  function atom(){
+    const c = peek();
+    if(c===undefined) throw 0;
+    if(/[0-9.]/.test(c)){ let j=i; while(i<s.length && /[0-9.]/.test(s[i])) i++; const v=parseFloat(s.slice(j,i)); if(isNaN(v)) throw 0; return ()=>v; }
+    if(/[xayb]/.test(c)){ i++; return env=>env[c]; }
+    if(c==="("){ i++; const e=expr(); if(peek()!==")") throw 0; i++; return e; }
+    throw 0;
+  }
+  function power(){
+    const b = atom();
+    if(peek()==="^"){ i++; const e = atom(); return env=>Math.pow(b(env),e(env)); }
+    return b;
+  }
+  function unary(){ if(peek()==="-"){ i++; const u=unary(); return env=>-u(env); } return power(); }
+  function expr(){
+    let l = unary();
+    while(i<s.length){
+      const c = peek();
+      if(c==="*"){ i++; const r=unary(), a=l; l=env=>a(env)*r(env); }
+      else if(c==="/"){ i++; const r=unary(), a=l; l=env=>a(env)/r(env); }
+      else if(/[0-9.xayb(]/.test(c)){ const r=unary(), a=l; l=env=>a(env)*r(env); }
+      else break;
+    }
+    return l;
+  }
+  const f = expr();
+  if(i!==s.length) throw 0;
+  return f;
+}
+const ENVS = [{x:1.37,a:2.71,y:3.19,b:1.83},{x:2.23,a:1.61,y:4.47,b:2.9}];
+const same = (p,q) => Math.abs(p-q) <= 1e-9*Math.max(1,Math.abs(p),Math.abs(q));
+function value(out, rad, env){
+  const o = out.trim() ? parse(out)(env) : 1;
+  const r = rad.trim() ? parse(rad)(env) : 1;
+  if(r<0 || !isFinite(o) || !isFinite(r)) throw 0;
+  return o*Math.sqrt(r);
+}
+
+// ---------- Prüfen ----------
+function check(t, outIn, radIn){
+  const out = outIn.value, rad = radIn.value;
+  if(!out.trim() && !rad.trim()) return {cls:"", msg:""};
+  let eqVal, eqRad;
+  try{
+    eqVal = ENVS.every(e => same(value(out,rad,e), value(t.out,t.rad,e)));
+    if(!t.rad) eqRad = !rad.trim();
+    else eqRad = !!rad.trim() && ENVS.every(e => same(parse(rad)(e), parse(t.rad)(e)));
+  }catch(_){ return {cls:"bad", msg:"Das kann ich nicht lesen – schau dir deine Eingabe nochmal an."}; }
+  if(eqVal && eqRad) return {cls:"ok", msg:"✓ Richtig!"};
+  if(eqVal){
+    if(!t.rad) return {cls:"bad", msg:"Der Wert stimmt – aber hier bleibt am Ende keine Wurzel mehr übrig!"};
+    return {cls:"bad", msg:"Der Wert stimmt – aber unter der Wurzel kannst du noch etwas herausziehen."};
+  }
+  if(!t.rad && rad.trim()) return {cls:"bad", msg:"Leider falsch. Tipp: Hier bleibt am Ende keine Wurzel mehr stehen."};
+  if(t.rad && !rad.trim()) return {cls:"bad", msg:"Leider falsch. Tipp: Hier bleibt ein Rest unter der Wurzel stehen."};
+  return {cls:"bad", msg:"Leider falsch – such die größte Quadratzahl, die drinsteckt."};
+}
+
+// ---------- Aufbau ----------
+const list = document.getElementById("list");
+let tasks = [], lastInput = null;
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+function lsf(n){ for(let k=Math.floor(Math.sqrt(n));k>1;k--){ if(n%(k*k)===0) return k*k; } return 1; }
+const isSq = n => n>1 && Number.isInteger(Math.sqrt(n));
+
+function checkSplit(t, p1, p2){
+  const n = +t.expr, A = parseInt(p1.value,10), B = parseInt(p2.value,10);
+  if(!p1.value.trim() || !p2.value.trim()) return {cls:"bad", msg:"Füll beide Felder aus."};
+  if(String(A)!==p1.value.trim() || String(B)!==p2.value.trim()) return {cls:"bad", msg:"Schreib in jedes Feld eine ganze Zahl."};
+  if(A*B!==n) return {cls:"bad", msg:`${A} · ${B} ergibt ${A*B}, nicht ${n}.`};
+  const big = lsf(n);
+  if(A===big || B===big) return {cls:"ok", msg:`✓ Gut zerlegt! Jetzt zieh die Wurzel aus ${big}.`};
+  if(isSq(A) || isSq(B)) return {cls:"bad", msg:"Das stimmt – aber es steckt eine noch größere Quadratzahl drin."};
+  return {cls:"bad", msg:"Einer der beiden Faktoren muss eine Quadratzahl sein."};
+}
+
+function splitOptions(n){
+  const big = lsf(n), seen = new Set(), key = (a,b)=>Math.min(a,b)+"x"+Math.max(a,b);
+  const order = (a,b)=> isSq(b)&&!isSq(a) ? [b,a] : (isSq(a)||a<=b ? [a,b] : [b,a]);
+  seen.add(key(big,n/big));
+  const sm=[], ns=[], wr=[];
+  for(let k=2;k*k<big;k++) if(n%(k*k)===0) sm.push(order(k*k,n/(k*k)));
+  for(let d=2;d*d<=n;d++) if(n%d===0 && !isSq(d) && !isSq(n/d)) ns.push(order(d,n/d));
+  [n/big+1, n/big-1, n/big+2].forEach(r=>{ if(r>1) wr.push([big,r]); });
+  [sm,ns,wr].forEach(shuffle);
+  const picks=[];
+  const add=pr=>{ const k=key(pr[0],pr[1]); if(!seen.has(k) && picks.length<3){ seen.add(k); picks.push(pr); } };
+  if(sm[0]) add(sm[0]); if(ns[0]) add(ns[0]); if(wr[0]) add(wr[0]);
+  shuffle([...sm,...ns,...wr]).forEach(add);
+  return shuffle([[big,n/big],...picks]);
+}
+
+function inputHTML(cls,label,extra=""){
+  return `<input class="f ${cls}" aria-label="${label}" autocomplete="off" autocapitalize="off" spellcheck="false" ${extra}>`;
+}
+
+function build(){
+  const showStars = document.getElementById("stars").checked;
+  const mode = document.getElementById("mode").value;
+  tasks = shuffle(RAW.map(r=>{
+    const t = {expr:r[0],out:r[1],rad:r[2],star:!!r[3],state:""};
+    t.split = /^\d+$/.test(t.expr) && t.rad!=="" && +t.expr>=70;
+    return t;
+  })).filter(t=>showStars||!t.star);
+  list.innerHTML = "";
+  tasks.forEach((t,idx)=>{
+    const li = document.createElement("li");
+    li.className = "task";
+    const isFrac = t.expr.includes("/");
+    const prob = `<span class="prob">${root(fracOrPlain(t.expr), isFrac)}</span>`;
+    const finalFields = `
+        <span class="ans">
+          ${inputHTML("o",`Aufgabe ${idx+1}: vor der Wurzel`)}
+          <span class="rt"><span class="sy">√</span><span class="ri">${inputHTML("r",`Aufgabe ${idx+1}: unter der Wurzel`)}</span></span>
+        </span>
+        <button class="btn small chk">Prüfen</button>
+        <button class="link sol">Lösung zeigen</button>`;
+    let body;
+    if(t.split){
+      body = `
+      <div class="row s1">
+        <span class="step-lbl">Schritt 1: als Produkt schreiben</span>
+        ${prob}<span class="eq">=</span>
+        ${mode==="type" ? `<span class="ans"><span class="rt"><span class="sy">√</span><span class="ri">
+          ${inputHTML("p p1",`Aufgabe ${idx+1}: erster Faktor`,'inputmode="numeric"')}
+          <span class="eq">&nbsp;·&nbsp;</span>
+          ${inputHTML("p p2",`Aufgabe ${idx+1}: zweiter Faktor`,'inputmode="numeric"')}
+        </span></span></span>
+        <button class="btn small chk1">Prüfen</button>`
+        : `<span class="prob">${root('<span class="ph">?</span>')}</span>
+        <span class="opts">${splitOptions(+t.expr).map(([a,b])=>`<button class="opt" data-a="${a}" data-b="${b}">${a} · ${b}</button>`).join("")}</span>`}
+      </div>
+      <div class="fb1" aria-live="polite"></div>
+      <div class="row s2 locked">
+        <span class="step-lbl">Schritt 2: Wurzel ziehen</span>
+        <span class="eq lead">=</span>${finalFields}
+      </div>`;
+    } else {
+      body = `<div class="row">${prob}<span class="eq">=</span>${finalFields}</div>`;
+    }
+    li.innerHTML = `
+      <span class="nr">${idx+1}${t.star?'<span class="st"> ★</span>':''}</span>
+      <div>${body}</div>
+      <div class="fb" aria-live="polite"></div>`;
+    const o = li.querySelector(".o"), r = li.querySelector(".r"), fb = li.querySelector(".fb");
+    const chk = li.querySelector(".chk");
+    const run = () => {
+      if(t.state==="ok" || (t.split && !t.splitDone)) return;
+      const res = check(t,o,r);
+      li.classList.remove("ok","bad");
+      if(res.cls) li.classList.add(res.cls);
+      fb.className = "fb " + res.cls; fb.textContent = res.msg;
+      if(res.cls==="ok"){ t.state="ok"; o.readOnly=r.readOnly=true; li.querySelector(".sol").remove(); chk.remove(); }
+      updateScore();
+    };
+    chk.addEventListener("click", run);
+    [o,r].forEach(inp=>{
+      inp.addEventListener("focus",()=>lastInput=inp);
+      inp.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); run(); } });
+    });
+
+    if(t.split){
+      const fb1 = li.querySelector(".fb1"), s2 = li.querySelector(".s2");
+      o.disabled = r.disabled = chk.disabled = true;
+      const unlock = () => {
+        t.splitDone = true; li.classList.add("splitdone");
+        s2.classList.remove("locked"); o.disabled = r.disabled = chk.disabled = false;
+        o.focus();
+      };
+      if(mode==="type"){
+        const p1 = li.querySelector(".p1"), p2 = li.querySelector(".p2"), chk1 = li.querySelector(".chk1");
+        const run1 = () => {
+          if(t.splitDone) return;
+          const res = checkSplit(t,p1,p2);
+          fb1.className = "fb1 " + res.cls; fb1.textContent = res.msg;
+          if(res.cls==="ok"){ p1.readOnly = p2.readOnly = true; chk1.remove(); unlock(); }
+        };
+        chk1.addEventListener("click", run1);
+        [p1,p2].forEach(inp=>{
+          inp.addEventListener("focus",()=>lastInput=inp);
+          inp.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); run1(); } });
+        });
+      } else {
+        const ph = li.querySelector(".ph");
+        li.querySelectorAll(".opt").forEach(btn=>btn.addEventListener("click",()=>{
+          if(t.splitDone) return;
+          const res = checkSplit(t,{value:btn.dataset.a},{value:btn.dataset.b});
+          fb1.className = "fb1 " + res.cls; fb1.textContent = res.msg;
+          if(res.cls==="ok"){
+            btn.classList.add("right"); ph.textContent = btn.textContent; ph.style.color="inherit";
+            li.querySelectorAll(".opt").forEach(x=>x.disabled=true);
+            unlock();
+          } else { btn.classList.add("wrong"); btn.disabled = true; }
+        }));
+      }
+    }
+
+    li.querySelector(".sol").addEventListener("click",()=>{
+      let h = "Lösung: ";
+      if(t.split){
+        const sq = t.out*t.out;
+        h += `<span class="prob">${root(fmt(t.expr))} = ${root(sq+"·"+t.rad)} = </span>`;
+      }
+      fb.className="fb sol"; fb.innerHTML = h + solutionHTML(t.out,t.rad);
+      t.state = t.state==="ok" ? "ok" : "shown";
+    });
+    list.appendChild(li);
+  });
+  updateScore();
+  window.scrollTo({top:0});
+}
+
+function updateScore(){
+  const ok = tasks.filter(t=>t.state==="ok").length;
+  document.getElementById("score").textContent = `Richtig: ${ok} von ${tasks.length}`;
+  document.getElementById("bar").style.width = (tasks.length? ok/tasks.length*100 : 0) + "%";
+  document.getElementById("done").style.display = ok===tasks.length && ok>0 ? "block" : "none";
+}
+
+document.getElementById("mix").addEventListener("click", build);
+document.getElementById("stars").addEventListener("change", build);
+document.getElementById("mode").addEventListener("change", build);
+
+// Eingabehilfe
+document.getElementById("pad").addEventListener("mousedown", e=>e.preventDefault());
+document.getElementById("pad").addEventListener("click", e=>{
+  const b = e.target.closest("button"); if(!b || !lastInput || lastInput.readOnly) return;
+  const inp = lastInput, k = b.dataset.k;
+  const s = inp.selectionStart ?? inp.value.length, en = inp.selectionEnd ?? inp.value.length;
+  if(k==="back"){
+    const from = s===en ? Math.max(0,s-1) : s;
+    inp.value = inp.value.slice(0,from) + inp.value.slice(en);
+    inp.setSelectionRange(from,from);
+  } else {
+    const ins = k.startsWith("^") ? ({"^2":"²","^3":"³","^4":"⁴"})[k] : k;
+    inp.value = inp.value.slice(0,s) + ins + inp.value.slice(en);
+    inp.setSelectionRange(s+ins.length, s+ins.length);
+  }
+  inp.focus();
+});
+
+build();
+</script>
+</body>
+</html>
