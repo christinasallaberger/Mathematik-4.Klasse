@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pythagoras im gleichschenkeligen und gleichseitigen Dreieck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#fdfdf9; --grid:#d6e4f2; --ink:#1b2a4a; --pen:#1d4ed8; --muted:#5b6b85;
+  --red:#c62828; --red-soft:#fdecea; --green:#2e7d32; --green-soft:#e6f4e7;
+  --marker:#ffe36e; --tri:#eaf1fb; --card:#ffffff; --line:#c9d6e6; --btn:#1b2a4a; --btn-ink:#ffffff;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#151b26; --grid:#222d3e; --ink:#e6ecf5; --pen:#8fb1ff; --muted:#9aa8bf;
+    --red:#ff7a7a; --red-soft:#3a1e22; --green:#6fd17a; --green-soft:#17301c;
+    --marker:#7a6516; --tri:#1e2a3e; --card:#1b2231; --line:#33415a; --btn:#e6ecf5; --btn-ink:#151b26;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#151b26; --grid:#222d3e; --ink:#e6ecf5; --pen:#8fb1ff; --muted:#9aa8bf;
+  --red:#ff7a7a; --red-soft:#3a1e22; --green:#6fd17a; --green-soft:#17301c;
+  --marker:#7a6516; --tri:#1e2a3e; --card:#1b2231; --line:#33415a; --btn:#e6ecf5; --btn-ink:#151b26;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; color:var(--ink); background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;
+  font-family:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif; font-size:17px; line-height:1.5;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 18px 60px}
+header h1{font-family:"Patrick Hand","Comic Sans MS",cursive;font-weight:400;font-size:clamp(34px,6vw,52px);line-height:1.05;margin:0 0 6px;color:var(--pen)}
+header p{margin:0 0 20px;color:var(--muted);max-width:60ch}
+.controls{display:flex;flex-wrap:wrap;gap:14px 22px;margin-bottom:22px}
+.ctl-label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.namein{font:inherit;font-size:16px;padding:7px 12px;border:2px solid var(--ink);border-radius:10px;background:var(--card);color:var(--ink);width:240px;max-width:100%}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:22px;align-items:start}
+@media (max-width:820px){.grid{grid-template-columns:1fr}}
+.sheet{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:18px}
+.task{font-size:20px;margin:0 0 8px}
+.task b{font-family:"Patrick Hand",cursive;font-size:26px;color:var(--pen);font-weight:400}
+svg{width:100%;height:auto;display:block}
+.side{stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+.side.hyp{stroke:var(--red);stroke-width:4}
+.side.unk,.side2.unk{stroke-dasharray:8 6}
+.side2{stroke:var(--muted);stroke-width:2;stroke-linecap:round}
+.tri{fill:var(--tri)}
+.ra{fill:none;stroke:var(--ink);stroke-width:2}
+.dot{fill:var(--ink)}
+.tick{stroke:var(--ink);stroke-width:2;stroke-linecap:round}
+.dim{stroke:var(--muted);stroke-width:1.5}
+.lbl{font-family:"Patrick Hand",cursive;font-size:21px;fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px;stroke-linejoin:round;pointer-events:none}
+.lbl.small{font-size:18px}
+.lbl.unk{fill:var(--pen)}
+.lbl.hypt{fill:var(--red)}
+.lbl .sub{font-size:16px;fill:var(--muted)}
+.way-title{margin:18px 0 4px;font-size:15px;color:var(--muted)}
+.way{font-family:"Patrick Hand",cursive;font-size:25px;line-height:1.55;color:var(--pen);min-height:44px;border-left:3px solid var(--red);padding-left:14px}
+.way:empty::before{content:"Hier entsteht dein Rechenweg.";color:var(--muted);font-size:19px}
+.wline{animation:write .35s ease-out}
+@keyframes write{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+.wline.final{display:inline-block;border-bottom:3px double var(--pen);margin-top:2px}
+.steps{display:flex;flex-direction:column;gap:12px}
+.step{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px 16px}
+.step.solved{border-color:var(--green)}
+.step-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.num{flex:none;width:30px;height:30px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-weight:700;font-size:15px}
+.step.solved .num{background:var(--green);border-color:var(--green);color:var(--card)}
+.step h3{margin:0;font-size:18px}
+.step p{margin:0 0 8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{font:inherit;font-family:"Patrick Hand",cursive;font-size:23px;min-width:56px;padding:4px 14px;border:2px solid var(--ink);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer}
+.opt:hover:not(:disabled){background:var(--tri)}
+.opt.good{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.opt.wrongb{background:var(--red-soft);border-color:var(--red);color:var(--red);text-decoration:line-through}
+.opt:disabled{cursor:default}
+.opt.word{font-size:22px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:"Patrick Hand",cursive;font-size:25px}
+.eq sup{font-size:17px;margin-left:-4px;align-self:flex-start;margin-top:4px}
+.n{font:inherit;font-family:"Patrick Hand",cursive;font-size:24px;width:84px;padding:2px 8px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);color:var(--pen);text-align:center}
+.n.wide{width:110px}
+.n.letter{width:64px}
+.n.opsel{width:64px;padding:2px 4px}
+.n:disabled{border-color:var(--green);color:var(--green)}
+.check,.next{font:inherit;font-size:16px;font-weight:700;padding:8px 16px;border-radius:10px;border:0;background:var(--btn);color:var(--btn-ink);cursor:pointer;margin-left:6px}
+.check:disabled{opacity:.35;cursor:default}
+.fb{font-size:15px;margin-top:8px}
+.fb:empty{display:none}
+.fb.bad{color:var(--red);background:var(--red-soft);padding:8px 10px;border-radius:8px}
+.fb.ok{color:var(--green)}
+.link{font:inherit;font-size:15px;background:none;border:0;padding:0;color:var(--pen);text-decoration:underline;cursor:pointer;margin-left:6px}
+.done{background:var(--green-soft);border:2px solid var(--green);border-radius:14px;padding:16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.done[hidden]{display:none}
+.done p{margin:0;font-size:18px}
+.score{font-size:15px;color:var(--muted);margin:0 0 12px}
+.namerow{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.namerow .next{margin-left:0}
+.namein.locked{border-color:var(--line);background:transparent;font-weight:700;cursor:default}
+[hidden]{display:none!important}
+.summary{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:20px}
+.summary h2{font-family:"Patrick Hand",cursive;font-weight:400;font-size:32px;line-height:1.1;color:var(--pen);margin:0 0 14px}
+.sumhead,.sumstats{display:flex;flex-wrap:wrap;gap:10px 28px;margin-bottom:16px}
+.sumhead span,.sumstats span{display:block;font-size:13px;color:var(--muted)}
+.sumhead b{font-size:18px}
+.sumstats{gap:10px}
+.sumstats div{border:2px solid var(--line);border-radius:12px;padding:10px 14px;min-width:120px}
+.sumstats b{font-size:26px}
+.tablewrap{overflow-x:auto;margin-bottom:14px}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:680px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:13px;color:var(--muted);font-weight:700}
+tr.okrow td:first-child{box-shadow:inset 4px 0 var(--green)}
+tr.errrow td:first-child{box-shadow:inset 4px 0 var(--red)}
+.sumnote{color:var(--muted);font-size:15px}
+.summary .next{margin-left:0}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--pen);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.wline{animation:none}}
+.hit{stroke:transparent;stroke-width:30;stroke-linecap:round;cursor:pointer;pointer-events:stroke;-webkit-tap-highlight-color:transparent}
+.side.legok{stroke:var(--pen);stroke-width:4}
+.side.flash,.side2.flash{stroke:var(--red);stroke-width:5;stroke-dasharray:none}
+.tapnote{text-align:center;font-weight:700;color:var(--pen);margin:4px 0 0;font-size:16px}
+.tag{font-size:14px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Pythagoras im gleichschenkeligen und gleichseitigen Dreieck</h1>
+    <p>Die Höhe teilt das Dreieck in zwei rechtwinklige Dreiecke. Erkenne Hypotenuse und Katheten, halbiere die Basis und berechne die gesuchte Strecke – Schritt für Schritt, wie im Heft.</p>
+  </header>
+
+  <div class="controls">
+    <div>
+      <label class="ctl-label" for="name">Dein Name</label>
+      <div class="namerow"><input id="name" class="namein" autocomplete="off" placeholder="Vor- und Nachname"><button class="next" id="nameOk">Los geht's</button></div>
+    </div>
+  </div>
+
+  <p class="score" id="score">Gelöst: 0 von 4, davon ohne Fehler: 0</p>
+
+  <div class="grid">
+    <div class="sheet">
+      <p class="task" id="taskText"></p>
+      <div id="fig"></div>
+      <p class="way-title">Rechenweg</p>
+      <div class="way" id="way"></div>
+    </div>
+    <div>
+      <div class="steps" id="steps"></div>
+      <div class="done" id="done" hidden>
+        <p id="doneText"></p>
+        <button class="next" id="nextBtn">Nächste Aufgabe</button>
+      </div>
+    </div>
+  </div>
+<section class="summary" id="summary" hidden></section>
+</div>
+
+<script>
+// Pythagoräische Tripel: [halbe Basis bzw. Höhe, ..., Schenkel]
+const TRIPLES=[[3,4,5],[6,8,10],[5,12,13],[8,15,17],[9,12,15],[12,16,20],[15,20,25],[10,24,26],[20,21,29],[7,24,25],[18,24,30],[16,30,34],[21,28,35],[24,32,40]];
+const ROUND=4;
+// [Figur, gesucht]  isos = gleichschenkelig, equi = gleichseitig; h = Höhe (Kathete), a = Schenkel (Hypotenuse)
+const PLAN=[['isos','h'],['isos','a'],['equi','h'],['isos','h']];
+const state={solved:0,perfect:0,log:[],nameLocked:false,idx:0};
+let task=null,bag=[],lastT=null;const usedS=new Set();
+const $=s=>document.querySelector(s);
+const rnd=n=>Math.floor(Math.random()*n);
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
+function fmt(x){return String(Math.round(x*100)/100).replace('.',',')}
+function parseNum(s){s=String(s).trim().replace(',','.');if(s==='')return NaN;return Number(s)}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+const sqn=n=>n.includes('/')?`(${n})²`:`${n}²`;
+function nextTriple(){if(!bag.length){bag=shuffle(TRIPLES);if(bag[bag.length-1]===lastT)bag.reverse();}lastT=bag.pop();return lastT;}
+function updateScore(){const n=$('#name').value.trim();$('#score').textContent=(n?n+': ':'')+`Gelöst: ${state.solved} von ${ROUND}, davon ohne Fehler: ${state.perfect}`;}
+
+function newTask(){
+  const [shape,find]=PLAN[state.idx%ROUND];state.idx++;
+  let a,half,h;
+  if(shape==='isos'){
+    const t=nextTriple();let x=t[0],y=t[1];
+    if(Math.random()<.5)[x,y]=[y,x];
+    if(x/y>2.2)[x,y]=[y,x]; // zu flache Dreiecke vermeiden
+    half=x;h=y;a=t[2];
+  }else{
+    let s,tries=0;do{s=2*(2+rnd(14));}while(usedS.has(s)&&++tries<60);usedS.add(s);
+    a=s;half=s/2;h=s*Math.sqrt(3)/2;
+  }
+  const BN=shape==='equi'?'a':'c',HN=BN+'/2',isHyp=find==='a';
+  const sq=isHyp?h*h+half*half:a*a-half*half;
+  task={shape,find,isHyp,a,half,h,base:2*half,BN,HN,unknown:find,sq,ans:Math.sqrt(sq),hypShown:false,halfShown:false,errors:0,shown:0,errSteps:new Set()};
+  $('#steps').innerHTML='';$('#way').innerHTML='';$('#done').hidden=true;
+  const fig=shape==='isos'?'gleichschenkeligen Dreieck':'gleichseitigen Dreieck';
+  $('#taskText').innerHTML=`<span class="tag">Aufgabe ${(state.idx-1)%ROUND+1} von ${ROUND} · ${shape==='isos'?'gleichschenkelig':'gleichseitig'}</span><br>Im ${fig} teilt die Höhe h das Dreieck in zwei gleiche rechtwinklige Dreiecke. Berechne ${isHyp?'die Länge des Schenkels <b>a</b>':'die Höhe <b>h</b>'}.`;
+  draw();
+  if(!state.nameLocked){task.waiting=true;$('#steps').innerHTML='<div class="step"><p>Gib oben zuerst deinen Namen ein und tippe auf „Los geht\'s“. Der Name kann danach nicht mehr geändert werden.</p></div>';return;}
+  stepIdentify();
+}
+
+function draw(){
+  const t=task,W=380,H=340,PX=64,PT=30,PB=84;
+  const sc=Math.min((W-2*PX)/t.base,(H-PT-PB)/t.h);
+  const w=t.base*sc,hh=t.h*sc,x0=(W-w)/2,yb=PT+(H-PT-PB+hh)/2;
+  const BL=[x0,yb],BR=[x0+w,yb],M=[x0+w/2,yb],T=[x0+w/2,yb-hh];
+  const id=t.id||{},m=14;
+  const segs={leftS:[BL,T,false],leftB:[BL,M,false],rightB:[M,BR,true],height:[M,T,true],rightS:[BR,T,true]};
+  const hypOn=t.hypShown||id.hyp;
+  let lines='',hits='';
+  for(const [key,[p,q,inTri]] of Object.entries(segs)){
+    let c=inTri?'side':'side2';
+    if(key==='rightS'&&hypOn)c+=' hyp';
+    if(id.legs&&id.legs.has(key))c+=' legok';
+    if((key==='height'&&t.unknown==='h')||((key==='rightS'||key==='leftS')&&t.unknown==='a'))c+=' unk';
+    if(id.flash===key)c+=' flash';
+    lines+=`<line x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" class="${c}"/>`;
+    if(t.selecting)hits+=`<line x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" class="hit" data-seg="${key}"/>`;
+  }
+  const mid=(p,q)=>[(p[0]+q[0])/2,(p[1]+q[1])/2];
+  const tick=(p,q)=>{const [mx,my]=mid(p,q),dx=q[0]-p[0],dy=q[1]-p[1],l=Math.hypot(dx,dy),nx=-dy/l*7,ny=dx/l*7;
+    return `<line class="tick" x1="${mx-nx}" y1="${my-ny}" x2="${mx+nx}" y2="${my+ny}"/>`;};
+  const ticks=tick(BL,T)+tick(BR,T);
+  const txt=(s,x,y,anchor,cls)=>`<text x="${x}" y="${y}" text-anchor="${anchor}" dominant-baseline="middle" class="lbl${cls?' '+cls:''}">${s}</text>`;
+  const unkTxt=(n,x)=>`${n} = ?<tspan class="sub" x="${x}" dy="1.15em">gesucht</tspan>`;
+  // Normale nach außen für die Schenkel
+  const nlen=Math.hypot(hh,w/2);
+  const rs=mid(BR,T),rsP=[rs[0]+hh/nlen*16,rs[1]-(w/2)/nlen*16];
+  const ls=mid(BL,T),lsP=[ls[0]-hh/nlen*16,ls[1]-(w/2)/nlen*16];
+  const aUnk=t.unknown==='a';
+  let labels='';
+  labels+=txt(aUnk?unkTxt('a',rsP[0]):`a = ${fmt(t.a)} cm`,rsP[0],rsP[1],'start',(aUnk?'unk':'')+(hypOn?' hypt':''));
+  labels+=txt(aUnk?'a = ?':'a',lsP[0],lsP[1],'end',aUnk?'unk':'');
+  const hy=(M[1]+T[1])/2,hx=M[0]-8;
+  labels+=txt(t.unknown==='h'?unkTxt('h',hx):`h = ${fmt(t.h)} cm`,hx,hy,'end',t.unknown==='h'?'unk':'');
+  const hbx=(M[0]+BR[0])/2;
+  labels+=txt(`${t.HN} = ${t.halfShown?fmt(t.half)+' cm':'?'}`,hbx,yb+18,'middle','small');
+  const dy=yb+42;
+  const dim=`<line class="dim" x1="${BL[0]}" y1="${dy}" x2="${BR[0]}" y2="${dy}"/><line class="dim" x1="${BL[0]}" y1="${dy-6}" x2="${BL[0]}" y2="${dy+6}"/><line class="dim" x1="${BR[0]}" y1="${dy-6}" x2="${BR[0]}" y2="${dy+6}"/>`;
+  labels+=txt(`${t.BN} = ${fmt(t.base)} cm`,M[0],dy+20,'middle','');
+  const ra=`M${M[0]+m},${M[1]} L${M[0]+m},${M[1]-m} L${M[0]},${M[1]-m}`;
+  const noteTxt=t.selecting?`<p class="tapnote">👆 Tippe in der Zeichnung auf ${id.phase==='hyp'?'die Hypotenuse':'die beiden Katheten'}.</p>`:'';
+  $('#fig').innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${t.shape==='isos'?'Gleichschenkeliges':'Gleichseitiges'} Dreieck mit eingezeichneter Höhe">
+    <polygon class="tri" points="${[M,BR,T].map(p=>p.join(',')).join(' ')}"/>${lines}${ticks}
+    <path class="ra" d="${ra}"/><circle class="dot" cx="${M[0]+m/2}" cy="${M[1]-m/2}" r="2.2"/>
+    ${dim}${labels}${hits}</svg>${noteTxt}`;
+  if(t.selecting)document.querySelectorAll('#fig .hit').forEach(el=>el.onclick=()=>t.onSeg&&t.onSeg(el.dataset.seg));
+}
+
+function addStep(num,title,body){
+  const d=document.createElement('section');d.className='step';
+  d.innerHTML=`<div class="step-head"><span class="num">${num}</span><h3>${title}</h3></div><div class="body">${body}</div><div class="fb" aria-live="polite"></div>`;
+  $('#steps').appendChild(d);
+  const first=d.querySelector('input');if(first&&num>1)first.focus({preventScroll:true});
+  if(num>1)d.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'});
+  return d;
+}
+function wrong(d,msg,solve){
+  task.errors++;d.tries=(d.tries||0)+1;task.errSteps.add(d.querySelector('h3').textContent);
+  const fb=d.querySelector('.fb');fb.className='fb bad';fb.innerHTML=msg;
+  if(d.tries>=2){const b=document.createElement('button');b.className='link';b.textContent='Lösung zeigen';b.onclick=()=>{task.shown++;solve();};fb.appendChild(b);}
+}
+function note(d,msg){const fb=d.querySelector('.fb');fb.className='fb bad';fb.textContent=msg;}
+function right(d,msg){
+  d.classList.add('solved');const fb=d.querySelector('.fb');fb.className='fb ok';fb.textContent='✓ '+msg;
+  d.querySelectorAll('input,button,select').forEach(e=>e.disabled=true);
+}
+function addWay(html,cls){const el=document.createElement('div');el.className='wline'+(cls?' '+cls:'');el.innerHTML=html;$('#way').appendChild(el);}
+function bindCheck(d,fn){d.querySelector('.check').onclick=fn;d.querySelectorAll('input').forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter')fn()}));}
+const near=(x,y)=>Math.abs(x-y)<1e-9;
+
+// Schritt 1: Hypotenuse und Katheten im eingefärbten Dreieck antippen
+function flash(key){task.id.flash=key;draw();const t=task;setTimeout(()=>{if(t===task&&t.id.flash===key){t.id.flash=null;draw();}},700);}
+function stepIdentify(){
+  task.id={phase:'hyp',legs:new Set(),flash:null,hyp:false};task.selecting=true;
+  const d=addStep(1,'Hypotenuse und Katheten erkennen',`<p class="idq">Schau dir das <b>eingefärbte</b> rechtwinklige Dreieck an. Tippe in der Zeichnung auf die <b>Hypotenuse</b>.</p>`);
+  const word=task.shape==='isos'?'Basis':'Seite';
+  const finishId=()=>{if(!task.selecting)return;task.selecting=false;task.id.phase='done';task.hypShown=true;task.id.legs=new Set(['height','rightB']);draw();
+    d.querySelector('.idq').textContent='Hypotenuse und Katheten sind markiert.';
+    right(d,`Richtig: Der Schenkel a ist die Hypotenuse – er liegt gegenüber vom rechten Winkel. Die Höhe h und die halbe ${word} ${task.HN} sind die Katheten.`);stepHalf();};
+  task.onSeg=key=>{
+    const id=task.id;if(!task.selecting)return;
+    const outside=key==='leftS'||key==='leftB';
+    if(id.phase==='hyp'){
+      if(key==='rightS'){id.hyp=true;id.phase='legs';d.querySelector('.idq').innerHTML='Richtig! Tippe jetzt auf die beiden <b>Katheten</b>.';const fb=d.querySelector('.fb');fb.className='fb';fb.innerHTML='';draw();}
+      else{flash(key);wrong(d,outside?'Diese Strecke gehört nicht zum eingefärbten Dreieck.':'Das ist eine Kathete – sie liegt am rechten Winkel. Die Hypotenuse liegt dem rechten Winkel gegenüber.',finishId);}
+    }else if(id.phase==='legs'){
+      if(key==='height'||key==='rightB'){id.legs.add(key);draw();if(id.legs.size===2)finishId();}
+      else{flash(key);wrong(d,key==='rightS'?'Das ist die Hypotenuse. Die Katheten bilden den rechten Winkel.':'Diese Strecke gehört nicht zum eingefärbten Dreieck.',finishId);}
+    }
+  };
+  draw();
+}
+
+// Schritt 2: Halbe Basis bzw. halbe Seite berechnen
+function stepHalf(){
+  const t=task,word=t.shape==='isos'?'Basis':'Seite';
+  const d=addStep(2,`Halbe ${word} berechnen`,`<p>Die untere Kathete ist nur die <b>halbe ${word}</b>. Berechne ${t.HN}.</p><div class="eq"><span>${t.HN} =</span><input class="n" inputmode="decimal" aria-label="halbe ${word}"><span>cm</span><button class="check">Prüfen</button></div>`);
+  const [i1]=d.querySelectorAll('input');
+  const solve=()=>{i1.value=fmt(t.half);t.halfShown=true;draw();
+    right(d,`Richtig: ${t.HN} = ${fmt(t.base)} : 2 = ${fmt(t.half)} cm.`);addWay(`${t.HN} = ${fmt(t.base)} : 2 = ${fmt(t.half)} cm`);stepFind();};
+  bindCheck(d,()=>{
+    const v=parseNum(i1.value);if(isNaN(v)){note(d,'Bitte eine Zahl eingeben.');return;}
+    if(near(v,t.half))solve();
+    else if(near(v,t.base))wrong(d,`Das ist die ganze ${word} ${t.BN}. Gesucht ist die Hälfte davon.`,solve);
+    else if(near(v,t.base*2))wrong(d,'Du hast verdoppelt. Hier musst du durch 2 teilen.',solve);
+    else wrong(d,`Rechne ${t.BN} : 2 = ${fmt(t.base)} : 2.`,solve);
+  });
+}
+
+// Schritt 3: Was ist gesucht?
+function stepFind(){
+  const U=task.unknown,want=task.isHyp?'hyp':'leg';
+  const d=addStep(3,'Was ist gesucht?',`<p>Ist die gesuchte Strecke ${U} im eingefärbten Dreieck eine Hypotenuse oder eine Kathete?</p><div class="opts"><button class="opt word" data-v="hyp">Hypotenuse</button><button class="opt word" data-v="leg">Kathete</button></div>`);
+  const solve=()=>{d.querySelector(`[data-v="${want}"]`).classList.add('good');
+    right(d,task.isHyp?`Richtig: Der Schenkel ${U} ist die Hypotenuse.`:`Richtig: Die Höhe ${U} ist eine Kathete.`);stepWords();};
+  d.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    if(b.dataset.v===want)solve();
+    else{b.classList.add('wrongb');b.disabled=true;
+      wrong(d,task.isHyp?`${U} liegt gegenüber vom rechten Winkel – also ist ${U} die Hypotenuse.`:`${U} liegt direkt am rechten Winkel – die Hypotenuse ist der Schenkel a.`,solve);}
+  });
+}
+
+// Schritt 4: Erste Zeile in Worten
+function stepWords(){
+  const inp=n=>`<input class="n letter" maxlength="12" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" aria-label="Feld ${n}">`;
+  const d=addStep(4,'Erste Zeile: Formel mit H und K',`<p>Schreibe die Formel mit <b>H</b> für Hypotenuse und <b>K</b> für Kathete – passend dazu, was gesucht ist – und wähle das Rechenzeichen.</p><div class="eq">${inp(1)}<sup>2</sup><span>=</span>${inp(2)}<sup>2</sup><select class="n opsel" aria-label="Rechenzeichen"><option value="">?</option><option value="+">+</option><option value="−">−</option></select>${inp(3)}<sup>2</sup><button class="check">Prüfen</button></div>`);
+  const ins=[...d.querySelectorAll('input')];
+  const isH=s=>/^(h|hypo?th?enuse)$/i.test(s.trim()),isK=s=>/^(k|kath?ete)$/i.test(s.trim());
+  const leg=!task.isHyp,sel=d.querySelector('select');
+  const W=leg?['K','H','K']:['H','K','K'],OP=leg?'−':'+';
+  const solve=()=>{W.forEach((w,i)=>ins[i].value=w);sel.value=OP;
+    right(d,'Richtig – das ist die erste Zeile!');addWay(`${W[0]}² = ${W[1]}² ${OP} ${W[2]}²`);stepVars();};
+  bindCheck(d,()=>{
+    const v=ins.map(i=>i.value);
+    if(v.some(x=>!x.trim())){note(d,'Bitte alle drei Felder ausfüllen.');return;}
+    if(!sel.value){note(d,'Wähle noch das Rechenzeichen (+ oder −).');return;}
+    const wordsOk=leg?(isK(v[0])&&isH(v[1])&&isK(v[2])):(isH(v[0])&&isK(v[1])&&isK(v[2]));
+    if(wordsOk&&sel.value===OP)solve();
+    else if(wordsOk)wrong(d,leg?'Die Wörter stimmen. Überlege noch einmal: Wird für eine Kathete addiert oder subtrahiert?':'Die Wörter stimmen. Überlege noch einmal: Wird für die Hypotenuse addiert oder subtrahiert?',solve);
+    else if(leg&&isH(v[0]))wrong(d,'Gesucht ist eine Kathete – also steht die Kathete allein links vom Ist-gleich.',solve);
+    else if(!leg&&isK(v[0]))wrong(d,'Gesucht ist die Hypotenuse – also steht sie allein links vom Ist-gleich.',solve);
+    else wrong(d,'Verwende H für Hypotenuse und K für Kathete. Links vom Ist-gleich steht die gesuchte Strecke.',solve);
+  });
+}
+
+// Schritt 5: Variablen einsetzen
+function stepVars(){
+  const t=task,H2=sqn(t.HN),B2=sqn(t.BN);
+  let correct,opts;
+  if(t.isHyp){correct=`a² = h² + ${H2}`;opts=[correct,`a² = h² + ${B2}`,`a² = h² − ${H2}`];}
+  else if(t.shape==='isos'){correct=`h² = a² − ${H2}`;opts=[correct,`h² = a² − ${B2}`,`h² = a² + ${H2}`];}
+  else{correct=`h² = a² − ${H2}`;opts=[correct,`h² = ${H2} − a²`,`h² = a² + ${H2}`];}
+  opts=shuffle(opts);
+  const word=t.shape==='isos'?'Basis':'Seite';
+  const d=addStep(5,'Variablen aus der Skizze einsetzen',`<p>Welche Formel passt zum eingefärbten Dreieck?</p><div class="opts">${opts.map(o=>`<button class="opt">${o}</button>`).join('')}</div>`);
+  const solve=()=>{d.querySelectorAll('.opt').forEach(b=>{if(b.textContent===correct)b.classList.add('good')});
+    right(d,'Richtige Formel!');addWay(correct);stepNumbers();};
+  d.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    if(b.textContent===correct)solve();
+    else{b.classList.add('wrongb');b.disabled=true;
+      if(!b.textContent.includes('/'))wrong(d,`Achtung: Die Kathete im eingefärbten Dreieck ist nur die halbe ${word} ${t.HN} – nicht die ganze ${word} ${t.BN}.`,solve);
+      else wrong(d,t.isHyp?'Die Hypotenuse steht allein links: Hypotenuse² = Kathete² + Kathete².':'Für eine Kathete gilt: Kathete² = Hypotenuse² − andere Kathete².',solve);}
+  });
+}
+
+// Schritt 6: Zahlen einsetzen
+function stepNumbers(){
+  const t=task,U=t.unknown,op=t.isHyp?'+':'−',word=t.shape==='isos'?'Basis':'Seite';
+  const d=addStep(6,'Zahlen einsetzen',`<p>Setze die Längen ein (ohne cm).</p><div class="eq"><span>${U}² =</span><input class="n" inputmode="decimal" aria-label="erste Zahl"><sup>2</sup><span>${op}</span><input class="n" inputmode="decimal" aria-label="zweite Zahl"><sup>2</sup><button class="check">Prüfen</button></div>`);
+  const [i1,i2]=d.querySelectorAll('input');
+  const exp=t.isHyp?[t.h,t.half]:[t.a,t.half];
+  const is=(a,b,x,y)=>near(a,x)&&near(b,y);
+  const ok=(a,b)=>t.isHyp?(is(a,b,exp[0],exp[1])||is(a,b,exp[1],exp[0])):is(a,b,exp[0],exp[1]);
+  const solve=()=>{if(!ok(parseNum(i1.value),parseNum(i2.value))){i1.value=fmt(exp[0]);i2.value=fmt(exp[1]);}
+    right(d,'Richtig eingesetzt!');addWay(`${U}² = ${i1.value.trim()}² ${op} ${i2.value.trim()}²`);stepCalc(parseNum(i1.value),parseNum(i2.value));};
+  bindCheck(d,()=>{
+    const a=parseNum(i1.value),b=parseNum(i2.value);
+    if(isNaN(a)||isNaN(b)){note(d,'Bitte beide Felder ausfüllen.');return;}
+    if(ok(a,b))solve();
+    else if(t.isHyp?(is(a,b,t.h,t.base)||is(a,b,t.base,t.h)):is(a,b,t.a,t.base))wrong(d,`Achtung: Setze nicht die ganze ${word} ${t.BN} = ${fmt(t.base)} ein, sondern die halbe ${word} ${t.HN} = ${fmt(t.half)}.`,solve);
+    else if(!t.isHyp&&is(a,b,t.half,t.a))wrong(d,'Vorsicht, Reihenfolge! Bei der Kathete kommt zuerst die Hypotenuse a, dann wird die andere Kathete abgezogen.',solve);
+    else wrong(d,t.isHyp?`Setze die beiden Katheten ein: die Höhe h und die halbe ${word} ${t.HN}.`:`Setze zuerst die Hypotenuse a, dann die halbe ${word} ${t.HN} ein.`,solve);
+  });
+}
+
+// Schritt 7: Berechnen
+function stepCalc(x,y){
+  const t=task,U=t.unknown;
+  const d=addStep(7,'Berechnen',`<p>Rechne die Quadrate aus und dann ${t.isHyp?'addiere':'subtrahiere'} sie.</p><div class="eq"><span>${U}² =</span><input class="n wide" inputmode="decimal" aria-label="Ergebnis"><button class="check">Prüfen</button></div>`);
+  const [i1]=d.querySelectorAll('input');
+  const solve=()=>{i1.value=fmt(t.sq);right(d,'Richtig gerechnet!');addWay(`${U}² = ${fmt(t.sq)}`);stepRoot();};
+  bindCheck(d,()=>{
+    const a=parseNum(i1.value);if(isNaN(a)){note(d,'Bitte eine Zahl eingeben.');return;}
+    if(Math.abs(a-t.sq)<1e-6)solve();
+    else if(near(a,t.isHyp?x+y:x-y))wrong(d,`Du hast die Zahlen noch nicht quadriert. Zum Beispiel: ${fmt(x)}² = ${fmt(x)} · ${fmt(x)}.`,solve);
+    else if(near(a,t.isHyp?x*x-y*y:x*x+y*y))wrong(d,`Achte auf das Rechenzeichen: hier wird ${t.isHyp?'addiert':'subtrahiert'}.`,solve);
+    else if(near(a,t.isHyp?2*x+2*y:2*x-2*y))wrong(d,`Quadrieren heißt nicht mal 2! ${fmt(x)}² = ${fmt(x)} · ${fmt(x)}.`,solve);
+    else wrong(d,`Rechne zuerst ${fmt(x)}² = ${fmt(x)} · ${fmt(x)} und ${fmt(y)}² = ${fmt(y)} · ${fmt(y)}.`,solve);
+  });
+}
+
+// Schritt 8: Wurzel ziehen
+function stepRoot(){
+  const t=task,U=t.unknown,exact=Number.isInteger(Math.round(t.ans*1e9)/1e9);
+  const d=addStep(8,'Wurzel ziehen',`<p>${exact?`Ziehe die Wurzel aus ${U}² = ${fmt(t.sq)}.`:`Ziehe die Wurzel aus ${U}² = ${fmt(t.sq)} und runde auf 2 Dezimalstellen.`}</p><div class="eq"><span>${U} =</span><input class="n wide" inputmode="decimal" aria-label="Ergebnis"><span>cm</span><button class="check">Prüfen</button></div>`);
+  const [i1]=d.querySelectorAll('input');
+  const solve=()=>{i1.value=fmt(t.ans);right(d,'Super, Aufgabe gelöst!');
+    addWay(`√${U}² = √${fmt(t.sq)}`);addWay(`${U} ${exact?'=':'≈'} ${fmt(t.ans)} cm`,'final');finish();};
+  bindCheck(d,()=>{
+    const a=parseNum(i1.value);if(isNaN(a)){note(d,'Bitte eine Zahl eingeben.');return;}
+    if(Math.abs(a-t.ans)<=(exact?1e-6:0.011))solve();
+    else if(Math.abs(a-t.sq)<1e-6)wrong(d,`Das ist noch ${U}². Du musst noch die Wurzel ziehen.`,solve);
+    else if(Math.abs(a-t.sq/2)<1e-6)wrong(d,'Wurzel ziehen heißt nicht durch 2 teilen! Gesucht ist die Zahl, die mit sich selbst multipliziert das Ergebnis ergibt.',solve);
+    else wrong(d,exact?`Welche Zahl ergibt mal sich selbst ${fmt(t.sq)}?`:`Tippe √${fmt(t.sq)} in den Taschenrechner und runde auf 2 Dezimalstellen.`,solve);
+  });
+}
+
+function logTask(){
+  const t=task;
+  let given;
+  if(t.shape==='equi')given=`a = ${fmt(t.a)} cm`;
+  else if(t.isHyp)given=`c = ${fmt(t.base)} cm, h = ${fmt(t.h)} cm`;
+  else given=`a = ${fmt(t.a)} cm, c = ${fmt(t.base)} cm`;
+  const exact=Number.isInteger(Math.round(t.ans*1e9)/1e9);
+  state.log.push({shape:t.shape==='isos'?'gleichschenkelig':'gleichseitig',isHyp:t.isHyp,given,
+    result:`${t.unknown} ${exact?'=':'≈'} ${fmt(t.ans)} cm`,errors:t.errors,shown:t.shown,
+    errSteps:t.errSteps.size?[...t.errSteps].join(', '):'–'});
+}
+function finish(){
+  state.solved++;if(task.errors===0)state.perfect++;
+  logTask();updateScore();
+  $('#doneText').innerHTML=(task.errors===0?'Fehlerfrei gelöst – stark!':`Geschafft! (${task.errors} ${task.errors===1?'Fehlversuch':'Fehlversuche'})`)+'<br><strong>✏️ Übertrage jetzt den ganzen Rechenweg in dein Hausübungsheft.</strong><br><span style="font-size:15px">Du findest ihn oben unter „Rechenweg“.</span>';
+  $('#nextBtn').textContent=state.log.length>=ROUND?'Zur Zusammenfassung':'Nächste Aufgabe';
+  $('#done').hidden=false;$('#nextBtn').focus({preventScroll:true});
+  $('#done').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function showSummary(){
+  const L=state.log,name=$('#name').value.trim()||'–';
+  const perfect=L.filter(r=>r.errors===0).length,errs=L.reduce((s,r)=>s+r.errors,0),shown=L.reduce((s,r)=>s+r.shown,0);
+  const now=new Date();
+  const dt=now.toLocaleDateString('de-AT')+', '+now.toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'});
+  const rows=L.map((r,i)=>`<tr class="${r.errors===0?'okrow':r.shown?'errrow':''}"><td>${i+1}</td><td>${r.shape}</td><td>${r.isHyp?'Schenkel a (Hypotenuse)':'Höhe h (Kathete)'}</td><td>${r.given}</td><td>${r.result}</td><td>${r.errors}</td><td>${r.shown?'ja ('+r.shown+'×)':'nein'}</td><td>${esc(r.errSteps)}</td></tr>`).join('');
+  const s=$('#summary');
+  s.innerHTML=`<h2>Zusammenfassung für die Lehrkraft</h2>
+    <div class="sumhead"><div><span>Name</span><b>${esc(name)}</b></div><div><span>Datum</span><b>${dt}</b></div><div><span>Übung</span><b>Pythagoras im gleichschenkeligen und gleichseitigen Dreieck</b></div></div>
+    <div class="sumstats"><div><b>${perfect} / ${L.length}</b><span>ohne Fehler</span></div><div><b>${errs}</b><span>Fehlversuche gesamt</span></div><div><b>${shown}</b><span>Lösungen angezeigt</span></div></div>
+    <div class="tablewrap"><table><thead><tr><th>Nr.</th><th>Dreieck</th><th>Gesucht</th><th>Gegeben</th><th>Ergebnis</th><th>Fehlversuche</th><th>Lösung gezeigt</th><th>Fehler bei Schritt</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <p class="sumnote">Zeige diese Seite deiner Lehrkraft. Die Rechenwege stehen in deinem Hausübungsheft.</p>
+    <button class="next" id="newRound">Neue Runde starten</button>`;
+  document.querySelector('.grid').hidden=true;document.querySelector('.controls').hidden=true;$('#score').hidden=true;s.hidden=false;
+  window.scrollTo({top:0});
+  $('#newRound').onclick=()=>{if(!confirm('Neue Runde starten? Die Zusammenfassung wird dabei gelöscht.'))return;
+    state.log=[];state.solved=0;state.perfect=0;s.hidden=true;
+    document.querySelector('.grid').hidden=false;document.querySelector('.controls').hidden=false;$('#score').hidden=false;
+    updateScore();newTask();};
+}
+function lockName(){const n=$('#name');if(state.nameLocked)return;if(!n.value.trim()){n.focus();return;}
+  n.value=n.value.trim();n.readOnly=true;n.classList.add('locked');n.setAttribute('aria-readonly','true');$('#nameOk').hidden=true;state.nameLocked=true;updateScore();
+  if(task&&task.waiting){task.waiting=false;$('#steps').innerHTML='';stepIdentify();}}
+$('#nameOk').onclick=lockName;
+$('#name').addEventListener('keydown',e=>{if(e.key==='Enter')lockName();});
+$('#nextBtn').onclick=()=>state.log.length>=ROUND?showSummary():newTask();
+newTask();
+</script>
+</body>
+</html>
