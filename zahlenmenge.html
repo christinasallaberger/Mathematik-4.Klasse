@@ -14,7 +14,7 @@
   --n:#2F6FD6; --z:#7A4CC2; --q:#1E9A7A; --i:#D9822B; --r:#C2405B;
   --ok:#1F9D5A; --okbg:#E3F5EA; --bad:#D23B3B; --badbg:#FBE6E6;
   --sans:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --math:"STIX Two Text","Cambria Math","Times New Roman",serif;
+  --math:"STIX Two Text","STIX Two Math","Cambria Math","Segoe UI Symbol","Times New Roman",serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){
@@ -165,11 +165,11 @@ tr.ok td.mark{color:var(--ok)} tr.bad td.mark{color:var(--bad)}
               <div class="box n"><span class="lbl">ℕ<small>natürliche Zahlen</small></span><span class="ex">0 &nbsp;1 &nbsp;2 &nbsp;3 …</span></div>
             </div>
           </div>
-          <div class="box i"><span class="lbl">ℝ∖ℚ<small>irrational</small></span><span class="ex"><span class="sqrt">√<span>2</span></span> &nbsp;π</span></div>
+          <div class="box i"><span class="lbl">𝕀<small>nicht rational</small></span><span class="ex"><span class="sqrt">√<span>2</span></span> &nbsp;π</span></div>
         </div>
       </div>
     </div>
-    <p class="note">∈ heißt „ist Element von“, ∉ heißt „ist nicht Element von“. ℝ∖ℚ sind die nicht rationalen (irrationalen) Zahlen.</p>
+    <p class="note">∈ heißt „ist Element von“, ∉ heißt „ist nicht Element von“. 𝕀 sind die nicht rationalen (irrationalen) Zahlen, zum Beispiel π und √2.</p>
   </section>
 
   <div class="tabs" role="tablist">
@@ -197,7 +197,7 @@ tr.ok td.mark{color:var(--ok)} tr.bad td.mark{color:var(--bad)}
           <th scope="col" class="setN">ℕ<small>natürlich</small></th>
           <th scope="col" class="setZ">ℤ<small>ganz</small></th>
           <th scope="col" class="setQ">ℚ<small>rational</small></th>
-          <th scope="col" class="setI">ℝ∖ℚ<small>irrational</small></th>
+          <th scope="col" class="setI">𝕀<small>nicht rational</small></th>
           <th scope="col" class="setR">ℝ<small>reell</small></th>
           <th scope="col" aria-label="Ergebnis"></th>
         </tr></thead>
@@ -224,8 +224,8 @@ tr.ok td.mark{color:var(--ok)} tr.bad td.mark{color:var(--bad)}
 const fr=(a,b)=>`<span class="frac"><span>${a}</span><span>${b}</span></span>`;
 const sq=x=>`<span class="sqrt">√<span>${x}</span></span>`;
 const per=(a,b)=>`${a}<span class="ov">${b}</span>`;
-const SET={N:'<span class="setN">ℕ</span>',Z:'<span class="setZ">ℤ</span>',Q:'<span class="setQ">ℚ</span>',I:'<span class="setI">ℝ∖ℚ</span>',R:'<span class="setR">ℝ</span>'};
-const NAME={N:'natürlich',Z:'ganz',Q:'rational',I:'irrational',R:'reell'};
+const SET={N:'<span class="setN">ℕ</span>',Z:'<span class="setZ">ℤ</span>',Q:'<span class="setQ">ℚ</span>',I:'<span class="setI">𝕀</span>',R:'<span class="setR">ℝ</span>'};
+const NAME={N:'natürlich',Z:'ganz',Q:'rational',I:'nicht rational',R:'reell'};
 
 // Teil 1: [Zahl (HTML), Menge, ist Element?, Erklärung]
 const T1=[
@@ -236,7 +236,7 @@ const T1=[
  ['0,5','Q',true,'0,5 = ½ ist ein Bruch, also rational.'],
  [sq(2),'Q',false,'√2 ist irrational (unendlich, nicht periodisch).'],
  [sq(2),'R',true,'Jede irrationale Zahl ist reell.'],
- ['π','I',true,'π ist irrational.'],
+ ['π','I',true,'π ist eine nicht rationale Zahl.'],
  [fr(3,4),'N',false,'¾ ist keine natürliche Zahl.'],
  ['12','Q',true,'12 = 12/1, also rational.'],
  ['−7','R',true,'Jede ganze Zahl ist auch reell.'],
