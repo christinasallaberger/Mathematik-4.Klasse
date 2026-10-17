@@ -238,20 +238,20 @@ const T1=[
  [sq(2),'R',true,'Jede irrationale Zahl ist reell.'],
  ['π','I',true,'π ist eine nicht rationale Zahl.'],
  [fr(3,4),'N',false,'¾ ist keine natürliche Zahl.'],
- ['12','Q',true,'12 = 12/1, also rational.'],
- ['−7','R',true,'Jede ganze Zahl ist auch reell.'],
+ ['12','I',false,'12 ist rational, also nicht in 𝕀.'],
+ ['−7','N',false,'Negative Zahlen sind nicht natürlich.'],
  [sq(9),'N',true,'√9 = 3, eine natürliche Zahl.'],
  [sq(16),'I',false,'√16 = 4 ist rational, nicht irrational.'],
  ['0','N',true,'In Österreich gehört 0 zu ℕ.'],
  ['−'+fr(1,2),'Q',true,'−½ ist ein Bruch, also rational.'],
  [per('0,','3'),'Q',true,'Periodische Dezimalzahlen sind rational (= ⅓).'],
  ['π','Q',false,'π ist nicht rational.'],
- ['−'+sq(5),'R',true,'−√5 ist irrational und damit reell.'],
+ ['−'+sq(5),'Q',false,'−√5 ist nicht rational, sie gehört zu 𝕀.'],
  ['2,5','N',false,'2,5 ist keine natürliche Zahl.'],
  ['−100','N',false,'Negative Zahlen sind nicht natürlich.'],
  [sq(3),'Z',false,'√3 ≈ 1,732… ist keine ganze Zahl.'],
  [fr(8,2),'Z',true,'8/2 = 4, eine ganze Zahl.'],
- ['−0,25','Q',true,'−0,25 = −¼, also rational.'],
+ ['−0,25','Z',false,'−0,25 ist keine ganze Zahl.'],
  [sq(7),'I',true,'√7 ist irrational.'],
  ['1000','R',true,'Jede natürliche Zahl ist auch reell.']
 ];
@@ -273,7 +273,9 @@ let r1={ok:0,bad:0}, r2={done:0,errors:0};
 function build1(){
   r1={ok:0,bad:0};
   const g=document.getElementById('grid1');g.innerHTML='';
-  shuffle(T1).forEach((t,k)=>{
+  let list;
+  do{list=shuffle(T1)}while(list.some((t,i)=>i>1&&t[2]===list[i-1][2]&&t[2]===list[i-2][2]));
+  list.forEach((t,k)=>{
     const d=document.createElement('div');d.className='item';
     d.innerHTML=`<span class="nr">Aufgabe ${k+1}</span>
       <div class="stmt"><span>${t[0]}</span><span class="slot" aria-label="Lücke"></span><span>${SET[t[1]]}</span></div>
