@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zahlenmengen – Übung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=STIX+Two+Text:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F8FC; --grid:#DFE7F3; --ink:#1C2647; --muted:#5B6688;
+  --card:#FFFFFF; --line:#C9D3E6;
+  --n:#2F6FD6; --z:#7A4CC2; --q:#1E9A7A; --i:#D9822B; --r:#C2405B;
+  --ok:#1F9D5A; --okbg:#E3F5EA; --bad:#D23B3B; --badbg:#FBE6E6;
+  --sans:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --math:"STIX Two Text","Cambria Math","Times New Roman",serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#141A2B; --grid:#1E2740; --ink:#E7ECF7; --muted:#9AA6C4;
+    --card:#1B2338; --line:#33405F;
+    --n:#6FA0F0; --z:#B08BEA; --q:#4FCBA8; --i:#F0A65A; --r:#EE7790;
+    --ok:#52CF8A; --okbg:#173A2A; --bad:#F06E6E; --badbg:#3E1E24;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141A2B; --grid:#1E2740; --ink:#E7ECF7; --muted:#9AA6C4;
+  --card:#1B2338; --line:#33405F;
+  --n:#6FA0F0; --z:#B08BEA; --q:#4FCBA8; --i:#F0A65A; --r:#EE7790;
+  --ok:#52CF8A; --okbg:#173A2A; --bad:#F06E6E; --badbg:#3E1E24;
+  color-scheme:dark;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0;font-family:var(--sans);color:var(--ink);font-size:1.0625rem;line-height:1.5;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;
+}
+.wrap{max-width:860px;margin:0 auto;padding:1.25rem 1rem 4rem}
+h1{font-family:var(--math);font-size:clamp(1.9rem,6vw,2.6rem);line-height:1.1;margin:.5rem 0 .25rem}
+.lead{color:var(--muted);margin:0 0 1.25rem;max-width:60ch}
+
+/* Mengen-Diagramm */
+.sets{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem;margin-bottom:1.5rem}
+.nest{position:relative;font-family:var(--math)}
+.box{border:2px solid;border-radius:14px;padding:.45rem .6rem .6rem}
+.box>.lbl{font-weight:700;font-size:1.15rem}
+.box>.lbl small{font-family:var(--sans);font-weight:400;font-size:.8rem;color:var(--muted);margin-left:.35rem}
+.ex{font-size:.95rem;color:var(--muted);margin-left:.35rem}
+.r{border-color:var(--r)} .r>.lbl{color:var(--r)}
+.inner{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.35rem}
+.inner>.q{flex:2 1 260px} .inner>.i{flex:1 1 150px}
+.q{border-color:var(--q)} .q>.lbl{color:var(--q)}
+.i{border-color:var(--i);border-style:dashed} .i>.lbl{color:var(--i)}
+.z{border-color:var(--z);margin-top:.35rem} .z>.lbl{color:var(--z)}
+.n{border-color:var(--n);margin-top:.35rem} .n>.lbl{color:var(--n)}
+.note{font-size:.85rem;color:var(--muted);margin:.6rem 0 0}
+
+/* Tabs */
+.tabs{display:flex;gap:.5rem;margin-bottom:1rem;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);padding:.5rem 0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+.tab{flex:1;font:inherit;font-weight:700;padding:.7rem .5rem;border-radius:10px;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.tab[aria-selected="true"]{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.tab:focus-visible,button:focus-visible{outline:3px solid var(--n);outline-offset:2px}
+.panel[hidden]{display:none}
+h2{font-size:1.3rem;margin:.25rem 0 .25rem}
+.task{color:var(--muted);margin:0 0 1rem}
+
+/* Teil 1 */
+.grid1{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.6rem}
+.item{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.6rem .7rem;display:flex;flex-direction:column;gap:.5rem}
+.item .nr{font-size:.75rem;color:var(--muted)}
+.stmt{display:flex;align-items:center;justify-content:center;gap:.6rem;font-family:var(--math);font-size:1.6rem;min-height:2.6rem}
+.slot{width:2.4rem;height:2.4rem;border:2px dashed var(--muted);border-radius:8px;display:grid;place-items:center;font-size:1.5rem;color:var(--ink)}
+.slot.filled{border-style:solid;border-color:var(--ink)}
+.choices{display:flex;gap:.4rem}
+.choices button{flex:1;font-family:var(--math);font-size:1.4rem;padding:.25rem;border-radius:8px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.choices button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.item.ok{border-color:var(--ok);background:var(--okbg)}
+.item.bad{border-color:var(--bad);background:var(--badbg)}
+.fb{font-size:.85rem;min-height:1em}
+.item.ok .fb{color:var(--ok)} .item.bad .fb{color:var(--bad)}
+
+/* Mathe-Notation */
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:.75em;line-height:1.05;margin:0 .05em}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .15em}
+.sqrt{white-space:nowrap}
+.sqrt>span{border-top:1.5px solid currentColor;padding:0 .1em;margin-left:.02em}
+.ov{text-decoration:overline}
+.setN{color:var(--n);font-weight:700} .setZ{color:var(--z);font-weight:700} .setQ{color:var(--q);font-weight:700}
+.setI{color:var(--i);font-weight:700} .setR{color:var(--r);font-weight:700}
+
+/* Teil 2 */
+.tblwrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:340px}
+th,td{padding:.35rem .25rem;text-align:center;border-bottom:1px solid var(--line)}
+thead th{font-family:var(--math);font-size:1.35rem;padding-top:.6rem;position:relative}
+thead th small{display:block;font-family:var(--sans);font-size:.68rem;font-weight:400;color:var(--muted);line-height:1.2}
+td.num{font-family:var(--math);font-size:1.35rem;text-align:left;padding-left:.7rem;white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+.cell{width:2.4rem;height:2.4rem;border-radius:8px;border:2px solid var(--line);background:var(--paper);cursor:pointer;font-size:1.2rem;font-weight:700;color:var(--paper);padding:0}
+tr.ok td{background:var(--okbg)} tr.bad td{background:var(--badbg)}
+.cell.wrong{background:var(--bad);border-color:var(--bad)}
+td.mark{width:2rem;font-weight:700}
+tr.ok td.mark{color:var(--ok)} tr.bad td.mark{color:var(--bad)}
+.legend2{font-size:.85rem;color:var(--muted);margin:.6rem 0 0}
+
+/* Start */
+.start{background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:1.2rem;margin-bottom:1.5rem;max-width:480px}
+.start label{display:block;font-weight:700;margin-bottom:.4rem}
+.start .row{display:flex;gap:.5rem;flex-wrap:wrap}
+.start input{flex:1 1 200px;font:inherit;padding:.65rem .8rem;border-radius:10px;border:2px solid var(--line);background:var(--paper);color:var(--ink)}
+.start input:focus-visible{outline:3px solid var(--n);outline-offset:1px}
+.start .err{color:var(--bad);font-size:.9rem;min-height:1.2em;margin:.4rem 0 0}
+.hello{font-weight:700;margin:0 0 1rem}
+#main[hidden]{display:none}
+.item.locked .choices button{cursor:default}
+.cell.right{background:var(--ok);border-color:var(--ok)}
+.cell.right::after{content:"✓"}
+.cell.wrong::after{content:"✗"}
+.cell:disabled{cursor:default}
+.progress{font-weight:700}
+.summary{margin-top:1.5rem;background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:1rem}
+.summary h3{margin:0 0 .4rem}
+.summary p{margin:.2rem 0}
+
+/* Aktionen */
+.actions{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin-top:1rem}
+.btn{font:inherit;font-weight:700;padding:.7rem 1.1rem;border-radius:10px;border:2px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer}
+.btn.sec{background:var(--card);color:var(--ink)}
+.score{font-weight:700;font-size:1.1rem}
+@media (prefers-reduced-motion:no-preference){
+  .item,.cell,tr td{transition:background-color .2s,border-color .2s}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Zahlenmengen</h1>
+  <p class="lead">Jede Menge steckt in der nächstgrößeren. Schau dir das Bild an und löse dann beide Teile.</p>
+
+  <section class="start" id="start">
+    <label for="nameIn">Wie heißt du?</label>
+    <div class="row">
+      <input id="nameIn" type="text" autocomplete="name" placeholder="Vor- und Nachname">
+      <button class="btn" id="go">Übung starten</button>
+    </div>
+    <p class="err" id="nameErr" aria-live="polite"></p>
+  </section>
+
+  <div id="main" hidden>
+  <p class="hello" id="hello"></p>
+  <section class="sets" aria-label="Übersicht der Zahlenmengen">
+    <div class="nest">
+      <div class="box r"><span class="lbl">ℝ<small>reelle Zahlen</small></span>
+        <div class="inner">
+          <div class="box q"><span class="lbl">ℚ<small>rationale Zahlen</small></span><span class="ex">½ &nbsp;−0,75 &nbsp;0,<span class="ov">3</span></span>
+            <div class="box z"><span class="lbl">ℤ<small>ganze Zahlen</small></span><span class="ex">−5 &nbsp;−1</span>
+              <div class="box n"><span class="lbl">ℕ<small>natürliche Zahlen</small></span><span class="ex">0 &nbsp;1 &nbsp;2 &nbsp;3 …</span></div>
+            </div>
+          </div>
+          <div class="box i"><span class="lbl">ℝ∖ℚ<small>irrational</small></span><span class="ex"><span class="sqrt">√<span>2</span></span> &nbsp;π</span></div>
+        </div>
+      </div>
+    </div>
+    <p class="note">∈ heißt „ist Element von“, ∉ heißt „ist nicht Element von“. ℝ∖ℚ sind die nicht rationalen (irrationalen) Zahlen.</p>
+  </section>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="t1" aria-controls="p1" aria-selected="true">Teil 1: ∈ oder ∉</button>
+    <button class="tab" role="tab" id="t2" aria-controls="p2" aria-selected="false">Teil 2: Tabelle</button>
+  </div>
+
+  <section class="panel" id="p1" role="tabpanel" aria-labelledby="t1">
+    <h2>Element oder nicht Element?</h2>
+    <p class="task">Setze bei jeder Aufgabe das richtige Zeichen ein: ∈ oder ∉. Du siehst sofort, ob es stimmt.</p>
+    <div class="grid1" id="grid1"></div>
+    <div class="actions">
+      <button class="btn sec" id="reset1">Neu mischen</button>
+      <span class="score" id="score1" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <section class="panel" id="p2" role="tabpanel" aria-labelledby="t2" hidden>
+    <h2>Zu welchen Mengen gehört die Zahl?</h2>
+    <p class="task">Tippe in jeder Zeile alle Mengen an, zu denen die Zahl gehört. Jedes Feld wird sofort kontrolliert.</p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr>
+          <th scope="col" style="text-align:left;padding-left:.7rem"><small>Zahl</small></th>
+          <th scope="col" class="setN">ℕ<small>natürlich</small></th>
+          <th scope="col" class="setZ">ℤ<small>ganz</small></th>
+          <th scope="col" class="setQ">ℚ<small>rational</small></th>
+          <th scope="col" class="setI">ℝ∖ℚ<small>irrational</small></th>
+          <th scope="col" class="setR">ℝ<small>reell</small></th>
+          <th scope="col" aria-label="Ergebnis"></th>
+        </tr></thead>
+        <tbody id="tbody2"></tbody>
+      </table>
+    </div>
+    <p class="legend2">Grün = richtig, rot = gehört nicht dazu. Eine Zeile ist fertig, wenn alle richtigen Mengen gefunden sind.</p>
+    <div class="actions">
+      <button class="btn sec" id="reset2">Neu mischen</button>
+      <span class="score" id="score2" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <section class="summary" aria-live="polite">
+    <h3 id="sumName"></h3>
+    <p id="sum1"></p>
+    <p id="sum2"></p>
+  </section>
+  </div>
+</div>
+
+<script>
+// Hilfsfunktionen für Notation
+const fr=(a,b)=>`<span class="frac"><span>${a}</span><span>${b}</span></span>`;
+const sq=x=>`<span class="sqrt">√<span>${x}</span></span>`;
+const per=(a,b)=>`${a}<span class="ov">${b}</span>`;
+const SET={N:'<span class="setN">ℕ</span>',Z:'<span class="setZ">ℤ</span>',Q:'<span class="setQ">ℚ</span>',I:'<span class="setI">ℝ∖ℚ</span>',R:'<span class="setR">ℝ</span>'};
+const NAME={N:'natürlich',Z:'ganz',Q:'rational',I:'irrational',R:'reell'};
+
+// Teil 1: [Zahl (HTML), Menge, ist Element?, Erklärung]
+const T1=[
+ ['5','N',true,'5 ist eine natürliche Zahl.'],
+ ['−3','N',false,'Negative Zahlen sind nicht natürlich.'],
+ ['−3','Z',true,'−3 ist eine ganze Zahl.'],
+ ['0,5','Z',false,'0,5 ist keine ganze Zahl.'],
+ ['0,5','Q',true,'0,5 = ½ ist ein Bruch, also rational.'],
+ [sq(2),'Q',false,'√2 ist irrational (unendlich, nicht periodisch).'],
+ [sq(2),'R',true,'Jede irrationale Zahl ist reell.'],
+ ['π','I',true,'π ist irrational.'],
+ [fr(3,4),'N',false,'¾ ist keine natürliche Zahl.'],
+ ['12','Q',true,'12 = 12/1, also rational.'],
+ ['−7','R',true,'Jede ganze Zahl ist auch reell.'],
+ [sq(9),'N',true,'√9 = 3, eine natürliche Zahl.'],
+ [sq(16),'I',false,'√16 = 4 ist rational, nicht irrational.'],
+ ['0','N',true,'In Österreich gehört 0 zu ℕ.'],
+ ['−'+fr(1,2),'Q',true,'−½ ist ein Bruch, also rational.'],
+ [per('0,','3'),'Q',true,'Periodische Dezimalzahlen sind rational (= ⅓).'],
+ ['π','Q',false,'π ist nicht rational.'],
+ ['−'+sq(5),'R',true,'−√5 ist irrational und damit reell.'],
+ ['2,5','N',false,'2,5 ist keine natürliche Zahl.'],
+ ['−100','N',false,'Negative Zahlen sind nicht natürlich.'],
+ [sq(3),'Z',false,'√3 ≈ 1,732… ist keine ganze Zahl.'],
+ [fr(8,2),'Z',true,'8/2 = 4, eine ganze Zahl.'],
+ ['−0,25','Q',true,'−0,25 = −¼, also rational.'],
+ [sq(7),'I',true,'√7 ist irrational.'],
+ ['1000','R',true,'Jede natürliche Zahl ist auch reell.']
+];
+
+// Teil 2: [Zahl (HTML), richtige Mengen]
+const T2=[
+ [sq(2),'IR'],['7','NZQR'],['−4','ZQR'],['0,75','QR'],['π','IR'],
+ ['0','NZQR'],['−'+fr(2,3),'QR'],[sq(25),'NZQR'],['3,14','QR'],['−'+sq(3),'IR'],
+ [fr(1,3),'QR'],[per('0,','6'),'QR'],['−15','ZQR'],['2π','IR'],[fr(12,4),'NZQR'],
+ ['−'+sq(16),'ZQR'],['4,5','QR'],[sq(10),'IR'],['−0,1','QR'],[sq('0,25'),'QR']
+];
+
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+
+let studentName='';
+let r1={ok:0,bad:0}, r2={done:0,errors:0};
+
+// ---------- Teil 1 ----------
+function build1(){
+  r1={ok:0,bad:0};
+  const g=document.getElementById('grid1');g.innerHTML='';
+  shuffle(T1).forEach((t,k)=>{
+    const d=document.createElement('div');d.className='item';
+    d.innerHTML=`<span class="nr">Aufgabe ${k+1}</span>
+      <div class="stmt"><span>${t[0]}</span><span class="slot" aria-label="Lücke"></span><span>${SET[t[1]]}</span></div>
+      <div class="choices"><button aria-pressed="false" data-v="in" aria-label="ist Element von">∈</button><button aria-pressed="false" data-v="out" aria-label="ist nicht Element von">∉</button></div>
+      <div class="fb" aria-live="polite"></div>`;
+    d.querySelectorAll('.choices button').forEach(b=>b.addEventListener('click',()=>{
+      if(d.classList.contains('locked'))return;
+      d.classList.add('locked');
+      b.setAttribute('aria-pressed','true');
+      d.querySelectorAll('.choices button').forEach(x=>x.disabled=true);
+      const s=d.querySelector('.slot');s.textContent=b.textContent;s.classList.add('filled');
+      const right=(b.dataset.v==='in')===t[2];
+      const fb=d.querySelector('.fb');
+      if(right){d.classList.add('ok');fb.textContent='Richtig!';r1.ok++}
+      else{d.classList.add('bad');fb.textContent='Falsch – richtig ist '+(t[2]?'∈':'∉')+'. '+t[3];r1.bad++}
+      update();
+    }));
+    g.appendChild(d);
+  });
+  update();
+}
+document.getElementById('reset1').addEventListener('click',build1);
+
+// ---------- Teil 2 ----------
+const COLS=['N','Z','Q','I','R'];
+function build2(){
+  r2={done:0,errors:0};
+  const tb=document.getElementById('tbody2');tb.innerHTML='';
+  shuffle(T2).forEach(t=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="num">${t[0]}</td>`+COLS.map(c=>`<td><button class="cell" data-c="${c}" aria-label="${NAME[c]}"></button></td>`).join('')+'<td class="mark"></td>';
+    let found=0, need=t[1].length, rowErr=0;
+    tr.querySelectorAll('.cell').forEach(b=>b.addEventListener('click',()=>{
+      if(b.disabled||tr.classList.contains('ok'))return;
+      b.disabled=true;
+      if(t[1].includes(b.dataset.c)){b.classList.add('right');found++}
+      else{b.classList.add('wrong');rowErr++;r2.errors++;tr.classList.add('bad');tr.querySelector('.mark').textContent='✗'}
+      if(found===need){
+        tr.classList.remove('bad');tr.classList.add('ok');
+        tr.querySelector('.mark').textContent=rowErr?'✓*':'✓';
+        tr.querySelectorAll('.cell').forEach(x=>x.disabled=true);
+        r2.done++;
+      }
+      update();
+    }));
+    tb.appendChild(tr);
+  });
+  update();
+}
+document.getElementById('reset2').addEventListener('click',build2);
+
+function update(){
+  const done1=r1.ok+r1.bad;
+  document.getElementById('score1').textContent=`${r1.ok} richtig, ${r1.bad} falsch · ${done1} von ${T1.length} erledigt`;
+  document.getElementById('score2').textContent=`${r2.done} von ${T2.length} Zeilen fertig · ${r2.errors} Fehler`;
+  document.getElementById('sumName').textContent='Ergebnis von '+studentName;
+  document.getElementById('sum1').textContent=`Teil 1: ${r1.ok} von ${T1.length} richtig`+(done1<T1.length?` (${T1.length-done1} offen)`:'');
+  document.getElementById('sum2').textContent=`Teil 2: ${r2.done} von ${T2.length} Zeilen fertig, ${r2.errors} Fehler`;
+}
+
+// ---------- Start ----------
+function start(){
+  const v=document.getElementById('nameIn').value.trim();
+  if(v.length<2){document.getElementById('nameErr').textContent='Bitte gib deinen Namen ein.';return}
+  studentName=v;
+  document.getElementById('start').hidden=true;
+  document.getElementById('main').hidden=false;
+  document.getElementById('hello').textContent='Viel Erfolg, '+v+'!';
+  build1();build2();
+}
+document.getElementById('go').addEventListener('click',start);
+document.getElementById('nameIn').addEventListener('keydown',e=>{if(e.key==='Enter')start()});
+
+// ---------- Tabs ----------
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',x===t?'true':'false'));
+  document.querySelectorAll('.panel').forEach(p=>p.hidden=p.id!==t.getAttribute('aria-controls'));
+}));
+
+</script>
+</body>
+</html>
