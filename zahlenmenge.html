@@ -127,8 +127,21 @@ tr.ok td.mark{color:var(--ok)} tr.bad td.mark{color:var(--bad)}
 .cell:disabled{cursor:default}
 .progress{font-weight:700}
 .summary{margin-top:1.5rem;background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:1rem}
-.summary h3{margin:0 0 .4rem}
-.summary p{margin:.2rem 0}
+.summary h3{margin:0 0 .2rem;font-size:1.25rem}
+.summary .meta{color:var(--muted);margin:0 0 .8rem;font-size:.95rem}
+.summary .status{font-weight:700;margin:0 0 .8rem}
+.sumtbl{width:100%;min-width:0;border-collapse:collapse;margin:.2rem 0 1rem}
+.sumtbl th,.sumtbl td{text-align:left;padding:.35rem .4rem;border-bottom:1px solid var(--line);font-size:.98rem}
+.sumtbl th{font-weight:700}
+.sumtbl td.m{font-family:var(--math);font-size:1.1rem}
+.summary h4{margin:.8rem 0 .3rem;font-size:1.02rem}
+.summary .none{color:var(--ok);margin:.2rem 0}
+.copied{color:var(--ok);font-weight:700}
+@media print{
+  body{background:#fff;color:#000}
+  .start,.sets,.tabs,.panel,.hello,.actions{display:none!important}
+  .summary{border:1px solid #000}
+}
 
 /* Aktionen */
 .actions{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin-top:1rem}
@@ -211,10 +224,16 @@ tr.ok td.mark{color:var(--ok)} tr.bad td.mark{color:var(--bad)}
     </div>
   </section>
 
-  <section class="summary" aria-live="polite">
-    <h3 id="sumName"></h3>
-    <p id="sum1"></p>
-    <p id="sum2"></p>
+  <section class="summary" id="summary">
+    <h3>Zusammenfassung für die Lehrkraft</h3>
+    <p class="meta" id="sumMeta"></p>
+    <p class="status" id="sumStatus"></p>
+    <div id="sumBody"></div>
+    <div class="actions">
+      <button class="btn" id="copySum">Zusammenfassung kopieren</button>
+      <button class="btn sec" id="printSum">Drucken / als PDF speichern</button>
+      <span id="copyMsg" class="copied" aria-live="polite"></span>
+    </div>
   </section>
   </div>
 </div>
@@ -267,11 +286,12 @@ const T2=[
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 
 let studentName='';
-let r1={ok:0,bad:0}, r2={done:0,errors:0};
+let r1={ok:0,bad:0,mist:[]}, r2={done:0,errors:0,mist:{}};
+let startTime=null, resets={1:0,2:0};
 
 // ---------- Teil 1 ----------
 function build1(){
-  r1={ok:0,bad:0};
+  r1={ok:0,bad:0,mist:[]};
   const g=document.getElementById('grid1');g.innerHTML='';
   let list;
   do{list=shuffle(T1)}while(list.some((t,i)=>i>1&&t[2]===list[i-1][2]&&t[2]===list[i-2][2]));
@@ -290,19 +310,19 @@ function build1(){
       const right=(b.dataset.v==='in')===t[2];
       const fb=d.querySelector('.fb');
       if(right){d.classList.add('ok');fb.textContent='Richtig!';r1.ok++}
-      else{d.classList.add('bad');fb.textContent='Falsch – richtig ist '+(t[2]?'∈':'∉')+'. '+t[3];r1.bad++}
+      else{d.classList.add('bad');fb.textContent='Falsch – richtig ist '+(t[2]?'∈':'∉')+'. '+t[3];r1.bad++;r1.mist.push({nr:k+1,stmt:t[0],set:t[1],chosen:b.textContent,right:t[2]?'∈':'∉'})}
       update();
     }));
     g.appendChild(d);
   });
   update();
 }
-document.getElementById('reset1').addEventListener('click',build1);
+document.getElementById('reset1').addEventListener('click',()=>{resets[1]++;build1()});
 
 // ---------- Teil 2 ----------
 const COLS=['N','Z','Q','I','R'];
 function build2(){
-  r2={done:0,errors:0};
+  r2={done:0,errors:0,mist:{}};
   const tb=document.getElementById('tbody2');tb.innerHTML='';
   shuffle(T2).forEach(t=>{
     const tr=document.createElement('tr');
@@ -312,7 +332,7 @@ function build2(){
       if(b.disabled||tr.classList.contains('ok'))return;
       b.disabled=true;
       if(t[1].includes(b.dataset.c)){b.classList.add('right');found++}
-      else{b.classList.add('wrong');rowErr++;r2.errors++;tr.classList.add('bad');tr.querySelector('.mark').textContent='✗'}
+      else{b.classList.add('wrong');rowErr++;r2.errors++;(r2.mist[t[0]]=r2.mist[t[0]]||{num:t[0],wrong:[],ans:t[1]}).wrong.push(b.dataset.c);tr.classList.add('bad');tr.querySelector('.mark').textContent='✗'}
       if(found===need){
         tr.classList.remove('bad');tr.classList.add('ok');
         tr.querySelector('.mark').textContent=rowErr?'✓*':'✓';
@@ -325,22 +345,84 @@ function build2(){
   });
   update();
 }
-document.getElementById('reset2').addEventListener('click',build2);
+document.getElementById('reset2').addEventListener('click',()=>{resets[2]++;build2()});
 
 function update(){
   const done1=r1.ok+r1.bad;
   document.getElementById('score1').textContent=`${r1.ok} richtig, ${r1.bad} falsch · ${done1} von ${T1.length} erledigt`;
   document.getElementById('score2').textContent=`${r2.done} von ${T2.length} Zeilen fertig · ${r2.errors} Fehler`;
-  document.getElementById('sumName').textContent='Ergebnis von '+studentName;
-  document.getElementById('sum1').textContent=`Teil 1: ${r1.ok} von ${T1.length} richtig`+(done1<T1.length?` (${T1.length-done1} offen)`:'');
-  document.getElementById('sum2').textContent=`Teil 2: ${r2.done} von ${T2.length} Zeilen fertig, ${r2.errors} Fehler`;
+  renderSummary();
 }
+
+// ---------- Zusammenfassung ----------
+const SETTXT={N:'ℕ',Z:'ℤ',Q:'ℚ',I:'𝕀',R:'ℝ'};
+const setsOf=str=>str.split('').map(c=>SETTXT[c]).join(', ');
+const pct=(a,b)=>b?Math.round(a/b*100):0;
+function fmtTime(d){return d.toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'})}
+function renderSummary(){
+  if(!startTime)return;
+  const now=new Date(), min=Math.max(1,Math.round((now-startTime)/60000));
+  const done1=r1.ok+r1.bad, fertig=done1===T1.length&&r2.done===T2.length;
+  const ok2=Object.keys(r2.mist).length, fehlerfrei2=r2.done-Object.values(r2.mist).length;
+  const pts=r1.ok+Math.max(0,fehlerfrei2), max=T1.length+T2.length;
+  document.getElementById('sumMeta').textContent=
+    `${studentName} · ${startTime.toLocaleDateString('de-AT')} · Beginn ${fmtTime(startTime)} · Dauer ca. ${min} Min.`;
+  document.getElementById('sumStatus').textContent= fertig
+    ? `Übung vollständig bearbeitet. Gesamt: ${pts} von ${max} Punkten (${pct(pts,max)} %).`
+    : `Noch nicht fertig: Teil 1 ${done1}/${T1.length} Aufgaben, Teil 2 ${r2.done}/${T2.length} Zeilen.`;
+  let h=`<table class="sumtbl"><thead><tr><th>Teil</th><th>Ergebnis</th><th>%</th></tr></thead><tbody>
+   <tr><td>1: ∈ oder ∉</td><td>${r1.ok} von ${T1.length} richtig</td><td>${pct(r1.ok,T1.length)} %</td></tr>
+   <tr><td>2: Tabelle</td><td>${fehlerfrei2} von ${T2.length} Zeilen ohne Fehler (${r2.errors} Fehlklicks)</td><td>${pct(fehlerfrei2,T2.length)} %</td></tr>
+  </tbody></table>`;
+  h+='<h4>Fehler in Teil 1</h4>';
+  h+= r1.mist.length ? `<table class="sumtbl"><thead><tr><th>Aufgabe</th><th>Gewählt</th><th>Richtig</th></tr></thead><tbody>`+
+    r1.mist.map(m=>`<tr><td class="m">${m.stmt} ☐ ${SET[m.set]}</td><td class="m">${m.chosen}</td><td class="m">${m.right}</td></tr>`).join('')+'</tbody></table>'
+    : '<p class="none">Keine Fehler.</p>';
+  h+='<h4>Fehler in Teil 2</h4>';
+  const m2=Object.values(r2.mist);
+  h+= m2.length ? `<table class="sumtbl"><thead><tr><th>Zahl</th><th>Falsch angeklickt</th><th>Richtig wäre</th></tr></thead><tbody>`+
+    m2.map(m=>`<tr><td class="m">${m.num}</td><td class="m">${setsOf(m.wrong.join(''))}</td><td class="m">${setsOf(m.ans)}</td></tr>`).join('')+'</tbody></table>'
+    : '<p class="none">Keine Fehler.</p>';
+  if(resets[1]||resets[2])h+=`<h4>Hinweis</h4><p>Neu gemischt (Ergebnis zurückgesetzt): Teil 1 ${resets[1]}×, Teil 2 ${resets[2]}×.</p>`;
+  document.getElementById('sumBody').innerHTML=h;
+}
+// Mathe-HTML in lesbaren Text umwandeln (für die Kopie)
+function toText(html){
+  const d=document.createElement('div');d.innerHTML=html;
+  d.querySelectorAll('.frac').forEach(f=>{const p=f.children;f.replaceWith(p[0].textContent+'/'+p[1].textContent)});
+  d.querySelectorAll('.sqrt').forEach(q=>q.replaceWith('√('+q.children[0].textContent+')'));
+  d.querySelectorAll('.ov').forEach(o=>o.replaceWith('('+o.textContent+' periodisch)'));
+  return d.textContent;
+}
+function summaryText(){
+  renderSummary();
+  let t='Zahlenmengen – Zusammenfassung\n'+document.getElementById('sumMeta').textContent+'\n'+document.getElementById('sumStatus').textContent+'\n\n';
+  const fehlerfrei2=r2.done-Object.keys(r2.mist).length;
+  t+=`Teil 1 (∈ oder ∉): ${r1.ok} von ${T1.length} richtig (${pct(r1.ok,T1.length)} %)\n`;
+  t+=`Teil 2 (Tabelle): ${fehlerfrei2} von ${T2.length} Zeilen ohne Fehler, ${r2.errors} Fehlklicks\n`;
+  if(resets[1]||resets[2])t+=`Neu gemischt: Teil 1 ${resets[1]}×, Teil 2 ${resets[2]}×\n`;
+  t+='\n';
+  t+='Fehler Teil 1:\n'+(r1.mist.length?r1.mist.map(m=>`- ${toText(m.stmt)} ☐ ${SETTXT[m.set]}: gewählt ${m.chosen}, richtig ${m.right}`).join('\n'):'- keine')+'\n\n';
+  t+='Fehler Teil 2:\n'+(Object.values(r2.mist).length?Object.values(r2.mist).map(m=>`- ${toText(m.num)}: falsch ${setsOf(m.wrong.join(''))}, richtig ${setsOf(m.ans)}`).join('\n'):'- keine');
+  return t;
+}
+document.getElementById('copySum').addEventListener('click',async()=>{
+  const msg=document.getElementById('copyMsg'), txt=summaryText();
+  try{await navigator.clipboard.writeText(txt);msg.textContent='Kopiert.'}
+  catch(e){
+    const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');msg.textContent='Kopiert.'}catch(_){msg.textContent='Kopieren nicht möglich – bitte drucken.'}
+    ta.remove();
+  }
+  setTimeout(()=>msg.textContent='',3000);
+});
+document.getElementById('printSum').addEventListener('click',()=>{renderSummary();window.print()});
 
 // ---------- Start ----------
 function start(){
   const v=document.getElementById('nameIn').value.trim();
   if(v.length<2){document.getElementById('nameErr').textContent='Bitte gib deinen Namen ein.';return}
-  studentName=v;
+  studentName=v;startTime=new Date();
   document.getElementById('start').hidden=true;
   document.getElementById('main').hidden=false;
   document.getElementById('hello').textContent='Viel Erfolg, '+v+'!';
