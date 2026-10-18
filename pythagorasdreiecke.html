@@ -472,5 +472,122 @@ $('#name').addEventListener('keydown',e=>{if(e.key==='Enter')lockName();});
 $('#nextBtn').onclick=()=>state.log.length>=ROUND?showSummary():newTask();
 newTask();
 </script>
+<script>
+/* Bildschirm-Tastatur für die Mathe-Übungen
+   Einbinden: in der HTML-Datei direkt vor dem schließenden body-Tag die Zeile
+   [script src="tastatur.js"][/script] einfügen (mit spitzen statt eckigen Klammern).
+   Passt sich automatisch an das Eingabefeld an:
+   - Zahlenfelder:            Ziffern, Komma, Löschen, Cursor, nächstes Feld, Prüfen
+   - Felder für H / K:        H, K, + und −
+   - Felder für Wörter:       Hypotenuse, Kathete, + und −
+   - Felder für Ausdrücke:    Buchstaben, + − / ( ) und Ziffern (z. B. f/2 oder (a − c)/2) */
+(function(){
+  if(document.getElementById('kpad'))return;            /* Übung hat schon eine Tastatur */
+  const NAME_IDS=['name','nameIn','pname'];
+  const css=`
+#kpad{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--card,#fff);border-top:3px solid var(--ink,#1b2a4a);padding:8px 10px calc(10px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 18px rgba(0,0,0,.18);font-family:"Atkinson Hyperlegible",system-ui,sans-serif;color:var(--ink,#1b2a4a)}
+#kpad[hidden],#kpadToggle[hidden]{display:none!important}
+#kpad .kp-inner{max-width:440px;margin:0 auto}
+#kpad .kp-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;font-weight:700;font-size:15px}
+#kpad .kp-small{font:inherit;font-size:15px;padding:3px 12px;background:transparent;color:var(--ink,#1b2a4a);border:2px solid var(--ink,#1b2a4a);border-radius:8px;cursor:pointer}
+#kpad .kp-grid{display:grid;gap:6px}
+#kpad .kp-grid button{font:inherit;font-size:22px;font-weight:700;padding:7px 0;background:var(--paper,#fdfdf9);color:var(--ink,#1b2a4a);border:2px solid var(--line,#c9d6e6);border-radius:10px;cursor:pointer;touch-action:manipulation}
+#kpad .kp-grid button.op{border-color:var(--ink,#1b2a4a);font-size:20px}
+#kpad .kp-grid button.act{background:var(--btn,var(--ink,#1b2a4a));color:var(--btn-ink,var(--paper,#fff));border-color:var(--btn,var(--ink,#1b2a4a))}
+#kpad .kp-grid button.wide{grid-column:span 2;color:var(--pen,var(--ink,#1d4ed8));border-color:var(--pen,var(--ink,#1d4ed8))}
+#kpad .kp-grid button:active{transform:translateY(1px)}
+#kpadToggle{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:49;font:inherit;font-size:16px;font-weight:700;padding:9px 16px;border-radius:999px;border:0;background:var(--btn,var(--ink,#1b2a4a));color:var(--btn-ink,var(--paper,#fff));cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+body.kpad-on{padding-bottom:310px}`;
+  const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
+
+  const MODES={
+    num:{title:'Zahlen',cols:4,keys:['7','8','9','⌫','4','5','6',',','1','2','3','←','0','→','⇥','↵']},
+    hk:{title:'H und K',cols:4,keys:['H*','K*','+','−','⌫','⇥','↵']},
+    word:{title:'Wörter',cols:4,keys:['Hypotenuse*','Kathete*','+','−','⌫','⇥','↵']},
+    expr:{title:'Buchstaben',cols:6,keys:['a','b','c','d','e','f','h','x','e₁','+','−','/','(',')','1','2','⌫','←','→','⇥','↵']}
+  };
+  const TITLE={'⌫':'Löschen','←':'Cursor nach links','→':'Cursor nach rechts','⇥':'Nächstes Feld','↵':'Prüfen','+':'plus','−':'minus','/':'geteilt (Bruchstrich)',',':'Komma'};
+  const WHOLE={H:1,K:1,Hypotenuse:1,Kathete:1};
+  const coarse=window.matchMedia&&matchMedia('(pointer: coarse)').matches;
+  let enabled=true,target=null,mode='',override=null;
+
+  const pad=document.createElement('div');pad.id='kpad';pad.hidden=true;pad.setAttribute('role','group');pad.setAttribute('aria-label','Bildschirm-Tastatur');
+  pad.innerHTML='<div class="kp-inner"><div class="kp-head"><span id="kpTitle">Tastatur</span><span><button type="button" class="kp-small" id="kpSwitch" hidden></button> <button type="button" class="kp-small" id="kpClose" title="Tastatur ausblenden">✕</button></span></div><div class="kp-grid"></div></div>';
+  const tog=document.createElement('button');tog.id='kpadToggle';tog.type='button';tog.textContent='⌨ Tastatur';tog.hidden=true;
+  document.body.append(pad,tog);
+  const grid=pad.querySelector('.kp-grid'),sw=document.getElementById('kpSwitch');
+
+  const eligible=el=>el&&el.tagName==='INPUT'&&!NAME_IDS.includes(el.id)&&!el.disabled&&!el.readOnly&&(el.type==='text'||el.type===''||!el.type);
+  function naturalMode(el){
+    if(el.classList.contains('word'))return 'word';
+    if(el.classList.contains('letter'))return 'hk';
+    if(el.classList.contains('expr'))return 'expr';
+    const im=(el.dataset.im!=null?el.dataset.im:el.getAttribute('inputmode'))||'';
+    return (im==='decimal'||im==='numeric')?'num':'expr';
+  }
+  function draw(m){
+    mode=m;const M=MODES[m];
+    grid.style.gridTemplateColumns='repeat('+M.cols+',1fr)';
+    grid.innerHTML=M.keys.map(k=>{const wide=k.endsWith('*'),key=wide?k.slice(0,-1):k;
+      const cls=key==='↵'?'act':wide?'wide':/^[0-9,a-zA-Z₁]+$/.test(key)&&key.length<=2?'':'op';
+      return '<button type="button" class="'+cls+'" data-key="'+key+'"'+(TITLE[key]?' title="'+TITLE[key]+'" aria-label="'+TITLE[key]+'"':'')+'>'+key+'</button>';}).join('');
+    document.getElementById('kpTitle').textContent=M.title;
+    const nat=target?naturalMode(target):m;
+    sw.hidden=!(nat==='num'||nat==='expr');
+    sw.textContent=m==='num'?'abc':'123';
+  }
+  function applyMode(el){
+    if(!('im' in el.dataset))el.dataset.im=el.getAttribute('inputmode')||'';
+    if(enabled&&coarse)el.setAttribute('inputmode','none');
+    else if(el.dataset.im)el.setAttribute('inputmode',el.dataset.im);else el.removeAttribute('inputmode');
+  }
+  const applyAll=()=>document.querySelectorAll('input').forEach(i=>{if(eligible(i))applyMode(i);});
+  let t0=null;new MutationObserver(()=>{clearTimeout(t0);t0=setTimeout(applyAll,30);}).observe(document.body,{childList:true,subtree:true});
+  function showPad(){pad.hidden=false;tog.hidden=true;document.body.classList.add('kpad-on');}
+  function hidePad(){pad.hidden=true;tog.hidden=false;document.body.classList.remove('kpad-on');}
+
+  document.addEventListener('focusin',e=>{
+    if(!eligible(e.target))return;
+    if(target!==e.target)override=null;
+    target=e.target;applyMode(target);draw(override||naturalMode(target));
+    if(enabled)showPad();else tog.hidden=false;
+  });
+  ['pointerdown','mousedown'].forEach(ev=>pad.addEventListener(ev,e=>e.preventDefault()));
+
+  const visibleInputs=()=>[...document.querySelectorAll('input')].filter(i=>eligible(i)&&i.offsetParent!==null);
+  function press(k){
+    if(!target||!document.body.contains(target)||target.disabled){const f=visibleInputs()[0];if(!f)return;f.focus();}
+    target.focus({preventScroll:true});
+    const v=target.value;let s=target.selectionStart,e=target.selectionEnd;if(s==null){s=e=v.length;}
+    const box=target.closest('.step')||target.closest('.task')||target.parentElement;
+    if(k==='↵'){target.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));return;}
+    if(k==='⇥'){const all=visibleInputs(),i=all.indexOf(target),n=all[i+1]||all[0];if(n)n.focus();return;}
+    if((k==='+'||k==='−')&&(mode==='hk'||mode==='word')){
+      const sel=box&&box.querySelector('select');
+      if(sel&&!sel.disabled){sel.value=k;sel.dispatchEvent(new Event('change',{bubbles:true}));}
+      return;}
+    if(WHOLE[k]){target.value=k;target.dispatchEvent(new Event('input',{bubbles:true}));
+      const all=visibleInputs(),n=all[all.indexOf(target)+1];if(n&&box&&box.contains(n)&&!n.value)n.focus();return;}
+    if(k==='←'){const p=Math.max(0,s-1);target.setSelectionRange(p,p);return;}
+    if(k==='→'){const p=Math.min(v.length,e+1);target.setSelectionRange(p,p);return;}
+    let nv,pos;
+    if(k==='⌫'){
+      if(mode==='hk'||mode==='word'){nv='';pos=0;}
+      else if(s!==e){nv=v.slice(0,s)+v.slice(e);pos=s;}
+      else if(s>0){nv=v.slice(0,s-1)+v.slice(s);pos=s-1;}else return;}
+    else{const ins=(k==='−'&&mode==='num')?'-':k;
+      if(target.maxLength>0&&v.length>=target.maxLength)return;
+      nv=v.slice(0,s)+ins+v.slice(e);pos=s+ins.length;}
+    target.value=nv;try{target.setSelectionRange(pos,pos);}catch(_){}
+    target.dispatchEvent(new Event('input',{bubbles:true}));
+  }
+  grid.addEventListener('click',e=>{const b=e.target.closest('[data-key]');if(b)press(b.dataset.key);});
+  sw.addEventListener('click',()=>{override=mode==='num'?'expr':'num';draw(override);});
+  document.getElementById('kpClose').addEventListener('click',()=>{enabled=false;applyAll();hidePad();});
+  tog.addEventListener('click',()=>{enabled=true;applyAll();showPad();
+    const f=(target&&document.body.contains(target)&&!target.disabled)?target:visibleInputs()[0];if(f)f.focus();});
+  draw('num');applyAll();
+})();
+</script>
 </body>
 </html>
