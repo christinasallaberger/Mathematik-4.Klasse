@@ -184,7 +184,7 @@ tr.skiprow td:first-child{box-shadow:inset 4px 0 var(--marker)}
 .chip.used{opacity:.55}
 .seg button:disabled{cursor:default;opacity:.5}
 .seg button[aria-pressed="true"]:disabled{opacity:1}
-</style>
+#sumTime h3{margin:1.2rem 0 .3rem;font-size:1.05rem}.tnote{font-size:.95rem;color:var(--muted)}.tnote b{color:var(--bad,var(--red,#c62828))}</style>
 </head>
 <body>
 <div class="wrap">
@@ -563,7 +563,7 @@ function renderNav(){
   $('#navSum').onclick=()=>{if(allDone())showSummary();};
 }
 function updateScore(){
-  const T=state.tasks,n=$('#name').value.trim();
+  const T=state.tasks,n=(state.lockedName||$('#name').value.trim());
   const solved=T.filter(t=>t.status==='solved').length,perfect=T.filter(t=>t.status==='solved'&&t.errors===0).length,sk=T.filter(t=>t.status==='skipped').length;
   $('#score').textContent=(n&&state.nameLocked?n+': ':'')+`Gelöst: ${solved} von ${ROUND}, davon ohne Fehler: ${perfect}`+(sk?`, übersprungen: ${sk}`:'');
 }
@@ -575,7 +575,7 @@ function finish(){
 }
 function setMain(show){document.querySelector('.grid').hidden=!show;document.querySelector('.controls').hidden=!show;$('#score').hidden=!show;$('#tasknav').hidden=!show;$('#summary').hidden=show;}
 function showSummary(){
-  const L=state.tasks,name=$('#name').value.trim()||'–';
+  const L=state.tasks,name=(state.lockedName||$('#name').value.trim())||'–';
   const skL=L.filter(t=>t.status==='skipped');
   const perfect=L.filter(t=>t.status==='solved'&&t.errors===0).length,errs=L.reduce((s,t)=>s+t.errors,0),shown=L.reduce((s,t)=>s+t.shown,0);
   const now=new Date(),dt=now.toLocaleDateString('de-AT')+', '+now.toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'});
@@ -596,7 +596,7 @@ function showSummary(){
 document.querySelectorAll('#level button').forEach(b=>b.onclick=()=>{if(state.nameLocked)return;
   document.querySelectorAll('#level button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));state.level=b.dataset.v;newRound();});
 function lockName(){const n=$('#name');if(state.nameLocked)return;if(!n.value.trim()){n.focus();return;}
-  n.value=n.value.trim();n.readOnly=true;n.classList.add('locked');$('#nameOk').hidden=true;state.nameLocked=true;
+  n.value=n.value.trim();state.lockedName=n.value;n.readOnly=true;n.disabled=true;n.classList.add('locked');$('#nameOk').hidden=true;state.nameLocked=true;
   document.querySelectorAll('#level button').forEach(x=>{x.disabled=x.getAttribute('aria-pressed')!=='true';});
   state.tasks.forEach(t=>{if(!t.started)t.stepsEl.innerHTML='';});showTask(state.cur);}
 $('#nameOk').onclick=lockName;
@@ -608,6 +608,23 @@ $('#skipBtn').onclick=()=>{if(!task||task.waiting||task.status==='solved')return
 newRound();
 </script>
 <script>
+
+/* ---------- Bearbeitungszeit ---------- */
+const fmtT=ms=>{const s=Math.max(0,Math.round(ms/1000));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
+const FAST_MS=20000;let tAct=null,tActTask=null;
+function tStop(){if(tActTask&&tAct!=null)tActTask.ms=(tActTask.ms||0)+Date.now()-tAct;tAct=null;tActTask=null;}
+const _showTaskT=showTask;showTask=function(i){tStop();_showTaskT(i);if(state.nameLocked&&task&&task.status!=='solved'){tAct=Date.now();tActTask=task;}};
+const _finishT=finish;finish=function(){tStop();_finishT();};
+const _showSumT=showSummary;showSummary=function(){
+  tStop();_showSumT();
+  const s=$('#summary'),L=state.tasks;
+  const hr=s.querySelector('thead tr');if(hr)hr.insertAdjacentHTML('beforeend','<th>Zeit</th>');
+  s.querySelectorAll('tbody tr').forEach((tr,i)=>{const t=L[i],ms=t&&t.ms;tr.insertAdjacentHTML('beforeend','<td>'+(ms!=null?fmtT(ms)+(t.status==='solved'&&ms<FAST_MS?' ⚡':''):'–')+'</td>');});
+  const solved=L.filter(t=>t.status==='solved'),tot=L.reduce((a,t)=>a+(t.ms||0),0),fast=solved.filter(t=>t.ms!=null&&t.ms<FAST_MS).length;
+  const st=s.querySelector('.sumstats');if(st)st.insertAdjacentHTML('beforeend','<div><b>'+fmtT(tot)+'</b><span>Bearbeitungszeit gesamt (Ø '+(L.length?fmtT(tot/L.length):'–')+' pro Aufgabe)</span></div>');
+  const n=s.querySelector('.sumnote');if(n)n.insertAdjacentHTML('beforebegin','<p class="tnote">Zeit = Arbeitszeit an der Aufgabe (bei übersprungenen Aufgaben werden alle Besuche zusammengezählt). ⚡ = in unter 20 Sekunden gelöst.'+(solved.length>=3&&fast/solved.length>0.5?' <b>Auffällig: Mehr als die Hälfte der Aufgaben wurde in unter 20 Sekunden gelöst.</b>':'')+'</p>');
+};
+
 /* Bildschirm-Tastatur für die Mathe-Übungen
    Einbinden: in der HTML-Datei direkt vor dem schließenden body-Tag die Zeile
    [script src="tastatur.js"][/script] einfügen (mit spitzen statt eckigen Klammern).
