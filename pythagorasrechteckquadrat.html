@@ -141,7 +141,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pen);outline-of
 .tapnote{text-align:center;font-weight:700;color:var(--pen);margin:4px 0 0;font-size:16px}
 .n.letter{width:64px}
 .tag{font-size:14px;color:var(--muted)}
-</style>
+#sumTime h3{margin:1.2rem 0 .3rem;font-size:1.05rem}.tnote{font-size:.95rem;color:var(--muted)}.tnote b{color:var(--bad,var(--red,#c62828))}</style>
 </head>
 <body>
 <div class="wrap">
@@ -192,7 +192,7 @@ function parseNum(s){s=String(s).trim().replace(',','.');if(s==='')return NaN;re
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function nextTriple(){if(!bag.length){bag=shuffle(TRIPLES);if(bag[bag.length-1]===lastT)bag.reverse();}lastT=bag.pop();return lastT;}
 function pickLetters(n){let nm;do{nm=shuffle(LETTERS).slice(0,n).sort();}while(nm.join('')===lastLetters);lastLetters=nm.join('');return nm;}
-function updateScore(){const n=$('#name').value.trim();$('#score').textContent=(n?n+': ':'')+`Gelöst: ${state.solved} von ${ROUND}, davon ohne Fehler: ${state.perfect}`;}
+function updateScore(){const n=(state.lockedName||$('#name').value.trim());$('#score').textContent=(n?n+': ':'')+`Gelöst: ${state.solved} von ${ROUND}, davon ohne Fehler: ${state.perfect}`;}
 
 function newTask(){
   const [shape,find,unkLeg]=PLAN[state.idx%ROUND];state.idx++;
@@ -416,7 +416,7 @@ function finish(){
   $('#done').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function showSummary(){
-  const L=state.log,name=$('#name').value.trim()||'–';
+  const L=state.log,name=(state.lockedName||$('#name').value.trim())||'–';
   const perfect=L.filter(r=>r.errors===0).length,errs=L.reduce((s,r)=>s+r.errors,0),shown=L.reduce((s,r)=>s+r.shown,0);
   const now=new Date();
   const dt=now.toLocaleDateString('de-AT')+', '+now.toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'});
@@ -436,7 +436,7 @@ function showSummary(){
     updateScore();newTask();};
 }
 function lockName(){const n=$('#name');if(state.nameLocked)return;if(!n.value.trim()){n.focus();return;}
-  n.value=n.value.trim();n.readOnly=true;n.classList.add('locked');n.setAttribute('aria-readonly','true');$('#nameOk').hidden=true;state.nameLocked=true;updateScore();
+  n.value=n.value.trim();state.lockedName=n.value;n.readOnly=true;n.disabled=true;n.classList.add('locked');n.setAttribute('aria-readonly','true');$('#nameOk').hidden=true;state.nameLocked=true;updateScore();
   if(task&&task.waiting){task.waiting=false;$('#steps').innerHTML='';stepIdentify();}}
 $('#nameOk').onclick=lockName;
 $('#name').addEventListener('keydown',e=>{if(e.key==='Enter')lockName();});
@@ -444,6 +444,24 @@ $('#nextBtn').onclick=()=>state.log.length>=ROUND?showSummary():newTask();
 newTask();
 </script>
 <script>
+
+/* ---------- Bearbeitungszeit ---------- */
+const fmtT=ms=>{const s=Math.max(0,Math.round(ms/1000));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
+const FAST_MS=20000;
+const _newTaskT=newTask;newTask=function(){_newTaskT();if(state.nameLocked&&task)task._t0=Date.now();};
+const _lockNameT=lockName;lockName=function(){_lockNameT();if(state.nameLocked&&task&&!task._t0)task._t0=Date.now();};
+$('#nameOk').onclick=lockName;
+const _logTaskT=logTask;logTask=function(){_logTaskT();const r=state.log[state.log.length-1];if(r)r.ms=Date.now()-(task._t0||Date.now());};
+const _showSumT=showSummary;showSummary=function(){
+  _showSumT();
+  const s=$('#summary'),L=state.log;
+  const hr=s.querySelector('thead tr');if(hr)hr.insertAdjacentHTML('beforeend','<th>Zeit</th>');
+  s.querySelectorAll('tbody tr').forEach((tr,i)=>{const ms=L[i]&&L[i].ms;tr.insertAdjacentHTML('beforeend','<td>'+(ms!=null?fmtT(ms)+(ms<FAST_MS?' ⚡':''):'–')+'</td>');});
+  const tot=L.reduce((a,r)=>a+(r.ms||0),0),fast=L.filter(r=>r.ms!=null&&r.ms<FAST_MS).length;
+  const st=s.querySelector('.sumstats');if(st)st.insertAdjacentHTML('beforeend','<div><b>'+fmtT(tot)+'</b><span>Bearbeitungszeit gesamt (Ø '+(L.length?fmtT(tot/L.length):'–')+' pro Aufgabe)</span></div>');
+  const n=s.querySelector('.sumnote');if(n)n.insertAdjacentHTML('beforebegin','<p class="tnote">Zeit = vom Start der Aufgabe bis zur Lösung. ⚡ = in unter 20 Sekunden gelöst.'+(L.length>=3&&fast/L.length>0.5?' <b>Auffällig: Mehr als die Hälfte der Aufgaben wurde in unter 20 Sekunden gelöst.</b>':'')+'</p>');
+};
+
 /* Bildschirm-Tastatur für die Mathe-Übungen
    Einbinden: in der HTML-Datei direkt vor dem schließenden body-Tag die Zeile
    [script src="tastatur.js"][/script] einfügen (mit spitzen statt eckigen Klammern).
