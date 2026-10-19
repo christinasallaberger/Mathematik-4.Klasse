@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pythagoras – Übungsstunde und Hausübung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#fdfdf9; --grid:#d6e4f2; --ink:#1b2a4a; --pen:#1d4ed8; --muted:#5b6b85;
+  --red:#c62828; --red-soft:#fdecea; --green:#2e7d32; --green-soft:#e6f4e7;
+  --marker:#ffe36e; --tri:#eaf1fb; --card:#ffffff; --line:#c9d6e6; --btn:#1b2a4a; --btn-ink:#ffffff;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#151b26; --grid:#222d3e; --ink:#e6ecf5; --pen:#8fb1ff; --muted:#9aa8bf;
+    --red:#ff7a7a; --red-soft:#3a1e22; --green:#6fd17a; --green-soft:#17301c;
+    --marker:#7a6516; --tri:#1e2a3e; --card:#1b2231; --line:#33415a; --btn:#e6ecf5; --btn-ink:#151b26;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#151b26; --grid:#222d3e; --ink:#e6ecf5; --pen:#8fb1ff; --muted:#9aa8bf;
+  --red:#ff7a7a; --red-soft:#3a1e22; --green:#6fd17a; --green-soft:#17301c;
+  --marker:#7a6516; --tri:#1e2a3e; --card:#1b2231; --line:#33415a; --btn:#e6ecf5; --btn-ink:#151b26;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; color:var(--ink); background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;
+  font-family:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif; font-size:17px; line-height:1.5;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 18px 60px}
+header h1{font-family:"Patrick Hand","Comic Sans MS",cursive;font-weight:400;font-size:clamp(34px,6vw,52px);line-height:1.05;margin:0 0 6px;color:var(--pen)}
+header p{margin:0 0 20px;color:var(--muted);max-width:60ch}
+.controls{display:flex;flex-wrap:wrap;gap:14px 22px;margin-bottom:22px}
+.seg{display:inline-flex;border:2px solid var(--ink);border-radius:10px;overflow:hidden;background:var(--card)}
+.seg button{font:inherit;font-size:15px;border:0;background:transparent;color:var(--ink);padding:7px 14px;cursor:pointer}
+.seg button+button{border-left:2px solid var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper);font-weight:700}
+.ctl-label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.namein{font:inherit;font-size:16px;padding:7px 12px;border:2px solid var(--ink);border-radius:10px;background:var(--card);color:var(--ink);width:240px;max-width:100%}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:22px;align-items:start}
+@media (max-width:820px){.grid{grid-template-columns:1fr}}
+.sheet{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:18px}
+.task{font-size:20px;margin:0 0 8px}
+.task b{font-family:"Patrick Hand",cursive;font-size:26px;color:var(--pen);font-weight:400}
+svg{width:100%;height:auto;display:block}
+.side{stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+.side.hyp{stroke:var(--red);stroke-width:4}
+.side.unk{stroke-dasharray:8 6}
+.tri{fill:var(--tri)}
+.ra{fill:none;stroke:var(--ink);stroke-width:2}
+.dot{fill:var(--ink)}
+.lbl{font-family:"Patrick Hand",cursive;font-size:21px;fill:var(--ink)}
+.lbl.unk{fill:var(--pen)}
+.lbl.hypt{fill:var(--red)}
+.merke{margin-top:10px;font-size:15px;color:var(--muted)}
+.merke span{background:var(--marker);color:var(--ink);padding:1px 6px;border-radius:3px}
+.way-title{margin:18px 0 4px;font-size:15px;color:var(--muted)}
+.way{font-family:"Patrick Hand",cursive;font-size:25px;line-height:1.55;color:var(--pen);min-height:44px;border-left:3px solid var(--red);padding-left:14px}
+.wayinner:empty::before{content:"Hier entsteht dein Rechenweg.";color:var(--muted);font-size:19px}
+.wline{animation:write .35s ease-out}
+@keyframes write{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+.wline.final{display:inline-block;border-bottom:3px double var(--pen);margin-top:2px}
+.steps{display:flex;flex-direction:column;gap:12px}
+.step{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px 16px}
+.step.solved{border-color:var(--green)}
+.step-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.num{flex:none;width:30px;height:30px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-weight:700;font-size:15px}
+.step.solved .num{background:var(--green);border-color:var(--green);color:var(--card)}
+.step h3{margin:0;font-size:18px}
+.step p{margin:0 0 8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{font:inherit;font-family:"Patrick Hand",cursive;font-size:23px;min-width:56px;padding:4px 14px;border:2px solid var(--ink);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer}
+.opt:hover:not(:disabled){background:var(--tri)}
+.opt.good{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.opt.wrongb{background:var(--red-soft);border-color:var(--red);color:var(--red);text-decoration:line-through}
+.opt:disabled{cursor:default}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:"Patrick Hand",cursive;font-size:25px}
+.eq sup{font-size:17px;margin-left:-4px;align-self:flex-start;margin-top:4px}
+.n{font:inherit;font-family:"Patrick Hand",cursive;font-size:24px;width:84px;padding:2px 8px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);color:var(--pen);text-align:center}
+.n.wide{width:110px}
+.n.word{width:150px}
+.n.opsel{width:64px;padding:2px 4px}
+.opt.word{font-size:22px}
+.n:disabled{border-color:var(--green);color:var(--green)}
+.check,.next{font:inherit;font-size:16px;font-weight:700;padding:8px 16px;border-radius:10px;border:0;background:var(--btn);color:var(--btn-ink);cursor:pointer;margin-left:6px}
+.check:disabled{opacity:.35;cursor:default}
+.fb{font-size:15px;margin-top:8px}
+.fb:empty{display:none}
+.fb.bad{color:var(--red);background:var(--red-soft);padding:8px 10px;border-radius:8px}
+.fb.ok{color:var(--green)}
+.link{font:inherit;font-size:15px;background:none;border:0;padding:0;color:var(--pen);text-decoration:underline;cursor:pointer;margin-left:6px}
+.done{background:var(--green-soft);border:2px solid var(--green);border-radius:14px;padding:16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.done[hidden]{display:none}
+.done p{margin:0;font-size:18px}
+.lbl .sub{font-size:16px;fill:var(--muted)}
+.score{font-size:15px;color:var(--muted);margin:0 0 12px}
+.namerow{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.namerow .next{margin-left:0}
+.namein.locked{border-color:var(--line);background:transparent;font-weight:700;cursor:default}
+[hidden]{display:none!important}
+.summary{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:20px}
+.summary h2{font-family:"Patrick Hand",cursive;font-weight:400;font-size:32px;line-height:1.1;color:var(--pen);margin:0 0 14px}
+.sumhead,.sumstats{display:flex;flex-wrap:wrap;gap:10px 28px;margin-bottom:16px}
+.sumhead span,.sumstats span{display:block;font-size:13px;color:var(--muted)}
+.sumhead b{font-size:18px}
+.sumstats{gap:10px}
+.sumstats div{border:2px solid var(--line);border-radius:12px;padding:10px 14px;min-width:120px}
+.sumstats b{font-size:26px}
+.tablewrap{overflow-x:auto;margin-bottom:14px}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:680px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:13px;color:var(--muted);font-weight:700}
+tr.okrow td:first-child{box-shadow:inset 4px 0 var(--green)}
+tr.errrow td:first-child{box-shadow:inset 4px 0 var(--red)}
+.sumnote{color:var(--muted);font-size:15px}
+.summary .next{margin-left:0}
+button:focus-visible,input:focus-visible{outline:3px solid var(--pen);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.wline{animation:none}}
+
+.rectbg{fill:none}
+.side2{stroke:var(--muted);stroke-width:2;stroke-linecap:round}
+.idrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px}
+.idl{font-family:"Patrick Hand",cursive;font-size:28px;min-width:30px;color:var(--pen)}
+.opt.sel{background:var(--tri);border-color:var(--pen);color:var(--pen)}
+.check.solo{margin-left:0;margin-top:4px}
+.hit{stroke:transparent;stroke-width:30;stroke-linecap:round;cursor:pointer;pointer-events:stroke;-webkit-tap-highlight-color:transparent}
+.lbl{pointer-events:none}
+.side.legok{stroke:var(--pen);stroke-width:4}
+.side.flash,.side2.flash{stroke:var(--red);stroke-width:5;stroke-dasharray:none}
+.tapnote{text-align:center;font-weight:700;color:var(--pen);margin:4px 0 0;font-size:16px}
+.n.letter{width:64px}
+.tag{font-size:14px;color:var(--muted)}
+.aux{stroke:var(--ink);stroke-width:1.6}
+.hgt{stroke:var(--ink);stroke-width:2;stroke-dasharray:6 5}
+.ext{stroke:var(--muted);stroke-width:2;stroke-dasharray:4 5}
+.ov{stroke-width:5;stroke-linecap:round;pointer-events:none}
+.ov.hyp{stroke:var(--red)}
+.ov.leg{stroke:var(--pen)}
+.ov.flash{stroke:var(--red);opacity:.75}
+.dim{stroke:var(--muted);stroke-width:1.5}
+.vtx{font-size:13px;fill:var(--muted);pointer-events:none}
+.n.expr{width:150px}
+.tasknav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.tnav{font:inherit;font-size:15px;font-weight:700;min-width:44px;padding:6px 10px;border:2px solid var(--ink);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer}
+.tnav.solved{border-color:var(--green);color:var(--green);background:var(--green-soft)}
+.tnav.skipped{border-color:var(--ink);background:var(--marker);color:var(--ink)}
+.tnav.cur{outline:3px solid var(--pen);outline-offset:1px}
+.tnav.sum{font-weight:400}
+.tnav:disabled{opacity:.4;cursor:default}
+.latetag{font-size:13px;color:var(--muted)}
+.sumbtns{display:flex;flex-wrap:wrap;gap:10px}
+.next.ghost{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.skip{font:inherit;font-size:15px;margin-top:12px;background:none;border:2px dashed var(--line);color:var(--muted);border-radius:10px;padding:8px 14px;cursor:pointer}
+.skip:hover{color:var(--ink);border-color:var(--ink)}
+tr.skiprow td{color:var(--muted)}
+tr.skiprow td:first-child{box-shadow:inset 4px 0 var(--marker)}
+.skiptag{background:var(--marker);color:var(--ink);padding:2px 8px;border-radius:4px;font-weight:700}
+.eq .lg{font-family:"Atkinson Hyperlegible",system-ui,sans-serif;font-size:16px;min-width:118px}
+
+body.pre .grid,body.pre #tasknav,body.pre #score{display:none!important}
+.startbox{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:flex-start}
+.hint2{display:block;font-size:14px;color:var(--muted);margin-top:4px;max-width:420px}
+.errmsg{color:var(--red);font-weight:700;margin:6px 0 0}
+.resume{background:var(--card);border:2px solid var(--pen);border-radius:14px;padding:14px 16px;max-width:560px}
+.resume p{margin:0 0 10px}
+.resume .next{margin:0 8px 6px 0}
+.whobar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:16px}
+.whobar b{font-size:18px}
+.savebox{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:10px;max-width:640px}
+.savebox p{margin:0 0 8px}
+.codeview{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:17px;font-weight:700;letter-spacing:.04em;background:var(--paper);border:2px dashed var(--ink);border-radius:8px;padding:8px 10px;word-break:break-all;margin:0 0 8px}
+.navlbl{font-size:13px;color:var(--muted);font-weight:700;align-self:center;margin:0 2px 0 8px}
+.navlbl:first-child{margin-left:0}
+.sumpart{font-family:"Patrick Hand",cursive;font-weight:400;font-size:26px;color:var(--pen);margin:18px 0 8px}
+.tnote{font-size:15px;color:var(--muted)}
+.tnote b{color:var(--red)}
+.restored{background:var(--green-soft);border:2px solid var(--green);border-radius:14px;padding:14px 16px}
+</style>
+</head>
+<body class="pre">
+<div class="wrap">
+  <header>
+    <h1>Pythagoras – Übungsstunde</h1>
+    <p>Gemischte Aufgaben: rechtwinkliges Dreieck, Rechteck und Quadrat, gleichschenkeliges und gleichseitiges Dreieck. Danach gibt es zusätzliche Beispiele für die Hausübung. Dein Fortschritt wird automatisch gespeichert.</p>
+  </header>
+
+  <div class="controls" id="controls">
+    <div class="startbox" id="startNew">
+      <div id="levelBox">
+        <span class="ctl-label">Niveau</span>
+        <div class="seg" id="level">
+          <button data-v="standard" aria-pressed="true">Standard</button>
+          <button data-v="ahs" aria-pressed="false">Standard AHS</button>
+        </div>
+      </div>
+      <div>
+        <label class="ctl-label" for="name">Dein Name</label>
+        <div class="namerow"><input id="name" class="namein" autocomplete="off" placeholder="Vor- und Nachname"><button class="next" id="nameOk">Los geht's</button></div>
+        <button class="link" id="haveCode" type="button">Ich habe einen Fortschritts-Code</button>
+        <div id="codeRow" hidden>
+          <input id="codeIn" class="namein" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Fortschritts-Code" style="width:340px;margin-top:6px">
+          <span class="hint2">Gib oben deinen Namen <b>genau wie beim ersten Mal</b> ein und tippe dann auf „Los geht's“.</span>
+        </div>
+        <p class="errmsg" id="startErr" hidden></p>
+      </div>
+    </div>
+    <div class="resume" id="resume" hidden></div>
+    <div id="whoWrap" hidden>
+      <div class="whobar"><span>👤 <b id="whoName"></b> · <span id="whoLevel"></span></span><button class="next ghost" id="saveBtn" type="button">💾 Fortschritt mitnehmen</button></div>
+      <div class="savebox" id="saveBox" hidden>
+        <p>Dein Fortschritt wird <b>auf diesem Gerät automatisch gespeichert</b>. Wenn du die Seite schließt und später wieder öffnest, kannst du weitermachen.</p>
+        <p>Auf einem <b>anderen Gerät</b> weitermachen (z. B. zu Hause)? Kopiere diesen Link und schick ihn dir selbst, oder schreib dir den Code auf:</p>
+        <div class="codeview" id="codeView"></div>
+        <button class="next" id="copyLink" type="button" data-label="🔗 Link kopieren">🔗 Link kopieren</button>
+        <button class="next ghost" id="copyCode" type="button" data-label="Code kopieren">Code kopieren</button>
+        <p class="hint2">Der Code funktioniert nur zusammen mit deinem Namen.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tasknav" id="tasknav"></div>
+  <p class="score" id="score"></p>
+  <div class="grid">
+    <div class="sheet">
+      <div id="taskText"></div>
+      <div id="fig"></div>
+      <p class="way-title">Rechenweg</p>
+      <div class="way" id="way"></div>
+    </div>
+    <div>
+      <div class="steps" id="steps"></div>
+      <button class="skip" id="skipBtn" hidden>⏭ Aufgabe überspringen</button>
+      <div class="done" id="done" hidden>
+        <p id="doneText"></p>
+        <button class="next" id="nextBtn">Nächste Aufgabe</button>
+      </div>
+    </div>
+  </div>
+<section class="summary" id="summary" hidden></section>
+</div>
+
+<script>
+/* ---------- Aufgabenplan ---------- */
+const ROUND_S=6;
+const STUNDE=[['allg','hyp'],['rect','hyp'],['isos','leg'],['allg','leg'],['square','hyp'],['equi','leg']];
+const HUE=[['rect','leg'],['isos','hyp'],['allg','hyp'],['equi','leg'],['allg','leg'],['isos','leg']];
+const PLAN=STUNDE.map(x=>[...x,'S']).concat(HUE.map(x=>[...x,'H']));
+const TRIPLES=[[3,4,5],[6,8,10],[5,12,13],[8,15,17],[9,12,15],[12,16,20],[15,20,25],[10,24,26],[20,21,29],[7,24,25],[18,24,30],[16,30,34],[21,28,35],[24,32,40],[12,35,37],[9,40,41],[27,36,45],[14,48,50],[30,40,50],[28,45,53],[33,44,55],[36,48,60],[11,60,61],[40,42,58]];
+const LETTERS='abcdefgkmnpqrstuvwxyz'.split('');
+const KEY='pythagoras-uebungsstunde-v2';
+const FAST_MS=20000;
+const state={level:'standard',name:'',locked:false,seed:0,cur:0,tasks:[]};
+let task=null;
+const $=s=>document.querySelector(s);
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+let rng=Math.random;
+const rnd=n=>Math.floor(rng()*n);
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const fmt=x=>String(Math.round(x*100)/100).replace('.',',');
+function parseNum(s){s=String(s).trim().replace(',','.');if(s==='')return NaN;return Number(s)}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+const near=(x,y)=>Math.abs(x-y)<1e-9;
+const sqn=n=>/[\/+−-]/.test(n)?`(${n})²`:`${n}²`;
+const fmtT=ms=>{const s=Math.max(0,Math.round(ms/1000));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
+const label=t=>t.part==='S'?String(t.no+1):'H'+(t.no-ROUND_S+1);
+
+/* ---------- Aufgaben erzeugen (aus dem Startwert, damit sie beim Weitermachen gleich bleiben) ---------- */
+const R1=x=>Math.round(x*10)/10;
+const key2=v=>String(Math.round(v*100)/100);
+function makeTask(i,used){
+  const [type,find,part]=PLAN[i],std=state.level==='standard';
+  rng=mulberry((state.seed*31+i*7919+(std?0:5))>>>0);
+  const tri=()=>TRIPLES[rnd(TRIPLES.length)];
+  /* Pythagoräisches Tripel, manchmal mit 0,5 / 1,5 / 2,5 gestreckt -> einfache Kommazahlen mit glattem Ergebnis */
+  const scaled=()=>{for(;;){const t=tri(),k=[1,0.5,1.5,2.5,0.5,1.5,2,3,3.5][rnd(9)],v=t.map(x=>R1(x*k));if(v[2]<=60&&v[0]>=1.5)return v;}};
+  /* Zahl in 0,5er-Schritten zwischen lo und hi */
+  const h5=(lo,hi)=>R1(lo+rnd(Math.round((hi-lo)*2)+1)*0.5);
+  let T,g=0,best=null,bestC=1e9;
+  for(;;){
+    g++;
+    if(type==='allg'){
+      const nm=[];while(nm.length<3){const l=LETTERS[rnd(LETTERS.length)];if(!nm.includes(l))nm.push(l);}
+      let a,b,c;
+      if(std){const v=scaled();[a,b,c]=rng()<.5?[v[0],v[1],v[2]]:[v[1],v[0],v[2]];}
+      else if(find==='hyp'){a=h5(2.5,20);b=h5(2.5,20);c=Math.hypot(a,b);}
+      else{a=h5(2.5,18);c=R1(a+h5(2,12));b=Math.sqrt(c*c-a*a);}
+      T={type,figName:'rechtwinkliges Dreieck',H:{n:nm[2],v:c},legH:{n:nm[0],v:a},legV:{n:nm[1],v:b},unk:find==='hyp'?'hyp':'legV'};
+    }else if(type==='rect'){
+      let a,b,d;
+      if(std){const v=scaled();[a,b,d]=rng()<.5?[v[1],v[0],v[2]]:[v[0],v[1],v[2]];}
+      else if(find==='hyp'){a=h5(4,22);b=h5(2.5,16);d=Math.hypot(a,b);}
+      else{a=h5(4,20);d=R1(a+h5(2,12));b=Math.sqrt(d*d-a*a);}
+      T={type,figName:'Rechteck',H:{n:'d',v:d},legH:{n:'a',v:a},legV:{n:'b',v:b},unk:find==='hyp'?'hyp':'legV'};
+    }else if(type==='square'){
+      const a=h5(3,20);
+      T={type,figName:'Quadrat',H:{n:'d',v:a*Math.SQRT2},legH:{n:'a',v:a},legV:{n:'a',v:a},unk:'hyp'};
+    }else if(type==='isos'){
+      let half,h,a;
+      if(std){const v=scaled();let x=v[0],y=v[1];if(rng()<.5)[x,y]=[y,x];if(x/y>2.2)[x,y]=[y,x];half=x;h=y;a=v[2];}
+      else if(find==='hyp'){half=h5(2.5,14);h=h5(2.5,20);a=Math.hypot(half,h);}
+      else{half=h5(2.5,14);a=R1(half+h5(2,12));h=Math.sqrt(a*a-half*half);}
+      T={type,figName:'gleichschenkeliges Dreieck',H:{n:'a',v:a},legH:{n:'c/2',v:half,base:'c',baseV:R1(2*half)},legV:{n:'h',v:h},unk:find==='hyp'?'hyp':'legV'};
+    }else{
+      const sd=4+rnd(37);
+      T={type,figName:'gleichseitiges Dreieck',H:{n:'a',v:sd},legH:{n:'a/2',v:sd/2,base:'a',baseV:sd},legV:{n:'h',v:sd*Math.sqrt(3)/2},unk:'legV'};
+    }
+    /* keine Zahl darf in einer anderen Aufgabe schon vorkommen */
+    T._vals=[T.H.v,T.legH.v,T.legV.v].concat(T.legH.baseV?[T.legH.baseV]:[]).map(key2);
+    const coll=T._vals.filter(v=>used.has(v)).length;
+    if(coll<bestC){best=T;bestC=coll;}
+    if(coll===0||g>4000){T=best;break;}
+  }
+  T._vals.forEach(v=>used.add(v));
+  rng=Math.random;
+  Object.assign(T,{no:i,part,find,errors:0,shown:0,errSteps:[],status:'open',wasSkipped:false,ms:0,started:false,halfShown:false,stepNo:0});
+  T.U=T.unk==='hyp'?T.H:T[T.unk];
+  T.K=T.unk==='hyp'?null:(T.unk==='legV'?T.legH:T.legV);
+  T.sq=T.unk==='hyp'?T.legH.v**2+T.legV.v**2:T.H.v**2-T.K.v**2;
+  T.ans=Math.sqrt(T.sq);T.exact=Math.abs(T.ans*10-Math.round(T.ans*10))<1e-7;
+  T.isHalf=type==='isos'||type==='equi';
+  T.stepsEl=document.createElement('div');T.stepsEl.className='steps';T.stepsEl.hidden=true;$('#steps').appendChild(T.stepsEl);
+  T.wayEl=document.createElement('div');T.wayEl.className='wayinner';T.wayEl.hidden=true;$('#way').appendChild(T.wayEl);
+  return T;
+}
+function buildTasks(){$('#steps').innerHTML='';$('#way').innerHTML='';const used=new Set();
+  /* schwierig zu besetzende Figuren zuerst erzeugen, damit sich keine Zahlen wiederholen */
+  const prio={isos:0,rect:1,allg:2,equi:3,square:4},order=PLAN.map((p,i)=>i).sort((a,b)=>prio[PLAN[a][0]]-prio[PLAN[b][0]]||a-b);
+  const arr=[];order.forEach(i=>{arr[i]=makeTask(i,used);});
+  $('#steps').innerHTML='';$('#way').innerHTML='';
+  arr.forEach(t=>{$('#steps').appendChild(t.stepsEl);$('#way').appendChild(t.wayEl);});state.tasks=arr;}
+function givenText(t){
+  const g=t.type==='square'?[['a',t.legH.v]]:t.type==='equi'?[['a',t.H.v]]:t.type==='isos'?(t.unk==='hyp'?[['c',t.legH.baseV],['h',t.legV.v]]:[['a',t.H.v],['c',t.legH.baseV]])
+    :(t.unk==='hyp'?[[t.legH.n,t.legH.v],[t.legV.n,t.legV.v]]:[[t.H.n,t.H.v],[t.legH.n,t.legH.v]]);
+  return g.map(([n,v])=>`${n} = ${fmt(v)} cm`).join(', ');
+}
+function taskText(t){
+  const U=t.U.n;
+  const what={allg:`Zwei Seiten des rechtwinkligen Dreiecks sind gegeben. Berechne die fehlende Seite <b>${U}</b>.`,
+    rect:t.unk==='hyp'?'Im Rechteck ist die Diagonale d eingezeichnet. Berechne die Länge der <b>Diagonale d</b>.':'Im Rechteck sind die Diagonale d und die Seite a bekannt. Berechne die Seite <b>b</b>.',
+    square:'Im Quadrat ist die Diagonale d eingezeichnet. Berechne die Länge der <b>Diagonale d</b>.',
+    isos:'Die Höhe h teilt das gleichschenkelige Dreieck in zwei gleiche rechtwinklige Dreiecke. '+(t.unk==='hyp'?'Berechne die Länge des <b>Schenkels a</b>.':'Berechne die <b>Höhe h</b>.'),
+    equi:'Die Höhe h teilt das gleichseitige Dreieck in zwei gleiche rechtwinklige Dreiecke. Berechne die <b>Höhe h</b>.'}[t.type];
+  return `<p class="tag">${t.part==='S'?'Übungsstunde':'Hausübung'} · Aufgabe ${label(t)} · ${t.figName}${t.status==='skipped'?' · <span class="skiptag">übersprungen</span>':''}</p><p class="task">${what}</p>`;
+}
+
+/* ---------- Zeichnung ---------- */
+function geom(t){
+  const P={},seg=[],labels=[],dims=[];let tri,others=[];
+  const mid=(p,q)=>[(P[p][0]+P[q][0])/2,(P[p][1]+P[q][1])/2];
+  const L=(at,dx,dy,anchor,name,val,o={})=>labels.push(Object.assign({at,dx,dy,anchor,name,val},o));
+  const isU=k=>t.unk===k;
+  if(!t.isHalf){
+    const a=t.legH.v,b=t.legV.v;
+    if(t.type==='allg'){Object.assign(P,{A:[0,0],C:[a,0],B:[a,b]});seg.push(['A','C','side'],['C','B','side'],['A','B','side']);tri={R:'C',HE:'A',VE:'B'};}
+    else{Object.assign(P,{A:[0,0],B:[a,0],C:[a,b],D:[0,b]});seg.push(['A','B','side'],['B','C','side'],['C','D','side2'],['D','A','side2'],['A','C','side']);tri={R:'B',HE:'A',VE:'C'};others=[['C','D'],['D','A']];}
+    L(mid(tri.HE,tri.R),0,24,'middle',t.legH.n,t.legH.v,{unk:isU('legH')});
+    L(mid(tri.R,tri.VE),12,0,'start',t.legV.n,t.legV.v,{unk:isU('legV')});
+    L(mid(tri.HE,tri.VE),-10,-14,'end',t.H.n,t.H.v,{unk:isU('hyp'),role:'hyp'});
+  }else{
+    const base=t.legH.baseV,h=t.legV.v;
+    Object.assign(P,{A:[0,0],B:[base,0],C:[base/2,h],M:[base/2,0]});
+    seg.push(['A','M','side2'],['M','B','side'],['B','C','side'],['C','A','side2'],['M','C','hgt']);
+    tri={R:'M',HE:'B',VE:'C'};others=[['A','M'],['C','A']];
+    L(mid('B','C'),12,-4,'start',t.H.n,t.H.v,{unk:isU('hyp'),role:'hyp'});
+    L(mid('C','A'),-12,-18,'end',t.H.n,t.H.v,{plain:isU('hyp')});
+    L(mid('M','C'),-8,10,'end',t.legV.n,t.legV.v,{unk:isU('legV')});
+    L(mid('M','B'),0,20,'middle',t.legH.n,t.halfShown?t.legH.v:null,{small:true});
+    dims.push({p:'A',q:'B',off:46,name:t.legH.base,val:base});
+  }
+  return {P,seg,labels,dims,tri,others};
+}
+function unit(p,q){const dx=q[0]-p[0],dy=q[1]-p[1],l=Math.hypot(dx,dy)||1;return[dx/l,dy/l]}
+function draw(){
+  const t=task,G=geom(t),W=380,H=300,PL=86,PR=110,PT=40,PB=t.isHalf?84:50;
+  const pts=Object.values(G.P),xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);
+  const mnx=Math.min(...xs),mxx=Math.max(...xs),mny=Math.min(...ys),mxy=Math.max(...ys);
+  const sc=Math.min((W-PL-PR)/(mxx-mnx||1),(H-PT-PB)/(mxy-mny||1));
+  const ox=PL+((W-PL-PR)-(mxx-mnx)*sc)/2,oy=PT+((H-PT-PB)-(mxy-mny)*sc)/2;
+  const tr=([x,y])=>[ox+(x-mnx)*sc,oy+(mxy-y)*sc];
+  const S=k=>tr(G.P[k]);
+  const id=t.id||{};
+  const Ln=(p,q,c)=>`<line x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" class="${c}"/>`;
+  let out=`<polygon class="tri" points="${[G.tri.R,G.tri.HE,G.tri.VE].map(k=>S(k).join(',')).join(' ')}"/>`;
+  G.seg.forEach(([p,q,c])=>out+=Ln(S(p),S(q),c));
+  const segOf={hyp:[G.tri.HE,G.tri.VE],legH:[G.tri.R,G.tri.HE],legV:[G.tri.R,G.tri.VE]};
+  G.others.forEach((o,i)=>segOf['o'+i]=o);
+  if(t.hypShown||id.hyp)out+=Ln(S(G.tri.HE),S(G.tri.VE),'ov hyp');
+  ['legH','legV'].forEach(k=>{if(t.legsShown||(id.legs&&id.legs.has(k)))out+=Ln(S(segOf[k][0]),S(segOf[k][1]),'ov leg');});
+  if(id.flash&&segOf[id.flash])out+=Ln(S(segOf[id.flash][0]),S(segOf[id.flash][1]),'ov flash');
+  const R=S(G.tri.R),u=unit(R,S(G.tri.HE)),v=unit(R,S(G.tri.VE)),m=14;
+  out+=`<path class="ra" d="M${R[0]+u[0]*m},${R[1]+u[1]*m} L${R[0]+u[0]*m+v[0]*m},${R[1]+u[1]*m+v[1]*m} L${R[0]+v[0]*m},${R[1]+v[1]*m}"/><circle class="dot" cx="${R[0]+(u[0]+v[0])*m/2}" cy="${R[1]+(u[1]+v[1])*m/2}" r="2"/>`;
+  const txt=(l,x)=>l.unk?`${l.name} = ?<tspan class="sub" x="${x}" dy="1.15em">gesucht</tspan>`:l.plain?l.name:l.val==null?`${l.name} = ?`:`${l.name} = ${fmt(l.val)} cm`;
+  const hypOn=t.hypShown||id.hyp;
+  G.labels.forEach(l=>{const p=tr(l.at),x=p[0]+l.dx,y=p[1]+l.dy;
+    const cls='lbl'+(l.unk?' unk':'')+(l.role==='hyp'&&hypOn?' hypt':'')+(l.small?' small':'');
+    out+=`<text x="${x}" y="${y}" text-anchor="${l.anchor}" dominant-baseline="middle" class="${cls}">${txt(l,x)}</text>`;});
+  G.dims.forEach(dm=>{const p=S(dm.p),q=S(dm.q),y=S('A')[1]+dm.off;
+    out+=Ln([p[0],y],[q[0],y],'dim')+Ln([p[0],y-6],[p[0],y+6],'dim')+Ln([q[0],y-6],[q[0],y+6],'dim');
+    out+=`<text x="${(p[0]+q[0])/2}" y="${y+16}" text-anchor="middle" dominant-baseline="middle" class="lbl">${dm.name} = ${fmt(dm.val)} cm</text>`;});
+  const C0=tr([(mnx+mxx)/2,(mny+mxy)/2]);
+  Object.keys(G.P).forEach(k=>{const p=S(k);let dx=p[0]-C0[0],dy=p[1]-C0[1];const l=Math.hypot(dx,dy)||1;
+    if(k==='M'){dx=.6;dy=.9;}else{dx/=l;dy/=l;}
+    out+=`<text x="${p[0]+dx*13}" y="${p[1]+dy*13}" text-anchor="middle" dominant-baseline="middle" class="vtx">${k}</text>`;});
+  if(t.selecting)Object.entries(segOf).sort((a,b)=>a[0].startsWith('o')?-1:1).forEach(([k,[p,q]])=>out+=`<line x1="${S(p)[0]}" y1="${S(p)[1]}" x2="${S(q)[0]}" y2="${S(q)[1]}" class="hit" data-seg="${k}"/>`);
+  const note=t.selecting?`<p class="tapnote">👆 Tippe in der Zeichnung auf ${id.phase==='hyp'?'die Hypotenuse':'die beiden Katheten'}.</p>`:'';
+  $('#fig').innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${t.figName}">${out}</svg>${note}`;
+  if(t.selecting)document.querySelectorAll('#fig .hit').forEach(el=>el.onclick=()=>t.onSeg&&t.onSeg(el.dataset.seg));
+}
+
+/* ---------- Bausteine für die Schritte ---------- */
+function addStep(title,body){
+  const t=task,num=++t.stepNo;
+  const d=document.createElement('section');d.className='step';
+  d.innerHTML=`<div class="step-head"><span class="num">${num}</span><h3>${title}</h3></div><div class="body">${body}</div><div class="fb" aria-live="polite"></div>`;
+  t.stepsEl.appendChild(d);
+  const first=d.querySelector('input');if(first&&num>1)first.focus({preventScroll:true});
+  if(num>1&&d.scrollIntoView)d.scrollIntoView({behavior:'smooth',block:'nearest'});
+  return d;
+}
+function wrong(d,msg,solve){
+  const t=task;t.errors++;d.tries=(d.tries||0)+1;const h=d.querySelector('h3').textContent;if(!t.errSteps.includes(h))t.errSteps.push(h);
+  const fb=d.querySelector('.fb');fb.className='fb bad';fb.innerHTML=msg;
+  if(d.tries>=2){const b=document.createElement('button');b.className='link';b.textContent='Lösung zeigen';b.onclick=()=>{t.shown++;solve();save();};fb.appendChild(b);}
+  save();
+}
+function note(d,msg){const fb=d.querySelector('.fb');fb.className='fb bad';fb.textContent=msg;}
+function right(d,msg){d.classList.add('solved');const fb=d.querySelector('.fb');fb.className='fb ok';fb.textContent='✓ '+msg;
+  d.querySelectorAll('input,button,select').forEach(e=>e.disabled=true);}
+function addWay(html,cls){const el=document.createElement('div');el.className='wline'+(cls?' '+cls:'');el.innerHTML=html;task.wayEl.appendChild(el);}
+function bindCheck(d,fn){d.querySelector('.check').onclick=fn;d.querySelectorAll('input').forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter')fn()}));}
+
+/* ---------- Schritte ---------- */
+function flash(key){const t=task;t.id.flash=key;draw();setTimeout(()=>{if(t===task&&t.id.flash===key){t.id.flash=null;draw();}},700);}
+function stepIdentify(){
+  const t=task;t.id={phase:'hyp',legs:new Set(),flash:null,hyp:false};t.selecting=true;
+  const d=addStep('Hypotenuse und Katheten erkennen',`<p class="idq">Tippe in der Zeichnung auf die <b>Hypotenuse</b> des eingefärbten Dreiecks.</p>`);
+  const done=()=>{if(!t.selecting)return;t.selecting=false;t.hypShown=true;t.legsShown=true;t.id.phase='done';draw();
+    d.querySelector('.idq').textContent='Die Hypotenuse ist rot, die Katheten sind blau markiert.';
+    right(d,`Richtig: ${t.H.n} ist die Hypotenuse – sie liegt gegenüber vom rechten Winkel.`+(t.isHalf?` Die Höhe h und die halbe ${t.type==='isos'?'Basis':'Seite'} ${t.legH.n} sind die Katheten.`:''));
+    t.isHalf?stepHalf():stepFind();};
+  t.onSeg=key=>{
+    const id=t.id;if(!t.selecting)return;const out=key.startsWith('o');
+    if(id.phase==='hyp'){
+      if(key==='hyp'){id.hyp=true;id.phase='legs';d.querySelector('.idq').innerHTML='Richtig! Tippe jetzt auf die beiden <b>Katheten</b>.';const fb=d.querySelector('.fb');fb.className='fb';fb.innerHTML='';draw();}
+      else{flash(key);wrong(d,out?'Diese Strecke gehört nicht zum eingefärbten Dreieck.':'Das ist eine Kathete – sie liegt am rechten Winkel. Die Hypotenuse liegt dem rechten Winkel gegenüber.',done);}
+    }else if(id.phase==='legs'){
+      if(key==='legH'||key==='legV'){id.legs.add(key);draw();if(id.legs.size===2)done();}
+      else{flash(key);wrong(d,key==='hyp'?'Das ist die Hypotenuse. Die Katheten bilden den rechten Winkel.':'Diese Strecke gehört nicht zum eingefärbten Dreieck.',done);}
+    }
+  };
+  draw();
+}
+function stepHalf(){
+  const t=task,word=t.type==='isos'?'Basis':'Seite',B=t.legH.base;
+  const d=addStep(`Halbe ${word} berechnen`,`<p>Die untere Kathete ist nur die <b>halbe ${word}</b>. Berechne ${t.legH.n}.</p><div class="eq"><span>${t.legH.n} =</span><input class="n" inputmode="decimal" aria-label="halbe ${word}"><span>cm</span><button class="check">Prüfen</button></div>`);
+  const [i1]=d.querySelectorAll('input');
+  const solve=()=>{i1.value=fmt(t.legH.v);t.halfShown=true;draw();
+    right(d,`Richtig: ${t.legH.n} = ${fmt(t.legH.baseV)} : 2 = ${fmt(t.legH.v)} cm.`);addWay(`${t.legH.n} = ${fmt(t.legH.baseV)} : 2 = ${fmt(t.legH.v)} cm`);stepFind();};
+  bindCheck(d,()=>{const v=parseNum(i1.value);if(isNaN(v)){note(d,'Bitte eine Zahl eingeben.');return;}
+    if(near(v,t.legH.v))solve();
+    else if(near(v,t.legH.baseV))wrong(d,`Das ist die ganze ${word} ${B}. Gesucht ist die Hälfte davon.`,solve);
+    else if(near(v,2*t.legH.baseV))wrong(d,'Du hast verdoppelt. Hier musst du durch 2 teilen.',solve);
+    else wrong(d,`Rechne ${B} : 2 = ${fmt(t.legH.baseV)} : 2.`,solve);});
+}
+function stepFind(){
+  const t=task,U=t.U.n,want=t.unk==='hyp'?'hyp':'leg';
+  const d=addStep('Was ist gesucht?',`<p>Ist die gesuchte Strecke ${U} eine Hypotenuse oder eine Kathete?</p><div class="opts"><button class="opt word" data-v="hyp">Hypotenuse</button><button class="opt word" data-v="leg">Kathete</button></div>`);
+  const solve=()=>{d.querySelector(`[data-v="${want}"]`).classList.add('good');right(d,want==='hyp'?`Richtig: ${U} ist die Hypotenuse.`:`Richtig: ${U} ist eine Kathete.`);stepWords();};
+  d.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    if(b.dataset.v===want)solve();
+    else{b.classList.add('wrongb');b.disabled=true;wrong(d,want==='hyp'?`${U} liegt gegenüber vom rechten Winkel – also ist ${U} die Hypotenuse.`:`${U} liegt direkt am rechten Winkel – die Hypotenuse ist ${t.H.n}.`,solve);}
+  });
+}
+function stepWords(){
+  const t=task;
+  const inp=n=>`<input class="n letter" maxlength="12" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" aria-label="Feld ${n}">`;
+  const d=addStep('Erste Zeile: Formel mit H und K',`<p>Schreibe die Formel mit <b>H</b> für Hypotenuse und <b>K</b> für Kathete – passend dazu, was gesucht ist – und wähle das Rechenzeichen.</p><div class="eq">${inp(1)}<sup>2</sup><span>=</span>${inp(2)}<sup>2</sup><select class="n opsel" aria-label="Rechenzeichen"><option value="">?</option><option value="+">+</option><option value="−">−</option></select>${inp(3)}<sup>2</sup><button class="check">Prüfen</button></div>`);
+  const ins=[...d.querySelectorAll('input')],sel=d.querySelector('select');
+  const isH=s=>/^(h|hypo?th?enuse)$/i.test(s.trim()),isK=s=>/^(k|kath?ete)$/i.test(s.trim());
+  const leg=t.unk!=='hyp',W=leg?['K','H','K']:['H','K','K'],OP=leg?'−':'+';
+  const solve=()=>{W.forEach((w,i)=>ins[i].value=w);sel.value=OP;right(d,'Richtig – das ist die erste Zeile!');addWay(`${W[0]}² = ${W[1]}² ${OP} ${W[2]}²`);stepVars();};
+  bindCheck(d,()=>{
+    const v=ins.map(i=>i.value);
+    if(v.some(x=>!x.trim())){note(d,'Bitte alle drei Felder ausfüllen.');return;}
+    if(!sel.value){note(d,'Wähle noch das Rechenzeichen (+ oder −).');return;}
+    const ok=leg?(isK(v[0])&&isH(v[1])&&isK(v[2])):(isH(v[0])&&isK(v[1])&&isK(v[2]));
+    if(ok&&sel.value===OP)solve();
+    else if(ok)wrong(d,`Überlege noch einmal: Wird für ${leg?'eine Kathete':'die Hypotenuse'} addiert oder subtrahiert?`,solve);
+    else if(leg&&isH(v[0]))wrong(d,'Gesucht ist eine Kathete – also steht K allein links vom Ist-gleich.',solve);
+    else if(!leg&&isK(v[0]))wrong(d,'Gesucht ist die Hypotenuse – also steht H allein links vom Ist-gleich.',solve);
+    else wrong(d,'Verwende H für Hypotenuse und K für Kathete. Links vom Ist-gleich steht die gesuchte Strecke.',solve);
+  });
+}
+function formula(t){
+  const H=t.H.n;
+  if(t.unk==='hyp'){const a=sqn(t.legH.n),b=sqn(t.legV.n);
+    const opts=[`${H}² = ${a} + ${b}`,t.isHalf?`${H}² = ${t.legH.base}² + ${b}`:`${a} = ${H}² + ${b}`,`${H}² = ${a} − ${b}`];return {correct:opts[0],opts};}
+  const U=t.U.n,K=sqn(t.K.n);
+  const opts=[`${U}² = ${H}² − ${K}`,`${U}² = ${H}² + ${K}`,t.isHalf&&t.K===t.legH?`${U}² = ${H}² − ${t.legH.base}²`:`${U}² = ${K} − ${H}²`];
+  return {correct:opts[0],opts};
+}
+function stepVars(){
+  const t=task,{correct,opts}=formula(t);
+  const d=addStep('Variablen aus der Skizze einsetzen',`<p>Welche Formel passt zum eingefärbten Dreieck?</p><div class="opts">${shuffle(opts).map(o=>`<button class="opt">${o}</button>`).join('')}</div>`);
+  const solve=()=>{d.querySelectorAll('.opt').forEach(b=>{if(b.textContent===correct)b.classList.add('good')});right(d,'Richtige Formel!');addWay(correct);stepNumbers();};
+  d.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    if(b.textContent===correct)solve();
+    else{b.classList.add('wrongb');b.disabled=true;
+      if(t.isHalf&&!b.textContent.includes('/'))wrong(d,`Achtung: Die Kathete im eingefärbten Dreieck ist nur die halbe ${t.type==='isos'?'Basis':'Seite'} ${t.legH.n} – nicht die ganze ${t.legH.base}.`,solve);
+      else wrong(d,t.unk==='hyp'?'Die Hypotenuse steht allein links: Hypotenuse² = Kathete² + Kathete².':'Für eine Kathete gilt: Kathete² = Hypotenuse² − andere Kathete².',solve);}
+  });
+}
+function stepNumbers(){
+  const t=task,U=t.U.n,op=t.unk==='hyp'?'+':'−';
+  const d=addStep('Zahlen einsetzen',`<p>Setze die Längen ein (ohne cm).</p><div class="eq"><span>${U}² =</span><input class="n" inputmode="decimal" aria-label="erste Zahl"><sup>2</sup><span>${op}</span><input class="n" inputmode="decimal" aria-label="zweite Zahl"><sup>2</sup><button class="check">Prüfen</button></div>`);
+  const [i1,i2]=d.querySelectorAll('input');
+  const exp=t.unk==='hyp'?[t.legH.v,t.legV.v]:[t.H.v,t.K.v];
+  const is=(a,b,x,y)=>near(a,x)&&near(b,y);
+  const ok=(a,b)=>t.unk==='hyp'?(is(a,b,exp[0],exp[1])||is(a,b,exp[1],exp[0])):is(a,b,exp[0],exp[1]);
+  const solve=()=>{if(!ok(parseNum(i1.value),parseNum(i2.value))){i1.value=fmt(exp[0]);i2.value=fmt(exp[1]);}
+    const x=parseNum(i1.value),y=parseNum(i2.value);right(d,'Richtig eingesetzt!');addWay(`${U}² = ${fmt(x)}² ${op} ${fmt(y)}²`);stepCalc(x,y);};
+  bindCheck(d,()=>{const a=parseNum(i1.value),b=parseNum(i2.value);
+    if(isNaN(a)||isNaN(b)){note(d,'Bitte beide Felder ausfüllen.');return;}
+    if(ok(a,b))solve();
+    else if(t.isHalf&&(near(a,t.legH.baseV)||near(b,t.legH.baseV)))wrong(d,`Achtung: Setze nicht die ganze ${t.type==='isos'?'Basis':'Seite'} ${t.legH.base} = ${fmt(t.legH.baseV)} ein, sondern die Hälfte ${t.legH.n} = ${fmt(t.legH.v)}.`,solve);
+    else if(t.unk!=='hyp'&&is(a,b,exp[1],exp[0]))wrong(d,'Vorsicht, Reihenfolge! Zuerst die Hypotenuse, dann wird die andere Kathete abgezogen.',solve);
+    else wrong(d,t.unk==='hyp'?`Setze die Längen der beiden Katheten ein: ${t.legH.n} und ${t.legV.n}.`:`Setze zuerst die Hypotenuse ${t.H.n}, dann die Kathete ${t.K.n} ein.`,solve);});
+}
+function stepCalc(x,y){
+  const t=task,U=t.U.n;
+  const d=addStep('Berechnen',`<p>Rechne die Quadrate aus und dann ${t.unk==='hyp'?'addiere':'subtrahiere'} sie.</p><div class="eq"><span>${U}² =</span><input class="n wide" inputmode="decimal" aria-label="Ergebnis"><button class="check">Prüfen</button></div>`);
+  const [i1]=d.querySelectorAll('input');
+  const solve=()=>{i1.value=fmt(t.sq);right(d,'Richtig gerechnet!');addWay(`${U}² = ${fmt(t.sq)}`);stepRoot();};
+  bindCheck(d,()=>{const a=parseNum(i1.value);if(isNaN(a)){note(d,'Bitte eine Zahl eingeben.');return;}
+    if(Math.abs(a-t.sq)<1e-6)solve();
+    else if(near(a,t.unk==='hyp'?x+y:x-y))wrong(d,`Du hast die Zahlen noch nicht quadriert. Zum Beispiel: ${fmt(x)}² = ${fmt(x)} · ${fmt(x)}.`,solve);
+    else if(near(a,t.unk==='hyp'?x*x-y*y:x*x+y*y))wrong(d,`Achte auf das Rechenzeichen: hier wird ${t.unk==='hyp'?'addiert':'subtrahiert'}.`,solve);
+    else if(near(a,t.unk==='hyp'?2*x+2*y:2*x-2*y))wrong(d,`Quadrieren heißt nicht mal 2! ${fmt(x)}² = ${fmt(x)} · ${fmt(x)}.`,solve);
+    else wrong(d,`Rechne zuerst ${fmt(x)}² = ${fmt(x)} · ${fmt(x)} und ${fmt(y)}² = ${fmt(y)} · ${fmt(y)}.`,solve);});
+}
+function stepRoot(){
+  const t=task,U=t.U.n;
+  const d=addStep('Wurzel ziehen',`<p>${t.exact?`Ziehe die Wurzel aus ${U}² = ${fmt(t.sq)}.`:`Ziehe die Wurzel aus ${U}² = ${fmt(t.sq)} und runde auf 2 Dezimalstellen.`}</p><div class="eq"><span>${U} ${t.exact?'=':'≈'}</span><input class="n wide" inputmode="decimal" aria-label="Ergebnis"><span>cm</span><button class="check">Prüfen</button></div>`);
+  const [i1]=d.querySelectorAll('input');
+  const solve=()=>{i1.value=fmt(t.ans);right(d,'Super, Aufgabe gelöst!');addWay(`√${U}² = √${fmt(t.sq)}`);addWay(`${U} ${t.exact?'=':'≈'} ${fmt(t.ans)} cm`,'final');finish();};
+  bindCheck(d,()=>{const a=parseNum(i1.value);if(isNaN(a)){note(d,'Bitte eine Zahl eingeben.');return;}
+    if(Math.abs(a-t.ans)<=(t.exact?1e-6:0.011))solve();
+    else if(Math.abs(a-t.sq)<1e-6)wrong(d,`Das ist noch ${U}². Du musst noch die Wurzel ziehen.`,solve);
+    else if(Math.abs(a-t.sq/2)<1e-6)wrong(d,'Wurzel ziehen heißt nicht durch 2 teilen! Gesucht ist die Zahl, die mit sich selbst multipliziert das Ergebnis ergibt.',solve);
+    else if(!t.exact&&Math.abs(a-t.ans)<0.2)wrong(d,'Fast! Achte aufs Runden auf 2 Dezimalstellen.',solve);
+    else wrong(d,t.exact?`Welche Zahl ergibt mal sich selbst ${fmt(t.sq)}?`:`Tippe √${fmt(t.sq)} in den Taschenrechner und runde auf 2 Dezimalstellen.`,solve);});
+}
+/* Rechenweg für bereits gelöste Aufgaben (nach dem Weitermachen) */
+function fullWay(t){
+  const U=t.U.n,op=t.unk==='hyp'?'+':'−',W=t.unk==='hyp'?['H','K','K']:['K','H','K'];
+  const nums=t.unk==='hyp'?[t.legH.v,t.legV.v]:[t.H.v,t.K.v];
+  const L=[];if(t.isHalf)L.push(`${t.legH.n} = ${fmt(t.legH.baseV)} : 2 = ${fmt(t.legH.v)} cm`);
+  L.push(`${W[0]}² = ${W[1]}² ${op} ${W[2]}²`,formula(t).correct,`${U}² = ${fmt(nums[0])}² ${op} ${fmt(nums[1])}²`,`${U}² = ${fmt(t.sq)}`,`√${U}² = √${fmt(t.sq)}`);
+  t.wayEl.innerHTML=L.map(x=>`<div class="wline">${x}</div>`).join('')+`<div class="wline final">${U} ${t.exact?'=':'≈'} ${fmt(t.ans)} cm</div>`;
+}
+
+/* ---------- Ablauf ---------- */
+let tAct=null,tActTask=null;
+function tStop(){if(tActTask&&tAct!=null)tActTask.ms+=Date.now()-tAct;tAct=null;tActTask=null;}
+function tStart(){if(state.locked&&task&&task.status!=='solved'&&$('#summary').hidden&&!document.hidden){tAct=Date.now();tActTask=task;}}
+function showTask(i){
+  tStop();
+  state.cur=i;task=state.tasks[i];const t=task;
+  state.tasks.forEach(x=>{x.stepsEl.hidden=x!==t;x.wayEl.hidden=x!==t;});
+  $('#taskText').innerHTML=taskText(t);
+  if(t.status==='solved'&&!t.started){t.started=true;t.hypShown=true;t.legsShown=true;t.halfShown=true;fullWay(t);
+    t.stepsEl.innerHTML='<div class="restored"><p>✓ Diese Aufgabe hast du schon gelöst. Den Rechenweg siehst du links.</p></div>';}
+  draw();
+  if(!t.started){t.started=true;t.stepsEl.innerHTML='';stepIdentify();}
+  $('#skipBtn').hidden=t.status==='solved';
+  tStart();updateDone();renderNav();updateScore();save();
+}
+function nextOpen(){const n=state.tasks.length;for(let k=1;k<=n;k++){const j=(state.cur+k)%n;if(state.tasks[j].status==='open')return j;}return -1;}
+const allDone=()=>state.tasks.every(t=>t.status==='solved');
+function updateDone(){
+  const t=task;if(t.status!=='solved'){$('#done').hidden=true;return;}
+  const stundeFertig=state.tasks.slice(0,ROUND_S).every(x=>x.status==='solved');
+  $('#doneText').innerHTML=(t.errors===0?'Fehlerfrei gelöst – stark!':`Geschafft! (${t.errors} ${t.errors===1?'Fehlversuch':'Fehlversuche'})`)+
+    '<br><strong>✏️ Übertrage jetzt den ganzen Rechenweg in dein Heft.</strong>'+
+    (stundeFertig&&t.part==='S'?'<br>🎉 Die Übungsstunde ist geschafft! Weiter geht es mit der Hausübung.':'');
+  const j=nextOpen();$('#nextBtn').textContent=j>=0?'Nächste Aufgabe':'Zur Auswertung';$('#done').hidden=false;
+}
+function renderNav(){
+  const btn=(t,i)=>`<button class="tnav ${t.status}${i===state.cur?' cur':''}" data-i="${i}" aria-label="Aufgabe ${label(t)}">${label(t)}${t.status==='solved'?' ✓':t.status==='skipped'?' ⏭':''}</button>`;
+  $('#tasknav').innerHTML=`<span class="navlbl">Übungsstunde</span>${state.tasks.slice(0,ROUND_S).map((t,k)=>btn(t,k)).join('')}<span class="navlbl">Hausübung</span>${state.tasks.slice(ROUND_S).map((t,k)=>btn(t,k+ROUND_S)).join('')}<button class="tnav sum" id="navSum">📋 Auswertung</button>`;
+  $('#tasknav').querySelectorAll('.tnav[data-i]').forEach(b=>b.onclick=()=>showTask(+b.dataset.i));
+  $('#navSum').onclick=showSummary;
+}
+function updateScore(){
+  const S=state.tasks.slice(0,ROUND_S),H=state.tasks.slice(ROUND_S),c=a=>a.filter(t=>t.status==='solved').length;
+  $('#score').textContent=`${state.name}: Übungsstunde ${c(S)} von ${S.length} · Hausübung ${c(H)} von ${H.length} gelöst`;
+}
+function finish(){
+  const t=task;tStop();t.status='solved';t.answerText=`${t.U.n} ${t.exact?'=':'≈'} ${fmt(t.ans)} cm`;$('#skipBtn').hidden=true;
+  updateDone();renderNav();updateScore();save();
+  $('#nextBtn').focus({preventScroll:true});if($('#done').scrollIntoView)$('#done').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function setMain(show){document.querySelector('.grid').hidden=!show;$('#score').hidden=!show;$('#tasknav').hidden=!show;$('#summary').hidden=show;}
+function showSummary(){
+  tStop();save();
+  const name=state.name,now=new Date(),dt=now.toLocaleDateString('de-AT')+', '+now.toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'});
+  const table=L=>{
+    const rows=L.map(t=>{const ms=t.ms,tm=ms?fmtT(ms)+(t.status==='solved'&&ms<FAST_MS?' ⚡':''):'–';
+      if(t.status!=='solved')return `<tr class="skiprow"><td>${label(t)}</td><td>${t.figName}</td><td>${t.U.n}</td><td>${givenText(t)}</td><td colspan="4">${t.status==='skipped'?'<span class="skiptag">⏭ übersprungen</span>':'noch offen'}</td><td>${tm}</td></tr>`;
+      return `<tr class="${t.errors===0?'okrow':t.shown?'errrow':''}"><td>${label(t)}</td><td>${t.figName}</td><td>${t.U.n} (${t.unk==='hyp'?'Hypotenuse':'Kathete'})</td><td>${givenText(t)}</td><td>${t.answerText||(t.U.n+' ≈ '+fmt(t.ans)+' cm')}${t.wasSkipped?'<br><span class="latetag">zuerst übersprungen</span>':''}</td><td>${t.errors}</td><td>${t.shown?'ja ('+t.shown+'×)':'nein'}</td><td>${t.errSteps.length?esc(t.errSteps.join(', ')):'–'}</td><td>${tm}</td></tr>`;}).join('');
+    return `<div class="tablewrap"><table><thead><tr><th>Nr.</th><th>Figur</th><th>Gesucht</th><th>Gegeben</th><th>Ergebnis</th><th>Fehlversuche</th><th>Lösung gezeigt</th><th>Fehler bei Schritt</th><th>Zeit</th></tr></thead><tbody>${rows}</tbody></table></div>`;};
+  const stats=L=>{const sol=L.filter(t=>t.status==='solved'),tot=L.reduce((a,t)=>a+t.ms,0);
+    return `<div class="sumstats"><div><b>${sol.length} / ${L.length}</b><span>gelöst</span></div><div><b>${sol.filter(t=>t.errors===0).length}</b><span>ohne Fehler</span></div><div><b>${L.reduce((a,t)=>a+t.errors,0)}</b><span>Fehlversuche</span></div><div><b>${L.reduce((a,t)=>a+t.shown,0)}</b><span>Lösungen angezeigt</span></div><div><b>${fmtT(tot)}</b><span>Bearbeitungszeit</span></div></div>`;};
+  const S=state.tasks.slice(0,ROUND_S),H=state.tasks.slice(ROUND_S);
+  const sol=state.tasks.filter(t=>t.status==='solved'),fast=sol.filter(t=>t.ms<FAST_MS).length;
+  const s=$('#summary');
+  s.innerHTML=`<h2>${allDone()?'Zusammenfassung für die Lehrkraft':'Zwischenstand für die Lehrkraft'}</h2>
+    <div class="sumhead"><div><span>Name</span><b>${esc(name)}</b></div><div><span>Datum</span><b>${dt}</b></div><div><span>Niveau</span><b>${state.level==='standard'?'Standard':'Standard AHS'}</b></div><div><span>Übung</span><b>Pythagoras – Übungsstunde</b></div></div>
+    <h3 class="sumpart">Übungsstunde</h3>${stats(S)}${table(S)}
+    <h3 class="sumpart">Hausübung</h3>${stats(H)}${table(H)}
+    <p class="tnote">Zeit = Arbeitszeit an der Aufgabe (Pausen zählen nicht). ⚡ = in unter 20 Sekunden gelöst.${sol.length>=3&&fast/sol.length>0.5?' <b>Auffällig: Mehr als die Hälfte der Aufgaben wurde in unter 20 Sekunden gelöst.</b>':''}</p>
+    <p class="sumnote">Zeige diese Seite deiner Lehrkraft. Die Rechenwege stehen in deinem Heft.</p>
+    <div class="sumbtns"><button class="next" id="backTasks">↩ Zurück zu den Aufgaben</button><button class="next ghost" id="newRound">Neue Runde starten</button></div>`;
+  setMain(false);window.scrollTo({top:0});
+  $('#backTasks').onclick=()=>{setMain(true);const j=state.tasks[state.cur].status==='solved'?nextOpen():state.cur;showTask(j>=0?j:state.cur);};
+  $('#newRound').onclick=()=>{if(!confirm('Neue Runde mit neuen Aufgaben starten? Dein bisheriger Fortschritt wird dabei gelöscht.'))return;
+    state.seed=Math.floor(Math.random()*2e9);buildTasks();setMain(true);showTask(0);};
+}
+
+/* ---------- Speichern und Weitermachen ---------- */
+const B36='0123456789abcdefghijklmnopqrstuvwxyz';
+const normName=n=>String(n).trim().replace(/\s+/g,' ').toLowerCase();
+function hash(s){let h=2166136261;for(const c of s){h^=c.codePointAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+function snapshot(){
+  return {v:1,name:state.name,level:state.level,seed:state.seed,
+    tasks:state.tasks.map(t=>({st:t.status,ws:t.wasSkipped,e:t.errors,sh:t.shown,ms:Math.round(t.ms+(t===tActTask&&tAct!=null?Date.now()-tAct:0)),es:t.errSteps}))};
+}
+function save(){if(!state.locked)return;try{localStorage.setItem(KEY,JSON.stringify(snapshot()));}catch(e){}if(!$('#saveBox').hidden)showCode();}
+function loadLocal(){try{const s=JSON.parse(localStorage.getItem(KEY)||'null');return s&&s.v===1&&s.tasks&&s.tasks.length===PLAN.length?s:null;}catch(e){return null;}}
+function encode(){
+  const s=snapshot();let p='b'+(s.level==='ahs'?'1':'0')+s.seed.toString(36).padStart(6,'0');
+  s.tasks.forEach(x=>{const st=x.st==='solved'?(x.ws?3:1):x.st==='skipped'?2:0;
+    p+=B36[st*4+Math.min(3,x.sh)]+B36[Math.min(35,x.e)]+Math.min(1295,Math.round(x.ms/1000)).toString(36).padStart(2,'0');});
+  return (p+(hash(normName(s.name)+'|'+p)%1679616).toString(36).padStart(4,'0')).toUpperCase();
+}
+function decode(code,name){
+  const s=String(code).toLowerCase().replace(/[^0-9a-z]/g,'');
+  if(s.length!==8+PLAN.length*4+4||s[0]!=='b')return null;
+  const p=s.slice(0,-4),c=s.slice(-4);
+  if((hash(normName(name)+'|'+p)%1679616).toString(36).padStart(4,'0')!==c)return null;
+  const tasks=[];
+  for(let i=0;i<PLAN.length;i++){const q=p.slice(8+i*4,12+i*4),a=B36.indexOf(q[0]),st=Math.floor(a/4);
+    tasks.push({st:['open','solved','skipped','solved'][st],ws:st>=2,e:B36.indexOf(q[1]),sh:a%4,ms:parseInt(q.slice(2),36)*1000,es:[]});}
+  return {v:1,name:name.trim().replace(/\s+/g,' '),level:p[1]==='1'?'ahs':'standard',seed:parseInt(p.slice(2,8),36),tasks};
+}
+const fmtCode=c=>c.match(/.{1,5}/g).join('-');
+function applySnap(s){
+  state.name=s.name;state.level=s.level;state.seed=s.seed;buildTasks();
+  s.tasks.forEach((x,i)=>{const t=state.tasks[i];t.status=x.st;t.wasSkipped=!!x.ws;t.errors=x.e||0;t.shown=x.sh||0;t.ms=x.ms||0;t.errSteps=x.es||[];
+    if(t.status==='solved')t.answerText=`${t.U.n} ${t.exact?'=':'≈'} ${fmt(t.ans)} cm`;});
+}
+function begin(){
+  state.locked=true;document.body.classList.remove('pre');
+  $('#startNew').hidden=true;$('#resume').hidden=true;$('#whoWrap').hidden=false;
+  $('#whoName').textContent=state.name;$('#whoLevel').textContent=state.level==='standard'?'Standard':'Standard AHS';
+  try{if(location.hash)history.replaceState(null,'',location.pathname+location.search);}catch(e){}
+  const first=state.tasks.findIndex(t=>t.status!=='solved');showTask(first>=0?first:0);
+}
+function startErr(msg){const e=$('#startErr');e.textContent=msg;e.hidden=!msg;}
+function startNew(){
+  const n=$('#name').value.trim().replace(/\s+/g,' ');
+  if(!n){startErr('Bitte gib zuerst deinen Namen ein.');$('#name').focus();return;}
+  const code=$('#codeRow').hidden?'':$('#codeIn').value.trim();
+  if(code){const s=decode(code,n);if(!s){startErr('Der Code passt nicht zu diesem Namen. Schreib deinen Namen genau wie beim ersten Mal (Leerzeichen und Buchstaben).');return;}
+    applySnap(s);begin();return;}
+  state.name=n;state.seed=Math.floor(Math.random()*2e9);buildTasks();begin();
+}
+function showCode(){const c=encode();$('#codeView').textContent=fmtCode(c);$('#codeView').dataset.code=c;}
+function copyText(text,btn){
+  const done=()=>{btn.textContent='✓ kopiert';setTimeout(()=>btn.textContent=btn.dataset.label,1600);};
+  const fb=()=>{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){}ta.remove();};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(done,fb);else fb();
+}
+
+/* ---------- Start ---------- */
+document.querySelectorAll('#level button').forEach(b=>b.onclick=()=>{if(state.locked)return;
+  document.querySelectorAll('#level button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));state.level=b.dataset.v;});
+$('#nameOk').onclick=startNew;
+$('#name').addEventListener('keydown',e=>{if(e.key==='Enter')startNew();});
+$('#codeIn').addEventListener('keydown',e=>{if(e.key==='Enter')startNew();});
+$('#haveCode').onclick=()=>{$('#codeRow').hidden=false;$('#levelBox').hidden=true;$('#haveCode').hidden=true;$('#codeIn').focus();};
+$('#saveBtn').onclick=()=>{const b=$('#saveBox');b.hidden=!b.hidden;if(!b.hidden){save();showCode();}};
+$('#copyLink').onclick=()=>copyText(location.href.split('#')[0]+'#weiter='+$('#codeView').dataset.code,$('#copyLink'));
+$('#copyCode').onclick=()=>copyText(fmtCode($('#codeView').dataset.code),$('#copyCode'));
+$('#nextBtn').onclick=()=>{const j=nextOpen();if(j>=0)showTask(j);else showSummary();};
+$('#skipBtn').onclick=()=>{if(!task||task.status==='solved')return;
+  if(!confirm('Diese Aufgabe überspringen? Du kannst später über die Aufgabenleiste wieder zurückkommen.'))return;
+  tStop();task.status='skipped';task.wasSkipped=true;save();const j=nextOpen();if(j>=0)showTask(j);else showSummary();};
+document.addEventListener('visibilitychange',()=>{if(document.hidden){tStop();save();}else tStart();});
+window.addEventListener('pagehide',()=>{tStop();save();});
+setInterval(()=>{if(state.locked)save();},15000);
+
+(function init(){
+  const m=location.hash.match(/weiter=([0-9A-Za-z-]+)/);
+  if(m){$('#codeIn').value=m[1];$('#codeRow').hidden=false;$('#levelBox').hidden=true;$('#haveCode').hidden=true;
+    startErr('');const p=document.createElement('p');p.className='hint2';p.innerHTML='<b>Willkommen zurück!</b> Gib deinen Namen ein, um mit deinem Fortschritt weiterzumachen.';$('#codeRow').prepend(p);$('#name').focus();return;}
+  const s=loadLocal();
+  if(s){const solved=s.tasks.filter(x=>x.st==='solved').length,r=$('#resume');
+    r.innerHTML=`<p>Willkommen zurück, <b>${esc(s.name)}</b>! Du hast schon <b>${solved} von ${s.tasks.length}</b> Aufgaben gelöst (${s.level==='standard'?'Standard':'Standard AHS'}).</p>
+      <button class="next" id="resGo">▶ Weitermachen</button><button class="next ghost" id="resNew">Ich bin nicht ${esc(s.name)} – neu beginnen</button>`;
+    r.hidden=false;$('#startNew').hidden=true;
+    $('#resGo').onclick=()=>{applySnap(s);begin();};
+    $('#resNew').onclick=()=>{if(!confirm('Neu beginnen? Der gespeicherte Fortschritt von '+s.name+' wird auf diesem Gerät gelöscht.'))return;
+      try{localStorage.removeItem(KEY);}catch(e){}r.hidden=true;$('#startNew').hidden=false;$('#name').focus();};
+    return;}
+  $('#name').focus();
+})();
+</script>
+<script>
+/* Bildschirm-Tastatur für die Mathe-Übungen
+   Einbinden: in der HTML-Datei direkt vor dem schließenden body-Tag die Zeile
+   [script src="tastatur.js"][/script] einfügen (mit spitzen statt eckigen Klammern).
+   Passt sich automatisch an das Eingabefeld an:
+   - Zahlenfelder:            Ziffern, Komma, Löschen, Cursor, nächstes Feld, Prüfen
+   - Felder für H / K:        H, K, + und −
+   - Felder für Wörter:       Hypotenuse, Kathete, + und −
+   - Felder für Ausdrücke:    Buchstaben, + − / ( ) und Ziffern (z. B. f/2 oder (a − c)/2) */
+(function(){
+  if(document.getElementById('kpad'))return;            /* Übung hat schon eine Tastatur */
+  const NAME_IDS=['name','nameIn','pname','codeIn'];
+  const css=`
+#kpad{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--card,#fff);border-top:3px solid var(--ink,#1b2a4a);padding:8px 10px calc(10px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 18px rgba(0,0,0,.18);font-family:"Atkinson Hyperlegible",system-ui,sans-serif;color:var(--ink,#1b2a4a)}
+#kpad[hidden],#kpadToggle[hidden]{display:none!important}
+#kpad .kp-inner{max-width:440px;margin:0 auto}
+#kpad .kp-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;font-weight:700;font-size:15px}
+#kpad .kp-small{font:inherit;font-size:15px;padding:3px 12px;background:transparent;color:var(--ink,#1b2a4a);border:2px solid var(--ink,#1b2a4a);border-radius:8px;cursor:pointer}
+#kpad .kp-grid{display:grid;gap:6px}
+#kpad .kp-grid button{font:inherit;font-size:22px;font-weight:700;padding:7px 0;background:var(--paper,#fdfdf9);color:var(--ink,#1b2a4a);border:2px solid var(--line,#c9d6e6);border-radius:10px;cursor:pointer;touch-action:manipulation}
+#kpad .kp-grid button.op{border-color:var(--ink,#1b2a4a);font-size:20px}
+#kpad .kp-grid button.act{background:var(--btn,var(--ink,#1b2a4a));color:var(--btn-ink,var(--paper,#fff));border-color:var(--btn,var(--ink,#1b2a4a))}
+#kpad .kp-grid button.wide{grid-column:span 2;color:var(--pen,var(--ink,#1d4ed8));border-color:var(--pen,var(--ink,#1d4ed8))}
+#kpad .kp-grid button:active{transform:translateY(1px)}
+#kpadToggle{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:49;font:inherit;font-size:16px;font-weight:700;padding:9px 16px;border-radius:999px;border:0;background:var(--btn,var(--ink,#1b2a4a));color:var(--btn-ink,var(--paper,#fff));cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+body.kpad-on{padding-bottom:310px}`;
+  const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
+
+  const MODES={
+    num:{title:'Zahlen',cols:4,keys:['7','8','9','⌫','4','5','6',',','1','2','3','←','0','→','⇥','↵']},
+    hk:{title:'H und K',cols:4,keys:['H*','K*','+','−','⌫','⇥','↵']},
+    word:{title:'Wörter',cols:4,keys:['Hypotenuse*','Kathete*','+','−','⌫','⇥','↵']},
+    expr:{title:'Buchstaben',cols:6,keys:['a','b','c','d','e','f','h','x','e₁','+','−','/','(',')','1','2','⌫','←','→','⇥','↵']}
+  };
+  const TITLE={'⌫':'Löschen','←':'Cursor nach links','→':'Cursor nach rechts','⇥':'Nächstes Feld','↵':'Prüfen','+':'plus','−':'minus','/':'geteilt (Bruchstrich)',',':'Komma'};
+  const WHOLE={H:1,K:1,Hypotenuse:1,Kathete:1};
+  const coarse=window.matchMedia&&matchMedia('(pointer: coarse)').matches;
+  let enabled=true,target=null,mode='',override=null;
+
+  const pad=document.createElement('div');pad.id='kpad';pad.hidden=true;pad.setAttribute('role','group');pad.setAttribute('aria-label','Bildschirm-Tastatur');
+  pad.innerHTML='<div class="kp-inner"><div class="kp-head"><span id="kpTitle">Tastatur</span><span><button type="button" class="kp-small" id="kpSwitch" hidden></button> <button type="button" class="kp-small" id="kpClose" title="Tastatur ausblenden">✕</button></span></div><div class="kp-grid"></div></div>';
+  const tog=document.createElement('button');tog.id='kpadToggle';tog.type='button';tog.textContent='⌨ Tastatur';tog.hidden=true;
+  document.body.append(pad,tog);
+  const grid=pad.querySelector('.kp-grid'),sw=document.getElementById('kpSwitch');
+
+  const eligible=el=>el&&el.tagName==='INPUT'&&!NAME_IDS.includes(el.id)&&!el.disabled&&!el.readOnly&&(el.type==='text'||el.type===''||!el.type);
+  function naturalMode(el){
+    if(el.classList.contains('word'))return 'word';
+    if(el.classList.contains('letter'))return 'hk';
+    if(el.classList.contains('expr'))return 'expr';
+    const im=(el.dataset.im!=null?el.dataset.im:el.getAttribute('inputmode'))||'';
+    return (im==='decimal'||im==='numeric')?'num':'expr';
+  }
+  function draw(m){
+    mode=m;const M=MODES[m];
+    grid.style.gridTemplateColumns='repeat('+M.cols+',1fr)';
+    grid.innerHTML=M.keys.map(k=>{const wide=k.endsWith('*'),key=wide?k.slice(0,-1):k;
+      const cls=key==='↵'?'act':wide?'wide':/^[0-9,a-zA-Z₁]+$/.test(key)&&key.length<=2?'':'op';
+      return '<button type="button" class="'+cls+'" data-key="'+key+'"'+(TITLE[key]?' title="'+TITLE[key]+'" aria-label="'+TITLE[key]+'"':'')+'>'+key+'</button>';}).join('');
+    document.getElementById('kpTitle').textContent=M.title;
+    const nat=target?naturalMode(target):m;
+    sw.hidden=!(nat==='num'||nat==='expr');
+    sw.textContent=m==='num'?'abc':'123';
+  }
+  function applyMode(el){
+    if(!('im' in el.dataset))el.dataset.im=el.getAttribute('inputmode')||'';
+    if(enabled&&coarse)el.setAttribute('inputmode','none');
+    else if(el.dataset.im)el.setAttribute('inputmode',el.dataset.im);else el.removeAttribute('inputmode');
+  }
+  const applyAll=()=>document.querySelectorAll('input').forEach(i=>{if(eligible(i))applyMode(i);});
+  let t0=null;new MutationObserver(()=>{clearTimeout(t0);t0=setTimeout(applyAll,30);}).observe(document.body,{childList:true,subtree:true});
+  function showPad(){pad.hidden=false;tog.hidden=true;document.body.classList.add('kpad-on');}
+  function hidePad(){pad.hidden=true;tog.hidden=false;document.body.classList.remove('kpad-on');}
+
+  document.addEventListener('focusin',e=>{
+    if(!eligible(e.target))return;
+    if(target!==e.target)override=null;
+    target=e.target;applyMode(target);draw(override||naturalMode(target));
+    if(enabled)showPad();else tog.hidden=false;
+  });
+  ['pointerdown','mousedown'].forEach(ev=>pad.addEventListener(ev,e=>e.preventDefault()));
+
+  const visibleInputs=()=>[...document.querySelectorAll('input')].filter(i=>eligible(i)&&i.offsetParent!==null);
+  function press(k){
+    if(!target||!document.body.contains(target)||target.disabled){const f=visibleInputs()[0];if(!f)return;f.focus();}
+    target.focus({preventScroll:true});
+    const v=target.value;let s=target.selectionStart,e=target.selectionEnd;if(s==null){s=e=v.length;}
+    const box=target.closest('.step')||target.closest('.task')||target.parentElement;
+    if(k==='↵'){target.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));return;}
+    if(k==='⇥'){const all=visibleInputs(),i=all.indexOf(target),n=all[i+1]||all[0];if(n)n.focus();return;}
+    if((k==='+'||k==='−')&&(mode==='hk'||mode==='word')){
+      const sel=box&&box.querySelector('select');
+      if(sel&&!sel.disabled){sel.value=k;sel.dispatchEvent(new Event('change',{bubbles:true}));}
+      return;}
+    if(WHOLE[k]){target.value=k;target.dispatchEvent(new Event('input',{bubbles:true}));
+      const all=visibleInputs(),n=all[all.indexOf(target)+1];if(n&&box&&box.contains(n)&&!n.value)n.focus();return;}
+    if(k==='←'){const p=Math.max(0,s-1);target.setSelectionRange(p,p);return;}
+    if(k==='→'){const p=Math.min(v.length,e+1);target.setSelectionRange(p,p);return;}
+    let nv,pos;
+    if(k==='⌫'){
+      if(mode==='hk'||mode==='word'){nv='';pos=0;}
+      else if(s!==e){nv=v.slice(0,s)+v.slice(e);pos=s;}
+      else if(s>0){nv=v.slice(0,s-1)+v.slice(s);pos=s-1;}else return;}
+    else{const ins=(k==='−'&&mode==='num')?'-':k;
+      if(target.maxLength>0&&v.length>=target.maxLength)return;
+      nv=v.slice(0,s)+ins+v.slice(e);pos=s+ins.length;}
+    target.value=nv;try{target.setSelectionRange(pos,pos);}catch(_){}
+    target.dispatchEvent(new Event('input',{bubbles:true}));
+  }
+  grid.addEventListener('click',e=>{const b=e.target.closest('[data-key]');if(b)press(b.dataset.key);});
+  sw.addEventListener('click',()=>{override=mode==='num'?'expr':'num';draw(override);});
+  document.getElementById('kpClose').addEventListener('click',()=>{enabled=false;applyAll();hidePad();});
+  tog.addEventListener('click',()=>{enabled=true;applyAll();showPad();
+    const f=(target&&document.body.contains(target)&&!target.disabled)?target:visibleInputs()[0];if(f)f.focus();});
+  draw('num');applyAll();
+})();
+</script>
+</body>
+</html>
