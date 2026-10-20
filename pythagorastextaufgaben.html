@@ -625,6 +625,152 @@ const _showSumT=showSummary;showSummary=function(){
   const n=s.querySelector('.sumnote');if(n)n.insertAdjacentHTML('beforebegin','<p class="tnote">Zeit = Arbeitszeit an der Aufgabe (bei übersprungenen Aufgaben werden alle Besuche zusammengezählt). ⚡ = in unter 20 Sekunden gelöst.'+(solved.length>=3&&fast/solved.length>0.5?' <b>Auffällig: Mehr als die Hälfte der Aufgaben wurde in unter 20 Sekunden gelöst.</b>':'')+'</p>');
 };
 
+
+/* ---------- Fortschritt: Hilfsfunktionen ---------- */
+let FS_EXTRA={};
+function fsHash(s){let h=2166136261;for(const c of String(s)){h^=c.codePointAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+function fsSeeded(seed){let a=fsHash(seed);return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function fsNote(){return FS_EXTRA&&FS_EXTRA.short?'Enthält Aufgaben, die auf einem anderen Gerät gelöst wurden – dort insgesamt '+FS_EXTRA.err+' Fehlversuche und ca. '+Math.round(FS_EXTRA.ms/60000)+' min Bearbeitungszeit.':'';}
+
+/* ---------- Fortschritt: Anpassung für diese Übung ---------- */
+let FS_SEED=0,FS_ROUND=0;const FS_LVL=true;
+const _nrFS=newRound;newRound=function(){FS_ROUND++;const o=Math.random;Math.random=fsSeeded(FS_SEED+'|'+FS_ROUND);try{_nrFS();}finally{Math.random=o;}};
+const FS_ADAPTER={id:'pythagoras-alltag',ver:8,
+  started:()=>state.nameLocked,
+  nameInput:()=>document.getElementById('name'),startButton:()=>document.getElementById('nameOk'),
+  codePlace:b=>document.getElementById('name').closest('.namerow').after(b),
+  barPlace:b=>document.querySelector('header').after(b),
+  shortWidths:()=>FS_LVL?[1,20,6]:[20,6],
+  short(){let m=0;state.tasks.forEach((t,k)=>{if(t.status==='solved')m+=2**k;});const f=[[FS_SEED,20],[m,6]];if(FS_LVL)f.unshift([state.level==='ahs'?1:0,1]);return f;},
+  totals(){return {err:state.tasks.reduce((a,t)=>a+t.errors,0)+(FS_EXTRA.err||0),ms:state.tasks.reduce((a,t)=>a+(t.ms||0),0)+(FS_EXTRA.ms||0)};},
+  dump(){return {seed:FS_SEED,round:FS_ROUND,level:state.level||null,tasks:state.tasks.map(t=>({status:t.status,errors:t.errors,shown:t.shown,es:[...t.errSteps],ms:t.ms||0,ws:!!t.wasSkipped,ans:t.answerText||null})),extra:FS_EXTRA};},
+  pre(src){
+    const full=src&&src.type==='full'?src.data:null;
+    if(full){FS_SEED=full.seed;FS_ROUND=(full.round||1)-1;}
+    else if(src){FS_SEED=FS_LVL?src.vals[1]:src.vals[0];FS_ROUND=0;}
+    else{FS_SEED=Math.floor(Math.random()*1048576);FS_ROUND=0;}
+    if(FS_LVL&&src){const lvl=full?full.level:(src.vals[0]?'ahs':'standard');if(lvl){state.level=lvl;document.querySelectorAll('#level button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.v===lvl?'true':'false'));}}
+    newRound();
+    if(!src)return;
+    const mask=full?0:(FS_LVL?src.vals[2]:src.vals[1]);
+    state.tasks.forEach((t,k)=>{
+      const d=full?full.tasks[k]:{status:Math.floor(mask/2**k)%2===1?'solved':'open',errors:0,shown:0,es:[],ms:0,ws:false,ans:null};if(!d)return;
+      t.status=d.status==='skipped'?'skipped':d.status;t.errors=d.errors||0;t.shown=d.shown||0;t.errSteps=new Set(d.es||[]);t.ms=d.ms||0;t.wasSkipped=!!d.ws;
+      if(t.status==='solved'){
+        let ans=d.ans;if(!ans&&typeof t.answer==='function'){try{ans=t.answer(t.r,t.extra&&t.extra.type==='num'?Math.round(t.extra.calc(t.r)*10**t.dec)/10**t.dec:undefined);}catch(e){}}
+        t.answerText=ans||'✓ auf einem anderen Gerät gelöst';t.started=true;
+        t.stepsEl.innerHTML='<div class="step solved"><p>✓ Diese Aufgabe hast du schon gelöst. Den Rechenweg findest du in deinem Heft.</p></div>';
+        t.doneHTML='✓ Diese Aufgabe hast du schon gelöst.';t.hypShown=true;t.legsShown=true;t.sketchDone=true;}
+    });
+    FS_EXTRA=full?(full.extra||{}):{err:src.err,ms:src.min*60000,short:true};
+    const first=state.tasks.findIndex(t=>t.status!=='solved');state.cur=first>=0?first:0;
+  },
+  post(src){if(src&&state.tasks.every(t=>t.status==='solved'))showSummary();}
+};
+const _ssFS=showSummary;showSummary=function(){_ssFS();const n=fsNote(),sn=document.querySelector('#summary .sumnote');if(n&&sn)sn.insertAdjacentHTML('beforebegin','<p class="fs-note">'+n+'</p>');};
+
+/* ---------- Fortschritt speichern und mitnehmen ---------- */
+(function(){
+  const A=FS_ADAPTER,AL='23456789ABCDEFGHJKMNPQRSTUVWXYZ';
+  const norm=n=>String(n||'').trim().replace(/\s+/g,' ').toLowerCase();
+  const KEY=n=>'mathe-fortschritt:'+A.id+':'+norm(n);
+  let started=false,name='',pendingLink=null,busy=false;
+  const css=`.fs-start{margin-top:8px}
+.fs-link{background:none;border:0;padding:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;font-size:.92em;opacity:.85}
+.fs-start input{font:inherit;font-size:1.05rem;padding:.35rem .6rem;border:2px solid var(--ink,#1b2a4a);border-radius:10px;background:var(--card,#fff);color:var(--ink,#1b2a4a);width:16rem;max-width:100%;margin-top:6px;letter-spacing:.06em;text-transform:uppercase}
+.fs-hint{display:block;font-size:.88em;opacity:.8;margin-top:4px}
+.fs-err{color:var(--red,var(--bad,#c62828));font-weight:700;margin:6px 0 0}
+.fs-info{font-weight:700;margin:6px 0 0}
+#fsBar{margin:0 0 14px}
+.fs-toast{display:inline-block;background:var(--green-soft,var(--okbg,#e6f4e7));border:2px solid var(--green,var(--ok,#2e7d32));border-radius:10px;padding:6px 12px;margin:0 10px 8px 0;font-weight:700}
+.fs-btn,.fs-btn2{font:inherit;font-size:15px;font-weight:700;padding:7px 14px;border-radius:999px;border:2px solid var(--ink,#1b2a4a);background:transparent;color:var(--ink,#1b2a4a);cursor:pointer}
+.fs-btn2{background:var(--ink,#1b2a4a);color:var(--paper,#fff);border-radius:10px}
+.fs-box{background:var(--card,#fff);border:2px solid var(--line,#c9d6e6);border-radius:14px;padding:12px 16px;margin-top:10px;max-width:640px}
+.fs-box p{margin:0 0 8px}
+.fs-code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:24px;font-weight:700;letter-spacing:.12em;background:var(--paper,#fdfdf9);border:2px dashed var(--ink,#1b2a4a);border-radius:10px;padding:8px 14px;display:inline-block;margin:0 0 10px}
+.fs-note{font-size:.95em;opacity:.85}`;
+  const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
+
+  /* kurzer Code: Werte -> Bits -> Zeichen (ohne 0/O/1/I/L) */
+  const toBits=f=>f.map(([v,w])=>Math.max(0,Math.min(2**w-1,Math.round(v||0))).toString(2).padStart(w,'0')).join('');
+  const chk=(nm,p)=>(fsHash(A.id+'|'+norm(nm)+'|'+p)%32768).toString(2).padStart(15,'0');
+  const widths=()=>[4].concat(A.shortWidths(),[6,8]);
+  const codeLen=()=>Math.ceil((widths().reduce((a,b)=>a+b,0)+15)*Math.log(2)/Math.log(31));
+  function shortCode(){
+    const tt=A.totals(),p=toBits([[A.ver,4]].concat(A.short(),[[Math.min(63,tt.err),6],[Math.min(255,Math.round(tt.ms/60000)),8]])),bits=p+chk(name,p);
+    let n=0n;for(const b of bits)n=n*2n+BigInt(b);let s='';for(let i=0,L=codeLen();i<L;i++){s=AL[Number(n%31n)]+s;n/=31n;}return s;
+  }
+  function readShort(code,nm){
+    const s=String(code).toUpperCase().replace(/[^0-9A-Z]/g,''),W=widths(),pl=W.reduce((a,b)=>a+b,0);
+    if(s.length!==codeLen())return null;
+    let n=0n;for(const ch of s){const i=AL.indexOf(ch);if(i<0)return null;n=n*31n+BigInt(i);}
+    let bits=n.toString(2);if(bits.length>pl+15)return null;bits=bits.padStart(pl+15,'0');
+    const p=bits.slice(0,pl);if(chk(nm,p)!==bits.slice(pl))return null;
+    const v=[];let k=0;W.forEach(w=>{v.push(parseInt(p.slice(k,k+w),2));k+=w;});
+    if(v[0]!==A.ver)return null;
+    return {type:'short',vals:v.slice(1,-2),err:v[v.length-2],min:v[v.length-1]};
+  }
+  const group=c=>c.match(/.{1,4}/g).join('-');
+  /* Link mit allen Einzelheiten */
+  const b64e=s=>btoa(unescape(encodeURIComponent(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  const b64d=s=>decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/'))));
+  function linkData(){const j=JSON.stringify(A.dump());return b64e(j)+'.'+(fsHash(A.id+'|'+norm(name)+'|'+j)%1679616).toString(36);}
+  function readLink(str,nm){try{const [b,c]=str.split('.'),j=b64d(b);if((fsHash(A.id+'|'+norm(nm)+'|'+j)%1679616).toString(36)!==c)return null;return {type:'full',data:JSON.parse(j)};}catch(e){return null;}}
+  /* Speicher am Gerät, pro Name */
+  function save(){if(!started)return;try{localStorage.setItem(KEY(name),JSON.stringify(A.dump()));}catch(e){}if(!box2.hidden)show();}
+  function loadLocal(nm){try{const s=localStorage.getItem(KEY(nm));return s?{type:'full',data:JSON.parse(s),local:true}:null;}catch(e){return null;}}
+
+  /* Oberfläche beim Namen */
+  const nameEl=A.nameInput(),startBtn=A.startButton();
+  const sb=document.createElement('div');sb.className='fs-start';
+  sb.innerHTML='<button type="button" class="fs-link" id="fsHave">Ich habe einen Fortschritts-Code</button><div id="fsCodeRow" hidden><input id="fsCode" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="z. B. K7M2-QX9P" aria-label="Fortschritts-Code"><span class="fs-hint">Gib oben deinen Namen <b>genau wie beim ersten Mal</b> ein.</span></div><p class="fs-info" id="fsInfo" hidden></p><p class="fs-err" id="fsErr" hidden></p>';
+  A.codePlace(sb);
+  document.getElementById('fsHave').onclick=()=>{document.getElementById('fsCodeRow').hidden=false;document.getElementById('fsHave').hidden=true;document.getElementById('fsCode').focus();};
+  const m=location.hash.match(/fortschritt=([^&]+)/);
+  if(m){pendingLink=m[1];const i=document.getElementById('fsInfo');i.textContent='Willkommen zurück! Gib deinen Namen ein, um mit deinem Fortschritt weiterzumachen.';i.hidden=false;document.getElementById('fsHave').hidden=true;}
+
+  /* Leiste nach dem Start */
+  const bar=document.createElement('div');bar.id='fsBar';bar.hidden=true;
+  bar.innerHTML='<span class="fs-toast" id="fsToast" hidden></span><button type="button" class="fs-btn" id="fsBtn">💾 Fortschritt mitnehmen</button><div class="fs-box" id="fsBox" hidden><p>Dein Fortschritt wird <b>auf diesem Gerät automatisch gespeichert</b>. Gib beim nächsten Mal einfach wieder deinen Namen ein.</p><p>Auf einem <b>anderen Gerät</b> weitermachen? Schreib dir diesen Code auf und gib ihn dort zusammen mit deinem Namen ein:</p><div class="fs-code" id="fsShow"></div><p>Oder kopiere diesen Link und schick ihn dir selbst (z. B. über EduPage). Mit dem Link bleiben auch alle Einzelheiten erhalten.</p><button type="button" class="fs-btn2" id="fsCopy" data-label="🔗 Link kopieren">🔗 Link kopieren</button></div>';
+  A.barPlace(bar);
+  const box2=document.getElementById('fsBox');
+  function show(){document.getElementById('fsShow').textContent=group(shortCode());}
+  document.getElementById('fsBtn').onclick=()=>{box2.hidden=!box2.hidden;if(!box2.hidden){save();show();}};
+  document.getElementById('fsCopy').onclick=()=>{const b=document.getElementById('fsCopy'),text=location.href.split('#')[0]+'#fortschritt='+linkData();
+    const done=()=>{b.textContent='✓ kopiert';setTimeout(()=>b.textContent=b.dataset.label,1600);};
+    const fb=()=>{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){}ta.remove();};
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(done,fb);else fb();};
+  function toast(msg){const t=document.getElementById('fsToast');t.textContent=msg;t.hidden=false;setTimeout(()=>{t.hidden=true;},9000);}
+
+  /* Start abfangen: vorher den passenden Fortschritt bereitstellen */
+  function block(e,msg){e.preventDefault();e.stopImmediatePropagation();const er=document.getElementById('fsErr');er.textContent=msg;er.hidden=false;}
+  function attempt(e){
+    if(started||busy||A.started())return;
+    const nm=nameEl.value.trim().replace(/\s+/g,' ');if(!nm)return;
+    const row=document.getElementById('fsCodeRow'),code=row.hidden?'':document.getElementById('fsCode').value.trim();
+    let src=null;
+    if(code){src=readShort(code,nm);if(!src){block(e,'Der Code passt nicht zu diesem Namen. Schreib deinen Namen genau wie beim ersten Mal und prüfe den Code.');return;}}
+    else if(pendingLink){src=readLink(pendingLink,nm);if(!src){block(e,'Dieser Link gehört zu einem anderen Namen. Schreib deinen Namen genau wie beim ersten Mal.');return;}}
+    else src=loadLocal(nm);
+    busy=true;name=nm;
+    try{A.pre(src);}catch(err){console.error(err);}
+    setTimeout(()=>{busy=false;if(!A.started())return;started=true;
+      try{A.post(src);}catch(err){console.error(err);}
+      bar.hidden=false;sb.hidden=true;
+      if(src)toast(src.type==='short'?'✓ Fortschritt geladen – bereits gelöste Aufgaben sind abgehakt.':'✓ Willkommen zurück! Dein Fortschritt wurde geladen.');
+      save();try{if(location.hash)history.replaceState(null,'',location.pathname+location.search);}catch(_){}
+    },0);
+  }
+  document.addEventListener('click',e=>{if(e.target&&e.target.closest&&e.target.closest('#'+startBtn.id))attempt(e);},true);
+  document.addEventListener('keydown',e=>{if(e.key!=='Enter')return;
+    if(e.target&&e.target.id==='fsCode'){e.preventDefault();startBtn.click();return;}
+    if(e.target===nameEl)attempt(e);},true);
+  setInterval(save,5000);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});
+  window.addEventListener('pagehide',save);
+  window.FS_SAVE=save;
+})();
+
 /* Bildschirm-Tastatur für die Mathe-Übungen
    Einbinden: in der HTML-Datei direkt vor dem schließenden body-Tag die Zeile
    [script src="tastatur.js"][/script] einfügen (mit spitzen statt eckigen Klammern).
@@ -635,7 +781,7 @@ const _showSumT=showSummary;showSummary=function(){
    - Felder für Ausdrücke:    Buchstaben, + − / ( ) und Ziffern (z. B. f/2 oder (a − c)/2) */
 (function(){
   if(document.getElementById('kpad'))return;            /* Übung hat schon eine Tastatur */
-  const NAME_IDS=['name','nameIn','pname'];
+  const NAME_IDS=['name','nameIn','pname','fsCode'];
   const css=`
 #kpad{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--card,#fff);border-top:3px solid var(--ink,#1b2a4a);padding:8px 10px calc(10px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 18px rgba(0,0,0,.18);font-family:"Atkinson Hyperlegible",system-ui,sans-serif;color:var(--ink,#1b2a4a)}
 #kpad[hidden],#kpadToggle[hidden]{display:none!important}
