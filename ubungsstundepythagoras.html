@@ -180,13 +180,14 @@ body.pre .grid,body.pre #tasknav,body.pre #score{display:none!important}
 .whobar b{font-size:18px}
 .savebox{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:10px;max-width:640px}
 .savebox p{margin:0 0 8px}
-.codeview{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:17px;font-weight:700;letter-spacing:.04em;background:var(--paper);border:2px dashed var(--ink);border-radius:8px;padding:8px 10px;word-break:break-all;margin:0 0 8px}
+.codeview{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:24px;display:inline-block;font-weight:700;letter-spacing:.04em;background:var(--paper);border:2px dashed var(--ink);border-radius:8px;padding:8px 10px;word-break:break-all;margin:0 0 8px}
 .navlbl{font-size:13px;color:var(--muted);font-weight:700;align-self:center;margin:0 2px 0 8px}
 .navlbl:first-child{margin-left:0}
 .sumpart{font-family:"Patrick Hand",cursive;font-weight:400;font-size:26px;color:var(--pen);margin:18px 0 8px}
 .tnote{font-size:15px;color:var(--muted)}
 .tnote b{color:var(--red)}
 .restored{background:var(--green-soft);border:2px solid var(--green);border-radius:14px;padding:14px 16px}
+.fs-toast{display:inline-block;background:var(--green-soft);border:2px solid var(--green);border-radius:10px;padding:4px 10px;font-weight:700}
 </style>
 </head>
 <body class="pre">
@@ -210,7 +211,7 @@ body.pre .grid,body.pre #tasknav,body.pre #score{display:none!important}
         <div class="namerow"><input id="name" class="namein" autocomplete="off" placeholder="Vor- und Nachname"><button class="next" id="nameOk">Los geht's</button></div>
         <button class="link" id="haveCode" type="button">Ich habe einen Fortschritts-Code</button>
         <div id="codeRow" hidden>
-          <input id="codeIn" class="namein" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Fortschritts-Code" style="width:340px;margin-top:6px">
+          <input id="codeIn" class="namein" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="z. B. K7M2-QX9P-…" style="width:340px;margin-top:6px;text-transform:uppercase;letter-spacing:.06em">
           <span class="hint2">Gib oben deinen Namen <b>genau wie beim ersten Mal</b> ein und tippe dann auf „Los geht's“.</span>
         </div>
         <p class="errmsg" id="startErr" hidden></p>
@@ -220,10 +221,10 @@ body.pre .grid,body.pre #tasknav,body.pre #score{display:none!important}
     <div id="whoWrap" hidden>
       <div class="whobar"><span>👤 <b id="whoName"></b> · <span id="whoLevel"></span></span><button class="next ghost" id="saveBtn" type="button">💾 Fortschritt mitnehmen</button></div>
       <div class="savebox" id="saveBox" hidden>
-        <p>Dein Fortschritt wird <b>auf diesem Gerät automatisch gespeichert</b>. Wenn du die Seite schließt und später wieder öffnest, kannst du weitermachen.</p>
-        <p>Auf einem <b>anderen Gerät</b> weitermachen (z. B. zu Hause)? Kopiere diesen Link und schick ihn dir selbst, oder schreib dir den Code auf:</p>
+        <p>Dein Fortschritt wird <b>auf diesem Gerät automatisch gespeichert</b>. Gib beim nächsten Mal einfach wieder deinen Namen ein.</p>
+        <p>Auf einem <b>anderen Gerät</b> weitermachen (z. B. zu Hause)? Schreib dir diesen Code auf und gib ihn dort zusammen mit deinem Namen ein:</p>
         <div class="codeview" id="codeView"></div>
-        <button class="next" id="copyLink" type="button" data-label="🔗 Link kopieren">🔗 Link kopieren</button>
+        <p>Oder kopiere den Link und schick ihn dir selbst (z. B. über EduPage) – damit bleiben auch alle Einzelheiten erhalten.</p><button class="next" id="copyLink" type="button" data-label="🔗 Link kopieren">🔗 Link kopieren</button>
         <button class="next ghost" id="copyCode" type="button" data-label="Code kopieren">Code kopieren</button>
         <p class="hint2">Der Code funktioniert nur zusammen mit deinem Namen.</p>
       </div>
@@ -631,50 +632,62 @@ function showSummary(){
     <h3 class="sumpart">Übungsstunde</h3>${stats(S)}${table(S)}
     <h3 class="sumpart">Hausübung</h3>${stats(H)}${table(H)}
     <p class="tnote">Zeit = Arbeitszeit an der Aufgabe (Pausen zählen nicht). ⚡ = in unter 20 Sekunden gelöst.${sol.length>=3&&fast/sol.length>0.5?' <b>Auffällig: Mehr als die Hälfte der Aufgaben wurde in unter 20 Sekunden gelöst.</b>':''}</p>
-    <p class="sumnote">Zeige diese Seite deiner Lehrkraft. Die Rechenwege stehen in deinem Heft.</p>
+    ${FS_EXTRA.short?`<p class="tnote">Enthält Aufgaben, die auf einem anderen Gerät gelöst wurden – dort insgesamt ${FS_EXTRA.err} Fehlversuche und ca. ${Math.round(FS_EXTRA.ms/60000)} min Bearbeitungszeit.</p>`:""}<p class="sumnote">Zeige diese Seite deiner Lehrkraft. Die Rechenwege stehen in deinem Heft.</p>
     <div class="sumbtns"><button class="next" id="backTasks">↩ Zurück zu den Aufgaben</button><button class="next ghost" id="newRound">Neue Runde starten</button></div>`;
   setMain(false);window.scrollTo({top:0});
   $('#backTasks').onclick=()=>{setMain(true);const j=state.tasks[state.cur].status==='solved'?nextOpen():state.cur;showTask(j>=0?j:state.cur);};
   $('#newRound').onclick=()=>{if(!confirm('Neue Runde mit neuen Aufgaben starten? Dein bisheriger Fortschritt wird dabei gelöscht.'))return;
-    state.seed=Math.floor(Math.random()*2e9);buildTasks();setMain(true);showTask(0);};
+    state.seed=Math.floor(Math.random()*1048576);FS_EXTRA={};buildTasks();setMain(true);showTask(0);};
 }
 
 /* ---------- Speichern und Weitermachen ---------- */
-const B36='0123456789abcdefghijklmnopqrstuvwxyz';
 const normName=n=>String(n).trim().replace(/\s+/g,' ').toLowerCase();
 function hash(s){let h=2166136261;for(const c of s){h^=c.codePointAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+const keyFor=n=>KEY+':'+normName(n);
+let FS_EXTRA={};
 function snapshot(){
-  return {v:1,name:state.name,level:state.level,seed:state.seed,
+  return {v:2,name:state.name,level:state.level,seed:state.seed,extra:FS_EXTRA,
     tasks:state.tasks.map(t=>({st:t.status,ws:t.wasSkipped,e:t.errors,sh:t.shown,ms:Math.round(t.ms+(t===tActTask&&tAct!=null?Date.now()-tAct:0)),es:t.errSteps}))};
 }
-function save(){if(!state.locked)return;try{localStorage.setItem(KEY,JSON.stringify(snapshot()));}catch(e){}if(!$('#saveBox').hidden)showCode();}
-function loadLocal(){try{const s=JSON.parse(localStorage.getItem(KEY)||'null');return s&&s.v===1&&s.tasks&&s.tasks.length===PLAN.length?s:null;}catch(e){return null;}}
+function save(){if(!state.locked)return;try{localStorage.setItem(keyFor(state.name),JSON.stringify(snapshot()));}catch(e){}if(!$('#saveBox').hidden)showCode();}
+function loadLocal(n){try{const s=JSON.parse(localStorage.getItem(keyFor(n))||'null');return s&&s.tasks&&s.tasks.length===PLAN.length?s:null;}catch(e){return null;}}
+/* kurzer Code (14 Zeichen, ohne 0/O/1/I/L): Niveau, Aufgaben-Startwert, gelöste Aufgaben, Fehler und Zeit gesamt */
+const AL='23456789ABCDEFGHJKMNPQRSTUVWXYZ',CODE_W=[4,1,20,PLAN.length,6,8];
+const CODE_PL=CODE_W.reduce((a,b)=>a+b,0),CODE_LEN=Math.ceil((CODE_PL+15)*Math.log(2)/Math.log(31));
+const chk=(n,p)=>(hash('pyth-stunde|'+normName(n)+'|'+p)%32768).toString(2).padStart(15,'0');
 function encode(){
-  const s=snapshot();let p='b'+(s.level==='ahs'?'1':'0')+s.seed.toString(36).padStart(6,'0');
-  s.tasks.forEach(x=>{const st=x.st==='solved'?(x.ws?3:1):x.st==='skipped'?2:0;
-    p+=B36[st*4+Math.min(3,x.sh)]+B36[Math.min(35,x.e)]+Math.min(1295,Math.round(x.ms/1000)).toString(36).padStart(2,'0');});
-  return (p+(hash(normName(s.name)+'|'+p)%1679616).toString(36).padStart(4,'0')).toUpperCase();
+  const s=snapshot();let mask=0;s.tasks.forEach((x,i)=>{if(x.st==='solved')mask+=2**i;});
+  const err=s.tasks.reduce((a,x)=>a+x.e,0)+(FS_EXTRA.err||0),min=Math.round((s.tasks.reduce((a,x)=>a+x.ms,0)+(FS_EXTRA.ms||0))/60000);
+  const vals=[10,s.level==='ahs'?1:0,s.seed,mask,Math.min(63,err),Math.min(255,min)];
+  const p=vals.map((v,i)=>v.toString(2).padStart(CODE_W[i],'0')).join(''),bits=p+chk(s.name,p);
+  let n=0n;for(const x of bits)n=n*2n+BigInt(x);let c='';for(let i=0;i<CODE_LEN;i++){c=AL[Number(n%31n)]+c;n/=31n;}return c;
 }
-function decode(code,name){
-  const s=String(code).toLowerCase().replace(/[^0-9a-z]/g,'');
-  if(s.length!==8+PLAN.length*4+4||s[0]!=='b')return null;
-  const p=s.slice(0,-4),c=s.slice(-4);
-  if((hash(normName(name)+'|'+p)%1679616).toString(36).padStart(4,'0')!==c)return null;
-  const tasks=[];
-  for(let i=0;i<PLAN.length;i++){const q=p.slice(8+i*4,12+i*4),a=B36.indexOf(q[0]),st=Math.floor(a/4);
-    tasks.push({st:['open','solved','skipped','solved'][st],ws:st>=2,e:B36.indexOf(q[1]),sh:a%4,ms:parseInt(q.slice(2),36)*1000,es:[]});}
-  return {v:1,name:name.trim().replace(/\s+/g,' '),level:p[1]==='1'?'ahs':'standard',seed:parseInt(p.slice(2,8),36),tasks};
+function decodeShort(code,name){
+  const s=String(code).toUpperCase().replace(/[^0-9A-Z]/g,'');if(s.length!==CODE_LEN)return null;
+  let n=0n;for(const ch of s){const i=AL.indexOf(ch);if(i<0)return null;n=n*31n+BigInt(i);}
+  let bits=n.toString(2);if(bits.length>CODE_PL+15)return null;bits=bits.padStart(CODE_PL+15,'0');
+  const p=bits.slice(0,CODE_PL);if(chk(name,p)!==bits.slice(CODE_PL))return null;
+  const v=[];let k=0;CODE_W.forEach(w=>{v.push(parseInt(p.slice(k,k+w),2));k+=w;});if(v[0]!==10)return null;
+  return {v:2,name:name.trim().replace(/\s+/g,' '),level:v[1]?'ahs':'standard',seed:v[2],extra:{err:v[4],ms:v[5]*60000,short:true},
+    tasks:PLAN.map((_,i)=>({st:Math.floor(v[3]/2**i)%2===1?'solved':'open',ws:false,e:0,sh:0,ms:0,es:[]}))};
 }
-const fmtCode=c=>c.match(/.{1,5}/g).join('-');
+/* Link mit allen Einzelheiten */
+const b64e=s=>btoa(unescape(encodeURIComponent(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const b64d=s=>decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/'))));
+function linkData(){const j=JSON.stringify(snapshot());return b64e(j)+'.'+(hash('pyth-stunde|'+normName(state.name)+'|'+j)%1679616).toString(36);}
+function decodeLink(str,name){try{const [b,c]=str.split('.'),j=b64d(b);if((hash('pyth-stunde|'+normName(name)+'|'+j)%1679616).toString(36)!==c)return null;const s=JSON.parse(j);s.name=name.trim().replace(/\s+/g,' ');return s;}catch(e){return null;}}
+const fmtCode=c=>c.match(/.{1,4}/g).join('-');
 function applySnap(s){
-  state.name=s.name;state.level=s.level;state.seed=s.seed;buildTasks();
+  state.name=s.name;state.level=s.level;state.seed=s.seed;FS_EXTRA=s.extra||{};buildTasks();
   s.tasks.forEach((x,i)=>{const t=state.tasks[i];t.status=x.st;t.wasSkipped=!!x.ws;t.errors=x.e||0;t.shown=x.sh||0;t.ms=x.ms||0;t.errSteps=x.es||[];
     if(t.status==='solved')t.answerText=`${t.U.n} ${t.exact?'=':'≈'} ${fmt(t.ans)} cm`;});
 }
+let pendingLink=null,toastMsg='';
 function begin(){
   state.locked=true;document.body.classList.remove('pre');
   $('#startNew').hidden=true;$('#resume').hidden=true;$('#whoWrap').hidden=false;
   $('#whoName').textContent=state.name;$('#whoLevel').textContent=state.level==='standard'?'Standard':'Standard AHS';
+  if(toastMsg){$('#whoName').parentNode.insertAdjacentHTML('afterend','<span class="fs-toast">'+toastMsg+'</span>');}
   try{if(location.hash)history.replaceState(null,'',location.pathname+location.search);}catch(e){}
   const first=state.tasks.findIndex(t=>t.status!=='solved');showTask(first>=0?first:0);
 }
@@ -683,11 +696,15 @@ function startNew(){
   const n=$('#name').value.trim().replace(/\s+/g,' ');
   if(!n){startErr('Bitte gib zuerst deinen Namen ein.');$('#name').focus();return;}
   const code=$('#codeRow').hidden?'':$('#codeIn').value.trim();
-  if(code){const s=decode(code,n);if(!s){startErr('Der Code passt nicht zu diesem Namen. Schreib deinen Namen genau wie beim ersten Mal (Leerzeichen und Buchstaben).');return;}
-    applySnap(s);begin();return;}
-  state.name=n;state.seed=Math.floor(Math.random()*2e9);buildTasks();begin();
+  if(code){const s=decodeShort(code,n);if(!s){startErr('Der Code passt nicht zu diesem Namen. Schreib deinen Namen genau wie beim ersten Mal und prüfe den Code.');return;}
+    toastMsg='✓ Fortschritt geladen – bereits gelöste Aufgaben sind abgehakt.';applySnap(s);begin();return;}
+  if(pendingLink){const s=decodeLink(pendingLink,n);if(!s){startErr('Dieser Link gehört zu einem anderen Namen. Schreib deinen Namen genau wie beim ersten Mal.');return;}
+    toastMsg='✓ Willkommen zurück! Dein Fortschritt wurde geladen.';applySnap(s);begin();return;}
+  const local=loadLocal(n);
+  if(local){local.name=n;toastMsg='✓ Willkommen zurück! Dein Fortschritt wurde geladen.';applySnap(local);begin();return;}
+  state.name=n;state.seed=Math.floor(Math.random()*1048576);FS_EXTRA={};buildTasks();begin();
 }
-function showCode(){const c=encode();$('#codeView').textContent=fmtCode(c);$('#codeView').dataset.code=c;}
+function showCode(){$('#codeView').textContent=fmtCode(encode());}
 function copyText(text,btn){
   const done=()=>{btn.textContent='✓ kopiert';setTimeout(()=>btn.textContent=btn.dataset.label,1600);};
   const fb=()=>{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){}ta.remove();};
@@ -702,8 +719,8 @@ $('#name').addEventListener('keydown',e=>{if(e.key==='Enter')startNew();});
 $('#codeIn').addEventListener('keydown',e=>{if(e.key==='Enter')startNew();});
 $('#haveCode').onclick=()=>{$('#codeRow').hidden=false;$('#levelBox').hidden=true;$('#haveCode').hidden=true;$('#codeIn').focus();};
 $('#saveBtn').onclick=()=>{const b=$('#saveBox');b.hidden=!b.hidden;if(!b.hidden){save();showCode();}};
-$('#copyLink').onclick=()=>copyText(location.href.split('#')[0]+'#weiter='+$('#codeView').dataset.code,$('#copyLink'));
-$('#copyCode').onclick=()=>copyText(fmtCode($('#codeView').dataset.code),$('#copyCode'));
+$('#copyLink').onclick=()=>copyText(location.href.split('#')[0]+'#weiter='+linkData(),$('#copyLink'));
+$('#copyCode').onclick=()=>copyText(fmtCode(encode()),$('#copyCode'));
 $('#nextBtn').onclick=()=>{const j=nextOpen();if(j>=0)showTask(j);else showSummary();};
 $('#skipBtn').onclick=()=>{if(!task||task.status==='solved')return;
   if(!confirm('Diese Aufgabe überspringen? Du kannst später über die Aufgabenleiste wieder zurückkommen.'))return;
@@ -713,18 +730,9 @@ window.addEventListener('pagehide',()=>{tStop();save();});
 setInterval(()=>{if(state.locked)save();},15000);
 
 (function init(){
-  const m=location.hash.match(/weiter=([0-9A-Za-z-]+)/);
-  if(m){$('#codeIn').value=m[1];$('#codeRow').hidden=false;$('#levelBox').hidden=true;$('#haveCode').hidden=true;
-    startErr('');const p=document.createElement('p');p.className='hint2';p.innerHTML='<b>Willkommen zurück!</b> Gib deinen Namen ein, um mit deinem Fortschritt weiterzumachen.';$('#codeRow').prepend(p);$('#name').focus();return;}
-  const s=loadLocal();
-  if(s){const solved=s.tasks.filter(x=>x.st==='solved').length,r=$('#resume');
-    r.innerHTML=`<p>Willkommen zurück, <b>${esc(s.name)}</b>! Du hast schon <b>${solved} von ${s.tasks.length}</b> Aufgaben gelöst (${s.level==='standard'?'Standard':'Standard AHS'}).</p>
-      <button class="next" id="resGo">▶ Weitermachen</button><button class="next ghost" id="resNew">Ich bin nicht ${esc(s.name)} – neu beginnen</button>`;
-    r.hidden=false;$('#startNew').hidden=true;
-    $('#resGo').onclick=()=>{applySnap(s);begin();};
-    $('#resNew').onclick=()=>{if(!confirm('Neu beginnen? Der gespeicherte Fortschritt von '+s.name+' wird auf diesem Gerät gelöscht.'))return;
-      try{localStorage.removeItem(KEY);}catch(e){}r.hidden=true;$('#startNew').hidden=false;$('#name').focus();};
-    return;}
+  const m=location.hash.match(/weiter=([^&]+)/);
+  if(m){pendingLink=m[1];$('#haveCode').hidden=true;$('#levelBox').hidden=true;
+    const p=document.createElement('p');p.className='hint2';p.innerHTML='<b>Willkommen zurück!</b> Gib deinen Namen ein, um mit deinem Fortschritt weiterzumachen.';$('#startErr').before(p);}
   $('#name').focus();
 })();
 </script>
@@ -739,7 +747,7 @@ setInterval(()=>{if(state.locked)save();},15000);
    - Felder für Ausdrücke:    Buchstaben, + − / ( ) und Ziffern (z. B. f/2 oder (a − c)/2) */
 (function(){
   if(document.getElementById('kpad'))return;            /* Übung hat schon eine Tastatur */
-  const NAME_IDS=['name','nameIn','pname','codeIn'];
+  const NAME_IDS=['name','nameIn','pname','codeIn','fsCode'];
   const css=`
 #kpad{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--card,#fff);border-top:3px solid var(--ink,#1b2a4a);padding:8px 10px calc(10px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 18px rgba(0,0,0,.18);font-family:"Atkinson Hyperlegible",system-ui,sans-serif;color:var(--ink,#1b2a4a)}
 #kpad[hidden],#kpadToggle[hidden]{display:none!important}
