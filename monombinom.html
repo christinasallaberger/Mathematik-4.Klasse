@@ -2,40 +2,172 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Termwerkstatt – Monom und Binom</title>
+
 <style>
 :root {
-  --dark: #23364d;
-  --main: #147d92;
-  --light: #eaf5f7;
-  --gold: #f8cf72;
-  --green: #19724a;
-  --red: #b33438;
+  --dark:#25364e;
+  --blue:#147d92;
+  --pale:#eaf5f7;
+  --gold:#f8cf72;
+  --green:#1d754c;
+  --red:#ad343b;
 }
-* { box-sizing: border-box; }
+* { box-sizing:border-box; }
 body {
-  margin: 0;
-  background: #f0f4f8;
-  color: var(--dark);
-  font-family: Arial, sans-serif;
-  line-height: 1.5;
+  margin:0;
+  background:#eef3f8;
+  color:var(--dark);
+  font:17px/1.5 Arial,sans-serif;
 }
 header {
-  background: var(--dark);
-  color: white;
-  padding: 24px 20px;
+  background:var(--dark);
+  color:white;
+  padding:24px 18px;
 }
-header > div, main {
-  max-width: 1000px;
-  margin: auto;
-}
-h1 { margin: 0; font-size: 30px; }
-h2 { margin-top: 0; }
-main { padding: 18px 14px 185px; }
+.wrap,main { max-width:1050px; margin:auto; }
+h1 { margin:0; font-size:32px; }
+h2 { margin-top:0; }
+h3 { margin:0 0 12px; }
+main { padding:20px 14px 190px; }
 .card {
-  background: white;
-  padding: 22px;
-  border-radius: 16px;
-  margin-bottom: 18px;
-  box-shadow: 0
+  background:white;
+  padding:24px;
+  margin-bottom:18px;
+  border-radius:18px;
+  box-shadow:0 5px 20px #25364e0c;
+}
+.badge {
+  display:inline-block;
+  background:white;
+  color:var(--dark);
+  border-radius:30px;
+  padding:8px 15px;
+  margin-top:12px;
+}
+button,input { font:inherit; }
+button {
+  border:0;
+  border-radius:10px;
+  padding:11px 16px;
+  margin:4px;
+  background:var(--blue);
+  color:white;
+  cursor:pointer;
+}
+button:hover { filter:brightness(.94); }
+button:disabled { opacity:.45; cursor:default; }
+.secondary { background:#e3edf3; color:var(--dark); }
+input[type=text] {
+  border:2px solid #b5c7d3;
+  border-radius:9px;
+  padding:11px;
+  width:240px;
+  max-width:100%;
+}
+input:focus { outline:3px solid #f8cf7280; }
+.muted { color:#5d7284; font-size:14px; }
+.math { font-size:25px; line-height:1.85; }
+.notice {
+  background:#fff6dd;
+  padding:17px;
+  border-left:5px solid var(--gold);
+  border-radius:9px;
+}
+.step {
+  background:#f6fafc;
+  border-left:5px solid #b8dce3;
+  border-radius:0 12px 12px 0;
+  padding:18px;
+  margin:20px 0;
+}
+.good { color:var(--green); }
+.bad { color:var(--red); }
+.feedback { min-height:28px; }
+.grid {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:9px;
+}
+.taskButton {
+  margin:0;
+  text-align:left;
+  color:var(--dark);
+  background:#edf3f7;
+  border:2px solid transparent;
+  padding:12px;
+}
+.taskButton.active { border-color:var(--blue); background:#e0f2f5; }
+.taskButton.done { background:#e7f5ed; }
+.taskButton span { display:block; }
+.taskButton small { font-size:11px; }
+.toolbar {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
+}
+progress {
+  display:block;
+  width:100%;
+  height:18px;
+  accent-color:var(--blue);
+  margin-top:16px;
+}
+.products { display:flex; flex-wrap:wrap; gap:12px; }
+.product {
+  background:white;
+  border:1px solid #d6e3eb;
+  padding:13px;
+  border-radius:10px;
+}
+.product input { width:180px; }
+.product label { display:block; }
+#diagram {
+  position:relative;
+  overflow-x:auto;
+  text-align:center;
+}
+#diagramInner {
+  position:relative;
+  min-width:460px;
+  padding:110px 10px 24px;
+}
+#terms {
+  display:inline-flex;
+  position:relative;
+  align-items:center;
+  white-space:nowrap;
+  z-index:1;
+}
+.term {
+  min-width:65px;
+  border:2px solid var(--blue);
+  color:var(--dark);
+  background:white;
+  font-size:24px;
+}
+.term.selected { background:var(--gold); }
+#arrowSvg {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+}
+.scroll { overflow-x:auto; }
+table { border-collapse:collapse; width:100%; font-size:15px; }
+th,td {
+  border-bottom:1px solid #d8e3eb;
+  padding:10px;
+  text-align:left;
+  vertical-align:top;
+}
+.status {
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:7px;
+  background:#fff0d0;
+}
+.status.complete { background:#e0
