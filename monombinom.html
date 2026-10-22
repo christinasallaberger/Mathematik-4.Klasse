@@ -7,206 +7,368 @@
 
 <style>
 :root {
-  --dark:#25364e;
-  --blue:#147d92;
-  --pale:#eaf5f7;
-  --gold:#f8cf72;
-  --green:#1d754c;
-  --red:#ad343b;
+  --dark: #25364e;
+  --blue: #147d92;
+  --gold: #f8cf72;
+  --green: #1d754c;
+  --red: #ad343b;
 }
-* { box-sizing:border-box; }
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-  margin:0;
-  background:#eef3f8;
-  color:var(--dark);
-  font:17px/1.5 Arial,sans-serif;
+  margin: 0;
+  background: #eef3f8;
+  color: var(--dark);
+  font: 17px/1.5 Arial, sans-serif;
 }
+
 header {
-  background:var(--dark);
-  color:white;
-  padding:24px 18px;
+  background: var(--dark);
+  color: white;
+  padding: 24px 18px;
 }
-.wrap,main { max-width:1050px; margin:auto; }
-h1 { margin:0; font-size:32px; }
-h2 { margin-top:0; }
-h3 { margin:0 0 12px; }
-main { padding:20px 14px 190px; }
+
+.wrap,
+main {
+  max-width: 1050px;
+  margin: auto;
+}
+
+h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+h3 {
+  margin: 0 0 12px;
+}
+
+main {
+  padding: 20px 14px 210px;
+}
+
 .card {
-  background:white;
-  padding:24px;
-  margin-bottom:18px;
-  border-radius:18px;
-  box-shadow:0 5px 20px #25364e0c;
+  background: white;
+  padding: 24px;
+  margin-bottom: 18px;
+  border-radius: 18px;
+  box-shadow: 0 5px 20px #25364e0c;
 }
+
 .badge {
-  display:inline-block;
-  background:white;
-  color:var(--dark);
-  border-radius:30px;
-  padding:8px 15px;
-  margin-top:12px;
+  display: inline-block;
+  background: white;
+  color: var(--dark);
+  border-radius: 30px;
+  padding: 8px 15px;
+  margin-top: 12px;
 }
-button,input { font:inherit; }
+
+button,
+input {
+  font: inherit;
+}
+
 button {
-  border:0;
-  border-radius:10px;
-  padding:11px 16px;
-  margin:4px;
-  background:var(--blue);
-  color:white;
-  cursor:pointer;
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 16px;
+  margin: 4px;
+  background: var(--blue);
+  color: white;
+  cursor: pointer;
 }
-button:hover { filter:brightness(.94); }
-button:disabled { opacity:.45; cursor:default; }
-.secondary { background:#e3edf3; color:var(--dark); }
-input[type=text] {
-  border:2px solid #b5c7d3;
-  border-radius:9px;
-  padding:11px;
-  width:240px;
-  max-width:100%;
+
+button:hover {
+  filter: brightness(.94);
 }
-input:focus { outline:3px solid #f8cf7280; }
-.muted { color:#5d7284; font-size:14px; }
-.math { font-size:25px; line-height:1.85; }
+
+button:disabled {
+  opacity: .45;
+  cursor: default;
+}
+
+button:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.secondary {
+  background: #e3edf3;
+  color: var(--dark);
+}
+
+input[type="text"] {
+  border: 2px solid #b5c7d3;
+  border-radius: 9px;
+  padding: 11px;
+  width: 240px;
+  max-width: 100%;
+}
+
+input:focus {
+  outline: 3px solid #f8cf7280;
+}
+
+.muted {
+  color: #5d7284;
+  font-size: 14px;
+}
+
+.math {
+  font-size: 25px;
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+}
+
 .notice {
-  background:#fff6dd;
-  padding:17px;
-  border-left:5px solid var(--gold);
-  border-radius:9px;
+  background: #fff6dd;
+  padding: 17px;
+  border-left: 5px solid var(--gold);
+  border-radius: 9px;
 }
+
 .step {
-  background:#f6fafc;
-  border-left:5px solid #b8dce3;
-  border-radius:0 12px 12px 0;
-  padding:18px;
-  margin:20px 0;
+  background: #f6fafc;
+  border-left: 5px solid #b8dce3;
+  border-radius: 0 12px 12px 0;
+  padding: 18px;
+  margin: 20px 0;
 }
-.good { color:var(--green); }
-.bad { color:var(--red); }
-.feedback { min-height:28px; }
+
+.good {
+  color: var(--green);
+}
+
+.bad {
+  color: var(--red);
+}
+
+.feedback {
+  min-height: 28px;
+}
+
 .grid {
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:9px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px;
 }
+
 .taskButton {
-  margin:0;
-  text-align:left;
-  color:var(--dark);
-  background:#edf3f7;
-  border:2px solid transparent;
-  padding:12px;
+  margin: 0;
+  text-align: left;
+  color: var(--dark);
+  background: #edf3f7;
+  border: 2px solid transparent;
+  padding: 12px;
 }
-.taskButton.active { border-color:var(--blue); background:#e0f2f5; }
-.taskButton.done { background:#e7f5ed; }
-.taskButton span { display:block; }
-.taskButton small { font-size:11px; }
+
+.taskButton.active {
+  border-color: var(--blue);
+  background: #e0f2f5;
+}
+
+.taskButton.done {
+  background: #e7f5ed;
+}
+
+.taskButton span {
+  display: block;
+}
+
+.taskButton small {
+  font-size: 11px;
+}
+
 .toolbar {
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  gap:8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
 }
+
 progress {
-  display:block;
-  width:100%;
-  height:18px;
-  accent-color:var(--blue);
-  margin-top:16px;
+  display: block;
+  width: 100%;
+  height: 18px;
+  accent-color: var(--blue);
+  margin-top: 16px;
 }
-.products { display:flex; flex-wrap:wrap; gap:12px; }
+
+.products {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .product {
-  background:white;
-  border:1px solid #d6e3eb;
-  padding:13px;
-  border-radius:10px;
+  background: white;
+  border: 1px solid #d6e3eb;
+  padding: 13px;
+  border-radius: 10px;
 }
-.product input { width:180px; }
-.product label { display:block; }
+
+.product input {
+  width: 180px;
+}
+
+.product label {
+  display: block;
+}
+
 #diagram {
-  position:relative;
-  overflow-x:auto;
-  text-align:center;
+  position: relative;
+  overflow-x: auto;
+  text-align: center;
 }
+
 #diagramInner {
-  position:relative;
-  min-width:460px;
-  padding:110px 10px 24px;
+  position: relative;
+  min-width: 460px;
+  padding: 110px 10px 24px;
 }
+
 #terms {
-  display:inline-flex;
-  position:relative;
-  align-items:center;
-  white-space:nowrap;
-  z-index:1;
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  white-space: nowrap;
+  z-index: 1;
 }
+
 .term {
-  min-width:65px;
-  border:2px solid var(--blue);
-  color:var(--dark);
-  background:white;
-  font-size:24px;
+  min-width: 65px;
+  border: 2px solid var(--blue);
+  color: var(--dark);
+  background: white;
+  font-size: 24px;
 }
-.term.selected { background:var(--gold); }
+
+.term.selected {
+  background: var(--gold);
+}
+
 #arrowSvg {
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
-.scroll { overflow-x:auto; }
-table { border-collapse:collapse; width:100%; font-size:15px; }
-th,td {
-  border-bottom:1px solid #d8e3eb;
-  padding:10px;
-  text-align:left;
-  vertical-align:top;
+
+.scroll {
+  overflow-x: auto;
 }
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 15px;
+}
+
+th,
+td {
+  border-bottom: 1px solid #d8e3eb;
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
 .status {
-  display:inline-block;
-  padding:4px 8px;
-  border-radius:7px;
-  background:#fff0d0;
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 7px;
+  background: #fff0d0;
 }
-.status.complete { background:#e0f3e8; color:var(--green); }
+
+.status.complete {
+  background: #e0f3e8;
+  color: var(--green);
+}
+
 #keypad {
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  z-index:30;
-  padding:7px;
-  background:#deebf2;
-  border-top:1px solid #b5cbd7;
-  text-align:center;
-  box-shadow:0 -4px 16px #25364e14;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  padding: 7px;
+  background: #deebf2;
+  border-top: 1px solid #b5cbd7;
+  text-align: center;
+  box-shadow: 0 -4px 16px #25364e14;
 }
+
 #keypad button {
-  background:white;
-  color:var(--dark);
-  min-width:42px;
-  padding:8px 12px;
-  margin:2px;
+  background: white;
+  color: var(--dark);
+  min-width: 42px;
+  padding: 8px 12px;
+  margin: 2px;
 }
-@media(max-width:700px) {
-  .grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-  .card { padding:17px; }
-  .math { font-size:22px; }
+
+#storageWarning {
+  margin-bottom: 16px;
 }
+
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .card {
+    padding: 17px;
+  }
+
+  .math {
+    font-size: 22px;
+  }
+}
+
 @media print {
-  body { background:white; font-size:12px; }
-  header { background:white; color:black; padding:0; }
-  main { padding:0; max-width:none; }
-  .noprint,#keypad,button { display:none!important; }
-  .card { box-shadow:none; border:1px solid #ccc; }
-  table { font-size:11px; }
+  body {
+    background: white;
+    font-size: 12px;
+  }
+
+  header {
+    background: white;
+    color: black;
+    padding: 0;
+  }
+
+  main {
+    padding: 0;
+    max-width: none;
+  }
+
+  .noprint,
+  #keypad,
+  button {
+    display: none !important;
+  }
+
+  .card {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+
+  table {
+    font-size: 11px;
+  }
 }
 </style>
 </head>
 
 <body>
+
 <header>
   <div class="wrap">
     <h1>Termwerkstatt</h1>
@@ -215,22 +377,31 @@ th,td {
   </div>
 </header>
 
-<main id="app"></main>
+<main>
+  <div
+    id="storageWarning"
+    class="notice bad noprint"
+    role="status"
+    hidden
+  ></div>
+
+  <div id="app"></div>
+</main>
+
 <div id="keypad" hidden></div>
 
 <script>
 "use strict";
 
-/* Aufgaben */
 const EXERCISES = [
-  { left:["3x"], right:["2x","4"] },
-  { left:["-2a"], right:["3a","-5"] },
-  { left:["4y"], right:["y","-3"] },
-  { left:["-3b"], right:["2b","-4"] },
-  { left:["x","3"], right:["x","2"] },
-  { left:["a","-4"], right:["a","3"] },
-  { left:["2x","1"], right:["x","-3"] },
-  { left:["2y","-3"], right:["y","-2"] }
+  { left: ["3x"], right: ["2x", "4"] },
+  { left: ["-2a"], right: ["3a", "-5"] },
+  { left: ["4y"], right: ["y", "-3"] },
+  { left: ["-3b"], right: ["2b", "-4"] },
+  { left: ["x", "3"], right: ["x", "2"] },
+  { left: ["a", "-4"], right: ["a", "3"] },
+  { left: ["2x", "1"], right: ["x", "-3"] },
+  { left: ["2y", "-3"], right: ["y", "-2"] }
 ];
 
 const STORAGE_KEY = "termwerkstatt_namen_gesamt_v1";
@@ -245,83 +416,111 @@ let lastMessage = "";
 
 function emptyState(name) {
   return {
-    version:1,
-    name:name,
-    started:new Date().toISOString(),
-    current:0,
-    overview:false,
-    tasks:EXERCISES.map(() => ({
-      step:0,
-      arrows:[],
-      entries:[[],[],[""]],
-      errors:[0,0,0,0],
-      copied:false
+    version: 1,
+    name,
+    started: new Date().toISOString(),
+    current: 0,
+    overview: false,
+    tasks: EXERCISES.map(() => ({
+      step: 0,
+      arrows: [],
+      entries: [[], [], [""]],
+      errors: [0, 0, 0, 0],
+      copied: false
     }))
   };
 }
 
 function nameKey(name) {
-  return name.normalize("NFC").trim()
-    .replace(/\s+/g," ")
+  return name
+    .normalize("NFC")
+    .trim()
+    .replace(/\s+/g, " ")
     .toLocaleLowerCase("de-AT");
 }
 
 function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g,c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",
-    '"':"&quot;","'":"&#39;"
-  }[c]));
+  return String(value).replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[character]));
 }
 
 function normal(value) {
-  return String(value).toLowerCase()
-    .replace(/\s/g,"")
-    .replace(/[−–]/g,"-")
-    .replace(/[×*]/g,"·")
-    .replace(/²/g,"^2")
-    .replace(/³/g,"^3")
-    .replace(/⁴/g,"^4");
+  return String(value)
+    .toLowerCase()
+    .replace(/\s/g, "")
+    .replace(/[−–]/g, "-")
+    .replace(/[×*]/g, "·")
+    .replace(/²/g, "^2")
+    .replace(/³/g, "^3")
+    .replace(/⁴/g, "^4");
 }
 
 function display(value) {
   return escapeHTML(value)
-    .replace(/\^2/g,"²")
-    .replace(/\^3/g,"³")
-    .replace(/\^4/g,"⁴")
-    .replace(/-/g,"−");
+    .replace(/\^2/g, "²")
+    .replace(/\^3/g, "³")
+    .replace(/\^4/g, "⁴")
+    .replace(/-/g, "−");
 }
 
 function mono(value) {
   const text = normal(value);
-  const m = text.match(/^([+-]?)(\d*)([a-z]?)(?:\^([234]))?$/);
-  if (!m || (!m[2] && !m[3]) || (!m[3] && m[4])) return null;
+  const match = text.match(/^([+-]?)(\d*)([a-z]?)(?:\^([234]))?$/);
+
+  if (!match) return null;
+  if (!match[2] && !match[3]) return null;
+  if (!match[3] && match[4]) return null;
+
+  const coefficient =
+    (match[1] === "-" ? -1 : 1) *
+    (match[2] ? Number(match[2]) : 1);
+
+  if (!Number.isSafeInteger(coefficient)) return null;
 
   return {
-    c:(m[1] === "-" ? -1 : 1) * (m[2] ? Number(m[2]) : 1),
-    v:m[3],
-    p:m[3] ? Number(m[4] || 1) : 0
+    c: coefficient,
+    v: match[3],
+    p: match[3] ? Number(match[4] || 1) : 0
   };
 }
 
-function formatMono(c,v,p) {
-  if (c === 0) return "0";
-  if (!p) return String(c);
-  return (c === 1 ? "" : c === -1 ? "-" : String(c)) +
-    v + (p > 1 ? "^" + p : "");
+function formatMono(coefficient, variable, power) {
+  if (coefficient === 0) return "0";
+  if (!power) return String(coefficient);
+
+  const number =
+    coefficient === 1 ? "" :
+    coefficient === -1 ? "-" :
+    String(coefficient);
+
+  return number + variable + (power > 1 ? "^" + power : "");
 }
 
-function multiply(a,b) {
-  const x = mono(a), y = mono(b);
-  return formatMono(x.c*y.c,x.v || y.v,x.p+y.p);
+function multiply(first, second) {
+  const a = mono(first);
+  const b = mono(second);
+
+  return formatMono(
+    a.c * b.c,
+    a.v || b.v,
+    a.p + b.p
+  );
 }
 
 function joinTerms(terms) {
-  return terms.map((term,i) => {
+  return terms.map((term, index) => {
     const text = String(term);
+
     if (text.startsWith("-")) {
-      return (i ? " - " : "-") + text.slice(1);
+      return (index ? " - " : "-") + text.slice(1);
     }
-    return (i ? " + " : "") + text;
+
+    return (index ? " + " : "") + text;
   }).join("");
 }
 
@@ -329,216 +528,334 @@ function source(exercise) {
   const left = exercise.left.length === 1
     ? exercise.left[0]
     : "(" + joinTerms(exercise.left) + ")";
+
   return left + " · (" + joinTerms(exercise.right) + ")";
 }
 
 function products(exercise) {
-  return exercise.left.flatMap((left,i) =>
-    exercise.right.map((right,j) => ({
-      left,right,key:i+","+j,
-      result:multiply(left,right)
+  return exercise.left.flatMap((left, i) =>
+    exercise.right.map((right, j) => ({
+      left,
+      right,
+      key: i + "," + j,
+      result: multiply(left, right)
     }))
   );
 }
 
 function polynomial(value) {
   const text = normal(value);
+
   if (!text || /[()·]/.test(text)) return null;
 
   const parts = text.match(/[+-]?[^+-]+/g);
+
   if (!parts || parts.join("") !== text) return null;
 
   const result = {};
+
   for (const part of parts) {
-    const m = mono(part);
-    if (!m) return null;
-    const key = m.v + ":" + m.p;
-    result[key] = (result[key] || 0) + m.c;
+    const term = mono(part);
+    if (!term) return null;
+
+    const key = term.v + ":" + term.p;
+    result[key] = (result[key] || 0) + term.c;
+
+    if (!Number.isSafeInteger(result[key])) return null;
   }
+
   return result;
 }
 
 function canonical(value) {
-  const p = polynomial(value);
-  if (!p) return null;
+  const parsed = polynomial(value);
+  if (!parsed) return null;
+
   return JSON.stringify(
-    Object.entries(p).filter(x => x[1] !== 0)
-      .sort((a,b) => a[0].localeCompare(b[0]))
+    Object.entries(parsed)
+      .filter(entry => entry[1] !== 0)
+      .sort((a, b) => a[0].localeCompare(b[0]))
   );
 }
 
 function finalResult(exercise) {
-  const p = polynomial(joinTerms(products(exercise).map(x => x.result)));
-  const terms = Object.entries(p)
-    .filter(x => x[1] !== 0)
-    .sort((a,b) => Number(b[0].split(":")[1]) -
-      Number(a[0].split(":")[1]))
-    .map(([key,c]) => {
-      const [v,power] = key.split(":");
-      return formatMono(c,v,Number(power));
+  const parsed = polynomial(
+    joinTerms(products(exercise).map(product => product.result))
+  );
+
+  const terms = Object.entries(parsed)
+    .filter(entry => entry[1] !== 0)
+    .sort((a, b) =>
+      Number(b[0].split(":")[1]) -
+      Number(a[0].split(":")[1])
+    )
+    .map(([key, coefficient]) => {
+      const [variable, power] = key.split(":");
+      return formatMono(coefficient, variable, Number(power));
     });
+
   return terms.length ? joinTerms(terms) : "0";
 }
 
 function validState(value) {
-  return value &&
+  return Boolean(
+    value &&
     value.version === 1 &&
     typeof value.name === "string" &&
     value.name.trim().length > 0 &&
     typeof value.started === "string" &&
+    Number.isFinite(Date.parse(value.started)) &&
     Number.isInteger(value.current) &&
-    value.current >= 0 && value.current < 8 &&
-    Array.isArray(value.tasks) && value.tasks.length === 8 &&
-    value.tasks.every((t,i) =>
-      t && Number.isInteger(t.step) && t.step >= 0 && t.step <= 4 &&
-      Array.isArray(t.arrows) &&
-      t.arrows.every(pair => products(EXERCISES[i]).some(x => x.key === pair)) &&
-      Array.isArray(t.entries) && t.entries.length === 3 &&
-      t.entries.every(row =>
-        Array.isArray(row) && row.every(x => typeof x === "string")) &&
-      Array.isArray(t.errors) && t.errors.length === 4 &&
-      t.errors.every(n => Number.isInteger(n) && n >= 0) &&
-      typeof t.copied === "boolean" &&
-      (!t.copied || t.step === 4)
-    );
+    value.current >= 0 &&
+    value.current < EXERCISES.length &&
+    Array.isArray(value.tasks) &&
+    value.tasks.length === EXERCISES.length &&
+    value.tasks.every((task, index) =>
+      task &&
+      Number.isInteger(task.step) &&
+      task.step >= 0 &&
+      task.step <= 4 &&
+      Array.isArray(task.arrows) &&
+      task.arrows.every(pair =>
+        products(EXERCISES[index]).some(product => product.key === pair)
+      ) &&
+      Array.isArray(task.entries) &&
+      task.entries.length === 3 &&
+      task.entries.every(row =>
+        Array.isArray(row) &&
+        row.every(entry => typeof entry === "string")
+      ) &&
+      Array.isArray(task.errors) &&
+      task.errors.length === 4 &&
+      task.errors.every(number =>
+        Number.isInteger(number) && number >= 0
+      ) &&
+      typeof task.copied === "boolean" &&
+      (!task.copied || task.step === 4)
+    )
+  );
+}
+
+function updateStorageWarning() {
+  const warning = $("storageWarning");
+
+  warning.hidden = storageOK;
+
+  warning.textContent = storageOK ? "" :
+    "Achtung: Der Fortschritt kann momentan nicht dauerhaft " +
+    "im Browser gespeichert werden. Bitte sichere ihn " +
+    "zusätzlich als Datei.";
 }
 
 function readProfiles() {
   try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-    if (saved && typeof saved === "object" && !Array.isArray(saved)) {
-      profiles = Object.assign(Object.create(null),saved);
+    const stored = localStorage.getItem(STORAGE_KEY);
+
+    if (stored !== null) {
+      const parsed = JSON.parse(stored);
+
+      if (
+        !parsed ||
+        typeof parsed !== "object" ||
+        Array.isArray(parsed)
+      ) {
+        throw new Error("Ungültiger Namensspeicher");
+      }
+
+      const merged = Object.assign(Object.create(null), parsed);
+
+      for (const key of Object.keys(profiles)) {
+        if (!Object.prototype.hasOwnProperty.call(merged, key)) {
+          merged[key] = profiles[key];
+        }
+      }
+
+      profiles = merged;
     }
+
     storageOK = true;
   } catch (error) {
     storageOK = false;
   }
+
+  updateStorageWarning();
 }
 
 function save() {
   if (!state) return;
-  const key = nameKey(state.name);
 
-  /*
-    Andere Namensprofile vor dem Speichern aktualisieren.
-    Dieselbe Bearbeitung nicht gleichzeitig in mehreren Tabs öffnen.
-  */
   readProfiles();
-  profiles[key] = JSON.parse(JSON.stringify(state));
+
+  profiles[nameKey(state.name)] =
+    JSON.parse(JSON.stringify(state));
 
   try {
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(profiles));
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(profiles)
+    );
+
     storageOK = true;
   } catch (error) {
     storageOK = false;
   }
+
+  updateStorageWarning();
 }
 
 function status(index) {
-  const t = state.tasks[index];
-  if (t.copied) return "Vollständig erledigt";
-  if (t.step === 4) return "Gelöst – Hefteintrag offen";
+  const task = state.tasks[index];
 
-  const begun = t.step > 0 || t.arrows.length > 0 ||
-    t.errors.some(n => n > 0) ||
-    t.entries.some(row => row.some(value => value.trim()));
+  if (task.copied) return "Vollständig erledigt";
+  if (task.step === 4) return "Gelöst – Hefteintrag offen";
 
-  return begun ? "Begonnen – noch nicht fertig" : "Nicht bearbeitet";
+  const begun =
+    task.step > 0 ||
+    task.arrows.length > 0 ||
+    task.errors.some(number => number > 0) ||
+    task.entries.some(row => row.some(entry => entry.trim()));
+
+  return begun
+    ? "Begonnen – noch nicht fertig"
+    : "Nicht bearbeitet";
 }
 
-function inputHTML(id,value,label) {
-  return `<input type="text" id="${id}"
-    value="${escapeHTML(value || "")}"
-    aria-label="${escapeHTML(label)}"
-    autocomplete="off" autocapitalize="off" spellcheck="false">`;
+function inputHTML(id, value, label) {
+  return `
+    <input
+      type="text"
+      id="${id}"
+      value="${escapeHTML(value || "")}"
+      aria-label="${escapeHTML(label)}"
+      autocomplete="off"
+      autocapitalize="off"
+      spellcheck="false"
+    >
+  `;
 }
 
 function render() {
   activeInput = null;
   selectedLeft = null;
+
   $("keypad").hidden = true;
 
   $("badge").innerHTML = state ? `
-    <span class="badge">🔒 ${escapeHTML(state.name)}</span>
-    <button class="secondary noprint" onclick="logout()">
-      Speichern & Namenswechsel
-    </button>
+    <span class="badge">
+      🔒 ${escapeHTML(state.name)}
+    </span>
   ` : "";
 
-  if (!state) renderLogin();
-  else if (state.overview) renderOverview();
-  else renderExercise();
+  updateStorageWarning();
+
+  if (!state) {
+    renderLogin();
+  } else if (state.overview) {
+    renderOverview();
+  } else {
+    renderExercise();
+  }
 }
 
 function renderLogin() {
   $("app").innerHTML = `
     <section class="card">
       <h2>Zuerst deinen Namen eingeben</h2>
+
       <p>
         Wenn du bereits gearbeitet hast, wird dein Lernstand
         unter deinem Namen wieder geöffnet.
       </p>
 
       <label for="studentName">Vor- und Nachname</label>
-      <p>${inputHTML("studentName","","Vor- und Nachname")}</p>
 
-      <button onclick="login()">Beginnen / weiterarbeiten</button>
-      <p id="loginMessage" class="bad" role="status"></p>
+      <p>
+        ${inputHTML("studentName", "", "Vor- und Nachname")}
+      </p>
+
+      <button onclick="login()">
+        Beginnen / weiterarbeiten
+      </button>
+
+      <p
+        id="loginMessage"
+        class="bad"
+        role="status"
+      ></p>
 
       <div class="notice">
-        Verwende jedes Mal denselben Vor- und Nachnamen.
-        Die Groß- und Kleinschreibung ist egal.
-        Während der Bearbeitung bleibt dein Name fest.
+        Kontrolliere deinen Namen vor dem Start.
+        Während der geöffneten Bearbeitung ist kein Namenswechsel möglich.
+        Verwende beim nächsten Öffnen wieder denselben Vor- und Nachnamen.
       </div>
 
       <p class="muted">
+        Die Groß- und Kleinschreibung ist egal.
         Die Speicherung gilt für dieses Gerät und diesen Browser.
+        Verwende immer dieselbe Übungsdatei beziehungsweise
+        dieselbe Internetadresse.
         Browserdaten nicht löschen und keinen privaten Modus verwenden.
+      </p>
+
+      <p class="muted">
         Der Name ist kein Passwort.
         Bei zwei Kindern mit gleichem Namen bitte einen vereinbarten
         Zusatz verwenden, zum Beispiel „Anna Muster 3a“.
+        Beim erneuten Öffnen oder Neuladen erscheint die Namenseingabe
+        wieder, damit der gespeicherte Lernstand geladen werden kann.
       </p>
-
-      ${!storageOK ? `
-        <p class="bad">
-          Die Browserspeicherung ist momentan nicht verfügbar.
-          Sichere den Fortschritt zusätzlich als Datei.
-        </p>
-      ` : ""}
     </section>
 
     <section class="card">
       <h3>Dein Arbeitsweg</h3>
+
       <ol>
         <li>Ein Beispiel auswählen.</li>
         <li>Pfeile setzen: Was wird womit multipliziert?</li>
-        <li>Die Multiplikationen aufschreiben.</li>
-        <li>Die einzelnen Produkte ausrechnen.</li>
+        <li>Die einzelnen Multiplikationen aufschreiben.</li>
+        <li>Die Produkte ausrechnen.</li>
         <li>Gleichartige Terme zusammenfassen.</li>
-        <li>Den Rechenweg ins Heft übertragen.</li>
+        <li>Den vollständigen Rechenweg ins Heft übertragen.</li>
       </ol>
-      <p>Vier Beispiele Monom · Binom und vier Beispiele Binom · Binom.</p>
+
+      <p>
+        Vier Beispiele Monom · Binom und vier Beispiele Binom · Binom.
+      </p>
     </section>
 
     <section class="card">
       <details>
         <summary>Zusätzlich gesicherte Fortschrittsdatei laden</summary>
-        <p>Optional, falls du eine Sicherungsdatei hast.</p>
-        <input type="file" accept=".json,application/json"
-          onchange="importProgress(this)">
+
+        <p>
+          Diese Möglichkeit brauchst du nur,
+          wenn du eine Sicherungsdatei laden möchtest.
+          Die Datei wird vor Beginn einer Bearbeitung geöffnet.
+        </p>
+
+        <input
+          type="file"
+          accept=".json,application/json"
+          onchange="importProgress(this)"
+        >
       </details>
     </section>
   `;
 
-  $("studentName").addEventListener("keydown",event => {
+  $("studentName").addEventListener("keydown", event => {
     if (event.key === "Enter") login();
   });
+
   $("studentName").focus();
 }
 
 function login() {
-  const name = $("studentName").value.normalize("NFC")
-    .trim().replace(/\s+/g," ");
+  if (state) return;
+
+  const name = $("studentName").value
+    .normalize("NFC")
+    .trim()
+    .replace(/\s+/g, " ");
 
   if (name.length < 3 || !name.includes(" ")) {
     $("loginMessage").textContent =
@@ -547,77 +864,112 @@ function login() {
   }
 
   readProfiles();
+
   const key = nameKey(name);
   const existing = profiles[key];
 
   if (existing) {
     if (!validState(existing)) {
       $("loginMessage").textContent =
-        "Dieser Lernstand konnte nicht geladen werden. Bitte die Lehrkraft fragen.";
+        "Dieser Lernstand konnte nicht geladen werden. " +
+        "Bitte die Lehrkraft fragen.";
       return;
     }
+
+    const confirmed = confirm(
+      "Mit diesem Namen weiterarbeiten?\n\n" +
+      existing.name +
+      "\n\nWährend der Bearbeitung ist kein Namenswechsel möglich."
+    );
+
+    if (!confirmed) return;
+
     state = JSON.parse(JSON.stringify(existing));
     state.overview = false;
   } else {
-    if (!confirm(
+    const confirmed = confirm(
       "Für diesen Namen wurde noch kein Lernstand gefunden:\n\n" +
       name +
       "\n\nIst der Name richtig und möchtest du neu beginnen?" +
-      "\nFalls du bereits gearbeitet hast, prüfe zuerst die Schreibweise."
-    )) return;
+      "\nWährend der Bearbeitung ist kein Namenswechsel möglich." +
+      "\n\nFalls du bereits gearbeitet hast, prüfe zuerst die Schreibweise."
+    );
+
+    if (!confirmed) return;
 
     state = emptyState(name);
   }
 
+  lastMessage = "";
+
   save();
   render();
-  window.scrollTo(0,0);
+  window.scrollTo(0, 0);
 }
 
 function taskButtons() {
-  return EXERCISES.map((e,i) => `
+  return EXERCISES.map((exercise, index) => `
     <button
-      class="taskButton ${state.current === i && !state.overview ? "active" : ""}
-      ${state.tasks[i].copied ? "done" : ""}"
-      onclick="choose(${i})">
-      <span>Beispiel ${i+1}</span>
-      <span>${display(source(e))}</span>
-      <small>${escapeHTML(status(i))}</small>
+      class="taskButton
+        ${state.current === index && !state.overview ? "active" : ""}
+        ${state.tasks[index].copied ? "done" : ""}"
+      onclick="choose(${index})"
+    >
+      <span>Beispiel ${index + 1}</span>
+      <span>${display(source(exercise))}</span>
+      <small>${escapeHTML(status(index))}</small>
     </button>
   `).join("");
 }
 
 function renderExercise() {
   const index = state.current;
-  const e = EXERCISES[index];
-  const t = state.tasks[index];
-  const list = products(e);
-  const done = state.tasks.filter(x => x.copied).length;
+  const exercise = EXERCISES[index];
+  const task = state.tasks[index];
+  const list = products(exercise);
+  const done = state.tasks.filter(item => item.copied).length;
 
   $("app").innerHTML = `
     <section class="card noprint">
       <h2>Wähle ein Beispiel</h2>
-      <div class="grid">${taskButtons()}</div>
+
+      <div class="grid">
+        ${taskButtons()}
+      </div>
+
       <progress value="${done}" max="8"></progress>
+
       <div class="toolbar">
         <span>${done} von 8 vollständig erledigt</span>
-        <button class="secondary" onclick="showOverview()">
+
+        <button
+          class="secondary"
+          onclick="showOverview()"
+        >
           Zusammenfassung ansehen
         </button>
       </div>
+
       <p class="muted">
-        Du darfst jederzeit wechseln. Deine Eingaben bleiben erhalten.
+        Du darfst jederzeit das Beispiel wechseln.
+        Deine Eingaben bleiben erhalten.
+        Dein Name bleibt während der Bearbeitung fest.
       </p>
     </section>
 
     <section class="card">
       <div class="muted">
-        Beispiel ${index+1} · ${index < 4 ? "Monom · Binom" : "Binom · Binom"}
+        Beispiel ${index + 1} ·
+        ${index < 4 ? "Monom · Binom" : "Binom · Binom"}
       </div>
-      <h2 class="math">${display(source(e))}</h2>
+
+      <h2 class="math">
+        ${display(source(exercise))}
+      </h2>
 
       <div class="step">
         <h3>1. Pfeile setzen</h3>
+
         <p>
           Klicke zuerst einen Term links und danach einen Term rechts an.
           Verbinde jeden linken Term mit jedem rechten Term.
@@ -625,34 +977,64 @@ function renderExercise() {
 
         <div id="diagram">
           <div id="diagramInner">
+
             <svg id="arrowSvg" aria-hidden="true">
               <defs>
-                <marker id="arrowHead" markerWidth="8" markerHeight="8"
-                  refX="7" refY="4" orient="auto">
-                  <path d="M0 0 L0 8 L8 4 Z" fill="#147d92"></path>
+                <marker
+                  id="arrowHead"
+                  markerWidth="8"
+                  markerHeight="8"
+                  refX="7"
+                  refY="4"
+                  orient="auto"
+                >
+                  <path
+                    d="M0 0 L0 8 L8 4 Z"
+                    fill="#147d92"
+                  ></path>
                 </marker>
               </defs>
+
               <g id="arrowPaths"></g>
             </svg>
 
             <div id="terms">
-              ${e.left.length > 1 ? "(" : ""}
-              ${e.left.map((term,i) => `
-                <button class="term" id="left${i}"
+              ${exercise.left.length > 1 ? "(" : ""}
+
+              ${exercise.left.map((term, i) => `
+                <button
+                  class="term"
+                  id="left${i}"
                   aria-label="Linker Term ${escapeHTML(term)}"
-                  onclick="pick('left',${i})">
-                  ${display(term.startsWith("-") ? "("+term+")" : term)}
+                  onclick="pick('left', ${i})"
+                >
+                  ${display(
+                    term.startsWith("-")
+                      ? "(" + term + ")"
+                      : term
+                  )}
                 </button>
               `).join("<span>+</span>")}
-              ${e.left.length > 1 ? ")" : ""}
+
+              ${exercise.left.length > 1 ? ")" : ""}
+
               <span>&nbsp; · (&nbsp;</span>
-              ${e.right.map((term,i) => `
-                <button class="term" id="right${i}"
+
+              ${exercise.right.map((term, i) => `
+                <button
+                  class="term"
+                  id="right${i}"
                   aria-label="Rechter Term ${escapeHTML(term)}"
-                  onclick="pick('right',${i})">
-                  ${display(term.startsWith("-") ? "("+term+")" : term)}
+                  onclick="pick('right', ${i})"
+                >
+                  ${display(
+                    term.startsWith("-")
+                      ? "(" + term + ")"
+                      : term
+                  )}
                 </button>
               `).join("<span>+</span>")}
+
               <span>&nbsp;)</span>
             </div>
           </div>
@@ -664,106 +1046,182 @@ function renderExercise() {
         </p>
 
         <p id="arrowMessage" role="status">
-          ${t.arrows.length} von ${list.length} Pfeilen gesetzt.
+          ${task.arrows.length} von ${list.length} Pfeilen gesetzt.
         </p>
 
-        ${t.step === 0 ? `
-          <button onclick="checkArrows()">Pfeile prüfen</button>
-          <button class="secondary" onclick="clearArrows()">Pfeile löschen</button>
-        ` : `<p class="good">✓ Alle Verbindungen sind richtig.</p>`}
+        ${task.step === 0 ? `
+          <button onclick="checkArrows()">
+            Pfeile prüfen
+          </button>
+
+          <button
+            class="secondary"
+            onclick="clearArrows()"
+          >
+            Pfeile löschen
+          </button>
+        ` : `
+          <p class="good">
+            ✓ Alle Verbindungen sind richtig.
+          </p>
+        `}
       </div>
 
-      ${t.step >= 1 ? `
+      ${task.step >= 1 ? `
         <div class="step">
           <h3>2. Was wird womit multipliziert?</h3>
+
           <p>
             Schreibe zu jeder Pfeilnummer die passende Multiplikation.
             Noch nicht ausrechnen!
           </p>
+
           <p class="muted">
             Beispiel für die Eingabe: 3x · (−2).
             Statt · ist auch * möglich.
           </p>
 
           <div class="products">
-            ${list.map((p,i) => `
+            ${list.map((product, i) => `
               <div class="product">
-                <label for="product${i}">Pfeil ${i+1}</label>
-                ${t.step === 1
-                  ? inputHTML("product"+i,t.entries[0][i],"Multiplikation zu Pfeil "+(i+1))
-                  : `<div class="math">${display(t.entries[0][i])}</div>`}
-              </div>
-            `).join("")}
-          </div>
-
-          ${t.step === 1
-            ? `<button onclick="checkStep(1)">Multiplikationen prüfen</button>`
-            : `<p class="good">✓ Die Multiplikationen stimmen.</p>`}
-        </div>
-      ` : ""}
-
-      ${t.step >= 2 ? `
-        <div class="step">
-          <h3>3. Ausmultiplizieren</h3>
-          <p>Rechne jedes Produkt aus. Achte auf Vorzeichen und Hochzahlen.</p>
-
-          <div class="products">
-            ${list.map((p,i) => `
-              <div class="product">
-                <label for="result${i}">
-                  ${display(t.entries[0][i])} =
+                <label for="product${i}">
+                  Pfeil ${i + 1}
                 </label>
-                ${t.step === 2
-                  ? inputHTML("result"+i,t.entries[1][i],"Ergebnis von Produkt "+(i+1))
-                  : `<div class="math">${display(t.entries[1][i])}</div>`}
+
+                ${task.step === 1
+                  ? inputHTML(
+                      "product" + i,
+                      task.entries[0][i],
+                      "Multiplikation zu Pfeil " + (i + 1)
+                    )
+                  : `
+                    <div class="math">
+                      ${display(task.entries[0][i])}
+                    </div>
+                  `}
               </div>
             `).join("")}
           </div>
 
-          ${t.step === 2
-            ? `<button onclick="checkStep(2)">Produkte prüfen</button>`
-            : `<p class="good">✓ Die Produkte stimmen.</p>`}
-        </div>
-      ` : ""}
-
-      ${t.step >= 3 ? `
-        <div class="step">
-          <h3>4. Zusammenfassen</h3>
-          <div class="math">
-            ${display(joinTerms(list.map(p => p.result)))}
-          </div>
-          <p>
-            Fasse gleichartige Terme vollständig zusammen.
-            Wenn das nicht möglich ist, schreibe den Term unverändert auf.
-          </p>
-
-          ${t.step === 3 ? `
-            ${inputHTML("finalAnswer",t.entries[2][0],"Zusammengefasstes Ergebnis")}
-            <button onclick="checkStep(3)">Ergebnis prüfen</button>
+          ${task.step === 1 ? `
+            <button onclick="checkStep(1)">
+              Multiplikationen prüfen
+            </button>
           ` : `
-            <div class="math good">= ${display(finalResult(e))}</div>
+            <p class="good">
+              ✓ Die Multiplikationen stimmen.
+            </p>
           `}
         </div>
       ` : ""}
 
-      <p id="feedback" class="feedback ${lastMessage ? "bad" : ""}"
-        role="status">${escapeHTML(lastMessage)}</p>
+      ${task.step >= 2 ? `
+        <div class="step">
+          <h3>3. Ausmultiplizieren</h3>
 
-      ${t.step === 4 ? `
+          <p>
+            Rechne jedes Produkt aus.
+            Achte auf Vorzeichen und Hochzahlen.
+          </p>
+
+          <div class="products">
+            ${list.map((product, i) => `
+              <div class="product">
+                <label for="result${i}">
+                  ${display(task.entries[0][i])} =
+                </label>
+
+                ${task.step === 2
+                  ? inputHTML(
+                      "result" + i,
+                      task.entries[1][i],
+                      "Ergebnis von Produkt " + (i + 1)
+                    )
+                  : `
+                    <div class="math">
+                      ${display(task.entries[1][i])}
+                    </div>
+                  `}
+              </div>
+            `).join("")}
+          </div>
+
+          ${task.step === 2 ? `
+            <button onclick="checkStep(2)">
+              Produkte prüfen
+            </button>
+          ` : `
+            <p class="good">
+              ✓ Die Produkte stimmen.
+            </p>
+          `}
+        </div>
+      ` : ""}
+
+      ${task.step >= 3 ? `
+        <div class="step">
+          <h3>4. Zusammenfassen</h3>
+
+          <div class="math">
+            ${display(
+              joinTerms(list.map(product => product.result))
+            )}
+          </div>
+
+          <p>
+            Fasse gleichartige Terme vollständig zusammen.
+            Wenn das nicht möglich ist,
+            schreibe den Term unverändert auf.
+          </p>
+
+          ${task.step === 3 ? `
+            ${inputHTML(
+              "finalAnswer",
+              task.entries[2][0],
+              "Zusammengefasstes Ergebnis"
+            )}
+
+            <button onclick="checkStep(3)">
+              Ergebnis prüfen
+            </button>
+          ` : `
+            <div class="math good">
+              = ${display(finalResult(exercise))}
+            </div>
+          `}
+        </div>
+      ` : ""}
+
+      <p
+        id="feedback"
+        class="feedback ${lastMessage ? "bad" : ""}"
+        role="status"
+      >
+        ${escapeHTML(lastMessage)}
+      </p>
+
+      ${task.step === 4 ? `
         <div class="notice">
           <h3>Übertrage dieses Beispiel ins Schulheft</h3>
+
           <p>
             Schreibe alle Zeilen auf.
             Zeichne bei der Ausgangsrechnung auch die Pfeile ein.
           </p>
 
           <div class="math">
-            ${display(source(e))}<br>
-            = ${list.map(p =>
-              "("+display(p.left)+") · ("+display(p.right)+")"
+            ${display(source(exercise))}<br>
+
+            = ${list.map(product =>
+              "(" + display(product.left) + ") · (" +
+              display(product.right) + ")"
             ).join(" + ")}<br>
-            = ${display(joinTerms(list.map(p => p.result)))}<br>
-            = ${display(finalResult(e))}
+
+            = ${display(
+              joinTerms(list.map(product => product.result))
+            )}<br>
+
+            = ${display(finalResult(exercise))}
           </div>
 
           <p class="muted">
@@ -772,31 +1230,50 @@ function renderExercise() {
           </p>
 
           <label>
-            <input type="checkbox" ${t.copied ? "checked" : ""}
-              onchange="confirmCopy(this.checked)">
-            Ich habe die Rechnung mit Pfeilen vollständig ins Heft übertragen.
+            <input
+              type="checkbox"
+              ${task.copied ? "checked" : ""}
+              onchange="confirmCopy(this.checked)"
+            >
+            Ich habe die Rechnung mit Pfeilen vollständig
+            ins Heft übertragen.
           </label>
         </div>
       ` : ""}
     </section>
 
     <div class="toolbar noprint">
-      <button class="secondary" onclick="choose(${index-1})"
-        ${index === 0 ? "disabled" : ""}>← Voriges Beispiel</button>
+      <button
+        class="secondary"
+        onclick="choose(${index - 1})"
+        ${index === 0 ? "disabled" : ""}
+      >
+        ← Voriges Beispiel
+      </button>
 
-      ${index < 7
-        ? `<button onclick="choose(${index+1})">Nächstes Beispiel →</button>`
-        : `<button onclick="showOverview()">Zur Zusammenfassung</button>`}
+      ${index < 7 ? `
+        <button onclick="choose(${index + 1})">
+          Nächstes Beispiel →
+        </button>
+      ` : `
+        <button onclick="showOverview()">
+          Zur Zusammenfassung
+        </button>
+      `}
     </div>
 
     <section class="card noprint">
-      <p class="${storageOK ? "muted" : "bad"}">
-        ${storageOK
-          ? "Dein Fortschritt wird automatisch unter deinem Namen gespeichert."
-          : "Achtung: Die dauerhafte Speicherung ist nicht verfügbar. Bitte als Datei sichern."}
+      <p class="muted">
+        Dein Fortschritt wird bei verfügbarer Browserspeicherung
+        automatisch unter deinem Namen gespeichert.
+        Beim nächsten Öffnen gibst du denselben Namen ein.
         Öffne dieselbe Bearbeitung nicht gleichzeitig in mehreren Tabs.
       </p>
-      <button class="secondary" onclick="exportProgress()">
+
+      <button
+        class="secondary"
+        onclick="exportProgress()"
+      >
         Zusätzliche Sicherungsdatei
       </button>
     </section>
@@ -807,26 +1284,42 @@ function renderExercise() {
 }
 
 function choose(index) {
-  if (!Number.isInteger(index) || index < 0 || index > 7) return;
+  if (!state) return;
+
+  if (
+    !Number.isInteger(index) ||
+    index < 0 ||
+    index >= EXERCISES.length
+  ) return;
+
   state.current = index;
   state.overview = false;
   lastMessage = "";
+
   save();
   render();
-  window.scrollTo(0,0);
+  window.scrollTo(0, 0);
 }
 
-function pick(side,index) {
-  const t = state.tasks[state.current];
-  if (t.step !== 0) return;
+function pick(side, index) {
+  if (!state) return;
+
+  const task = state.tasks[state.current];
+
+  if (task.step !== 0) return;
 
   if (side === "left") {
     selectedLeft = index;
-    document.querySelectorAll(".term").forEach(b =>
-      b.classList.remove("selected"));
-    $("left"+index).classList.add("selected");
+
+    document.querySelectorAll(".term").forEach(button =>
+      button.classList.remove("selected")
+    );
+
+    $("left" + index).classList.add("selected");
+
     $("arrowMessage").textContent =
       "Jetzt einen passenden Term rechts anklicken.";
+
     return;
   }
 
@@ -836,168 +1329,264 @@ function pick(side,index) {
     return;
   }
 
-  const key = selectedLeft+","+index;
-  if (!t.arrows.includes(key)) t.arrows.push(key);
+  const key = selectedLeft + "," + index;
+
+  if (!task.arrows.includes(key)) {
+    task.arrows.push(key);
+  }
+
   save();
   render();
 }
 
 function drawArrows() {
-  if (!$("arrowPaths")) return;
+  if (!state || !$("arrowPaths")) return;
 
   const box = $("diagramInner").getBoundingClientRect();
   const list = products(EXERCISES[state.current]);
-  const t = state.tasks[state.current];
+  const task = state.tasks[state.current];
 
-  $("arrowPaths").innerHTML = t.arrows.map(pair => {
-    const [left,right] = pair.split(",");
-    const a = $("left"+left).getBoundingClientRect();
-    const b = $("right"+right).getBoundingClientRect();
-    const number = list.findIndex(p => p.key === pair)+1;
+  $("arrowPaths").innerHTML = task.arrows.map(pair => {
+    const [left, right] = pair.split(",");
 
-    const x1 = a.left+a.width/2-box.left;
-    const x2 = b.left+b.width/2-box.left;
-    const y1 = a.top-box.top;
-    const y2 = b.top-box.top-4;
-    const top = 3+(number-1)*20;
-    const labelY = (y1+y2)/8+top*0.75;
+    const first = $("left" + left).getBoundingClientRect();
+    const second = $("right" + right).getBoundingClientRect();
+
+    const number =
+      list.findIndex(product => product.key === pair) + 1;
+
+    const x1 = first.left + first.width / 2 - box.left;
+    const x2 = second.left + second.width / 2 - box.left;
+
+    const y1 = first.top - box.top;
+    const y2 = second.top - box.top - 4;
+
+    const controlY = 3 + (number - 1) * 20;
+    const labelY = (y1 + y2) / 8 + controlY * 0.75;
 
     return `
-      <path d="M${x1},${y1}
-        C${x1},${top} ${x2},${top} ${x2},${y2}"
-        fill="none" stroke="#147d92" stroke-width="2.5"
-        marker-end="url(#arrowHead)"></path>
-      <rect x="${(x1+x2)/2-10}" y="${labelY-13}"
-        width="20" height="20" rx="7" fill="white"></rect>
-      <text x="${(x1+x2)/2}" y="${labelY+2}"
-        text-anchor="middle" font-size="14" fill="#25364e">
+      <path
+        d="M${x1},${y1}
+           C${x1},${controlY}
+            ${x2},${controlY}
+            ${x2},${y2}"
+        fill="none"
+        stroke="#147d92"
+        stroke-width="2.5"
+        marker-end="url(#arrowHead)"
+      ></path>
+
+      <rect
+        x="${(x1 + x2) / 2 - 10}"
+        y="${labelY - 13}"
+        width="20"
+        height="20"
+        rx="7"
+        fill="white"
+      ></rect>
+
+      <text
+        x="${(x1 + x2) / 2}"
+        y="${labelY + 2}"
+        text-anchor="middle"
+        font-size="14"
+        fill="#25364e"
+      >
         ${number}
       </text>
     `;
   }).join("");
 }
 
-window.addEventListener("resize",drawArrows);
+window.addEventListener("resize", drawArrows);
 
 function clearArrows() {
-  state.tasks[state.current].arrows = [];
+  if (!state) return;
+
+  const task = state.tasks[state.current];
+
+  if (task.step !== 0) return;
+
+  task.arrows = [];
+
   save();
   render();
 }
 
 function checkArrows() {
-  const t = state.tasks[state.current];
-  const expected = products(EXERCISES[state.current]).length;
+  if (!state) return;
 
-  if (new Set(t.arrows).size !== expected) {
-    t.errors[0]++;
+  const task = state.tasks[state.current];
+
+  if (task.step !== 0) return;
+
+  const expected =
+    products(EXERCISES[state.current]).length;
+
+  if (new Set(task.arrows).size !== expected) {
+    task.errors[0]++;
+
     save();
+
     $("arrowMessage").textContent =
-      "Es fehlen Verbindungen. Jeder linke Term braucht einen Pfeil zu jedem rechten Term.";
+      "Es fehlen Verbindungen. Jeder linke Term braucht " +
+      "einen Pfeil zu jedem rechten Term.";
+
     return;
   }
 
-  t.step = 1;
+  task.step = 1;
   lastMessage = "";
+
   save();
   render();
 }
 
-function correctProduct(value,left,right) {
+function correctProduct(value, left, right) {
   const factors = normal(value).split("·");
+
   if (factors.length !== 2) return false;
 
-  const clean = factor => {
-    if (factor.startsWith("(") && factor.endsWith(")")) {
-      factor = factor.slice(1,-1);
+  function cleanFactor(factor) {
+    if (
+      factor.startsWith("(") &&
+      factor.endsWith(")")
+    ) {
+      factor = factor.slice(1, -1);
     }
-    return mono(factor) ? canonical(factor) : null;
-  };
 
-  const entered = factors.map(clean);
-  if (entered.some(x => x === null)) return false;
+    return mono(factor)
+      ? canonical(factor)
+      : null;
+  }
+
+  const entered = factors.map(cleanFactor);
+
+  if (entered.some(factor => factor === null)) {
+    return false;
+  }
+
+  const expected = [
+    canonical(left),
+    canonical(right)
+  ];
 
   return entered.sort().join("|") ===
-    [canonical(left),canonical(right)].sort().join("|");
+    expected.sort().join("|");
 }
 
 function checkStep(step) {
-  const t = state.tasks[state.current];
-  const e = EXERCISES[state.current];
-  const list = products(e);
+  if (!state) return;
+
+  const task = state.tasks[state.current];
+  const exercise = EXERCISES[state.current];
+  const list = products(exercise);
+
+  if (task.step !== step) return;
+
   let correct = false;
 
   if (step === 1) {
-    t.entries[0] = list.map((p,i) => $("product"+i).value.trim());
-    correct = t.entries[0].every((value,i) =>
-      correctProduct(value,list[i].left,list[i].right));
+    task.entries[0] = list.map((product, index) =>
+      $("product" + index).value.trim()
+    );
+
+    correct = task.entries[0].every((value, index) =>
+      correctProduct(
+        value,
+        list[index].left,
+        list[index].right
+      )
+    );
   }
 
   if (step === 2) {
-    t.entries[1] = list.map((p,i) => $("result"+i).value.trim());
-    correct = t.entries[1].every((value,i) =>
+    task.entries[1] = list.map((product, index) =>
+      $("result" + index).value.trim()
+    );
+
+    correct = task.entries[1].every((value, index) =>
       mono(value) !== null &&
-      canonical(value) === canonical(list[i].result));
+      canonical(value) ===
+      canonical(list[index].result)
+    );
   }
 
   if (step === 3) {
     const value = $("finalAnswer").value.trim();
-    t.entries[2] = [value];
 
-    const p = polynomial(value);
-    const terms = normal(value).match(/[+-]?[^+-]+/g) || [];
-    const nonzero = p
-      ? Object.values(p).filter(c => c !== 0).length
+    task.entries[2] = [value];
+
+    const parsed = polynomial(value);
+    const terms =
+      normal(value).match(/[+-]?[^+-]+/g) || [];
+
+    const nonzeroTerms = parsed
+      ? Object.values(parsed)
+          .filter(number => number !== 0).length
       : -1;
 
-    correct = p !== null &&
-      canonical(value) === canonical(finalResult(e)) &&
-      terms.length === Math.max(1,nonzero);
+    correct =
+      parsed !== null &&
+      canonical(value) === canonical(finalResult(exercise)) &&
+      terms.length === Math.max(1, nonzeroTerms);
   }
 
   if (!correct) {
-    t.errors[step]++;
+    task.errors[step]++;
+
     lastMessage = [
       "",
-      "Prüfe die Pfeilnummern und schreibe die beiden ursprünglichen Faktoren mit · dazwischen auf. Noch nicht ausrechnen!",
-      "Prüfe Zahlenfaktoren, Vorzeichen und Hochzahlen. In jedes Feld gehört ein ausgerechnetes Produkt.",
-      "Prüfe die Vorzeichen und fasse gleichartige Terme vollständig zusammen."
+      "Prüfe die Pfeilnummern und schreibe die beiden " +
+        "ursprünglichen Faktoren mit · dazwischen auf. " +
+        "Noch nicht ausrechnen!",
+      "Prüfe Zahlenfaktoren, Vorzeichen und Hochzahlen. " +
+        "In jedes Feld gehört ein ausgerechnetes Produkt.",
+      "Prüfe die Vorzeichen und fasse gleichartige Terme " +
+        "vollständig zusammen."
     ][step];
 
     save();
+
     $("feedback").className = "feedback bad";
     $("feedback").textContent = lastMessage;
+
     return;
   }
 
-  t.step++;
+  task.step++;
   lastMessage = "";
+
   save();
   render();
 }
 
 function bindInputs() {
-  document.querySelectorAll(".product input,#finalAnswer")
+  document
+    .querySelectorAll(".product input, #finalAnswer")
     .forEach(input => {
-      input.addEventListener("focus",() => {
+      input.addEventListener("focus", () => {
         activeInput = input;
         $("keypad").hidden = false;
       });
 
-      input.addEventListener("input",() => {
-        const t = state.tasks[state.current];
+      input.addEventListener("input", () => {
+        const task = state.tasks[state.current];
 
         if (input.id === "finalAnswer") {
-          t.entries[2][0] = input.value;
+          task.entries[2][0] = input.value;
         } else if (input.id.startsWith("product")) {
-          t.entries[0][Number(input.id.slice(7))] = input.value;
+          task.entries[0][Number(input.id.slice(7))] =
+            input.value;
         } else {
-          t.entries[1][Number(input.id.slice(6))] = input.value;
+          task.entries[1][Number(input.id.slice(6))] =
+            input.value;
         }
+
         save();
       });
 
-      input.addEventListener("keydown",event => {
+      input.addEventListener("keydown", event => {
         if (event.key === "Enter") {
           checkStep(state.tasks[state.current].step);
         }
@@ -1006,32 +1595,55 @@ function bindInputs() {
 }
 
 function confirmCopy(checked) {
-  state.tasks[state.current].copied = checked;
+  if (!state) return;
+
+  const task = state.tasks[state.current];
+
+  if (task.step !== 4) return;
+
+  task.copied = checked;
+
   save();
   render();
 }
 
 function showOverview() {
+  if (!state) return;
+
   state.overview = true;
   lastMessage = "";
+
   save();
   render();
-  window.scrollTo(0,0);
+  window.scrollTo(0, 0);
 }
 
 function renderOverview() {
-  const solved = state.tasks.filter(t => t.step === 4).length;
-  const copied = state.tasks.filter(t => t.copied).length;
-  const untouched = state.tasks.filter((t,i) =>
-    status(i) === "Nicht bearbeitet").length;
-  const errors = [0,0,0,0];
+  const solved =
+    state.tasks.filter(task => task.step === 4).length;
 
-  state.tasks.forEach(t =>
-    t.errors.forEach((n,i) => errors[i] += n));
+  const copied =
+    state.tasks.filter(task => task.copied).length;
+
+  const untouched =
+    state.tasks.filter((task, index) =>
+      status(index) === "Nicht bearbeitet"
+    ).length;
+
+  const errors = [0, 0, 0, 0];
+
+  state.tasks.forEach(task =>
+    task.errors.forEach((number, index) =>
+      errors[index] += number
+    )
+  );
 
   $("app").innerHTML = `
     <section class="card">
-      <h2>Zusammenfassung für ${escapeHTML(state.name)}</h2>
+      <h2>
+        Zusammenfassung für ${escapeHTML(state.name)}
+      </h2>
+
       <p>
         ${solved} von 8 Beispielen richtig gelöst<br>
         ${copied} von 8 Hefteinträgen bestätigt<br>
@@ -1041,21 +1653,28 @@ function renderOverview() {
       <div class="notice">
         ${copied === 8
           ? "Geschafft! Alle Beispiele und Hefteinträge sind erledigt."
-          : "Es sind noch Beispiele oder Hefteinträge offen. Du kannst jederzeit weiterarbeiten."}
+          : "Es sind noch Beispiele oder Hefteinträge offen. " +
+            "Du kannst jederzeit weiterarbeiten."}
       </div>
     </section>
 
     <section class="card noprint">
       <h3>Direkt zu einem Beispiel</h3>
-      <div class="grid">${taskButtons()}</div>
+
+      <div class="grid">
+        ${taskButtons()}
+      </div>
     </section>
 
     <section class="card">
       <h2>Lehrkraftübersicht</h2>
+
       <p>
         Name: ${escapeHTML(state.name)}<br>
         Beginn:
-        ${escapeHTML(new Date(state.started).toLocaleString("de-AT"))}
+        ${escapeHTML(
+          new Date(state.started).toLocaleString("de-AT")
+        )}
       </p>
 
       <div class="scroll">
@@ -1065,24 +1684,39 @@ function renderOverview() {
               <th>Beispiel</th>
               <th>Bearbeitungsstand</th>
               <th>Bestätigtes Ergebnis</th>
-              <th>Fehlversuche<br>Pfeile / Ansatz / Produkte / Zusammenfassen</th>
+              <th>
+                Fehlversuche<br>
+                Pfeile / Ansatz / Produkte / Zusammenfassen
+              </th>
             </tr>
           </thead>
+
           <tbody>
-            ${EXERCISES.map((e,i) => `
+            ${EXERCISES.map((exercise, index) => `
               <tr>
-                <td>${i+1}. ${display(source(e))}</td>
                 <td>
-                  <span class="status ${state.tasks[i].copied ? "complete" : ""}">
-                    ${escapeHTML(status(i))}
+                  ${index + 1}.
+                  ${display(source(exercise))}
+                </td>
+
+                <td>
+                  <span
+                    class="status
+                    ${state.tasks[index].copied ? "complete" : ""}"
+                  >
+                    ${escapeHTML(status(index))}
                   </span>
                 </td>
+
                 <td>
-                  ${state.tasks[i].step === 4
-                    ? display(finalResult(e))
+                  ${state.tasks[index].step === 4
+                    ? display(finalResult(exercise))
                     : "Noch nicht vorhanden"}
                 </td>
-                <td>${state.tasks[i].errors.join(" / ")}</td>
+
+                <td>
+                  ${state.tasks[index].errors.join(" / ")}
+                </td>
               </tr>
             `).join("")}
           </tbody>
@@ -1090,13 +1724,16 @@ function renderOverview() {
       </div>
 
       <p class="muted">
-        Fehlversuche zählen erfolglose Prüfungen, nicht einzelne Fehler.
-        Null Fehlversuche bei einer nicht bearbeiteten Aufgabe bedeuten
-        nicht, dass diese Aufgabe gelöst wurde.
+        Fehlversuche zählen erfolglose Prüfungen,
+        nicht einzelne Fehler.
+        Null Fehlversuche bei einer nicht bearbeiteten Aufgabe
+        bedeuten nicht, dass diese Aufgabe gelöst wurde.
         Die Hefteinträge werden von den Kindern selbst bestätigt.
+        Die Übersicht ist keine manipulationssichere Prüfung.
       </p>
 
       <h3>Fehlversuche nach Arbeitsschritt</h3>
+
       <ul>
         <li>Pfeile setzen: ${errors[0]}</li>
         <li>Multiplikationen aufschreiben: ${errors[1]}</li>
@@ -1105,20 +1742,36 @@ function renderOverview() {
       </ul>
 
       <div class="toolbar noprint">
-        <button onclick="window.print()">Drucken / als PDF speichern</button>
-        <button class="secondary" onclick="exportCSV()">CSV für die Lehrkraft</button>
-        <button class="secondary" onclick="exportProgress()">Fortschritt sichern</button>
+        <button onclick="window.print()">
+          Drucken / als PDF speichern
+        </button>
+
+        <button
+          class="secondary"
+          onclick="exportCSV()"
+        >
+          CSV für die Lehrkraft
+        </button>
+
+        <button
+          class="secondary"
+          onclick="exportProgress()"
+        >
+          Fortschritt sichern
+        </button>
       </div>
     </section>
 
     <section class="card">
       <h2>Merksatz für das Schulheft</h2>
+
       <p>
-        Beim Ausmultiplizieren multipliziere ich jeden Term der ersten
-        Klammer mit jedem Term der zweiten Klammer.
+        Beim Ausmultiplizieren multipliziere ich jeden Term
+        der ersten Klammer mit jedem Term der zweiten Klammer.
         Steht ein Monom vor der Klammer, multipliziere ich es
         mit jedem Term in der Klammer.
       </p>
+
       <p>
         Ich beachte die Vorzeichen, multipliziere die Zahlen
         und addiere bei gleicher Basis die Hochzahlen.
@@ -1127,105 +1780,140 @@ function renderOverview() {
     </section>
 
     <div class="toolbar noprint">
-      <button onclick="choose(${state.current})">Zurück zur letzten Aufgabe</button>
-      <button class="secondary" onclick="logout()">Speichern & Namenswechsel</button>
+      <button onclick="choose(${state.current})">
+        Zurück zur letzten Aufgabe
+      </button>
     </div>
   `;
 }
 
-function logout() {
-  save();
-
-  if (!storageOK && !confirm(
-    "Der Fortschritt konnte nicht dauerhaft gespeichert werden.\n" +
-    "Sichere ihn bitte zuerst als Datei.\n\n" +
-    "Trotzdem zur Namenseingabe wechseln?"
-  )) return;
-
-  state = null;
-  lastMessage = "";
-  render();
-  window.scrollTo(0,0);
-}
-
-function download(content,filename,type) {
-  const url = URL.createObjectURL(new Blob([content],{type}));
+function download(content, filename, type) {
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
+
   link.href = url;
   link.download = filename;
+
   document.body.appendChild(link);
   link.click();
   link.remove();
-  setTimeout(() => URL.revokeObjectURL(url),2000);
+
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
 }
 
 function exportProgress() {
   if (!state) return;
+
   download(
-    JSON.stringify(state,null,2),
+    JSON.stringify(state, null, 2),
     "Termwerkstatt-Fortschritt.json",
     "application/json"
   );
 }
 
 async function importProgress(input) {
+  if (state) return;
   if (!input.files[0]) return;
 
   try {
-    const imported = JSON.parse(await input.files[0].text());
-    if (!validState(imported)) throw new Error("Ungültige Datei");
+    const imported = JSON.parse(
+      await input.files[0].text()
+    );
+
+    if (state) return;
+
+    if (!validState(imported)) {
+      throw new Error("Ungültige Datei");
+    }
 
     readProfiles();
-    const exists = Boolean(profiles[nameKey(imported.name)]);
 
-    if (!confirm(
-      "Fortschritt für "+imported.name+" laden?" +
-      (exists ? "\n\nDer bisherige Lernstand dieses Namens wird ersetzt." : "")
-    )) return;
+    const exists = Boolean(
+      profiles[nameKey(imported.name)]
+    );
+
+    const confirmed = confirm(
+      "Fortschritt für " + imported.name + " laden?" +
+      "\n\nWährend der Bearbeitung ist kein Namenswechsel möglich." +
+      (exists
+        ? "\n\nDer bisherige Lernstand dieses Namens wird ersetzt."
+        : "")
+    );
+
+    if (!confirmed || state) return;
 
     state = imported;
     state.overview = false;
+    lastMessage = "";
+
     save();
     render();
   } catch (error) {
-    alert("Diese Fortschrittsdatei konnte nicht geladen werden.");
+    alert(
+      "Diese Fortschrittsdatei konnte nicht geladen werden."
+    );
   }
 }
 
 function exportCSV() {
+  if (!state) return;
+
   const rows = [
     [
-      "Name","Beispiel","Aufgabe","Bearbeitungsstand","Ergebnis",
-      "Fehlversuche Pfeile","Fehlversuche Ansatz",
-      "Fehlversuche Produkte","Fehlversuche Zusammenfassen",
+      "Name",
+      "Beispiel",
+      "Aufgabe",
+      "Bearbeitungsstand",
+      "Ergebnis",
+      "Fehlversuche Pfeile",
+      "Fehlversuche Ansatz",
+      "Fehlversuche Produkte",
+      "Fehlversuche Zusammenfassen",
       "Hefteintrag bestätigt"
     ],
-    ...EXERCISES.map((e,i) => [
-      state.name,i+1,source(e),status(i),
-      state.tasks[i].step === 4 ? finalResult(e) : "",
-      ...state.tasks[i].errors,
-      state.tasks[i].copied ? "Ja" : "Nein"
+
+    ...EXERCISES.map((exercise, index) => [
+      state.name,
+      index + 1,
+      source(exercise),
+      status(index),
+
+      state.tasks[index].step === 4
+        ? finalResult(exercise)
+        : "",
+
+      ...state.tasks[index].errors,
+
+      state.tasks[index].copied ? "Ja" : "Nein"
     ])
   ];
 
-  const csv = "\uFEFF"+rows.map(row =>
+  const csv = "\uFEFF" + rows.map(row =>
     row.map(value => {
       let text = String(value);
-      if (/^[=+@-]/.test(text)) text = "'"+text;
-      return '"'+text.replace(/"/g,'""')+'"';
+
+      if (/^[=+@-]/.test(text)) {
+        text = "'" + text;
+      }
+
+      return '"' + text.replace(/"/g, '""') + '"';
     }).join(";")
   ).join("\r\n");
 
-  download(csv,"Termwerkstatt-Lehrkraft.csv","text/csv;charset=utf-8");
+  download(
+    csv,
+    "Termwerkstatt-Lehrkraft.csv",
+    "text/csv;charset=utf-8"
+  );
 }
 
-/* Bildschirmtastatur */
 const KEYS = [
-  "7","8","9","+","−",
-  "4","5","6","·","(",
-  "1","2","3",")","²",
-  "0","x","a","y","b",
-  "⌫","Leeren","Schließen"
+  "7", "8", "9", "+", "−",
+  "4", "5", "6", "·", "(",
+  "1", "2", "3", ")", "²",
+  "0", "x", "a", "y", "b",
+  "⌫", "Leeren", "Schließen"
 ];
 
 $("keypad").innerHTML = `
@@ -1233,29 +1921,44 @@ $("keypad").innerHTML = `
     Tastenfeld · zuerst ein Rechenfeld auswählen ·
     ² oder ^2 für die zweite Potenz
   </div>
+
   ${KEYS.map(key => `
-    <button type="button" data-key="${escapeHTML(key)}">
+    <button
+      type="button"
+      data-key="${escapeHTML(key)}"
+    >
       ${escapeHTML(key)}
     </button>
   `).join("")}
 `;
 
-$("keypad").addEventListener("pointerdown",event => {
-  if (event.target.closest("button")) event.preventDefault();
+$("keypad").addEventListener("pointerdown", event => {
+  if (event.target.closest("button")) {
+    event.preventDefault();
+  }
 });
 
-$("keypad").addEventListener("click",event => {
+$("keypad").addEventListener("click", event => {
   const button = event.target.closest("button");
+
   if (!button) return;
+
   const key = button.dataset.key;
 
   if (key === "Schließen") {
     $("keypad").hidden = true;
-    if (activeInput) activeInput.blur();
+
+    if (activeInput) {
+      activeInput.blur();
+    }
+
     return;
   }
 
-  if (!activeInput || !document.contains(activeInput)) return;
+  if (
+    !activeInput ||
+    !document.contains(activeInput)
+  ) return;
 
   let start = activeInput.selectionStart;
   const end = activeInput.selectionEnd;
@@ -1265,22 +1968,32 @@ $("keypad").addEventListener("click",event => {
     activeInput.value = "";
     start = 0;
   } else if (key === "⌫") {
-    const from = start === end ? Math.max(0,start-1) : start;
-    activeInput.value = value.slice(0,from)+value.slice(end);
+    const from = start === end
+      ? Math.max(0, start - 1)
+      : start;
+
+    activeInput.value =
+      value.slice(0, from) +
+      value.slice(end);
+
     start = from;
   } else {
-    activeInput.value = value.slice(0,start)+key+value.slice(end);
+    activeInput.value =
+      value.slice(0, start) +
+      key +
+      value.slice(end);
+
     start += key.length;
   }
 
   activeInput.focus();
-  activeInput.setSelectionRange(start,start);
+  activeInput.setSelectionRange(start, start);
   activeInput.dispatchEvent(new Event("input"));
 });
 
-/* Start immer mit Namenseingabe. */
 readProfiles();
 render();
 </script>
+
 </body>
 </html>
