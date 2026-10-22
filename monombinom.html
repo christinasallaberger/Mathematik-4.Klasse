@@ -75,6 +75,10 @@ input.bad{border-color:var(--bad);background:var(--badbg)}
 /* So geht's */
 details.info{background:var(--info);border:0;border-left:6px solid var(--ink);border-radius:.5rem;padding:.7rem 1rem;margin:0 0 1.5rem}
 details.info summary{cursor:pointer;font-weight:700;color:var(--ink)}
+.heftbox{margin:1.2rem 0 0}
+.hefttitle{margin:.6rem 1rem 0;font-weight:700;color:var(--muted);font-size:.95rem}
+.heftbox .copy{font-size:1rem;white-space:normal;margin:.8rem 0 .2rem!important}
+.copy{background:var(--mark);color:var(--text);border-radius:.4rem;padding:.4rem .7rem;margin:.6rem 0!important}
 details.info p{margin:.4rem 0}
 .rule{font-size:1.1rem}
 
@@ -92,7 +96,7 @@ details.info p{margin:.4rem 0}
 .diagram{overflow-x:auto;margin:1rem 0 .5rem;border:2px dashed var(--line);border-radius:.6rem;background:var(--paper)}
 .diagInner{position:relative;display:inline-block;min-width:100%;padding:0 1rem .6rem}
 svg.arrows{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
-svg.arrows #arrowG path{fill:none;stroke:var(--arrow);stroke-width:2.5}
+svg.arrows g.ag path{fill:none;stroke:var(--arrow);stroke-width:2.5}
 svg.arrows marker path{fill:var(--arrow);stroke:none}
 svg.arrows rect{fill:var(--card);stroke:var(--arrow);stroke-width:1}
 svg.arrows text{fill:var(--ink);font-size:13px;font-weight:700;font-family:"Atkinson Hyperlegible",system-ui,sans-serif}
@@ -210,7 +214,8 @@ body.padon .wrap{padding-bottom:20rem}
     <section id="exCard"></section>
 
     <details class="info" id="howto" open>
-      <summary>So geht’s</summary>
+      <summary>Zusammenfassung – schreib sie in dein Heft!</summary>
+      <p class="copy">✏️ <b>Schreib diese Zusammenfassung mit dem Beispiel ordentlich in dein Heft ab.</b></p>
       <p class="rule">(<i>x</i> + 2) · (<i>x</i> + 3) = <i>x</i> · <i>x</i> + <i>x</i> · 3 + 2 · <i>x</i> + 2 · 3 = <i>x</i><sup>2</sup> + 3<i>x</i> + 2<i>x</i> + 6 = <i>x</i><sup>2</sup> + 5<i>x</i> + 6</p>
       <p><b>Jedes</b> Glied der ersten Klammer wird mit <b>jedem</b> Glied der zweiten Klammer multipliziert – jeder Pfeil ist ein Produkt.</p>
       <p>Das <b>Vorzeichen gehört zum Glied</b>: plus · minus = minus, minus · minus = plus.</p>
@@ -496,6 +501,11 @@ function factorHTML(side,ms,clickable,e){
   const paren=ms.length>1||ms[0].c.n<0n;
   return (paren?'<span class="paren">(</span>':'')+terms+(paren?'<span class="paren">)</span>':'');
 }
+function staticFactorHTML(side,ms){
+  const terms=ms.map((m,i)=>'<span class="term" id="b'+side+i+'">'+termH(m,!i)+'</span>').join('');
+  const paren=ms.length>1||ms[0].c.n<0n;
+  return (paren?'<span class="paren">(</span>':'')+terms+(paren?'<span class="paren">)</span>':'');
+}
 function exStatus(e){return e.step===DONE?(e.shown?'done shown':'done'):(e.step>0||e.arrows.length?'started':'');}
 
 function renderEx(focus){
@@ -519,10 +529,10 @@ function renderEx(focus){
   h+='<div class="head"><span class="num">'+(cur+1)+'</span><h2>Multipliziere aus: '+exH(d)+'</h2></div>';
 
   h+='<div class="diagram"><div class="diagInner" id="diag">'+
-    '<svg class="arrows" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker></defs><g id="arrowG"></g></svg>'+
+    '<svg class="arrows" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker></defs><g id="arrowG" class="ag"></g></svg>'+
     '<div class="exprWrap" style="padding-top:'+topPad+'px;padding-bottom:'+botPad+'px">'+
       factorHTML('L',d.left,e.step===0,e)+'<span class="dotop">·</span>'+factorHTML('R',d.right,e.step===0,e)+
-    '</div>'+(nb.length?'<div class="nb">'+nb.map(x=>'<div>'+x+'</div>').join('')+'</div>':'')+
+    '</div>'+
   '</div></div>';
 
   /* Schritt 1: Pfeile */
@@ -609,6 +619,15 @@ function renderEx(focus){
       :'<button type="button" data-act="sum">Zur Auswertung</button>')+'</div>';
   }
 
+  /* Heft: Rechenweg ganz unten */
+  h+='<div class="diagram heftbox"><p class="hefttitle">Dein Rechenweg</p><div class="diagInner" id="diag2">'+
+    '<svg class="arrows" aria-hidden="true"><defs><marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker></defs><g id="arrowG2" class="ag"></g></svg>'+
+    '<div class="exprWrap" style="padding-top:'+topPad+'px;padding-bottom:'+botPad+'px">'+
+      staticFactorHTML('L',d.left)+'<span class="dotop">·</span>'+staticFactorHTML('R',d.right)+
+    '</div>'+(nb.length?'<div class="nb">'+nb.map(x=>'<div>'+x+'</div>').join('')+'</div>':'')+
+    (e.step>=DONE?'<p class="copy">✏️ <b>Schreib diesen Rechenweg mit den Pfeilen ordentlich in dein Heft ab.</b></p>':'')+
+  '</div></div>';
+
   $('exCard').innerHTML=h;
   $('score').textContent=g.ex.filter(x=>x.step===DONE).length+' von '+g.ex.length+' fertig';
   document.querySelectorAll('#exCard [data-prev]').forEach(pv=>updatePrev(pv.previousElementSibling));
@@ -636,12 +655,12 @@ function updatePrev(inp){
   pv.innerHTML=(!inp.value.trim()||q.err)?'':'→ <b>'+polyH(q.ms)+'</b>';
 }
 
-function drawArrows(){
-  const e=curEx(),grp=$('arrowG'),inner=$('diag');if(!e||!grp||!inner)return;
+function drawArrowsIn(innerId,gId,prefix,marker){
+  const e=curEx(),grp=$(gId),inner=$(innerId);if(!e||!grp||!inner)return;
   const box=inner.getBoundingClientRect(),two=e.data.left.length===2;
   grp.innerHTML=e.arrows.map(key=>{
     const p=e.prods.find(q=>q.key===key);if(!p)return '';
-    const A=$('tL'+p.i),Bn=$('tR'+p.j);if(!A||!Bn)return '';
+    const A=$(prefix+'L'+p.i),Bn=$(prefix+'R'+p.j);if(!A||!Bn)return '';
     const a=A.getBoundingClientRect(),b=Bn.getBoundingClientRect();
     const below=two&&p.i===1,dist=ARR_BASE+p.j*ARR_GAP;
     const x1=a.left+a.width/2-box.left,x2=b.left+b.width/2-box.left;
@@ -649,10 +668,11 @@ function drawArrows(){
     if(below){y1=a.bottom-box.top;y2=b.bottom-box.top+2;c=Math.max(y1,y2)+dist;}
     else{y1=a.top-box.top;y2=b.top-box.top-2;c=Math.min(y1,y2)-dist;}
     const nr=e.prods.indexOf(p)+1,lx=(x1+x2)/2,ly=(y1+y2)/8+c*.75;
-    return '<path d="M '+x1+' '+y1+' C '+x1+' '+c+', '+x2+' '+c+', '+x2+' '+y2+'" marker-end="url(#ah)"/>'+
+    return '<path d="M '+x1+' '+y1+' C '+x1+' '+c+', '+x2+' '+c+', '+x2+' '+y2+'" marker-end="url(#'+marker+')"/>'+
       '<rect x="'+(lx-10)+'" y="'+(ly-10)+'" width="20" height="20" rx="6"/><text x="'+lx+'" y="'+(ly+4.5)+'" text-anchor="middle">'+nr+'</text>';
   }).join('');
 }
+function drawArrows(){drawArrowsIn('diag','arrowG','t','ah');drawArrowsIn('diag2','arrowG2','b','ah2');}
 window.addEventListener('resize',drawArrows);
 
 /* ================= Auswertung ================= */
