@@ -1,686 +1,903 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Klammern ausmultiplizieren – mit Pfeilen üben</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap" rel="stylesheet">
 <style>
-/* =========================================================
-   HEFTOPTIK
-   ========================================================= */
-
-.notebook-work,
-.notebook-summary {
-  position: relative;
-  background-color: #fffefb;
-
-  background-image:
-    linear-gradient(
-      to right,
-      rgba(95, 151, 192, 0.15) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      to bottom,
-      rgba(95, 151, 192, 0.15) 1px,
-      transparent 1px
-    );
-
-  background-size: 24px 24px;
-
-  border: 1px solid #d7e0e8;
-  border-radius: 8px;
-
-  padding: 28px 24px 28px 65px;
-
-  box-shadow:
-    0 5px 20px rgba(37, 54, 78, 0.08),
-    4px 4px 0 #ffffff,
-    5px 5px 0 #dce4eb;
+:root{
+  --paper:#F7F9FC; --grid:#DCE6F2; --ink:#1B2F6B; --text:#1E2533; --muted:#5B6578;
+  --card:#FFFFFF; --line:#C9D5E6; --ok:#217A4B; --okbg:#E3F4EA; --bad:#B3261E; --badbg:#FBE7E5;
+  --mark:#FFE873; --field:#FFFFFF; --info:#EAF1FB; --arrow:#147D92;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
-
-.notebook-work::before,
-.notebook-summary::before {
-  content: "";
-  position: absolute;
-
-  left: 45px;
-  top: 0;
-  bottom: 0;
-
-  width: 2px;
-
-  background: rgba(205, 89, 101, 0.55);
-
-  pointer-events: none;
-}
-
-.notebook-work .step {
-  border: none;
-  border-radius: 0;
-  background: transparent;
-
-  padding: 15px 0 20px;
-  margin: 0;
-
-  border-bottom: 1px dashed rgba(80, 118, 148, 0.28);
-}
-
-.notebook-work .step h3 {
-  font-size: 17px;
-  color: #456983;
-
-  margin: 5px 0 10px;
-}
-
-.notebook-work .math,
-.notebook-summary .math,
-.notebook-calculation {
-  color: #173f72;
-
-  font-family:
-    "Segoe Print",
-    "Bradley Hand",
-    "Comic Sans MS",
-    cursive;
-
-  font-size: 25px;
-  line-height: 1.9;
-}
-
-.notebook-work .products {
-  gap: 12px;
-}
-
-.notebook-work .product {
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px dashed #a9bfce;
-  border-radius: 5px;
-}
-
-.notebook-work input[type="text"] {
-  color: #173f72;
-
-  font-family:
-    "Segoe Print",
-    "Bradley Hand",
-    "Comic Sans MS",
-    cursive;
-
-  font-size: 23px;
-
-  background: rgba(255, 255, 255, 0.85);
-
-  border: none;
-  border-bottom: 2px solid #547d9c;
-  border-radius: 0;
-
-  padding: 7px 8px;
-}
-
-.notebook-work .notice {
-  background: rgba(255, 248, 220, 0.87);
-}
-
-.notebook-work .term {
-  background: #fffefb;
-}
-
-.notebook-work .term.selected {
-  background: #f8df9b;
-}
-
-.notebook-work #diagram {
-  background: transparent;
-}
-
-.notebook-work .feedback {
-  background: rgba(255, 255, 255, 0.75);
-}
-
-.notebook-heading {
-  color: #456983;
-  font-size: 16px;
-
-  margin-bottom: 14px;
-}
-
-.notebook-example-title {
-  color: #173f72;
-  font-size: 21px;
-
-  margin-bottom: 8px;
-}
-
-.notebook-arrow-scroll {
-  overflow-x: auto;
-  margin: 8px 0 12px;
-}
-
-.notebook-arrow-svg {
-  display: block;
-
-  width: 100%;
-  min-width: 460px;
-  max-width: 760px;
-
-  height: auto;
-}
-
-.notebook-calculation-line {
-  min-height: 45px;
-  padding-left: 8px;
-}
-
-.notebook-summary .status {
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-}
-
-.notebook-summary .muted {
-  font-family: Arial, sans-serif;
-}
-
-.notebook-open-note {
-  color: #805b22;
-  background: rgba(255, 245, 215, 0.9);
-
-  padding: 12px;
-  border-radius: 6px;
-}
-
-@media (max-width: 700px) {
-  .notebook-work,
-  .notebook-summary {
-    padding: 22px 14px 22px 38px;
-  }
-
-  .notebook-work::before,
-  .notebook-summary::before {
-    left: 25px;
-  }
-
-  .notebook-work .math,
-  .notebook-summary .math,
-  .notebook-calculation {
-    font-size: 21px;
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111827; --grid:#1C2638; --ink:#A9C1FF; --text:#E6EAF2; --muted:#9AA4B8;
+    --card:#172033; --line:#2C3A55; --ok:#5FD08E; --okbg:#173326; --bad:#FF8A80; --badbg:#3A1C1C;
+    --mark:#6B5A12; --field:#0F1726; --info:#1A2740; --arrow:#5CC8DC; color-scheme: dark;
   }
 }
-
-@media print {
-  .notebook-work,
-  .notebook-summary {
-    box-shadow: none;
-    break-inside: avoid;
-
-    print-color-adjust: exact;
-    -webkit-print-color-adjust: exact;
-  }
-
-  .notebook-arrow-scroll {
-    overflow: visible;
-  }
-
-  .notebook-arrow-svg {
-    min-width: 0;
-    max-width: 100%;
-  }
+:root[data-theme="dark"]{
+  --paper:#111827; --grid:#1C2638; --ink:#A9C1FF; --text:#E6EAF2; --muted:#9AA4B8;
+  --card:#172033; --line:#2C3A55; --ok:#5FD08E; --okbg:#173326; --bad:#FF8A80; --badbg:#3A1C1C;
+  --mark:#6B5A12; --field:#0F1726; --info:#1A2740; --arrow:#5CC8DC; color-scheme: dark;
 }
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; color:var(--text); font-family:"Atkinson Hyperlegible",system-ui,"Segoe UI",Arial,sans-serif;
+  font-size:1.0625rem; line-height:1.5;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.wrap{max-width:60rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1rem;margin:1rem 0 2rem}
+h1{font-family:Fraunces,Georgia,serif;font-weight:800;color:var(--ink);font-size:clamp(2.1rem,6vw,3.5rem);line-height:1.02;margin:0;letter-spacing:-.01em}
+h1 .arc{display:inline-block;animation:hop 1.2s ease-out .3s 1;color:var(--arrow)}
+@keyframes hop{0%{transform:translateY(0)}30%{transform:translateY(-.3em) rotate(-8deg)}60%{transform:translateY(0)}100%{transform:none}}
+@media (prefers-reduced-motion: reduce){h1 .arc{animation:none}}
+.sub{color:var(--muted);margin:.5rem 0 0;max-width:40rem}
+.top{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.score{font-weight:700;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:999px;padding:.35rem .9rem}
+button{font:inherit;cursor:pointer;border-radius:.5rem;border:2px solid var(--ink);background:var(--ink);color:var(--paper);padding:.45rem .9rem;font-weight:700}
+button.ghost{background:transparent;color:var(--ink)}
+button:disabled{cursor:default;opacity:.45}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+button.mini{font-size:.85rem;padding:.1rem .55rem;background:transparent;color:var(--ink);border-width:1.5px}
+section{background:var(--card);border:2px solid var(--line);border-radius:.75rem;padding:1.25rem 1.25rem 1rem;margin:0 0 1.5rem}
+.head{display:flex;gap:.8rem;align-items:baseline;flex-wrap:wrap}
+.num{font-family:Fraunces,Georgia,serif;font-weight:800;font-size:1.6rem;color:var(--ink);min-width:1.4em}
+h2{font-size:1.15rem;margin:0}
+h3{font-size:1.05rem;margin:0 0 .4rem;color:var(--ink)}
+sup{font-size:.68em;margin-left:.04em}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.8em;line-height:1.1;margin:0 .1em}
+.fr>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .2em}
+.fr>span:last-child{padding:0 .2em}
+input{font:inherit;font-size:1.1rem;color:var(--text);background:var(--field);border:2px solid var(--line);border-radius:.4rem;padding:.2rem .4rem}
+input.ok{border-color:var(--ok);background:var(--okbg)}
+input.bad{border-color:var(--bad);background:var(--badbg)}
+.actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.6rem}
+.res{color:var(--muted);font-weight:700}
+.hint{color:var(--muted);font-size:.95rem;margin:.4rem 0 0}
+.msg{margin:.6rem 0 0;font-size:.97rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.msg.ok{color:var(--ok);font-weight:700}.msg.bad{color:var(--bad)}.msg.shown{color:var(--muted)}
+.prev{color:var(--muted);font-size:1.1rem}
+.prev b{color:var(--text);font-weight:400}
+
+/* So geht's */
+details.info{background:var(--info);border:0;border-left:6px solid var(--ink);border-radius:.5rem;padding:.7rem 1rem;margin:0 0 1.5rem}
+details.info summary{cursor:pointer;font-weight:700;color:var(--ink)}
+details.info p{margin:.4rem 0}
+.rule{font-size:1.1rem}
+
+/* Navigation durch die Beispiele */
+.nav{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.dots{display:flex;gap:.35rem;flex-wrap:wrap}
+.dot{width:2.3rem;height:2.3rem;border-radius:50%;padding:0;font-weight:700;background:var(--field);color:var(--ink);border:2px solid var(--line)}
+.dot.started{background:var(--info)}
+.dot.done{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.dot.shown{border-style:dashed}
+.dot.cur{border-color:var(--ink);box-shadow:0 0 0 3px var(--mark)}
+.round{margin-left:auto;color:var(--muted);font-size:.9rem;border:1.5px solid var(--line);border-radius:999px;padding:.1rem .6rem}
+
+/* Rechnung mit Pfeilen */
+.diagram{overflow-x:auto;margin:1rem 0 .5rem;border:2px dashed var(--line);border-radius:.6rem;background:var(--paper)}
+.diagInner{position:relative;display:inline-block;min-width:100%;padding:0 1rem .6rem}
+svg.arrows{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+svg.arrows #arrowG path{fill:none;stroke:var(--arrow);stroke-width:2.5}
+svg.arrows marker path{fill:var(--arrow);stroke:none}
+svg.arrows rect{fill:var(--card);stroke:var(--arrow);stroke-width:1}
+svg.arrows text{fill:var(--ink);font-size:13px;font-weight:700;font-family:"Atkinson Hyperlegible",system-ui,sans-serif}
+.exprWrap{display:flex;align-items:center;gap:.1rem;font-size:1.65rem;white-space:nowrap}
+.paren,.dotop{color:var(--muted);padding:0 .1rem}
+.term{font:inherit;font-weight:400;font-size:1.65rem;background:transparent;color:var(--text);border:2px solid transparent;border-radius:.45rem;padding:0 .3rem;line-height:1.35}
+.term.clickable{border-color:var(--line);border-style:dashed;cursor:pointer}
+.term.clickable:hover{background:var(--info)}
+.term.sel{background:var(--mark);border-color:var(--ink);border-style:solid;color:var(--text)}
+.term:disabled{opacity:1;cursor:default}
+.nb{font-size:1.45rem;color:var(--ink);white-space:nowrap;padding-left:.2rem}
+.nb div{margin:.15rem 0}
+.nb .fin{font-weight:700}
+
+/* Schritte */
+.stepcard{border:2px solid var(--line);border-radius:.6rem;padding:.8rem 1rem;margin-top:1rem}
+.stepcard.active{border-color:var(--ink)}
+.stepcard.done{border-color:var(--ok)}
+.stepcard p{margin:.3rem 0}
+.donetxt{color:var(--ok);font-weight:700}
+.prodrow{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin:.45rem 0;font-size:1.2rem}
+.badge{display:inline-flex;width:1.7rem;height:1.7rem;border-radius:.5rem;background:var(--info);color:var(--ink);font-weight:700;align-items:center;justify-content:center;font-size:.9rem;border:1.5px solid var(--arrow)}
+.prodrow input{width:8rem}
+.prodrow input.fac{width:5.5rem;text-align:center}
+.rowmsg{flex-basis:100%;padding-left:2.2rem;font-size:.92rem;color:var(--bad)}
+.rowmsg:empty{display:none}
+.finline{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;font-size:1.2rem;margin:.4rem 0}
+.finline input{width:20rem;max-width:100%}
+.donebox{margin-top:1rem;padding:.8rem 1rem;border-radius:.6rem;background:var(--okbg);border:2px solid var(--ok);display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+.donebox b{color:var(--ok)}
+
+/* Start & Auswertung */
+.startcard{border-color:var(--ink);border-width:3px}
+.startcard h2{font-family:Fraunces,Georgia,serif;font-size:1.5rem;color:var(--ink)}
+#pname{width:16rem;max-width:100%;font-size:1.15rem}
+#startDone{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.who{font-weight:700;color:var(--ink);display:inline-flex;align-items:center;gap:.4rem;font-size:1.1rem}
+#codeAsk{margin-top:1rem}
+#codeAsk summary{cursor:pointer;color:var(--ink);font-weight:700}
+#pcode{width:17rem;max-width:100%;font-family:ui-monospace,Consolas,"Courier New",monospace;text-transform:uppercase;letter-spacing:.05em}
+#pnameErr{color:var(--bad);margin:.6rem 0 0}
+#startMsg{flex-basis:100%;margin:0;color:var(--ok);font-weight:700}
+#startMsg:empty{display:none}
+#codeBox{flex-basis:100%;background:var(--info);border-left:6px solid var(--ink);border-radius:.5rem;padding:.7rem 1rem}
+#codeBox p{margin:.3rem 0}
+.code{font-family:ui-monospace,Consolas,"Courier New",monospace;font-size:1.35rem;font-weight:700;letter-spacing:.06em;color:var(--ink);word-break:break-all}
+.levels{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden;margin-top:1rem}
+.levels button{border:0;border-radius:0;background:transparent;color:var(--ink);padding:.45rem 1.1rem}
+.levels button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.finish{display:flex;justify-content:center;margin:0 0 1.5rem}
+#summary{border-color:var(--ink);border-width:3px}
+#summary .who{margin:.4rem 0 0;color:var(--muted)}
+#summary .who b{color:var(--text)}
+.summsg{font-size:1.2rem;font-weight:700;color:var(--ink);margin:.6rem 0 1rem}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:30rem}
+th,td{text-align:left;padding:.4rem .6rem;border-bottom:1px solid var(--line)}
+td.c,th.c{text-align:center}
+tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--ink)}
+body.locked #main{opacity:.35;filter:grayscale(.4);pointer-events:none;user-select:none}
+
+/* Eingabehilfe */
+#pad{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:3px solid var(--ink);
+  padding:.5rem .6rem calc(.5rem + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 16px rgba(27,47,107,.15)}
+#pad .padtop{display:flex;align-items:center;gap:.5rem;max-width:34rem;margin:0 auto .4rem;color:var(--muted);font-size:.9rem}
+#pad .padtop span{margin-right:auto;font-weight:700;color:var(--ink)}
+#pad .keys{display:grid;grid-template-columns:repeat(7,1fr);gap:.3rem;max-width:34rem;margin:0 auto}
+#pad .keys button{padding:.55rem 0;font-size:1.15rem;font-weight:700;background:var(--field);color:var(--text);border:2px solid var(--line);border-radius:.45rem;touch-action:manipulation}
+#pad .keys button.var{font-style:italic;font-family:Georgia,serif}
+#pad .keys button.op{background:var(--info)}
+#pad .keys button.span2{grid-column:span 2}
+#pad .keys button.go{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+body.padon .wrap{padding-bottom:20rem}
 </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Klammern ausmultiplizieren <span class="arc" aria-hidden="true">⤻</span></h1>
+      <p class="sub">Setze die Pfeile, rechne jedes Produkt aus und fasse zusammen. Mit ◀ ▶ oder den Nummern kannst du zwischen den Beispielen hin- und herspringen.</p>
+      <div class="levels" role="group" aria-label="Niveau">
+        <button type="button" data-level="std" aria-pressed="true">Standard</button>
+        <button type="button" data-level="ahs" aria-pressed="false">Standard AHS</button>
+      </div>
+    </div>
+    <div class="top"><span class="score" id="score">0 von 6 fertig</span></div>
+  </header>
+
+  <section id="start" class="startcard">
+    <div id="startAsk">
+      <h2>Wie heißt du?</h2>
+      <p class="hint">Gib zuerst deinen Namen ein. Er steht am Ende in deiner Auswertung. Hast du auf diesem Gerät schon geübt, machst du automatisch dort weiter, wo du aufgehört hast.</p>
+      <div class="actions"><input id="pname" placeholder="Vor- und Nachname" autocomplete="name" aria-label="Dein Name"><button id="startBtn" type="button">Los geht’s</button></div>
+      <details id="codeAsk">
+        <summary>Auf einem anderen Gerät angefangen? Code eingeben</summary>
+        <p class="hint">Schreib oben deinen Namen genau wie auf dem anderen Gerät und tippe hier den Code ein.</p>
+        <div class="actions"><input id="pcode" placeholder="z. B. K7MP-2XQ9" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Code vom anderen Gerät"></div>
+      </details>
+      <p id="pnameErr" hidden></p>
+    </div>
+    <div id="startDone" hidden>
+      <span class="who">👤 <b id="pnameShow"></b></span>
+      <button type="button" class="mini" id="codeBtn" aria-expanded="false">Auf anderem Gerät weitermachen</button>
+      <p id="startMsg" aria-live="polite"></p>
+      <div id="codeBox" hidden>
+        <p>Dein Code: <span class="code" id="codeShow"></span> <button type="button" class="mini" id="codeCopy">Kopieren</button></p>
+        <p class="hint">Öffne die Übung auf dem anderen Gerät, gib <b>genau denselben Namen</b> ein und tippe diesen Code ein. Der Code ändert sich, während du weiterarbeitest – schreib ihn dir erst auf, wenn du hier aufhörst.</p>
+      </div>
+    </div>
+  </section>
+
+  <div id="main">
+
+    <section id="exCard"></section>
+
+    <details class="info" id="howto" open>
+      <summary>So geht’s</summary>
+      <p class="rule">(<i>x</i> + 2) · (<i>x</i> + 3) = <i>x</i> · <i>x</i> + <i>x</i> · 3 + 2 · <i>x</i> + 2 · 3 = <i>x</i><sup>2</sup> + 3<i>x</i> + 2<i>x</i> + 6 = <i>x</i><sup>2</sup> + 5<i>x</i> + 6</p>
+      <p><b>Jedes</b> Glied der ersten Klammer wird mit <b>jedem</b> Glied der zweiten Klammer multipliziert – jeder Pfeil ist ein Produkt.</p>
+      <p>Das <b>Vorzeichen gehört zum Glied</b>: plus · minus = minus, minus · minus = plus.</p>
+      <p>Vorzahlen werden multipliziert, Hochzahlen gleicher Variablen addiert: 3<i>x</i> · 2<i>x</i> = 6<i>x</i><sup>2</sup>.</p>
+      <p class="hint">Eingabe: Hochzahlen mit ^ oder ², z. B. x^2 oder x². Den Malpunkt kannst du weglassen: 6ab.</p>
+    </details>
+
+    <div class="finish"><button class="ghost" id="showSum" type="button">Auswertung anzeigen</button></div>
+
+    <section id="summary" hidden>
+      <div class="head"><h2 id="sumTitle">Auswertung</h2></div>
+      <p id="sumWho" class="who"></p>
+      <p id="sumMsg" class="summsg"></p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Beispiel</th><th>Ergebnis</th><th class="c">Fehlversuche</th></tr></thead>
+        <tbody id="sumBody"></tbody>
+        <tfoot id="sumFoot"></tfoot>
+      </table></div>
+      <div class="actions" style="margin-top:1rem"><button type="button" id="newRound2">Neue Runde mit neuen Beispielen</button></div>
+    </section>
+  </div>
+</div>
+
+<div id="pad" hidden role="group" aria-label="Eingabehilfe">
+  <div class="padtop"><span>Eingabehilfe</span>
+    <button type="button" class="mini" id="padSys">Handy-Tastatur einblenden</button>
+    <button type="button" class="mini" id="padHide" aria-label="Eingabehilfe schließen">✕</button>
+  </div>
+  <div class="keys">
+    <button type="button" data-ins="7">7</button><button type="button" data-ins="8">8</button><button type="button" data-ins="9">9</button>
+    <button type="button" class="var" data-var="0">x</button><button type="button" class="var" data-var="1">y</button><button type="button" class="var" data-var="2">a</button><button type="button" class="var" data-var="3">b</button>
+    <button type="button" data-ins="4">4</button><button type="button" data-ins="5">5</button><button type="button" data-ins="6">6</button>
+    <button type="button" class="op" data-ins="²" aria-label="hoch 2">□²</button><button type="button" class="op" data-ins="³" aria-label="hoch 3">□³</button><button type="button" class="op" data-ins="^" aria-label="hoch beliebige Zahl">□ⁿ</button><button type="button" class="op" data-act="del" aria-label="Löschen">⌫</button>
+    <button type="button" data-ins="1">1</button><button type="button" data-ins="2">2</button><button type="button" data-ins="3">3</button>
+    <button type="button" class="op" data-ins="+">+</button><button type="button" class="op" data-ins="-" aria-label="minus">−</button><button type="button" class="op" data-ins="·" aria-label="mal">·</button><button type="button" class="op" data-ins="/" aria-label="Bruchstrich">/</button>
+    <button type="button" data-ins="0">0</button><button type="button" class="op" data-ins="," aria-label="Komma">,</button>
+    <button type="button" class="op" data-act="clr" aria-label="Feld leeren">C</button>
+    <button type="button" class="op span2" data-act="left" aria-label="Cursor nach links">◀</button>
+    <button type="button" class="go span2" data-act="ok">✓ fertig</button>
+  </div>
+</div>
 
 <script>
-/* =========================================================
-   HEFTANSICHT UND PFEILE IN DER ZUSAMMENFASSUNG
-   Diesen Block nach den bisherigen Skripten einfügen.
-   ========================================================= */
+/* ================= Zufall (reproduzierbar) ================= */
+let RNG=Math.random;
+const rnd=(a,b)=>a+Math.floor(RNG()*(b-a+1));
+const sg=()=>RNG()<.5?1:-1;
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
+const $=id=>document.getElementById(id);
 
-let notebookDrawingNumber = 0;
+/* ================= Brüche ================= */
+const MINUS='−',B=x=>BigInt(x);
+function gcd(a,b){a=a<0n?-a:a;b=b<0n?-b:b;while(b){[a,b]=[b,a%b];}return a;}
+function rat(n,d=1n){if(d<0n){n=-n;d=-d;}const g=gcd(n,d)||1n;return {n:n/g,d:d/g};}
+const ri=k=>rat(B(k));
+const rneg=a=>({n:-a.n,d:a.d});
+const radd=(a,b)=>rat(a.n*b.d+b.n*a.d,a.d*b.d);
+const rmul=(a,b)=>rat(a.n*b.n,a.d*b.d);
+const rpow=(r,e)=>rat(r.n**B(e),r.d**B(e));
+const req=(a,b)=>a.n*b.d===b.n*a.d;
+const isZero=a=>a.n===0n;
+const isOne=a=>a.n===1n&&a.d===1n;
+const fracH=(n,d)=>'<span class="fr"><span>'+n+'</span><span>'+d+'</span></span>';
 
-/*
-  Erzeugt eine eigenständige Zeichnung.
-  Die Pfeile entsprechen den gespeicherten Verbindungen.
-*/
-function notebookArrowDrawing(exerciseIndex, savedArrows) {
-  const exercise = EXERCISES[exerciseIndex];
-  const expectedProducts = products(exercise);
+/* ================= Glieder (Monome) ================= */
+const V=k=>'<i>'+k+'</i>';
+const sup=e=>e>1?'<sup>'+e+'</sup>':'';
+const mono=(c,v)=>({c:typeof c==='number'?ri(c):c,v:v||{}});
+const mkey=m=>Object.keys(m.v).filter(k=>m.v[k]>0).sort().map(k=>k+(m.v[k]>1?m.v[k]:'')).join('');
+const deg=m=>Object.values(m.v).reduce((s,e)=>s+e,0);
+function cmpTerm(a,b){const d=deg(b)-deg(a);if(d)return d;const ka=mkey(a),kb=mkey(b);return ka<kb?-1:ka>kb?1:0;}
+function mulMono(a,b){const m=Object.assign({},a.v);Object.keys(b.v).forEach(k=>{m[k]=(m[k]||0)+b.v[k];});
+  const v={};Object.keys(m).sort().forEach(k=>{if(m[k]>0)v[k]=m[k];});return {c:rmul(a.c,b.c),v};}
+function normalize(ms){const map=new Map();
+  ms.forEach(t=>{const k=mkey(t),o=map.get(k);if(o)o.c=radd(o.c,t.c);else map.set(k,{c:t.c,v:Object.assign({},t.v)});});
+  return [...map.values()].filter(t=>!isZero(t.c)).sort(cmpTerm);}
+function sameNorm(a,b){return a.length===b.length&&a.every((t,i)=>mkey(t)===mkey(b[i])&&req(t.c,b[i].c));}
 
-  const drawingId = "notebookArrow" + (++notebookDrawingNumber);
+function coefH(a){return a.d===1n?String(a.n):fracH(a.n,a.d);}
+function varsH(m){return Object.keys(m.v).sort().map(k=>V(k)+sup(m.v[k])).join('');}
+function absH(m){const a=m.c.n<0n?rneg(m.c):m.c,vp=varsH(m);if(!vp)return coefH(a);if(isOne(a))return vp;return coefH(a)+vp;}
+function termH(m,first){const neg=m.c.n<0n;return first?(neg?MINUS:'')+absH(m):(neg?'− ':'+ ')+absH(m);}
+function polyH(ms){return ms.length?ms.map((m,i)=>termH(m,!i)).join(' '):'0';}
+function facH(m){return m.c.n<0n?'('+MINUS+absH(m)+')':absH(m);}
+function exH(d){const one=d.left.length===1,L=one&&d.left[0].c.n>=0n?polyH(d.left):'('+polyH(d.left)+')';return L+' · ('+polyH(d.right)+')';}
+function cPlain(a){return a.d===1n?String(a.n):a.n+'/'+a.d;}
+function polyPlain(ms){if(!ms.length)return '0';return ms.map((m,i)=>{const neg=m.c.n<0n,a=neg?rneg(m.c):m.c,ks=Object.keys(m.v).sort();
+  const s=((!ks.length||!isOne(a))?cPlain(a):'')+ks.map(k=>k+(m.v[k]>1?'^'+m.v[k]:'')).join('');
+  return i?(neg?' - ':' + ')+s:(neg?'-':'')+s;}).join('');}
 
-  const width = 680;
-  const height = 205;
-
-  const baseline = 166;
-  const arrowEnd = 139;
-  const boxTop = 142;
-  const boxHeight = 44;
-  const boxWidth = 84;
-
-  let leftPositions;
-  let rightPositions;
-  let multiplicationX;
-  let leftBracketX = null;
-  let leftClosingX = null;
-  let rightBracketX;
-  let rightClosingX;
-
-  if (exercise.left.length === 1) {
-    leftPositions = [145];
-    rightPositions = [365, 525];
-
-    multiplicationX = 252;
-    rightBracketX = 300;
-    rightClosingX = 590;
-  } else {
-    leftPositions = [95, 225];
-    rightPositions = [435, 565];
-
-    leftBracketX = 32;
-    leftClosingX = 288;
-
-    multiplicationX = 330;
-    rightBracketX = 370;
-    rightClosingX = 630;
-  }
-
-  function termText(term) {
-    return display(
-      term.startsWith("-") ? "(" + term + ")" : term
-    );
-  }
-
-  function termBox(term, x) {
-    return `
-      <rect
-        x="${x - boxWidth / 2}"
-        y="${boxTop}"
-        width="${boxWidth}"
-        height="${boxHeight}"
-        rx="7"
-        fill="#fffefb"
-        stroke="#8daac1"
-        stroke-width="1.5"
-      ></rect>
-
-      <text
-        x="${x}"
-        y="${baseline}"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        fill="#173f72"
-        font-size="25"
-        font-family="Segoe Print, Comic Sans MS, cursive"
-      >
-        ${termText(term)}
-      </text>
-    `;
-  }
-
-  const symbols = [];
-
-  if (exercise.left.length > 1) {
-    symbols.push(`
-      <text x="${leftBracketX}" y="${baseline}"
-        text-anchor="middle" dominant-baseline="middle"
-        font-size="34" fill="#173f72">(</text>
-
-      <text x="${(leftPositions[0] + leftPositions[1]) / 2}"
-        y="${baseline}" text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="26" fill="#173f72">+</text>
-
-      <text x="${leftClosingX}" y="${baseline}"
-        text-anchor="middle" dominant-baseline="middle"
-        font-size="34" fill="#173f72">)</text>
-    `);
-  }
-
-  symbols.push(`
-    <text x="${multiplicationX}" y="${baseline}"
-      text-anchor="middle" dominant-baseline="middle"
-      font-size="30" fill="#173f72">·</text>
-
-    <text x="${rightBracketX}" y="${baseline}"
-      text-anchor="middle" dominant-baseline="middle"
-      font-size="34" fill="#173f72">(</text>
-
-    <text x="${(rightPositions[0] + rightPositions[1]) / 2}"
-      y="${baseline}" text-anchor="middle"
-      dominant-baseline="middle"
-      font-size="26" fill="#173f72">+</text>
-
-    <text x="${rightClosingX}" y="${baseline}"
-      text-anchor="middle" dominant-baseline="middle"
-      font-size="34" fill="#173f72">)</text>
-  `);
-
-  const uniqueArrows = [
-    ...new Set(Array.isArray(savedArrows) ? savedArrows : [])
-  ];
-
-  const paths = uniqueArrows.map(pair => {
-    const productIndex =
-      expectedProducts.findIndex(product => product.key === pair);
-
-    if (productIndex < 0) return "";
-
-    const [leftIndex, rightIndex] = pair.split(",").map(Number);
-
-    const x1 = leftPositions[leftIndex];
-    const x2 = rightPositions[rightIndex];
-
-    const controlY = 4 + productIndex * 24;
-
-    const labelX = (x1 + x2) / 2;
-    const labelY = arrowEnd / 4 + controlY * 0.75;
-
-    return `
-      <path
-        d="M ${x1} ${arrowEnd}
-           C ${x1} ${controlY},
-             ${x2} ${controlY},
-             ${x2} ${arrowEnd}"
-        fill="none"
-        stroke="#147d92"
-        stroke-width="2.5"
-        marker-end="url(#${drawingId})"
-      ></path>
-
-      <rect
-        x="${labelX - 11}"
-        y="${labelY - 12}"
-        width="22"
-        height="22"
-        rx="8"
-        fill="#fffefb"
-      ></rect>
-
-      <text
-        x="${labelX}"
-        y="${labelY + 3}"
-        text-anchor="middle"
-        font-size="14"
-        fill="#173f72"
-        font-family="Arial, sans-serif"
-      >
-        ${productIndex + 1}
-      </text>
-    `;
-  }).join("");
-
-  return `
-    <div class="notebook-arrow-scroll">
-      <svg
-        class="notebook-arrow-svg"
-        viewBox="0 0 ${width} ${height}"
-        role="img"
-        aria-label="${escapeHTML(
-          source(exercise) + " mit " +
-          uniqueArrows.length + " gespeicherten Verteilungspfeilen"
-        )}"
-      >
-        <defs>
-          <marker
-            id="${drawingId}"
-            markerWidth="8"
-            markerHeight="8"
-            refX="7"
-            refY="4"
-            orient="auto"
-          >
-            <path
-              d="M0 0 L0 8 L8 4 Z"
-              fill="#147d92"
-            ></path>
-          </marker>
-        </defs>
-
-        ${paths}
-
-        ${exercise.left.map((term, index) =>
-          termBox(term, leftPositions[index])
-        ).join("")}
-
-        ${exercise.right.map((term, index) =>
-          termBox(term, rightPositions[index])
-        ).join("")}
-
-        ${symbols.join("")}
-      </svg>
-    </div>
-  `;
-}
-
-/*
-  Vollständiger Rechenweg mit den gespeicherten Pfeilen.
-  Nur bereits richtig gelöste Beispiele erhalten alle Lösungszeilen.
-*/
-function notebookCompletedCalculation(index) {
-  const exercise = EXERCISES[index];
-  const task = state.tasks[index];
-
-  const list = products(exercise);
-
-  const multiplicationLine =
-    typeof task.multiplicationLine === "string" &&
-    task.multiplicationLine.trim()
-      ? task.multiplicationLine.replace(/^\s*=\s*/, "")
-      : list.map(product =>
-          "(" + product.left + ") · (" + product.right + ")"
-        ).join(" + ");
-
-  return `
-    ${notebookArrowDrawing(index, task.arrows)}
-
-    <div class="notebook-calculation">
-      <div class="notebook-calculation-line">
-        = ${display(multiplicationLine)}
-      </div>
-
-      <div class="notebook-calculation-line">
-        = ${display(
-          joinTerms(list.map(product => product.result))
-        )}
-      </div>
-
-      <div class="notebook-calculation-line">
-        = ${display(finalResult(exercise))}
-      </div>
-    </div>
-  `;
-}
-
-/*
-  Die vorhandene Übungsansicht bleibt funktionsfähig.
-  Anschließend wird die Heftgestaltung ergänzt.
-*/
-const renderExerciseBeforeNotebook = renderExercise;
-
-renderExercise = function () {
-  renderExerciseBeforeNotebook();
-
-  if (!state || state.overview) return;
-
-  const firstStep = document.querySelector("#app .step");
-
-  if (!firstStep) return;
-
-  const workCard = firstStep.closest(".card");
-
-  if (!workCard) return;
-
-  workCard.classList.add("notebook-work");
-
-  const heading = document.createElement("div");
-  heading.className = "notebook-heading";
-  heading.textContent =
-    "Mathematikheft · " + state.name +
-    " · Beispiel " + (state.current + 1);
-
-  workCard.insertBefore(heading, workCard.firstChild);
-
-  const task = state.tasks[state.current];
-
-  /*
-    Im Hefteintrag die bisherige Rechnung durch
-    Rechnung plus tatsächliche Verteilungspfeile ersetzen.
-  */
-  if (task.step === 4) {
-    const notices = workCard.querySelectorAll(".notice");
-
-    for (const notice of notices) {
-      const copyCheckbox =
-        notice.querySelector('input[type="checkbox"]');
-
-      if (!copyCheckbox) continue;
-
-      const existingCalculation = notice.querySelector(".math");
-
-      if (existingCalculation) {
-        const replacement = document.createElement("div");
-
-        replacement.innerHTML =
-          notebookCompletedCalculation(state.current);
-
-        existingCalculation.replaceWith(replacement);
-      }
+/* Eingabe lesen, z. B. 3x^2 - 2xy + 5 (gleichartige Glieder sind erlaubt) */
+function numRat(s){s=s.replace('.',',');let m=s.match(/^(\d+)\/(\d+)$/);if(m)return +m[2]?rat(B(m[1]),B(m[2])):null;
+  m=s.match(/^(\d+)(?:,(\d+))?$/);if(!m)return null;const f=m[2]||'';return rat(B(m[1]+f),10n**B(f.length));}
+function parseTerm(str){
+  const s=str.replace(/[−–—]/g,'-').replace(/²/g,'^2').replace(/³/g,'^3').replace(/⁴/g,'^4').replace(/\s+/g,'').replace(/[·×•]/g,'*').toLowerCase();
+  if(!s)return {err:'Schreibe einen Term.'};
+  if(/[()\[\]]/.test(s))return {err:'Schreibe ohne Klammern.'};
+  if(s.includes('='))return {err:'Schreibe nur den Term, ohne =.'};
+  const chunks=s.match(/[+-]?[^+-]+/g)||[];
+  if(chunks.join('')!==s)return {err:'Zwischen zwei Gliedern steht genau ein + oder −.'};
+  const ms=[];
+  for(const ch of chunks){
+    const neg=ch[0]==='-',body=/^[+-]/.test(ch)?ch.slice(1):ch;
+    if(!body.replace(/\*/g,''))return {err:'Nach einem Rechenzeichen fehlt ein Glied.'};
+    let c=ri(neg?-1:1),last=null,pos=0;const v={};
+    const re=/(\d+(?:[.,]\d+)?(?:\/\d+)?)|([a-z])|(\^\d+)|(\*)/y;
+    while(pos<body.length){
+      re.lastIndex=pos;const m=re.exec(body);
+      if(!m)return {err:'Das Zeichen „'+body[pos]+'“ kann ich nicht lesen.'};
+      pos=re.lastIndex;
+      if(m[1]){const r=numRat(m[1]);if(!r)return {err:'Die Zahl '+m[1]+' kann ich nicht lesen.'};c=rmul(c,r);last={n:r};}
+      else if(m[2]){v[m[2]]=(v[m[2]]||0)+1;last={k:m[2]};}
+      else if(m[3]){const e=+m[3].slice(1);if(!last)return {err:'Vor ^ muss eine Zahl oder eine Variable stehen.'};
+        if(e<1)return {err:'Verwende Hochzahlen ab 1.'};
+        if(last.k)v[last.k]+=e-1;else c=rmul(c,rpow(last.n,e-1));last=null;}
     }
+    ms.push({c,v});
   }
+  if(ms.some(m=>isZero(m.c)))return {err:'Ein Glied mit der Vorzahl 0 fällt weg – lass es einfach weg.'};
+  return {ms};
+}
+
+/* ================= Beispiele erzeugen ================= */
+const N_EX=6,DONE=6;  /* Schritte: 0 Pfeile, 1 Produkte anschreiben, 2 ausrechnen, 3 Zeile anschreiben, 4 ankreuzen, 5 zusammenfassen, 6 fertig */
+const X1=c=>mono(c,{x:1}),X2=c=>mono(c,{x:2}),K=c=>mono(c);
+const GEN={
+  std:[
+    ()=>({left:[K(rnd(2,9))],right:[X1(1),K(sg()*rnd(1,9))]}),
+    ()=>({left:[X1(rnd(2,6))],right:[X1(rnd(1,5)),K(sg()*rnd(1,9))]}),
+    ()=>({left:[K(-rnd(2,6))],right:[X1(rnd(1,4)),K(sg()*rnd(1,9))]}),
+    ()=>({left:[X1(1),K(rnd(1,9))],right:[X1(1),K(rnd(1,9))]}),
+    ()=>{const a=rnd(1,9),b=rnd(1,9);return {left:[X1(1),K(a)],right:[X1(1),K(-b)]};},
+    ()=>({left:[X1(rnd(2,5)),K(rnd(1,9))],right:[X1(1),K(sg()*rnd(1,9))]})
+  ],
+  ahs:[
+    ()=>({left:[X1(sg()*rnd(2,5))],right:[X2(rnd(1,4)),X1(sg()*rnd(1,9)),K(sg()*rnd(1,9))]}),
+    ()=>({left:[X1(rnd(2,5)),K(sg()*rnd(1,9))],right:[X1(rnd(2,5)),K(sg()*rnd(1,9))]}),
+    ()=>{const a=rnd(1,4),k=rnd(1,9);return {left:[X1(a),K(k)],right:[X1(a),K(-k)]};},
+    ()=>({left:[mono(rnd(1,5),{a:1}),mono(sg()*rnd(1,5),{b:1})],right:[mono(rnd(1,5),{a:1}),mono(sg()*rnd(1,5),{b:1})]}),
+    ()=>({left:[X1(1),K(sg()*rnd(1,6))],right:[X2(1),X1(sg()*rnd(1,6)),K(sg()*rnd(1,9))]}),
+    ()=>{const a=rnd(2,5),b=rnd(1,9);return {left:[X1(a),K(-b)],right:[X1(a),K(-b)]};}
+  ]
 };
+function mixSeed(seed,lvl,round){return (Math.imul(seed^0x9E3779B9,0x85EBCA6B)^Math.imul(lvl==='ahs'?2:1,0xC2B2AE35)^Math.imul(round,0x27D4EB2F))>>>0;}
+function genRound(lvl,seed,round){
+  const old=RNG;RNG=mulberry32(mixSeed(seed,lvl,round));
+  try{return GEN[lvl].map(f=>f());}finally{RNG=old;}
+}
+function newEx(data){
+  const prods=[];
+  data.left.forEach((a,i)=>data.right.forEach((b,j)=>prods.push({key:i+','+j,i,j,a,b,res:mulMono(a,b)})));
+  return {data,prods,expected:normalize(prods.map(p=>p.res)),step:0,err:0,shown:false,arrows:[],sel:null,
+    facVals:prods.map(()=>['','']),facMarks:prods.map(()=>null),facHints:prods.map(()=>''),
+    prodVals:prods.map(()=>''),prodMarks:prods.map(()=>null),prodHints:prods.map(()=>''),lineVal:'',decision:null,comb:new Set(prods.map(p=>mkey(p.res))).size<prods.length,finalVal:'',msg:{},tries:[0,0,0,0,0,0]};
+}
 
-/*
-  In der Abschlussübersicht bekommt jedes Beispiel
-  einen eigenen Heftausschnitt.
+/* ================= Zustand ================= */
+const LEVELS={std:'Standard',ahs:'Standard AHS'};
+const G={std:{seed:Math.floor(Math.random()*65536),round:1,cur:0,ex:[]},ahs:{seed:Math.floor(Math.random()*65536),round:1,cur:0,ex:[]}};
+let level=location.hash==='#ahs'?'ahs':'std',PUPIL='',restoring=false,summaryRequested=false;
+function makeRound(lvl){const g=G[lvl];g.ex=genRound(lvl,g.seed,g.round).map(newEx);g.cur=0;}
+const curG=()=>G[level];
+const curEx=()=>curG().ex[curG().cur];
 
-  Nicht bearbeitete Beispiele werden deutlich markiert.
-  Bei begonnenen Beispielen erscheinen nur die bisher
-  gespeicherten Pfeile, keine vorweggenommenen Lösungen.
-*/
-const renderOverviewBeforeNotebook = renderOverview;
+/* ================= Prüfen ================= */
+function fail(e,s,text){e.err++;e.tries[s]++;e.msg[s]={kind:'bad',text:text+(e.tries[s]===1?' Versuch es nochmal!':''),offer:e.tries[s]>=2};}
+function hint(e,s,text){e.msg[s]={kind:'bad',text,offer:e.tries[s]>=2};}
+function advance(e,s,text){e.step=s+1;e.msg[s]={kind:'ok',text};}
 
-renderOverview = function () {
-  renderOverviewBeforeNotebook();
+function check0(e){
+  const miss=e.prods.length-e.arrows.length;
+  if(!miss){advance(e,0,'Richtig! Alle Pfeile sind gesetzt.');return true;}
+  fail(e,0,'Es fehl'+(miss===1?'t noch 1 Pfeil':'en noch '+miss+' Pfeile')+'. Jedes Glied der ersten Klammer wird mit jedem Glied der zweiten Klammer multipliziert.');
+  return false;
+}
+function judgeProd(p,s){
+  if(!s.trim())return {empty:true,text:''};
+  const q=parseTerm(s);if(q.err)return {fmt:true,text:q.err};
+  const n=normalize(q.ms);
+  if(n.length!==1)return {text:n.length?'Ein Produkt ergibt genau ein Glied.':'Das Produkt ist nicht 0.'};
+  const m=n[0],x=p.res;
+  if(mkey(m)===mkey(x)){
+    if(req(m.c,x.c))return {ok:true};
+    if(req(rneg(m.c),x.c))return {text:'Kontrolliere das Vorzeichen: plus · minus = minus, minus · minus = plus.'};
+    const sum=radd(p.a.c,p.b.c);
+    if(req(m.c,sum)||req(rneg(m.c),sum))return {text:'Die Vorzahlen werden multipliziert, nicht addiert.'};
+    return {text:'Rechne die Vorzahlen nochmal: '+coefH(p.a.c.n<0n?rneg(p.a.c):p.a.c)+' · '+coefH(p.b.c.n<0n?rneg(p.b.c):p.b.c)+' = ?'};
+  }
+  return {text:'Kontrolliere die Variablen: Gleiche Variablen werden zusammengefasst und ihre Hochzahlen addiert, z. B. x · x = x².'};
+}
+/* Schritt 2: Welche Produkte entstehen? (Faktoren selbst anschreiben) */
+function readFactor(str){
+  const t=str.replace(/[()]/g,'').trim();
+  if(!t)return {empty:true};
+  const q=parseTerm(t);if(q.err)return {fmt:true,text:q.err};
+  if(q.ms.length!==1)return {text:'Ein Faktor ist ein einzelnes Glied, z. B. 3x oder −5.'};
+  return {m:q.ms[0]};
+}
+const sameMono=(a,b)=>mkey(a)===mkey(b)&&req(a.c,b.c);
+function judgeFac(p,vals,k){
+  const f1=readFactor(vals[0]),f2=readFactor(vals[1]);
+  if(f1.empty||f2.empty)return {empty:true,text:''};
+  if(!f1.m)return {fmt:!!f1.fmt,text:f1.text};
+  if(!f2.m)return {fmt:!!f2.fmt,text:f2.text};
+  const x=f1.m,y=f2.m;
+  if((sameMono(x,p.a)&&sameMono(y,p.b))||(sameMono(x,p.b)&&sameMono(y,p.a)))return {ok:true};
+  const abs=m=>({c:m.c.n<0n?rneg(m.c):m.c,v:m.v});
+  if((sameMono(abs(x),abs(p.a))&&sameMono(abs(y),abs(p.b)))||(sameMono(abs(x),abs(p.b))&&sameMono(abs(y),abs(p.a))))
+    return {text:'Das Vorzeichen gehört zum Glied: Steht in der Klammer „− 3“, ist der Faktor −3.'};
+  return {text:'Schau dir Pfeil '+(k+1)+' an: Er verbindet ein Glied der ersten Klammer mit einem Glied der zweiten Klammer.'};
+}
+function checkFac(e){
+  const rs=e.prods.map((p,k)=>judgeFac(p,e.facVals[k],k));
+  rs.forEach((r,k)=>{e.facMarks[k]=r.ok?'ok':r.empty?null:'bad';e.facHints[k]=r.ok?'':r.text;});
+  if(rs.every(r=>r.ok)){advance(e,1,'Richtig! Das sind alle Produkte.');return true;}
+  if(rs.some(r=>r.empty)){hint(e,1,'Fülle zuerst alle Felder aus.');return false;}
+  if(rs.every(r=>r.ok||r.fmt)){hint(e,1,'Kontrolliere die Schreibweise in den markierten Zeilen.');return false;}
+  fail(e,1,'Nicht alle Produkte stimmen – schau dir die rot markierten Zeilen an.');return false;
+}
+function check1(e){
+  const rs=e.prods.map((p,k)=>judgeProd(p,e.prodVals[k]));
+  rs.forEach((r,k)=>{e.prodMarks[k]=r.ok?'ok':r.empty?null:'bad';e.prodHints[k]=r.ok?'':r.text;});
+  if(rs.every(r=>r.ok)){advance(e,2,'Richtig! Alle Produkte stimmen.');return true;}
+  if(rs.some(r=>r.empty)){hint(e,2,'Fülle zuerst alle Felder aus.');return false;}
+  if(rs.every(r=>r.ok||r.fmt)){hint(e,2,'Kontrolliere die Schreibweise in den markierten Feldern.');return false;}
+  fail(e,2,'Nicht alle Produkte stimmen – schau dir die rot markierten an.');return false;
+}
+const termSig=ms=>ms.map(m=>mkey(m)+':'+m.c.n+'/'+m.c.d).sort().join('|');
+function check2(e){
+  const s=e.lineVal,res=e.prods.map(p=>p.res);
+  if(!s.trim()){hint(e,3,'Schreib die neue Zeile in das Feld.');return false;}
+  const q=parseTerm(s);if(q.err){hint(e,3,q.err);return false;}
+  if(termSig(q.ms)===termSig(res)){advance(e,3,'Richtig! So sieht die neue Zeile aus.');return true;}
+  if(q.ms.length<res.length&&sameNorm(normalize(q.ms),e.expected)){hint(e,3,'Du hast schon zusammengefasst – schreib zuerst alle '+res.length+' Produkte einzeln hin.');return false;}
+  const abs=ms=>ms.map(m=>({c:m.c.n<0n?rneg(m.c):m.c,v:m.v}));
+  if(q.ms.length!==res.length)fail(e,3,'Es müssen genau '+res.length+' Glieder sein – eines für jeden Pfeil.');
+  else if(termSig(abs(q.ms))===termSig(abs(res)))fail(e,3,'Kontrolliere die Vorzeichen: + (−6x) schreibt man kürzer als − 6x.');
+  else fail(e,3,'Vergleiche jedes Glied mit deinen Produkten oben.');
+  return false;
+}
+function decide(e,yes){
+  if(yes===e.comb){e.decision=yes;e.step=yes?5:DONE;
+    e.msg[4]={kind:'ok',text:yes?'Richtig! Es gibt gleichartige Glieder.':'Richtig! Alle Glieder sind verschieden – die Zeile ist schon das Ergebnis.'};return true;}
+  fail(e,4,yes?'Schau genau: Jedes Glied hat eine andere Variable oder Hochzahl – hier kann man nichts zusammenfassen.'
+    :'Schau genau: Es gibt Glieder mit derselben Variablen und derselben Hochzahl.');
+  return false;
+}
+function check5(e){
+  const s=e.finalVal;
+  if(!s.trim()){hint(e,5,'Schreib dein Ergebnis in das Feld.');return false;}
+  const q=parseTerm(s);if(q.err){hint(e,5,q.err);return false;}
+  const n=normalize(q.ms);
+  if(sameNorm(n,e.expected)){
+    if(q.ms.length>n.length){hint(e,5,'Richtig gerechnet – aber gleichartige Glieder kannst du noch zusammenfassen.');return false;}
+    advance(e,5,'Richtig zusammengefasst!');return true;
+  }
+  const keys=new Set(n.map(mkey).concat(e.expected.map(mkey))),bad=[];
+  keys.forEach(k=>{const a=n.find(t=>mkey(t)===k),b=e.expected.find(t=>mkey(t)===k);
+    if(!a||!b||!req(a.c,b.c))bad.push(k===''?'die Zahl ohne Variable':'die Glieder mit '+varsH(a||b));});
+  fail(e,5,'Kontrolliere '+bad.join(' und ')+'.');return false;
+}
+function showSolution(e,s){
+  if(s===0){e.arrows=e.prods.map(p=>p.key);e.msg[0]={kind:'shown',text:'Die Pfeile sind jetzt gesetzt – schau dir an, wohin sie zeigen.'};}
+  if(s===1){e.facVals=e.prods.map(p=>[polyPlain([p.a]),polyPlain([p.b])]);e.facMarks=e.prods.map(()=>'ok');e.facHints=e.prods.map(()=>'');
+    e.msg[1]={kind:'shown',text:'Die Produkte sind jetzt eingetragen – vergleiche sie mit den Pfeilen.'};}
+  if(s===2){e.prodVals=e.prods.map(p=>polyPlain([p.res]));e.prodMarks=e.prods.map(()=>'ok');e.prodHints=e.prods.map(()=>'');
+    e.msg[2]={kind:'shown',text:'Die Ergebnisse sind jetzt eingetragen – rechne sie im Kopf nach.'};}
+  if(s===3){e.lineVal=polyPlain(e.prods.map(p=>p.res));e.msg[3]={kind:'shown',text:'Lösung: = '+polyH(e.prods.map(p=>p.res))};}
+  if(s===5){e.finalVal=polyPlain(e.expected);e.msg[5]={kind:'shown',text:'Lösung: = '+polyH(e.expected)};}
+  e.shown=true;e.step=s+1;
+  if(s===4){e.decision=e.comb;e.step=e.comb?5:DONE;e.msg[4]={kind:'shown',text:e.comb?'Ja – es gibt gleichartige Glieder.':'Nein – alle Glieder sind verschieden.'};}
+}
 
-  if (!state || !state.overview) return;
+/* ================= Anzeige ================= */
+const ARR_BASE=34,ARR_GAP=24;
+function msgHTML(e,s){const m=e.msg[s];if(!m)return '';
+  return '<p class="msg '+m.kind+'">'+m.text+(m.offer&&e.step===s?' <button type="button" class="mini" data-act="show'+s+'">Lösung zeigen</button>':'')+'</p>';}
+function factorHTML(side,ms,clickable,e){
+  const terms=ms.map((m,i)=>{
+    const sel=e.sel&&e.sel.side===side&&e.sel.i===i;
+    return '<button type="button" class="term'+(clickable?' clickable':'')+(sel?' sel':'')+'" id="t'+side+i+'" data-side="'+side+'" data-i="'+i+'"'+
+      (clickable?'':' disabled')+' aria-label="Glied '+(i+1)+' der '+(side==='L'?'ersten':'zweiten')+' Klammer">'+termH(ms[i],!i)+'</button>';}).join('');
+  const paren=ms.length>1||ms[0].c.n<0n;
+  return (paren?'<span class="paren">(</span>':'')+terms+(paren?'<span class="paren">)</span>':'');
+}
+function exStatus(e){return e.step===DONE?(e.shown?'done shown':'done'):(e.step>0||e.arrows.length?'started':'');}
 
-  if ($("notebookOverview")) {
-    $("notebookOverview").remove();
+function renderEx(focus){
+  const g=curG(),e=curEx(),d=e.data,n=e.prods.length,cur=g.cur;
+  const two=d.left.length===2,topPad=Math.ceil((ARR_BASE+(d.right.length-1)*ARR_GAP)*.75+26);
+  const botPad=two?topPad:12;
+  const allDone=g.ex.every(x=>x.step===DONE);
+  const nb=[];
+  if(e.step>=2)nb.push('= '+e.prods.map((p,k)=>(k?' + ':'')+facH(p.a)+' · '+facH(p.b)).join(''));
+  if(e.step>=4)nb.push((e.comb?'= ':'<span class="fin">= ')+polyH(e.prods.map(p=>p.res))+(e.comb?'':'</span>'));
+  if(e.step>=DONE&&e.comb)nb.push('<span class="fin">= '+polyH(e.expected)+'</span>');
+  const monoLeft=d.left.length===1;
+
+  let h='<div class="nav">'+
+    '<button type="button" class="ghost" data-act="prev" aria-label="Vorheriges Beispiel"'+(cur===0?' disabled':'')+'>◀</button>'+
+    '<div class="dots" role="group" aria-label="Beispiele">'+g.ex.map((x,k)=>'<button type="button" class="dot '+exStatus(x)+(k===cur?' cur':'')+'" data-go="'+k+'" aria-label="Beispiel '+(k+1)+'"'+(k===cur?' aria-current="true"':'')+'>'+(k+1)+'</button>').join('')+'</div>'+
+    '<button type="button" class="ghost" data-act="next" aria-label="Nächstes Beispiel"'+(cur===g.ex.length-1?' disabled':'')+'>▶</button>'+
+    '<span class="round">Runde '+g.round+'</span>'+
+    '<button type="button" class="mini" data-act="newround">Neue Runde</button></div>';
+
+  h+='<div class="head"><span class="num">'+(cur+1)+'</span><h2>Multipliziere aus: '+exH(d)+'</h2></div>';
+
+  h+='<div class="diagram"><div class="diagInner" id="diag">'+
+    '<svg class="arrows" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker></defs><g id="arrowG"></g></svg>'+
+    '<div class="exprWrap" style="padding-top:'+topPad+'px;padding-bottom:'+botPad+'px">'+
+      factorHTML('L',d.left,e.step===0,e)+'<span class="dotop">·</span>'+factorHTML('R',d.right,e.step===0,e)+
+    '</div>'+(nb.length?'<div class="nb">'+nb.map(x=>'<div>'+x+'</div>').join('')+'</div>':'')+
+  '</div></div>';
+
+  /* Schritt 1: Pfeile */
+  h+='<div class="stepcard '+(e.step===0?'active':'done')+'"><h3>1. Setze die Pfeile</h3>';
+  if(e.step===0){
+    h+='<p>'+(monoLeft?'Tippe nacheinander auf jedes Glied in der Klammer. Der Pfeil kommt vom Faktor davor.'
+      :'Tippe zuerst auf ein Glied der ersten Klammer, dann auf ein Glied der zweiten Klammer.')+
+      ' Nochmal antippen entfernt einen Pfeil.</p>'+
+      '<div class="actions"><button type="button" data-act="check0">Pfeile fertig</button><span class="res">'+e.arrows.length+' von '+n+' Pfeilen</span></div>';
+  }else h+='<p class="donetxt">✓ Alle '+n+' Pfeile sind gesetzt.</p>';
+  h+=msgHTML(e,0)+'</div>';
+
+  /* Schritt 2: Welche Produkte entstehen? */
+  if(e.step>=1){
+    h+='<div class="stepcard '+(e.step===1?'active':'done')+'"><h3>2. Schreib an, welche Produkte entstehen</h3>';
+    if(e.step===1)h+='<p>Schau dir jeden Pfeil an: Welche zwei Glieder verbindet er? Das Vorzeichen gehört zum Glied, z. B. −3.</p>';
+    e.prods.forEach((p,k)=>{
+      h+='<div class="prodrow"><span class="badge">'+(k+1)+'</span>';
+      if(e.step===1){
+        const cls=e.facMarks[k]?' '+e.facMarks[k]:'';
+        h+='<input class="pin fac'+cls+'" data-fi="'+k+'" data-fs="0" value="'+esc(e.facVals[k][0])+'" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Pfeil '+(k+1)+', erster Faktor"> · '+
+           '<input class="pin fac'+cls+'" data-fi="'+k+'" data-fs="1" value="'+esc(e.facVals[k][1])+'" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Pfeil '+(k+1)+', zweiter Faktor">'+
+           '<span class="rowmsg">'+esc(e.facHints[k])+'</span>';
+      }else h+='<b>'+facH(p.a)+' · '+facH(p.b)+'</b>';
+      h+='</div>';
+    });
+    if(e.step===1)h+='<div class="actions"><button type="button" data-act="checkFac">Produkte prüfen</button></div>';
+    h+=msgHTML(e,1)+'</div>';
   }
 
-  const notebookOverview = document.createElement("section");
-  notebookOverview.id = "notebookOverview";
+  /* Schritt 3: ausrechnen */
+  if(e.step>=2){
+    h+='<div class="stepcard '+(e.step===2?'active':'done')+'"><h3>3. Rechne jedes Produkt aus</h3>';
+    if(e.step===2)h+='<p>Jeder Pfeil ist ein Produkt. Das Vorzeichen gehört zum Glied.</p>';
+    e.prods.forEach((p,k)=>{
+      h+='<div class="prodrow"><span class="badge">'+(k+1)+'</span>'+facH(p.a)+' · '+facH(p.b)+' = ';
+      if(e.step===2)h+='<input class="pin'+(e.prodMarks[k]?' '+e.prodMarks[k]:'')+'" data-pi="'+k+'" value="'+esc(e.prodVals[k])+'" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Ergebnis von Produkt '+(k+1)+'"><span class="prev" data-prev></span><span class="rowmsg">'+esc(e.prodHints[k])+'</span>';
+      else h+='<b>'+termH(p.res,true)+'</b>';
+      h+='</div>';
+    });
+    if(e.step===2)h+='<div class="actions"><button type="button" data-act="check1">Ergebnisse prüfen</button></div>';
+    h+=msgHTML(e,2)+'</div>';
+  }
 
-  notebookOverview.innerHTML = `
-    <section class="card">
-      <h2>Deine Beispiele im Heft</h2>
+  /* Schritt 4: neue Zeile selbst anschreiben */
+  const resLine=polyH(e.prods.map(p=>p.res));
+  if(e.step>=3){
+    h+='<div class="stepcard '+(e.step===3?'active':'done')+'"><h3>4. Schreib die neue Zeile an</h3>';
+    if(e.step===3){
+      h+='<p>Schreib alle Produkte hintereinander als eine Rechnung. Achte auf die Vorzeichen: + (−6) schreibt man als − 6.</p>'+
+        '<div class="finline">= <input class="pin" data-line value="'+esc(e.lineVal)+'" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Neue Zeile mit allen Produkten" placeholder="z. B. x^2 + 3x + 2x + 6"><span class="prev" data-prev></span></div>'+
+        '<div class="actions"><button type="button" data-act="check2">Zeile prüfen</button></div>';
+    }else h+='<div class="finline donetxt">= '+resLine+' ✓</div>';
+    h+=msgHTML(e,3)+'</div>';
+  }
 
-      <p>
-        Hier siehst du die gespeicherten Pfeile.
-        Bei richtig gelösten Beispielen wird außerdem
-        der vollständige Rechenweg angezeigt.
-      </p>
-    </section>
+  /* Schritt 5: ankreuzen, ob man zusammenfassen kann */
+  if(e.step>=4){
+    h+='<div class="stepcard '+(e.step===4?'active':'done')+'"><h3>5. Kann man hier etwas zusammenfassen?</h3>';
+    if(e.step===4){
+      h+='<p>Gleichartig sind Glieder mit <b>denselben Variablen</b> und <b>denselben Hochzahlen</b>, z. B. 3<i>x</i> und −5<i>x</i>.</p>'+
+        '<div class="actions"><button type="button" class="ghost" data-act="dec1">Ja, es gibt gleichartige Glieder</button>'+
+        '<button type="button" class="ghost" data-act="dec0">Nein, alle Glieder sind verschieden</button></div>';
+    }else h+='<p class="donetxt">✓ '+(e.comb?'Ja – es gibt gleichartige Glieder.':'Nein – die Zeile ist schon das Ergebnis.')+'</p>';
+    h+=msgHTML(e,4)+'</div>';
+  }
 
-    ${EXERCISES.map((exercise, index) => {
-      const task = state.tasks[index];
-      const currentStatus = status(index);
+  /* Schritt 6: zusammenfassen (nur wenn es etwas zusammenzufassen gibt) */
+  if(e.step>=5&&e.comb){
+    h+='<div class="stepcard '+(e.step===5?'active':'done')+'"><h3>6. Fasse gleichartige Glieder zusammen</h3>';
+    h+='<div class="finline">= '+resLine+'</div>';
+    if(e.step===5){
+      h+='<div class="finline">= <input class="pin" data-fin value="'+esc(e.finalVal)+'" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Zusammengefasstes Ergebnis" placeholder="z. B. x^2 + 5x + 6"><span class="prev" data-prev></span></div>'+
+        '<div class="actions"><button type="button" data-act="check5">Ergebnis prüfen</button></div>';
+    }else h+='<div class="finline donetxt">= '+polyH(e.expected)+' ✓</div>';
+    h+=msgHTML(e,5)+'</div>';
+  }
 
-      let content;
+  if(e.step===DONE){
+    const nextOpen=g.ex.findIndex((x,k)=>k>cur&&x.step<DONE),anyOpen=g.ex.findIndex(x=>x.step<DONE);
+    h+='<div class="donebox"><b>Beispiel '+(cur+1)+' geschafft!</b>'+
+      (nextOpen>=0?'<button type="button" data-act="go" data-to="'+nextOpen+'">Weiter zu Beispiel '+(nextOpen+1)+' ▶</button>'
+      :anyOpen>=0?'<button type="button" data-act="go" data-to="'+anyOpen+'">Noch offen: Beispiel '+(anyOpen+1)+' ▶</button>'
+      :'<button type="button" data-act="sum">Zur Auswertung</button>')+'</div>';
+  }
 
-      if (task.step === 4) {
-        content = notebookCompletedCalculation(index);
-      } else if (currentStatus === "Nicht bearbeitet") {
-        content = `
-          <div class="math">
-            ${display(source(exercise))}
-          </div>
+  $('exCard').innerHTML=h;
+  $('score').textContent=g.ex.filter(x=>x.step===DONE).length+' von '+g.ex.length+' fertig';
+  document.querySelectorAll('#exCard [data-prev]').forEach(pv=>updatePrev(pv.previousElementSibling));
+  if(window.padApply)window.padApply();
+  requestAnimationFrame(drawArrows);
+  if(focus){
+    let f=null;
+    if(focus==='step'){
+      if(e.step===1)f=[...document.querySelectorAll('#exCard [data-fi]')].find(i=>i.classList.contains('bad'))||document.querySelector('#exCard [data-fi]');
+      else if(e.step===2)f=[...document.querySelectorAll('#exCard [data-pi]')].find(i=>i.classList.contains('bad'))||document.querySelector('#exCard [data-pi]');
+      else if(e.step===3)f=document.querySelector('#exCard [data-line]');
+      else if(e.step===4)f=document.querySelector('#exCard [data-act=dec1]');
+      else if(e.step===5)f=document.querySelector('#exCard [data-fin]');
+    }else f=document.querySelector(focus);
+    if(f){f.focus({preventScroll:false});if(f.select&&f.classList.contains('bad'))f.select();}
+  }
+  if(allDone&&!summaryRequested&&!restoring)summaryRequested=true;
+  updateSummary();
+  saveProgress();
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function updatePrev(inp){
+  if(!inp||!inp.nextElementSibling||!inp.nextElementSibling.hasAttribute('data-prev'))return;
+  const pv=inp.nextElementSibling,q=parseTerm(inp.value);
+  pv.innerHTML=(!inp.value.trim()||q.err)?'':'→ <b>'+polyH(q.ms)+'</b>';
+}
 
-          <p class="notebook-open-note">
-            Noch nicht bearbeitet:
-            Es wurden noch keine Pfeile und kein
-            vollständiger Rechenweg gespeichert.
-          </p>
-        `;
-      } else {
-        content = `
-          ${notebookArrowDrawing(index, task.arrows)}
+function drawArrows(){
+  const e=curEx(),grp=$('arrowG'),inner=$('diag');if(!e||!grp||!inner)return;
+  const box=inner.getBoundingClientRect(),two=e.data.left.length===2;
+  grp.innerHTML=e.arrows.map(key=>{
+    const p=e.prods.find(q=>q.key===key);if(!p)return '';
+    const A=$('tL'+p.i),Bn=$('tR'+p.j);if(!A||!Bn)return '';
+    const a=A.getBoundingClientRect(),b=Bn.getBoundingClientRect();
+    const below=two&&p.i===1,dist=ARR_BASE+p.j*ARR_GAP;
+    const x1=a.left+a.width/2-box.left,x2=b.left+b.width/2-box.left;
+    let y1,y2,c;
+    if(below){y1=a.bottom-box.top;y2=b.bottom-box.top+2;c=Math.max(y1,y2)+dist;}
+    else{y1=a.top-box.top;y2=b.top-box.top-2;c=Math.min(y1,y2)-dist;}
+    const nr=e.prods.indexOf(p)+1,lx=(x1+x2)/2,ly=(y1+y2)/8+c*.75;
+    return '<path d="M '+x1+' '+y1+' C '+x1+' '+c+', '+x2+' '+c+', '+x2+' '+y2+'" marker-end="url(#ah)"/>'+
+      '<rect x="'+(lx-10)+'" y="'+(ly-10)+'" width="20" height="20" rx="6"/><text x="'+lx+'" y="'+(ly+4.5)+'" text-anchor="middle">'+nr+'</text>';
+  }).join('');
+}
+window.addEventListener('resize',drawArrows);
 
-          <p class="notebook-open-note">
-            Noch nicht fertig.
-            Angezeigt werden die bisher gespeicherten Pfeile.
-            Der vollständige Rechenweg ist noch nicht abgeschlossen.
-          </p>
-        `;
-
-        if (
-          typeof task.multiplicationLine === "string" &&
-          task.multiplicationLine.trim()
-        ) {
-          content += `
-            <p class="muted">
-              Bisherige Eingabe der Multiplikationszeile
-              ${task.step >= 2
-                ? "– bereits richtig geprüft:"
-                : "– noch nicht richtig bestätigt:"}
-            </p>
-
-            <div class="notebook-calculation">
-              ${display(task.multiplicationLine)}
-            </div>
-          `;
-        }
-      }
-
-      return `
-        <section class="card notebook-summary">
-          <div class="notebook-heading">
-            Mathematikheft · ${escapeHTML(state.name)}
-          </div>
-
-          <h3 class="notebook-example-title">
-            Beispiel ${index + 1}
-          </h3>
-
-          <span
-            class="status ${task.copied ? "complete" : ""}"
-          >
-            ${escapeHTML(currentStatus)}
-          </span>
-
-          ${content}
-
-          <p class="muted">
-            Hefteintrag:
-            ${task.copied
-              ? "von dir als übertragen bestätigt"
-              : "noch nicht bestätigt"}
-          </p>
-
-          <button
-            class="secondary noprint"
-            onclick="choose(${index})"
-          >
-            Beispiel ${index + 1} öffnen
-          </button>
-        </section>
-      `;
-    }).join("")}
-  `;
-
-  /*
-    Die Heftausschnitte vor der Lehrkraftübersicht einfügen.
-  */
-  const cards = Array.from(
-    document.querySelectorAll("#app > .card")
-  );
-
-  const teacherCard = cards.find(card => {
-    const title = card.querySelector("h2");
-
-    return title &&
-      title.textContent.trim() === "Lehrkraftübersicht";
+/* ================= Auswertung ================= */
+function updateSummary(){
+  const g=curG(),sum=$('summary');
+  const allDone=g.ex.every(e=>e.step===DONE);
+  if(!summaryRequested){sum.hidden=true;return;}
+  let T={done:0,first:0,shown:0,open:0,err:0},rows='';
+  g.ex.forEach((e,k)=>{
+    let st;
+    if(e.step<DONE){st='offen';T.open++;}
+    else{T.done++;if(e.shown){st='Lösung angesehen';T.shown++;}else if(!e.err){st='✓ beim 1. Versuch';T.first++;}else st='✓ richtig';}
+    T.err+=e.err;
+    rows+='<tr><td>'+(k+1)+') '+exH(e.data)+(e.step===DONE?' = '+polyH(e.expected):'')+'</td><td>'+st+'</td><td class="c">'+e.err+'</td></tr>';
   });
+  $('sumBody').innerHTML=rows;
+  $('sumFoot').innerHTML='<tr><td>Gesamt: '+T.done+' von '+g.ex.length+' fertig</td><td>'+T.first+' beim 1. Versuch, '+T.shown+' mit Lösung</td><td class="c">'+T.err+'</td></tr>';
+  const n=g.ex.length,ok=T.done-T.shown;let msg;
+  if(T.first===n)msg='Perfekt! Alle Beispiele beim ersten Versuch richtig.';
+  else if(ok===n)msg='Super, alle Beispiele selbst gelöst!';
+  else if(ok/n>=.75)msg='Sehr gut gemacht!';
+  else if(ok/n>=.5)msg='Gut! Mit ein bisschen Übung klappt der Rest auch.';
+  else msg='Übe noch ein bisschen weiter – starte eine neue Runde und probier es nochmal.';
+  if(!allDone)msg='Noch nicht alles erledigt: '+T.open+' Beispiel'+(T.open===1?' ist':'e sind')+' noch offen. '+msg;
+  $('sumTitle').textContent=(allDone?'Geschafft'+(PUPIL?', '+PUPIL:'')+'! Deine Auswertung':'Zwischenstand'+(PUPIL?' von '+PUPIL:''))+' ('+LEVELS[level]+', Runde '+g.round+')';
+  const now=new Date(),who=$('sumWho');
+  who.innerHTML='👤 <b></b> · '+now.toLocaleDateString('de-AT')+', '+now.toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'})+' Uhr · '+LEVELS[level];
+  who.querySelector('b').textContent=PUPIL||'(kein Name)';
+  $('sumMsg').textContent=msg;
+  const wasHidden=sum.hidden;sum.hidden=false;
+  if(wasHidden&&!restoring&&allDone)setTimeout(()=>sum.scrollIntoView({behavior:'smooth',block:'start'}),300);
+}
 
-  if (teacherCard) {
-    teacherCard.before(notebookOverview);
-  } else {
-    $("app").appendChild(notebookOverview);
+/* ================= Bedienung ================= */
+function goTo(k){const g=curG();g.cur=Math.max(0,Math.min(g.ex.length-1,k));renderEx();
+  $('exCard').scrollIntoView({behavior:'smooth',block:'start'});}
+function newRound(){
+  const g=curG();
+  if(g.ex.some(e=>e.step<DONE)&&!confirm('Neue Runde starten? Die offenen Beispiele werden durch neue ersetzt.'))return;
+  g.round=g.round>=100?1:g.round+1;makeRound(level);summaryRequested=false;renderEx();
+  $('exCard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function clickTerm(side,i){
+  const e=curEx();if(e.step!==0)return;
+  const toggle=key=>{e.arrows=e.arrows.includes(key)?e.arrows.filter(k=>k!==key):e.arrows.concat(key);e.sel=null;e.msg[0]=null;};
+  if(e.data.left.length===1&&side==='R'){toggle('0,'+i);}
+  else if(!e.sel||e.sel.side===side){e.sel=(e.sel&&e.sel.side===side&&e.sel.i===i)?null:{side,i};}
+  else{const li=side==='L'?i:e.sel.i,rj=side==='R'?i:e.sel.i;toggle(li+','+rj);}
+  e.arrows.sort((a,b)=>e.prods.findIndex(p=>p.key===a)-e.prods.findIndex(p=>p.key===b));
+  renderEx('#t'+side+i);
+}
+$('exCard').addEventListener('click',ev=>{
+  const t=ev.target.closest('button');if(!t)return;
+  const e=curEx();
+  if(t.classList.contains('term')){clickTerm(t.dataset.side,+t.dataset.i);return;}
+  if(t.dataset.go!==undefined){goTo(+t.dataset.go);return;}
+  const a=t.dataset.act;
+  if(a==='prev')goTo(curG().cur-1);
+  else if(a==='next')goTo(curG().cur+1);
+  else if(a==='go')goTo(+t.dataset.to);
+  else if(a==='newround')newRound();
+  else if(a==='sum'){summaryRequested=true;updateSummary();$('summary').scrollIntoView({behavior:'smooth',block:'start'});}
+  else if(a==='check0'){const ok=check0(e);renderEx(ok?'step':null);}
+  else if(a==='checkFac'){checkFac(e);renderEx('step');}
+  else if(a==='check1'){check1(e);renderEx('step');}
+  else if(a==='check2'){check2(e);renderEx('step');}
+  else if(a==='dec1'||a==='dec0'){decide(e,a==='dec1');renderEx('step');}
+  else if(a==='check5'){check5(e);renderEx(e.step===5?'step':null);}
+  else if(/^show\d$/.test(a)){showSolution(e,+a.slice(4));renderEx('step');}
+});
+$('exCard').addEventListener('input',ev=>{
+  const t=ev.target,e=curEx();
+  if(t.dataset.fi!==undefined){const k=+t.dataset.fi;e.facVals[k][+t.dataset.fs]=t.value;e.facMarks[k]=null;e.facHints[k]='';
+    t.parentNode.querySelectorAll('input').forEach(i=>i.classList.remove('ok','bad'));const rm=t.parentNode.querySelector('.rowmsg');if(rm)rm.textContent='';}
+  else if(t.dataset.pi!==undefined){const k=+t.dataset.pi;e.prodVals[k]=t.value;e.prodMarks[k]=null;e.prodHints[k]='';
+    t.classList.remove('ok','bad');const rm=t.parentNode.querySelector('.rowmsg');if(rm)rm.textContent='';}
+  else if(t.hasAttribute('data-line'))e.lineVal=t.value;
+  else if(t.hasAttribute('data-fin'))e.finalVal=t.value;
+  updatePrev(t);
+});
+$('exCard').addEventListener('keydown',ev=>{
+  if(ev.key!=='Enter'||ev.target.tagName!=='INPUT')return;
+  ev.preventDefault();const t=ev.target,e=curEx();
+  if(t.dataset.fi!==undefined){
+    const all=[...document.querySelectorAll('#exCard [data-fi]')],nx=all.slice(all.indexOf(t)+1).find(i=>!i.value.trim());
+    if(nx){nx.focus();return;}
+    checkFac(e);renderEx('step');
+  }else if(t.dataset.pi!==undefined){
+    const all=[...document.querySelectorAll('#exCard [data-pi]')],nx=all.slice(+t.dataset.pi+1).find(i=>!i.value.trim());
+    if(nx){nx.focus();return;}
+    check1(e);renderEx('step');
+  }else if(t.hasAttribute('data-line')){check2(e);renderEx('step');}
+  else if(t.hasAttribute('data-fin')){check5(e);renderEx(e.step===5?'step':null);}
+});
+$('showSum').addEventListener('click',()=>{summaryRequested=true;updateSummary();$('summary').scrollIntoView({behavior:'smooth',block:'start'});});
+$('newRound2').addEventListener('click',newRound);
+
+function setLevel(l){
+  level=l;summaryRequested=curG().ex.every(e=>e.step===DONE);
+  document.querySelectorAll('.levels button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.level===l?'true':'false'));
+  try{history.replaceState(null,'',l==='ahs'?'#ahs':'#standard');}catch(x){}
+  renderEx();
+}
+document.querySelectorAll('.levels button').forEach(b=>b.addEventListener('click',()=>setLevel(b.dataset.level)));
+
+/* ================= Fortschritt: speichern (gleiches Gerät) & Code (anderes Gerät) ================= */
+const STORE='ausmult3:',ALPH='23456789ABCDEFGHJKMNPQRSTUVWXYZ',AL=B(ALPH.length);
+const normName=s=>s.trim().replace(/\s+/g,' ').toLowerCase();
+function nameHash(n){let h=2166136261;for(const ch of normName(n)){h^=ch.codePointAt(0);h=Math.imul(h,16777619);}return (h>>>0)%1024;}
+function checkChar(s){let c=0;for(let k=0;k<s.length;k++)c=(c+(k+1)*ALPH.indexOf(s[k]))%ALPH.length;return ALPH[c];}
+function makeCode(lvl){
+  const g=G[lvl],F=[],f=(v,r)=>F.push([v,r]);
+  f(lvl==='ahs'?1:0,2);f(g.seed,65536);f(g.round-1,100);f(g.cur,N_EX);
+  g.ex.forEach(e=>f(e.step*8+Math.min(e.err,3)*2+(e.shown?1:0),56));
+  f(nameHash(PUPIL),1024);
+  let N=0n;for(let k=F.length-1;k>=0;k--)N=N*B(F[k][1])+B(F[k][0]);
+  let s='';do{s=ALPH[Number(N%AL)]+s;N/=AL;}while(N>0n);
+  s+=checkChar(s);
+  return s.match(/.{1,4}/g).join('-');
+}
+function readCode(str){
+  const bad={err:'Dieser Code ist ungültig. Kontrolliere, ob du ihn richtig abgeschrieben hast.'};
+  const s=str.toUpperCase().replace(/[\s\-–—_.]/g,'');
+  if(s.length<3||[...s].some(ch=>!ALPH.includes(ch)))return bad;
+  const body=s.slice(0,-1);
+  if(checkChar(body)!==s.slice(-1))return {err:'Im Code ist ein Tippfehler. Kontrolliere ihn Zeichen für Zeichen.'};
+  let N=0n;for(const ch of body)N=N*AL+B(ALPH.indexOf(ch));
+  const g=r=>{const v=Number(N%B(r));N/=B(r);return v;};
+  const lvl=g(2)?'ahs':'std',seed=g(65536),round=g(100)+1,cur=g(N_EX),ex=[];
+  for(let k=0;k<N_EX;k++){const v=g(56);ex.push({step:v>>3,err:(v>>1)&3,shown:!!(v&1)});}
+  const nh=g(1024);
+  if(N!==0n||ex.some(x=>x.step>DONE))return bad;
+  return {lvl,seed,round,cur,ex,nh};
+}
+function applyCode(p){
+  const g=G[p.lvl];g.seed=p.seed;g.round=p.round;makeRound(p.lvl);g.cur=p.cur;
+  p.ex.forEach((s,k)=>{const e=g.ex[k];e.err=s.err;e.shown=s.shown;
+    if(s.step>=1)e.arrows=e.prods.map(q=>q.key);
+    if(s.step>=2){e.facVals=e.prods.map(q=>[polyPlain([q.a]),polyPlain([q.b])]);e.facMarks=e.prods.map(()=>'ok');}
+    if(s.step>=3){e.prodVals=e.prods.map(q=>polyPlain([q.res]));e.prodMarks=e.prods.map(()=>'ok');}
+    if(s.step>=4)e.lineVal=polyPlain(e.prods.map(q=>q.res));
+    if(s.step>=5)e.decision=e.comb;
+    if(s.step>=DONE)e.finalVal=polyPlain(e.expected);
+    e.step=(s.step===5&&!e.comb)?DONE:s.step;});
+}
+function saveProgress(lvl){
+  lvl=lvl||level;
+  if(!PUPIL||restoring)return;
+  const code=makeCode(lvl);
+  try{const k=STORE+normName(PUPIL),o=JSON.parse(localStorage.getItem(k)||'{}');o.last=level;o[lvl]=code;localStorage.setItem(k,JSON.stringify(o));}catch(x){}
+  if(lvl===level)$('codeShow').textContent=code;
+}
+function loadSaved(name){try{return JSON.parse(localStorage.getItem(STORE+normName(name))||'null');}catch(x){return null;}}
+
+/* ================= Name zu Beginn (danach nicht mehr änderbar) ================= */
+function setLocked(on){document.body.classList.toggle('locked',on);if(on)$('main').setAttribute('inert','');else $('main').removeAttribute('inert');}
+function startErr(msg,el){const err=$('pnameErr');err.textContent=msg;err.hidden=false;el.focus();}
+function startWithName(){
+  const inp=$('pname'),v=inp.value.trim().replace(/\s+/g,' '),codeInp=$('pcode');
+  if(v.length<2){startErr('Bitte gib deinen Namen ein.',inp);return;}
+  let p=null;
+  if(codeInp.value.trim()){
+    p=readCode(codeInp.value);
+    if(p.err){$('codeAsk').open=true;startErr(p.err,codeInp);return;}
+    if(p.nh!==nameHash(v)){startErr('Dieser Code gehört zu einem anderen Namen. Schreib deinen Namen genau so wie auf dem anderen Gerät.',inp);return;}
   }
-};
+  $('pnameErr').hidden=true;PUPIL=v;
+  const saved=loadSaved(v);let msg='';
+  restoring=true;
+  try{
+    if(saved){['std','ahs'].forEach(l=>{if(saved[l]&&!(p&&p.lvl===l)){const q=readCode(saved[l]);if(!q.err&&q.nh===nameHash(v))applyCode(q);}});
+      msg='Willkommen zurück! Du machst dort weiter, wo du auf diesem Gerät aufgehört hast.';}
+    if(p){applyCode(p);msg='Dein Fortschritt vom anderen Gerät wurde übernommen.';}
+  }finally{restoring=false;}
+  saveProgress('std');saveProgress('ahs');
+  $('pnameShow').textContent=v;$('startMsg').textContent=msg;
+  $('startAsk').hidden=true;$('startDone').hidden=false;
+  setLocked(false);
+  setLevel(p?p.lvl:(saved&&saved.last)||level);
+}
+$('startBtn').addEventListener('click',startWithName);
+['pname','pcode'].forEach(k=>$(k).addEventListener('keydown',ev=>{if(ev.key==='Enter'){ev.preventDefault();startWithName();}}));
+$('codeBtn').addEventListener('click',ev=>{
+  const box=$('codeBox'),open=box.hidden;saveProgress();box.hidden=!open;ev.currentTarget.setAttribute('aria-expanded',open?'true':'false');
+});
+$('codeCopy').addEventListener('click',ev=>{
+  const b=ev.currentTarget,txt=$('codeShow').textContent;
+  try{navigator.clipboard.writeText(txt).then(()=>{b.textContent='Kopiert ✓';setTimeout(()=>{b.textContent='Kopieren';},1500);},()=>{});}catch(x){}
+});
 
-/* Aktuelle Ansicht mit Heftoptik neu aufbauen. */
-render();
+/* ================= Start ================= */
+makeRound('std');makeRound('ahs');
+setLevel(level);
+setLocked(true);
+$('pname').focus();
+
+/* ================= Eingabehilfe (Bildschirm-Tastatur) ================= */
+(function(){
+  const pad=$('pad'),sysBtn=$('padSys');
+  const touch=window.matchMedia&&matchMedia('(pointer: coarse)').matches;
+  let padOnly=touch,closed=false,cur=null;
+  try{const s=localStorage.getItem('padOnly');if(s!==null)padOnly=s==='1';}catch(x){}
+  function applyMode(){
+    document.querySelectorAll('#exCard input.pin').forEach(i=>{if(padOnly)i.setAttribute('inputmode','none');else i.removeAttribute('inputmode');});
+    sysBtn.textContent=padOnly?'Handy-Tastatur einblenden':'Handy-Tastatur ausblenden';
+  }
+  window.padApply=applyMode;applyMode();
+  function setVars(){
+    const e=curEx(),found=[];
+    [...e.data.left,...e.data.right].forEach(m=>Object.keys(m.v).forEach(k=>{if(!found.includes(k))found.push(k);}));
+    ['x','y','a','b'].forEach(t=>{if(found.length<4&&!found.includes(t))found.push(t);});
+    pad.querySelectorAll('[data-var]').forEach(b=>{b.textContent=found[+b.dataset.var];});
+  }
+  function show(input){cur=input;setVars();if(closed)return;pad.hidden=false;document.body.classList.add('padon');
+    const r=input.getBoundingClientRect();if(r.bottom>window.innerHeight-pad.offsetHeight-10)input.scrollIntoView({block:'center',behavior:'smooth'});}
+  function hide(){pad.hidden=true;document.body.classList.remove('padon');}
+  document.addEventListener('focusin',ev=>{const t=ev.target;if(t.tagName==='INPUT'&&t.classList.contains('pin')&&!t.readOnly)show(t);});
+  document.addEventListener('focusout',()=>setTimeout(()=>{const a=document.activeElement;
+    if(!(a&&a.tagName==='INPUT'&&a.classList.contains('pin')))hide();},150));
+  function insert(txt){
+    if(!cur||!cur.isConnected)return;
+    const s=cur.selectionStart??cur.value.length,e=cur.selectionEnd??cur.value.length;
+    cur.setRangeText(txt,s,e,'end');cur.dispatchEvent(new Event('input',{bubbles:true}));
+  }
+  pad.addEventListener('pointerdown',ev=>{if(ev.target.closest('button'))ev.preventDefault();});
+  pad.addEventListener('mousedown',ev=>{if(ev.target.closest('button'))ev.preventDefault();});
+  pad.addEventListener('click',ev=>{
+    const b=ev.target.closest('button');if(!b)return;
+    if(b.id==='padHide'){closed=true;hide();return;}
+    if(b.id==='padSys'){padOnly=!padOnly;try{localStorage.setItem('padOnly',padOnly?'1':'0');}catch(x){}applyMode();
+      if(cur&&cur.isConnected){cur.blur();setTimeout(()=>cur.focus(),60);}return;}
+    if(!cur||!cur.isConnected)return;
+    if(b.dataset.ins!==undefined)insert(b.dataset.ins);
+    else if(b.dataset.var!==undefined)insert(b.textContent);
+    else if(b.dataset.act==='clr'){cur.value='';cur.dispatchEvent(new Event('input',{bubbles:true}));}
+    else if(b.dataset.act==='left'){const s=Math.max(0,(cur.selectionStart??cur.value.length)-1);cur.setSelectionRange(s,s);}
+    else if(b.dataset.act==='del'){
+      const s=cur.selectionStart??cur.value.length,e2=cur.selectionEnd??s;
+      if(s!==e2)cur.setRangeText('',s,e2,'end');else if(s>0)cur.setRangeText('',s-1,s,'end');
+      cur.dispatchEvent(new Event('input',{bubbles:true}));}
+    else if(b.dataset.act==='ok'){cur.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));}
+    if(cur&&cur.isConnected)cur.focus({preventScroll:true});
+  });
+  document.addEventListener('click',ev=>{if(ev.target.closest('[data-go],[data-act="next"],[data-act="prev"],[data-act="newround"],#newRound2'))closed=false;});
+})();
 </script>
+</body>
+</html>
