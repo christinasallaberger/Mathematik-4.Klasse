@@ -156,7 +156,7 @@ ol.tasks.blocked .task:not(.current){opacity:.38}
 .padtop{display:flex;justify-content:space-between;align-items:center;max-width:560px;margin:0 auto 4px;font-size:.85rem;color:var(--muted)}
 .padhide{background:none;border:none;color:var(--muted);font-size:.85rem;padding:2px 6px;text-decoration:underline}
 .keys{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;max-width:560px;margin:0 auto}
-.keys button{min-height:46px;padding:4px 2px;border:1.5px solid var(--line);border-radius:9px;background:var(--field);color:var(--text);font-size:1.25rem;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.keys button{min-height:46px;padding:4px 2px;border:1.5px solid var(--line);border-radius:9px;background:var(--field);color:var(--text);font-size:1.25rem;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
 .keys button:active{background:var(--grid)}
 .keys .kr{font-weight:700;color:var(--ink);font-size:1.45rem}
 .keys .kv{font-family:"Cambria Math",Cambria,Georgia,serif;font-style:italic;color:var(--ink)}
@@ -211,10 +211,10 @@ body.padon{padding-bottom:270px}
 <div class="pad" id="pad" role="group" aria-label="Bildschirm-Tastatur">
   <div class="padtop"><span>Tastatur</span><button type="button" class="padhide" id="padHide" aria-label="Tastatur ausblenden">▾ ausblenden</button></div>
   <div class="keys">
-    <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button><button data-k="√" class="kr">√</button><button data-k="x" class="kv">x</button><button data-k="^2" class="kp">x²</button><button data-k="back" class="kf" aria-label="Löschen">⌫</button>
-    <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button><button data-k="·" class="ko" aria-label="mal">·</button><button data-k="a" class="kv">a</button><button data-k="^3" class="kp">x³</button><button data-k="left" class="kf" aria-label="Cursor nach links">←</button>
-    <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button><button data-k="/" class="ko" aria-label="Bruchstrich">/</button><button data-k="y" class="kv">y</button><button data-k="^4" class="kp">x⁴</button><button data-k="right" class="kf" aria-label="Cursor nach rechts">→</button>
-    <button data-k="0" class="w2">0</button><button data-k="(" class="ko">(</button><button data-k=")" class="ko">)</button><button data-k="enter" class="kenter w3" aria-label="Prüfen">↵ Prüfen</button>
+    <button type="button" data-k="7">7</button><button type="button" data-k="8">8</button><button type="button" data-k="9">9</button><button type="button" data-k="√" class="kr">√</button><button type="button" data-k="x" class="kv">x</button><button type="button" data-k="^2" class="kp">x²</button><button type="button" data-k="back" class="kf" aria-label="Löschen">⌫</button>
+    <button type="button" data-k="4">4</button><button type="button" data-k="5">5</button><button type="button" data-k="6">6</button><button type="button" data-k="·" class="ko" aria-label="mal">·</button><button type="button" data-k="a" class="kv">a</button><button type="button" data-k="^3" class="kp">x³</button><button type="button" data-k="left" class="kf" aria-label="Cursor nach links">←</button>
+    <button type="button" data-k="1">1</button><button type="button" data-k="2">2</button><button type="button" data-k="3">3</button><button type="button" data-k="/" class="ko" aria-label="Bruchstrich">/</button><button type="button" data-k="y" class="kv">y</button><button type="button" data-k="^4" class="kp">x⁴</button><button type="button" data-k="right" class="kf" aria-label="Cursor nach rechts">→</button>
+    <button type="button" data-k="0" class="w2">0</button><button type="button" data-k="(" class="ko">(</button><button type="button" data-k=")" class="ko">)</button><button type="button" data-k="enter" class="kenter w3" aria-label="Prüfen">↵ Prüfen</button>
   </div>
 </div>
 <button type="button" class="padshow" id="padShow" hidden>⌨ Tastatur</button>
@@ -777,7 +777,9 @@ function setPad(on){
 }
 document.getElementById("padHide").addEventListener("click", ()=>setPad(false));
 padShow.addEventListener("click", ()=>{ setPad(true); if(lastInput && !lastInput.readOnly && !lastInput.disabled) lastInput.focus(); });
-["mousedown","pointerdown","touchstart"].forEach(ev=>pad.addEventListener(ev, e=>{ if(e.target.closest(".keys button")) e.preventDefault(); }, {passive:false}));
+/* WICHTIG: nur pointerdown/mousedown abfangen (damit das Eingabefeld den Fokus behält).
+   Ein preventDefault bei touchstart würde auf Handy und Tablet den Klick auf die Taste verhindern. */
+["pointerdown","mousedown"].forEach(ev=>pad.addEventListener(ev, e=>{ if(e.target.closest(".keys button")) e.preventDefault(); }));
 pad.addEventListener("click", e=>{
   const b = e.target.closest(".keys button"); if(!b) return;
   if(!lastInput || lastInput.readOnly || lastInput.disabled || !document.body.contains(lastInput)) return;
