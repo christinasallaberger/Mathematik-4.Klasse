@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bruchterme addieren und subtrahieren</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F9FC; --grid:#DCE6F2; --ink:#1B2F6B; --text:#1E2533; --muted:#5B6578;
+  --card:#FFFFFF; --line:#C9D5E6; --ok:#217A4B; --okbg:#E3F4EA; --bad:#B3261E; --badbg:#FBE7E5;
+  --mark:#FFE873; --field:#FFFFFF; --info:#EAF1FB; --accent:#147D92;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111827; --grid:#1C2638; --ink:#A9C1FF; --text:#E6EAF2; --muted:#9AA4B8;
+    --card:#172033; --line:#2C3A55; --ok:#5FD08E; --okbg:#173326; --bad:#FF8A80; --badbg:#3A1C1C;
+    --mark:#6B5A12; --field:#0F1726; --info:#1A2740; --accent:#5CC8DC; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111827; --grid:#1C2638; --ink:#A9C1FF; --text:#E6EAF2; --muted:#9AA4B8;
+  --card:#172033; --line:#2C3A55; --ok:#5FD08E; --okbg:#173326; --bad:#FF8A80; --badbg:#3A1C1C;
+  --mark:#6B5A12; --field:#0F1726; --info:#1A2740; --accent:#5CC8DC; color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; color:var(--text); font-family:"Atkinson Hyperlegible",system-ui,"Segoe UI",Arial,sans-serif;
+  font-size:1.0625rem; line-height:1.5;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.wrap{max-width:60rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1rem;margin:1rem 0 2rem}
+h1{font-family:Fraunces,Georgia,serif;font-weight:800;color:var(--ink);font-size:clamp(2.1rem,6vw,3.5rem);line-height:1.02;margin:0;letter-spacing:-.01em}
+h1 .acc{color:var(--accent)}
+.sub{color:var(--muted);margin:.5rem 0 0;max-width:42rem}
+.top{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.score{font-weight:700;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:999px;padding:.35rem .9rem}
+button{font:inherit;cursor:pointer;border-radius:.5rem;border:2px solid var(--ink);background:var(--ink);color:var(--paper);padding:.45rem .9rem;font-weight:700}
+button.ghost{background:transparent;color:var(--ink)}
+button:disabled{cursor:default;opacity:.45}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+button.mini{font-size:.85rem;padding:.1rem .55rem;background:transparent;color:var(--ink);border-width:1.5px}
+section{background:var(--card);border:2px solid var(--line);border-radius:.75rem;padding:1.25rem 1.25rem 1rem;margin:0 0 1.5rem}
+.head{display:flex;gap:.8rem;align-items:baseline;flex-wrap:wrap}
+.num{font-family:Fraunces,Georgia,serif;font-weight:800;font-size:1.6rem;color:var(--ink);min-width:1.4em}
+h2{font-size:1.15rem;margin:0}
+h3{font-size:1.05rem;margin:0 0 .4rem;color:var(--ink)}
+sup{font-size:.68em;margin-left:.04em}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.15;margin:0 .15em}
+.fr>span:first-child{border-bottom:2px solid currentColor;padding:0 .3em .1em}
+.fr>span:last-child{padding:.1em .3em 0}
+.task-expr{font-size:1.5rem;margin:.8rem 0 .2rem;display:flex;align-items:center;flex-wrap:wrap;gap:.3rem}
+input{font:inherit;font-size:1.1rem;color:var(--text);background:var(--field);border:2px solid var(--line);border-radius:.4rem;padding:.2rem .4rem}
+input.ok{border-color:var(--ok);background:var(--okbg)}
+input.bad{border-color:var(--bad);background:var(--badbg)}
+.actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.6rem}
+.hint{color:var(--muted);font-size:.95rem;margin:.4rem 0 0}
+.msg{margin:.6rem 0 0;font-size:.97rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.msg.ok{color:var(--ok);font-weight:700}.msg.bad{color:var(--bad)}.msg.shown{color:var(--muted)}
+.prev{color:var(--muted);font-size:1.05rem}
+.prev b{color:var(--text);font-weight:400}
+
+details.info{background:var(--info);border:0;border-left:6px solid var(--ink);border-radius:.5rem;padding:.7rem 1rem;margin:0 0 1.5rem}
+details.info summary{cursor:pointer;font-weight:700;color:var(--ink)}
+details.info p{margin:.5rem 0}
+.copy{background:var(--mark);color:var(--text);border-radius:.4rem;padding:.4rem .7rem;margin:.6rem 0!important}
+.rule{font-size:1.15rem;display:flex;align-items:center;flex-wrap:wrap;gap:.25rem}
+
+.levels{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden;margin-top:1rem}
+.levels button{border:0;border-radius:0;background:transparent;color:var(--ink);padding:.45rem 1.1rem}
+.levels button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.nav{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.dots{display:flex;gap:.35rem;flex-wrap:wrap}
+.dot{width:2.3rem;height:2.3rem;border-radius:50%;padding:0;font-weight:700;background:var(--field);color:var(--ink);border:2px solid var(--line)}
+.dot.started{background:var(--info)}
+.dot.done{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.dot.shown{border-style:dashed}
+.dot.cur{border-color:var(--ink);box-shadow:0 0 0 3px var(--mark)}
+.round{margin-left:auto;color:var(--muted);font-size:.9rem;border:1.5px solid var(--line);border-radius:999px;padding:.1rem .6rem}
+
+.stepcard{border:2px solid var(--line);border-radius:.6rem;padding:.8rem 1rem;margin-top:1rem}
+.stepcard.active{border-color:var(--ink)}
+.stepcard.done{border-color:var(--ok)}
+.stepcard p{margin:.3rem 0}
+.donetxt{color:var(--ok);font-weight:700}
+.row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin:.5rem 0;font-size:1.2rem}
+.row input{width:14rem;max-width:100%}
+.row input.sm{width:9rem}
+.rowmsg{flex-basis:100%;font-size:.92rem;color:var(--bad)}
+.rowmsg:empty{display:none}
+.donebox{margin-top:1rem;padding:.8rem 1rem;border-radius:.6rem;background:var(--okbg);border:2px solid var(--ok);display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+.donebox b{color:var(--ok)}
+
+.heft{overflow-x:auto;margin:1.2rem 0 .5rem;border:2px dashed var(--line);border-radius:.6rem;background:var(--paper);padding:.8rem 1rem}
+.heft .hefttitle{margin:0 0 .3rem;font-weight:700;color:var(--muted);font-size:.95rem}
+.heft .hl{font-size:1.3rem;color:var(--ink);margin:.5rem 0;display:flex;align-items:center;flex-wrap:wrap;gap:.25rem}
+.heft .small{font-size:1rem;color:var(--muted)}
+.heft .fin{font-weight:700}
+.heft .copy{font-size:1rem}
+
+.startcard{border-color:var(--ink);border-width:3px}
+.startcard h2{font-family:Fraunces,Georgia,serif;font-size:1.5rem;color:var(--ink)}
+#pname{width:16rem;max-width:100%;font-size:1.15rem}
+#startDone{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.who{font-weight:700;color:var(--ink);display:inline-flex;align-items:center;gap:.4rem;font-size:1.1rem}
+#codeAsk{margin-top:1rem}
+#codeAsk summary{cursor:pointer;color:var(--ink);font-weight:700}
+#pcode{width:17rem;max-width:100%;font-family:ui-monospace,Consolas,"Courier New",monospace;text-transform:uppercase;letter-spacing:.05em}
+#pnameErr{color:var(--bad);margin:.6rem 0 0}
+#startMsg{flex-basis:100%;margin:0;color:var(--ok);font-weight:700}
+#startMsg:empty{display:none}
+#codeBox{flex-basis:100%;background:var(--info);border-left:6px solid var(--ink);border-radius:.5rem;padding:.7rem 1rem}
+#codeBox p{margin:.3rem 0}
+.code{font-family:ui-monospace,Consolas,"Courier New",monospace;font-size:1.35rem;font-weight:700;letter-spacing:.06em;color:var(--ink);word-break:break-all}
+.finish{display:flex;justify-content:center;margin:0 0 1.5rem}
+#summary{border-color:var(--ink);border-width:3px}
+#summary .who{margin:.4rem 0 0;color:var(--muted)}
+#summary .who b{color:var(--text)}
+.summsg{font-size:1.2rem;font-weight:700;color:var(--ink);margin:.6rem 0 1rem}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:30rem}
+th,td{text-align:left;padding:.4rem .6rem;border-bottom:1px solid var(--line);vertical-align:middle}
+td.c,th.c{text-align:center}
+tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--ink)}
+body.locked #main{opacity:.35;filter:grayscale(.4);pointer-events:none;user-select:none}
+
+#pad{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:3px solid var(--ink);
+  padding:.5rem .6rem calc(.5rem + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 16px rgba(27,47,107,.15)}
+#pad .padtop{display:flex;align-items:center;gap:.5rem;max-width:34rem;margin:0 auto .4rem;color:var(--muted);font-size:.9rem}
+#pad .padtop span{margin-right:auto;font-weight:700;color:var(--ink)}
+#pad .keys{display:grid;grid-template-columns:repeat(7,1fr);gap:.3rem;max-width:34rem;margin:0 auto}
+#pad .keys button{padding:.55rem 0;font-size:1.15rem;font-weight:700;background:var(--field);color:var(--text);border:2px solid var(--line);border-radius:.45rem;touch-action:manipulation}
+#pad .keys button.var{font-style:italic;font-family:Georgia,serif}
+#pad .keys button.op{background:var(--info)}
+#pad .keys button.go{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+body.padon .wrap{padding-bottom:20rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Bruchterme <span class="acc">+</span> und <span class="acc">−</span></h1>
+      <p class="sub">Nenner zerlegen, Hauptnenner finden, erweitern, Zähler zusammenfassen – Schritt für Schritt. Mit ◀ ▶ oder den Nummern springst du zwischen den Beispielen.</p>
+      <div class="levels" role="group" aria-label="Niveau">
+        <button type="button" data-level="std" aria-pressed="true">Standard</button>
+        <button type="button" data-level="ahs" aria-pressed="false">Standard AHS</button>
+      </div>
+    </div>
+    <div class="top"><span class="score" id="score">0 von 6 fertig</span></div>
+  </header>
+
+  <section id="start" class="startcard">
+    <div id="startAsk">
+      <h2>Wie heißt du?</h2>
+      <p class="hint">Gib zuerst deinen Namen ein. Er steht am Ende in deiner Auswertung und kann danach nicht mehr geändert werden. Hast du auf diesem Gerät schon geübt, machst du automatisch dort weiter, wo du aufgehört hast.</p>
+      <div class="actions"><input id="pname" placeholder="Vor- und Nachname" autocomplete="name" aria-label="Dein Name"><button id="startBtn" type="button">Los geht’s</button></div>
+      <details id="codeAsk">
+        <summary>Auf einem anderen Gerät angefangen? Code eingeben</summary>
+        <p class="hint">Schreib oben deinen Namen genau wie auf dem anderen Gerät und tippe hier den Code ein.</p>
+        <div class="actions"><input id="pcode" placeholder="z. B. K7MP-2XQ9" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Code vom anderen Gerät"></div>
+      </details>
+      <p id="pnameErr" hidden></p>
+    </div>
+    <div id="startDone" hidden>
+      <span class="who">👤 <b id="pnameShow"></b></span>
+      <button type="button" class="mini" id="codeBtn" aria-expanded="false">Auf anderem Gerät weitermachen</button>
+      <p id="startMsg" aria-live="polite"></p>
+      <div id="codeBox" hidden>
+        <p>Dein Code: <span class="code" id="codeShow"></span> <button type="button" class="mini" id="codeCopy">Kopieren</button></p>
+        <p class="hint">Öffne die Übung auf dem anderen Gerät, gib <b>genau denselben Namen</b> ein und tippe diesen Code ein. Der Code ändert sich, während du weiterarbeitest – schreib ihn dir erst auf, wenn du hier aufhörst.</p>
+      </div>
+    </div>
+  </section>
+
+  <div id="main">
+    <section id="exCard"></section>
+
+    <details class="info" id="howto" open>
+      <summary>Zusammenfassung – schreib sie in dein Heft!</summary>
+      <p class="copy">✏️ <b>Schreib diese Zusammenfassung mit dem Beispiel ordentlich in dein Heft ab.</b></p>
+      <p><b>1. Nenner zerlegen:</b> Zahl oder <i>x</i> herausheben, binomische Formeln verwenden.</p>
+      <p><b>2. Hauptnenner:</b> Nimm von den Zahlen das <b>kgV</b> und jeden Faktor so oft, wie er in einem Nenner <b>höchstens</b> vorkommt.</p>
+      <p><b>3. Erweitern:</b> Multipliziere Zähler und Nenner jedes Bruchs mit dem, was seinem Nenner zum Hauptnenner <b>fehlt</b>.</p>
+      <p><b>4. Zähler:</b> Ausmultiplizieren und zusammenfassen. <b>Achtung:</b> Ein Minus vor dem Bruch gilt für den <b>ganzen</b> Zähler!</p>
+      <p><b>Beispiel:</b></p>
+      <p class="rule" id="sumEx"></p>
+      <p><b>Binomische Formeln</b> (Standard AHS):<br>
+        <i>x</i><sup>2</sup> − 9 = (<i>x</i> + 3)(<i>x</i> − 3) &nbsp;·&nbsp; <i>x</i><sup>2</sup> + 6<i>x</i> + 9 = (<i>x</i> + 3)<sup>2</sup> &nbsp;·&nbsp; <i>x</i><sup>2</sup> − 6<i>x</i> + 9 = (<i>x</i> − 3)<sup>2</sup></p>
+      <p><b>Zuerst die Zahl herausheben, dann die binomische Formel:</b><br>
+        2<i>x</i><sup>2</sup> − 18 = 2(<i>x</i><sup>2</sup> − 9) = 2(<i>x</i> + 3)(<i>x</i> − 3) &nbsp;·&nbsp; 3<i>x</i><sup>2</sup> + 12<i>x</i> + 12 = 3(<i>x</i><sup>2</sup> + 4<i>x</i> + 4) = 3(<i>x</i> + 2)<sup>2</sup></p>
+      <p class="hint">Eingabe: Malpunkt kannst du weglassen, z. B. 2(x+3)(x-3) oder (x+2)^2 oder 6x.</p>
+    </details>
+
+    <div class="finish"><button class="ghost" id="showSum" type="button">Auswertung anzeigen</button></div>
+
+    <section id="summary" hidden>
+      <div class="head"><h2 id="sumTitle">Auswertung</h2></div>
+      <p id="sumWho" class="who"></p>
+      <p id="sumMsg" class="summsg"></p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Beispiel</th><th>Ergebnis</th><th>Bewertung</th><th class="c">Fehlversuche</th></tr></thead>
+        <tbody id="sumBody"></tbody>
+        <tfoot id="sumFoot"></tfoot>
+      </table></div>
+      <div class="actions" style="margin-top:1rem"><button type="button" id="newRound2">Neue Runde mit neuen Beispielen</button></div>
+    </section>
+  </div>
+</div>
+
+<div id="pad" hidden role="group" aria-label="Eingabehilfe">
+  <div class="padtop"><span>Eingabehilfe</span>
+    <button type="button" class="mini" id="padSys">Handy-Tastatur einblenden</button>
+    <button type="button" class="mini" id="padHide" aria-label="Eingabehilfe schließen">✕</button>
+  </div>
+  <div class="keys">
+    <button type="button" data-ins="7">7</button><button type="button" data-ins="8">8</button><button type="button" data-ins="9">9</button><button type="button" class="var" data-ins="x">x</button><button type="button" class="op" data-ins="(">(</button><button type="button" class="op" data-ins=")">)</button><button type="button" class="op" data-act="del" aria-label="Löschen">⌫</button>
+    <button type="button" data-ins="4">4</button><button type="button" data-ins="5">5</button><button type="button" data-ins="6">6</button><button type="button" class="op" data-ins="+">+</button><button type="button" class="op" data-ins="-" aria-label="minus">−</button><button type="button" class="op" data-ins="·" aria-label="mal">·</button><button type="button" class="op" data-act="clr" aria-label="Feld leeren">C</button>
+    <button type="button" data-ins="1">1</button><button type="button" data-ins="2">2</button><button type="button" data-ins="3">3</button><button type="button" class="op" data-ins="²" aria-label="hoch 2">□²</button><button type="button" class="op" data-ins="^" aria-label="hoch">□ⁿ</button><button type="button" class="op" data-act="left" aria-label="Cursor nach links">◀</button><button type="button" class="op" data-act="right" aria-label="Cursor nach rechts">▶</button>
+    <button type="button" data-ins="0" style="grid-column:span 3">0</button><button type="button" class="go" data-act="ok" style="grid-column:span 4">✓ fertig</button>
+  </div>
+</div>
+
+<script>
+/* ================= Hilfsfunktionen ================= */
+let RNG=Math.random;
+const rnd=(a,b)=>a+Math.floor(RNG()*(b-a+1));
+const pick=a=>a[rnd(0,a.length-1)];
+const sg=()=>RNG()<.5?1:-1;
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const gcd=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b)[a,b]=[b,a%b];return a;};
+const lcm=(a,b)=>a/gcd(a,b)*b;
+const MINUS='−',X='<i>x</i>',sup=e=>e>1?'<sup>'+e+'</sup>':'';
+const fr=(n,d)=>'<span class="fr"><span>'+n+'</span><span>'+d+'</span></span>';
+
+/* ================= Polynome in x (Koeffizienten-Liste, Index = Hochzahl) ================= */
+const P={
+  trim:a=>{a=a.map(v=>v||0);while(a.length>1&&a[a.length-1]===0)a.pop();return a;},
+  add:(a,b)=>{const r=[];for(let i=0;i<Math.max(a.length,b.length);i++)r.push((a[i]||0)+(b[i]||0));return P.trim(r);},
+  neg:a=>a.map(v=>-v||0),
+  scale:(a,k)=>P.trim(a.map(v=>v*k)),
+  mul:(a,b)=>{const r=Array(a.length+b.length-1).fill(0);a.forEach((x,i)=>b.forEach((y,j)=>{r[i+j]+=x*y;}));return P.trim(r);},
+  pow:(a,n)=>{let r=[1];for(let i=0;i<n;i++)r=P.mul(r,a);return r;},
+  eq:(a,b)=>{a=P.trim(a);b=P.trim(b);return a.length===b.length&&a.every((v,i)=>v===b[i]);},
+  deg:a=>P.trim(a).length-1,
+  terms:a=>a.filter(v=>v).length,
+  content:a=>a.reduce((g,v)=>gcd(g,v),0),
+  lead:a=>{a=P.trim(a);return a[a.length-1];}
+};
+function termH(c,e,first){
+  const neg=c<0,a=Math.abs(c);let core=e===0?String(a):(a===1?'':a)+X+sup(e);
+  return first?(neg?MINUS:'')+core:(neg?' − ':' + ')+core;
+}
+function polyH(p){p=P.trim(p);const out=[];for(let e=p.length-1;e>=0;e--)if(p[e])out.push(termH(p[e],e,!out.length));return out.length?out.join(''):'0';}
+function polyPlain(p){p=P.trim(p);const out=[];for(let e=p.length-1;e>=0;e--){const c=p[e];if(!c)continue;const a=Math.abs(c);
+  const core=e===0?String(a):(a===1?'':a)+'x'+(e>1?'^'+e:'');out.push(out.length?(c<0?' - ':' + ')+core:(c<0?'-':'')+core);}return out.length?out.join(''):'0';}
+
+/* Eingabe lesen: 2(x+3)(x-3), (x+2)^2, 6x, 3x^2-12 … */
+function parsePoly(str){
+  const s=String(str).replace(/[−–—]/g,'-').replace(/²/g,'^2').replace(/³/g,'^3').replace(/[·×•]/g,'*').replace(/\s+/g,'').toLowerCase();
+  if(!s)return {err:'Schreib einen Term.'};
+  const bad=s.match(/[^0-9x+\-*^()]/);
+  if(bad){const ch=bad[0];return {err:ch==='/'||ch===':'?'Schreib hier ohne Bruchstrich.':ch===','||ch==='.'?'Verwende nur ganze Zahlen.':'Das Zeichen „'+ch+'“ kann ich nicht lesen. Die Variable heißt x.'};}
+  let i=0;const peek=()=>s[i];
+  function expr(){
+    const parts=[];let sign=1;
+    if(peek()==='+'||peek()==='-'){sign=s[i++]==='-'?-1:1;}
+    parts.push({sign,t:term()});
+    while(peek()==='+'||peek()==='-'){const sgn=s[i++]==='-'?-1:1;parts.push({sign:sgn,t:term()});}
+    let p=[0];parts.forEach(x=>{p=P.add(p,x.sign<0?P.neg(x.t.p):x.t.p);});
+    return {p,parts};
+  }
+  function term(){
+    const fs=[power()];
+    while(i<s.length&&(peek()==='*'||/[0-9x(]/.test(peek()))){if(peek()==='*')i++;fs.push(power());}
+    let p=[1];fs.forEach(f=>{p=P.mul(p,f.p);});return {p,fs};
+  }
+  function power(){
+    const a=atom();
+    if(peek()==='^'){i++;const m=s.slice(i).match(/^\d+/);if(!m)throw 'Nach ^ muss eine Hochzahl stehen.';i+=m[0].length;return {p:P.pow(a.p,+m[0]),base:a.p,exp:+m[0]};}
+    return {p:a.p,base:a.p,exp:1};
+  }
+  function atom(){
+    const c=peek();if(c===undefined)throw 'Da fehlt noch etwas.';
+    if(/\d/.test(c)){const m=s.slice(i).match(/^\d+/);i+=m[0].length;return {p:[+m[0]]};}
+    if(c==='x'){i++;return {p:[0,1]};}
+    if(c==='('){i++;const e=expr();if(peek()!==')')throw 'Eine Klammer ist nicht geschlossen.';i++;return {p:e.p};}
+    throw 'Das Zeichen „'+c+'“ passt hier nicht.';
+  }
+  try{const e=expr();if(i!==s.length)throw 'Prüfe Klammern und Rechenzeichen.';
+    const single=e.parts.length===1;
+    return {p:e.p,factors:single?e.parts[0].t.fs:null,neg:single&&e.parts[0].sign<0,nterms:e.parts.length,hasParen:s.includes('(')};
+  }catch(m){return {err:typeof m==='string'?m:'Das kann ich nicht lesen.'};}
+}
+
+/* ================= Nenner als Produkt: Zahl · Faktoren (a·x + b)^m ================= */
+/* den = {c, fs:[[a,b,m],…]}  –  [1,0,m] ist x^m */
+const linP=(a,b)=>[b,a];
+function denPoly(d){let p=[d.c];d.fs.forEach(([a,b,m])=>{p=P.mul(p,P.pow(linP(a,b),m));});return p;}
+function denH(d){
+  const xs=d.fs.filter(f=>f[1]===0),bs=d.fs.filter(f=>f[1]!==0);
+  let h=(d.c!==1||(!xs.length&&!bs.length))?String(d.c):'';
+  xs.forEach(([a,b,m])=>{h+=X+sup(m);});
+  bs.forEach(([a,b,m])=>{h+='('+polyH(linP(a,b))+')'+sup(m);});
+  return h;
+}
+function denPlain(d){
+  const xs=d.fs.filter(f=>f[1]===0),bs=d.fs.filter(f=>f[1]!==0);
+  let h=(d.c!==1||(!xs.length&&!bs.length))?String(d.c):'';
+  xs.forEach(([a,b,m])=>{h+='x'+(m>1?'^'+m:'');});
+  bs.forEach(([a,b,m])=>{h+='('+polyPlain(linP(a,b))+')'+(m>1?'^'+m:'');});
+  return h;
+}
+const fkey=f=>f[0]+','+f[1];
+function denLcm(ds){
+  const c=ds.reduce((g,d)=>lcm(g,d.c),1),mp=new Map();
+  ds.forEach(d=>d.fs.forEach(f=>{const k=fkey(f),o=mp.get(k);if(!o||o[2]<f[2])mp.set(k,f.slice());}));
+  return {c,fs:sortF([...mp.values()])};
+}
+function denDiv(h,d){
+  const fs=[];h.fs.forEach(f=>{const o=d.fs.find(g=>fkey(g)===fkey(f));const m=f[2]-(o?o[2]:0);if(m>0)fs.push([f[0],f[1],m]);});
+  return {c:h.c/d.c,fs:sortF(fs)};
+}
+const sortF=fs=>fs.sort((p,q)=>(p[1]===0?-1:0)-(q[1]===0?-1:0)||q[1]-p[1]);
+const isOneDen=d=>d.c===1&&!d.fs.length;
+/* muss der Schüler den Nenner erst zerlegen? */
+const needsFactor=d=>{const bs=d.fs.filter(f=>f[1]!==0),cnt=d.fs.reduce((s,f)=>s+(f[1]===0?1:f[2]),0);return bs.length>0&&(d.c!==1||cnt>=2);};
+
+/* ================= Beispiele ================= */
+const N_EX=6,DONE=4;  /* Schritte: 0 Nenner zerlegen · 1 Hauptnenner · 2 Erweiterungsfaktoren · 3 Zähler · 4 fertig */
+const K=k=>[k],Xp=[0,1];
+const p6=()=>rnd(1,6),pm=()=>sg()*rnd(1,6);
+const GEN={
+  std:[
+    ()=>{let c1,c2;do{c1=pick([2,3,4,6,8,9,10]);c2=pick([2,3,4,5,6,8,12]);}while(c1===c2||gcd(c1,c2)===1);return [{n:K(rnd(1,9)),d:{c:c1,fs:[[1,0,1]]}},{n:K(rnd(1,9)),d:{c:c2,fs:[[1,0,1]]}}];},
+    ()=>[{n:K(rnd(1,9)),d:{c:pick([1,2,3]),fs:[[1,0,1]]}},{n:K(rnd(1,9)),d:{c:pick([1,2,3,6]),fs:[[1,0,2]]}}],
+    ()=>{const p=pm();return [{n:K(rnd(1,9)),d:{c:1,fs:[[1,p,1]]}},{n:K(rnd(1,9)),d:{c:1,fs:[[1,0,1]]}}];},
+    ()=>{const p=pm(),c=rnd(2,5);return [{n:K(rnd(1,9)),d:{c,fs:[[1,p,1]]}},{n:K(rnd(1,9)),d:{c:1,fs:[[1,p,1]]}}];},
+    ()=>{const p=pm();return [{n:K(rnd(1,9)),d:{c:1,fs:[[1,0,1],[1,p,1]]}},{n:K(rnd(1,9)),d:{c:pick([1,2,3]),fs:[[1,0,1]]}}];},
+    ()=>{let p,q;do{p=pm();q=pm();}while(p===q);return [{n:K(rnd(1,9)),d:{c:1,fs:[[1,p,1]]}},{n:K(rnd(1,9)),d:{c:1,fs:[[1,q,1]]}}];}
+  ],
+  ahs:[
+    ()=>{const p=p6(),s=sg();return [{n:K(rnd(1,9)),d:{c:1,fs:[[1,p,1],[1,-p,1]]}},{n:K(rnd(1,9)),d:{c:1,fs:[[1,s*p,1]]}}];},
+    ()=>{const p=p6(),c=rnd(2,5);return [{n:K(rnd(1,9)),d:{c,fs:[[1,p,1],[1,-p,1]]}},{n:pick([K(rnd(1,9)),Xp]),d:{c:1,fs:[[1,-p,1]]}}];},
+    ()=>{const p=pm();return [{n:K(rnd(1,9)),d:{c:1,fs:[[1,p,2]]}},{n:K(rnd(1,9)),d:{c:1,fs:[[1,p,1]]}}];},
+    ()=>{const p=pm(),c=pick([2,3]),d=pick([2,3,4,6]);return [{n:K(rnd(1,9)),d:{c,fs:[[1,p,2]]}},{n:K(rnd(1,9)),d:{c:d,fs:[[1,p,1]]}}];},
+    ()=>{const p=p6();return [{n:K(rnd(1,9)),d:{c:1,fs:[[1,p,1],[1,-p,1]]}},{n:K(rnd(1,9)),d:{c:1,fs:[[1,-p,2]]}}];},
+    ()=>{const p=p6();let c,d;do{c=rnd(2,6);d=rnd(2,6);}while(c===d);return [{n:pick([K(rnd(1,9)),Xp]),d:{c,fs:[[1,p,1],[1,-p,1]]}},{n:K(rnd(1,9)),d:{c:d,fs:[[1,sg()*p,1]]}}];}
+  ]
+};
+function build(fs,op){
+  fs.forEach(f=>{f.d.fs=sortF(f.d.fs);});
+  const hn=denLcm(fs.map(f=>f.d)),rs=fs.map(f=>denDiv(hn,f.d));
+  const prods=fs.map((f,k)=>P.mul(f.n,denPoly(rs[k])));
+  const N=P.add(prods[0],op<0?P.neg(prods[1]):prods[1]);
+  return {fr:fs,op,hn,rs,prods,N,need:fs.map(f=>needsFactor(f.d))};
+}
+/* darf nicht kürzbar sein und der Zähler nicht 0 */
+function okTask(t){
+  if(P.eq(t.N,[0]))return false;
+  /* die einzelnen Brüche sollen nicht schon kürzbar sein */
+  for(const f of t.fr){
+    if(gcd(P.content(f.n),f.d.c)>1)return false;
+    for(const [a,b] of f.d.fs){let v=0;const dg=P.deg(f.n);for(let e=0;e<=dg;e++)v+=(f.n[e]||0)*Math.pow(-b,e)*Math.pow(a,dg-e);if(v===0)return false;}
+  }
+  if(gcd(P.content(t.N),t.hn.c)>1)return false;
+  for(const [a,b] of t.hn.fs){let v=0,pw=1;const deg=P.deg(t.N);
+    /* N(-b/a)·a^deg als ganze Zahl */
+    for(let e=0;e<=deg;e++){v+=(t.N[e]||0)*Math.pow(-b,e)*Math.pow(a,deg-e);}
+    if(v===0)return false;}
+  return Math.max(...P.trim(t.N).map(Math.abs))<=200;
+}
+function mixSeed(seed,lvl,round){return (Math.imul(seed^0x9E3779B9,0x85EBCA6B)^Math.imul(lvl==='ahs'?2:1,0xC2B2AE35)^Math.imul(round,0x27D4EB2F))>>>0;}
+function genRound(lvl,seed,round){
+  const old=RNG;RNG=mulberry32(mixSeed(seed,lvl,round));
+  try{return GEN[lvl].map(g=>{for(let k=0;k<200;k++){const t=build(g(),sg());if(okTask(t))return t;}return build(g(),1);});}finally{RNG=old;}
+}
+function newEx(t){
+  const n=t.fr.length;
+  return {t,step:t.need.some(Boolean)?0:1,err:0,shown:false,msg:{},tries:[0,0,0,0],
+    fv:Array(n).fill(''),fm:Array(n).fill(null),fh:Array(n).fill(''),hv:'',hm:null,rv:Array(n).fill(''),rm:Array(n).fill(null),rh:Array(n).fill(''),nv:'',nm:null};
+}
+const applies=(e,s)=>s!==0||e.t.need.some(Boolean);
+const nextStep=(e,s)=>{let n=s+1;while(n<DONE&&!applies(e,n))n++;return n;};
+const opH=t=>t.op<0?' − ':' + ';
+function exprH(t,fact){return t.fr.map((f,k)=>(k?opH(t):'')+fr(polyH(f.n),fact?denH(f.d):polyH(denPoly(f.d)))).join('');}
+function mulH(n,r){const nh=P.terms(n)>1?'('+polyH(n)+')':polyH(n);return isOneDen(r)?nh:nh+' · '+denH(r);}
+function numLineH(t){return t.fr.map((f,k)=>(k?opH(t):'')+mulH(f.n,t.rs[k])).join('');}
+
+/* ================= Zustand ================= */
+const LEVELS={std:'Standard',ahs:'Standard AHS'};
+const G={std:{seed:Math.floor(Math.random()*65536),round:1,cur:0,ex:[]},ahs:{seed:Math.floor(Math.random()*65536),round:1,cur:0,ex:[]}};
+let level=location.hash==='#ahs'?'ahs':'std',PUPIL='',restoring=false,summaryRequested=false;
+function makeRound(lvl){const g=G[lvl];g.ex=genRound(lvl,g.seed,g.round).map(newEx);g.cur=0;}
+const curG=()=>G[level],curEx=()=>curG().ex[curG().cur];
+
+/* ================= Prüfen ================= */
+function fail(e,s,text){e.err++;e.tries[s]++;e.msg[s]={kind:'bad',text:text+(e.tries[s]===1?' Versuch es nochmal!':''),offer:e.tries[s]>=2};}
+function hint(e,s,text){e.msg[s]={kind:'bad',text,offer:e.tries[s]>=2};}
+function advance(e,s,text){e.step=nextStep(e,s);e.msg[s]={kind:'ok',text};}
+function rowCheck(e,s,rs,marks,hints,okText,failText){
+  rs.forEach((r,k)=>{if(r.skip)return;marks[k]=r.ok?'ok':r.empty?null:'bad';hints[k]=r.ok?'':r.text;});
+  const act=rs.filter(r=>!r.skip);
+  if(act.every(r=>r.ok)){advance(e,s,okText);return;}
+  if(act.some(r=>r.empty)){hint(e,s,'Fülle zuerst alle Felder aus.');return;}
+  if(act.every(r=>r.ok||r.fmt)){hint(e,s,'Kontrolliere die Markierten – da passt die Schreibweise noch nicht.');return;}
+  fail(e,s,failText);
+}
+/* Schritt 1: Nenner zerlegen */
+function factorIssue(f){
+  const b=f.base,d=P.deg(b);
+  if(d<=0||P.terms(b)===1)return null;
+  if(f.exp>1&&d>1)return '('+polyH(b)+') kannst du noch weiter zerlegen.';
+  const ct=P.content(b);
+  if(d===1)return ct>1?'Bei ('+polyH(b)+') kannst du noch '+ct+' herausheben.':null;
+  if(!b[0])return 'Bei ('+polyH(b)+') kannst du noch '+X+' herausheben.';
+  if(ct>1)return 'Bei ('+polyH(b)+') kannst du noch '+ct+' herausheben – danach brauchst du eine binomische Formel.';
+  return '('+polyH(b)+') kannst du noch mit einer binomischen Formel zerlegen.';
+}
+function judgeFactor(d,s){
+  if(!s.trim())return {empty:true};
+  const r=parsePoly(s);if(r.err)return {fmt:true,text:r.err};
+  const dp=denPoly(d);
+  if(!P.eq(r.p,dp))return {text:'Das ergibt ausmultipliziert '+polyH(r.p)+', nicht '+polyH(dp)+'.'};
+  if(!r.factors)return {text:'Schreib den Nenner als Produkt – ohne + oder − außerhalb der Klammern.'};
+  for(const f of r.factors){const iss=factorIssue(f);if(iss)return {text:iss};}
+  return {ok:true};
+}
+function check0(e){
+  const t=e.t,rs=t.fr.map((f,k)=>t.need[k]?judgeFactor(f.d,e.fv[k]):{skip:true});
+  rowCheck(e,0,rs,e.fm,e.fh,'Richtig zerlegt!','Nicht alle Nenner sind richtig zerlegt – schau dir die rot markierten an.');
+}
+/* Schritt 2: Hauptnenner */
+function check1(e){
+  const t=e.t,s=e.hv;
+  if(!s.trim()){hint(e,1,'Schreib den Hauptnenner in das Feld.');return;}
+  const r=parsePoly(s);if(r.err){hint(e,1,r.err);return;}
+  const hp=denPoly(t.hn);
+  if(P.eq(r.p,hp)){e.hm='ok';advance(e,1,'Richtig! Das ist der Hauptnenner.');return;}
+  e.hm='bad';
+  const k=P.lead(r.p)/P.lead(hp);
+  const prodAll=t.fr.reduce((p,f)=>P.mul(p,denPoly(f.d)),[1]);
+  if(P.eq(r.p,prodAll))fail(e,1,'Das ist das Produkt der Nenner – gemeinsame Faktoren nimmst du nur einmal (so oft, wie sie höchstens vorkommen).');
+  else if(Number.isInteger(k)&&k>1&&P.eq(r.p,P.scale(hp,k)))fail(e,1,'Das ist ein gemeinsamer Nenner, aber nicht der kleinste: Nimm von den Zahlen das kgV.');
+  else fail(e,1,'Nimm von den Zahlen das kgV und jeden Faktor so oft, wie er in einem Nenner höchstens vorkommt.');
+}
+/* Schritt 3: Erweiterungsfaktoren */
+function judgeExt(t,k,s){
+  if(!s.trim())return {empty:true};
+  const r=parsePoly(s);if(r.err)return {fmt:true,text:r.err};
+  const want=denPoly(t.rs[k]);
+  if(P.eq(r.p,want))return {ok:true};
+  if(isOneDen(t.rs[k]))return {text:'Dieser Nenner ist schon der Hauptnenner – du erweiterst mit 1.'};
+  if(P.eq(r.p,denPoly(t.hn)))return {text:'Das ist der ganze Hauptnenner. Du brauchst nur das, was diesem Nenner noch fehlt.'};
+  if(P.eq(r.p,[1]))return {text:'Diesem Nenner fehlt noch etwas zum Hauptnenner.'};
+  return {text:'Vergleiche den Nenner mit dem Hauptnenner: Was fehlt ihm noch? (Zahl und Faktoren)'};
+}
+function check2(e){
+  const t=e.t,rs=t.fr.map((f,k)=>judgeExt(t,k,e.rv[k]));
+  rowCheck(e,2,rs,e.rm,e.rh,'Richtig! So erweiterst du die Brüche.','Nicht alle Erweiterungsfaktoren stimmen.');
+}
+/* Schritt 4: Zähler */
+function check3(e){
+  const t=e.t,s=e.nv;
+  if(!s.trim()){hint(e,3,'Schreib den Zähler in das Feld.');return;}
+  const r=parsePoly(s);if(r.err){hint(e,3,r.err);return;}
+  if(P.eq(r.p,t.N)){
+    if(r.hasParen){hint(e,3,'Richtig gerechnet – aber multipliziere noch aus, ohne Klammern.');return;}
+    if(r.nterms>P.terms(t.N)){hint(e,3,'Richtig gerechnet – fasse gleichartige Glieder noch zusammen.');return;}
+    e.nm='ok';advance(e,3,'Richtig! Das ist der Zähler.');return;
+  }
+  e.nm='bad';
+  const [p1,p2]=t.prods;
+  if(t.op<0){
+    const ld=P.deg(p2),leadOnly=Array(ld+1).fill(0);leadOnly[ld]=P.lead(p2);
+    const alt=P.add(P.add(p1,P.neg(leadOnly)),P.add(p2,P.neg(leadOnly)));
+    if(P.terms(p2)>1&&P.eq(r.p,alt)){fail(e,3,'Das Minus vor dem Bruch gilt für den ganzen Zähler: −(…) dreht alle Vorzeichen in der Klammer um.');return;}
+    if(P.eq(r.p,P.add(p1,p2))){fail(e,3,'Achte auf das Minus vor dem zweiten Bruch!');return;}
+  }
+  const plain=P.add(t.fr[0].n,t.op<0?P.neg(t.fr[1].n):t.fr[1].n);
+  if(P.eq(r.p,plain)){fail(e,3,'Du musst jeden Zähler auch mit seinem Erweiterungsfaktor multiplizieren.');return;}
+  fail(e,3,'Multipliziere jeden Zähler mit seinem Erweiterungsfaktor aus und fasse zusammen.');
+}
+function showSolution(e,s){
+  const t=e.t;
+  if(s===0){t.fr.forEach((f,k)=>{if(t.need[k]){e.fv[k]=denPlain(f.d);e.fm[k]='ok';e.fh[k]='';}});}
+  if(s===1){e.hv=denPlain(t.hn);e.hm='ok';}
+  if(s===2){e.rv=t.rs.map(denPlain);e.rm=t.rs.map(()=>'ok');e.rh=t.rs.map(()=>'');}
+  if(s===3){e.nv=polyPlain(t.N);e.nm='ok';}
+  e.shown=true;e.msg[s]={kind:'shown',text:'Die Lösung ist jetzt eingetragen – schau sie dir genau an.'};
+  e.step=nextStep(e,s);
+}
+
+/* ================= Anzeige ================= */
+function msgHTML(e,s){const m=e.msg[s];if(!m)return '';
+  return '<p class="msg '+m.kind+'">'+m.text+(m.offer&&e.step===s?' <button type="button" class="mini" data-act="show'+s+'">Lösung zeigen</button>':'')+'</p>';}
+function inp(attr,val,cls,label,ph){return '<input class="pin'+(cls?' '+cls:'')+'" '+attr+' value="'+esc(val)+'" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="'+label+'"'+(ph?' placeholder="'+ph+'"':'')+'><span class="prev" data-prev></span>';}
+function exStatus(e){const st=e.t.need.some(Boolean)?0:1;return e.step===DONE?(e.shown?'done shown':'done'):(e.step>st?'started':'');}
+function stepNo(e,s){let n=0;for(let k=0;k<=s;k++)if(applies(e,k))n++;return n;}
+function card(e,s,title,body,doneTxt){
+  if(!applies(e,s)||e.step<s)return '';
+  return '<div class="stepcard '+(e.step===s?'active':'done')+'"><h3>'+stepNo(e,s)+'. '+title+'</h3>'+(e.step===s?body:'<div class="donetxt">✓ '+doneTxt+'</div>')+msgHTML(e,s)+'</div>';
+}
+function renderEx(focus){
+  const g=curG(),e=curEx(),t=e.t,cur=g.cur,allDone=g.ex.every(x=>x.step===DONE);
+  let h='<div class="nav"><button type="button" class="ghost" data-act="prev" aria-label="Vorheriges Beispiel"'+(cur===0?' disabled':'')+'>◀</button>'+
+    '<div class="dots" role="group" aria-label="Beispiele">'+g.ex.map((x,k)=>'<button type="button" class="dot '+exStatus(x)+(k===cur?' cur':'')+'" data-go="'+k+'" aria-label="Beispiel '+(k+1)+'"'+(k===cur?' aria-current="true"':'')+'>'+(k+1)+'</button>').join('')+'</div>'+
+    '<button type="button" class="ghost" data-act="next" aria-label="Nächstes Beispiel"'+(cur===N_EX-1?' disabled':'')+'>▶</button>'+
+    '<span class="round">Runde '+g.round+'</span><button type="button" class="mini" data-act="newround">Neue Runde</button></div>';
+  h+='<div class="head"><span class="num">'+(cur+1)+'</span><h2>Berechne und fasse zu einem Bruch zusammen:</h2></div>';
+  h+='<div class="task-expr">'+exprH(t,false)+'</div>';
+
+  /* 0: Nenner zerlegen */
+  let b0='<p>Zerlege die Nenner in Faktoren: <b>Zahl oder '+X+' herausheben</b>'+(level==='ahs'?', dann eine <b>binomische Formel</b> verwenden':'')+'.</p>';
+  t.fr.forEach((f,k)=>{b0+='<div class="row">'+polyH(denPoly(f.d))+' = '+(t.need[k]?inp('data-fi="'+k+'"',e.fv[k],e.fm[k]||'','Zerlegter Nenner','z. B. 2(x+3)(x-3)')+'<span class="rowmsg">'+e.fh[k]+'</span>':'<span>'+denH(f.d)+' (schon zerlegt)</span>')+'</div>';});
+  b0+='<div class="actions"><button type="button" data-act="check0">Prüfen</button></div>';
+  h+=card(e,0,'Zerlege die Nenner',b0,'<span class="rule">'+exprH(t,true)+'</span>');
+  /* 1: Hauptnenner */
+  h+=card(e,1,'Bestimme den Hauptnenner',
+    '<p>Die zerlegten Nenner: '+t.fr.map(f=>'<b>'+denH(f.d)+'</b>').join(' und ')+'. Nimm von den Zahlen das <b>kgV</b> und jeden Faktor so oft, wie er in einem Nenner <b>höchstens</b> vorkommt.</p>'+
+    '<div class="row">Hauptnenner = '+inp('data-hn',e.hv,e.hm||'','Hauptnenner','z. B. 2x(x+3)')+'</div><div class="actions"><button type="button" data-act="check1">Prüfen</button></div>',
+    'Hauptnenner = '+denH(t.hn));
+  /* 2: Erweiterungsfaktoren */
+  let b2='<p>Mit welchem Term musst du jeden Bruch erweitern? Überlege: Was <b>fehlt</b> dem Nenner noch zum Hauptnenner '+denH(t.hn)+'?</p>';
+  t.fr.forEach((f,k)=>{b2+='<div class="row">'+fr(polyH(f.n),denH(f.d))+' erweitern mit '+inp('data-ri="'+k+'"',e.rv[k],'sm'+(e.rm[k]?' '+e.rm[k]:''),'Erweiterungsfaktor','z. B. 2x')+'<span class="rowmsg">'+e.rh[k]+'</span></div>';});
+  b2+='<div class="actions"><button type="button" data-act="check2">Prüfen</button></div>';
+  h+=card(e,2,'Erweitere auf den Hauptnenner',b2,t.fr.map((f,k)=>'erweitern mit '+denH(t.rs[k])).join(' · '));
+  /* 3: Zähler */
+  h+=card(e,3,'Berechne den Zähler',
+    '<p>Multipliziere aus und fasse zusammen.'+(t.op<0?' <b>Achtung:</b> Das Minus gilt für den ganzen zweiten Zähler!':'')+'</p>'+
+    '<div class="row">'+fr(numLineH(t),denH(t.hn))+'</div><div class="row">Zähler = '+inp('data-nv',e.nv,e.nm||'','Zähler','z. B. 5x + 3')+'</div><div class="actions"><button type="button" data-act="check3">Prüfen</button></div>',
+    'Zähler = '+polyH(t.N));
+
+  if(e.step===DONE){
+    const nextOpen=g.ex.findIndex((x,k)=>k>cur&&x.step<DONE),anyOpen=g.ex.findIndex(x=>x.step<DONE);
+    h+='<div class="donebox"><b>Beispiel '+(cur+1)+' geschafft!</b>'+
+      (nextOpen>=0?'<button type="button" data-act="go" data-to="'+nextOpen+'">Weiter zu Beispiel '+(nextOpen+1)+' ▶</button>'
+      :anyOpen>=0?'<button type="button" data-act="go" data-to="'+anyOpen+'">Noch offen: Beispiel '+(anyOpen+1)+' ▶</button>'
+      :'<button type="button" data-act="sum">Zur Auswertung</button>')+'</div>';
+  }
+  /* Heft */
+  h+='<div class="heft"><p class="hefttitle">Dein Rechenweg</p><div class="hl">'+exprH(t,false)+'</div>';
+  if(t.need.some(Boolean)&&e.step>0)h+='<div class="hl">= '+exprH(t,true)+'</div>';
+  if(e.step>1)h+='<div class="hl small">Hauptnenner: '+denH(t.hn)+'</div>';
+  if(e.step>2)h+='<div class="hl">= '+fr(numLineH(t),denH(t.hn))+'</div>';
+  if(e.step>=DONE)h+='<div class="hl fin">= '+fr(polyH(t.N),denH(t.hn))+'</div><p class="copy">✏️ <b>Schreib diesen Rechenweg ordentlich in dein Heft ab.</b></p>';
+  h+='</div>';
+
+  $('exCard').innerHTML=h;
+  $('score').textContent=g.ex.filter(x=>x.step===DONE).length+' von '+N_EX+' fertig';
+  document.querySelectorAll('#exCard [data-prev]').forEach(pv=>updatePrev(pv.previousElementSibling));
+  if(window.padApply)window.padApply();
+  if(focus){let f=null;
+    if(focus==='step'){const firstBad=sel=>[...document.querySelectorAll('#exCard '+sel)].find(i=>i.classList.contains('bad'))||document.querySelector('#exCard '+sel);
+      f=e.step===0?firstBad('[data-fi]'):e.step===1?document.querySelector('#exCard [data-hn]'):e.step===2?firstBad('[data-ri]'):e.step===3?document.querySelector('#exCard [data-nv]'):null;}
+    else f=document.querySelector(focus);
+    if(f)f.focus({preventScroll:false});}
+  if(allDone&&!summaryRequested&&!restoring)summaryRequested=true;
+  updateSummary();saveProgress();
+}
+function updatePrev(i){
+  if(!i||!i.nextElementSibling||!i.nextElementSibling.hasAttribute('data-prev'))return;
+  const pv=i.nextElementSibling,r=parsePoly(i.value);
+  pv.innerHTML=(!i.value.trim()||r.err)?'':'→ <b>'+polyH(r.p)+'</b>';
+}
+
+/* ================= Auswertung ================= */
+function updateSummary(){
+  const g=curG(),sum=$('summary'),allDone=g.ex.every(e=>e.step===DONE);
+  if(!summaryRequested){sum.hidden=true;return;}
+  let T={done:0,first:0,shown:0,open:0,err:0},rows='';
+  g.ex.forEach((e,k)=>{let st;const t=e.t;
+    if(e.step<DONE){st='offen';T.open++;}
+    else{T.done++;if(e.shown){st='Lösung angesehen';T.shown++;}else if(!e.err){st='✓ beim 1. Versuch';T.first++;}else st='✓ richtig';}
+    T.err+=e.err;
+    rows+='<tr><td>'+(k+1)+') '+exprH(t,false)+'</td><td>'+(e.step===DONE?fr(polyH(t.N),denH(t.hn)):'–')+'</td><td>'+st+'</td><td class="c">'+e.err+'</td></tr>';});
+  $('sumBody').innerHTML=rows;
+  $('sumFoot').innerHTML='<tr><td>Gesamt: '+T.done+' von '+N_EX+' fertig</td><td></td><td>'+T.first+' beim 1. Versuch, '+T.shown+' mit Lösung</td><td class="c">'+T.err+'</td></tr>';
+  const ok=T.done-T.shown;let msg;
+  if(T.first===N_EX)msg='Perfekt! Alle Beispiele beim ersten Versuch richtig.';
+  else if(ok===N_EX)msg='Super, alle Beispiele selbst gelöst!';
+  else if(ok/N_EX>=.75)msg='Sehr gut gemacht!';
+  else if(ok/N_EX>=.5)msg='Gut! Mit ein bisschen Übung klappt der Rest auch.';
+  else msg='Übe noch ein bisschen weiter – starte eine neue Runde und probier es nochmal.';
+  if(!allDone)msg='Noch nicht alles erledigt: '+T.open+' Beispiel'+(T.open===1?' ist':'e sind')+' noch offen. '+msg;
+  $('sumTitle').textContent=(allDone?'Geschafft'+(PUPIL?', '+PUPIL:'')+'! Deine Auswertung':'Zwischenstand'+(PUPIL?' von '+PUPIL:''))+' ('+LEVELS[level]+', Runde '+g.round+')';
+  const now=new Date(),who=$('sumWho');
+  who.innerHTML='👤 <b></b> · '+now.toLocaleDateString('de-AT')+', '+now.toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'})+' Uhr · '+LEVELS[level];
+  who.querySelector('b').textContent=PUPIL||'(kein Name)';
+  $('sumMsg').textContent=msg;
+  const wasHidden=sum.hidden;sum.hidden=false;
+  if(wasHidden&&!restoring&&allDone)setTimeout(()=>sum.scrollIntoView({behavior:'smooth',block:'start'}),300);
+}
+
+/* ================= Bedienung ================= */
+function goTo(k){const g=curG();g.cur=Math.max(0,Math.min(N_EX-1,k));renderEx();$('exCard').scrollIntoView({behavior:'smooth',block:'start'});}
+function newRound(){
+  const g=curG();
+  if(g.ex.some(e=>e.step<DONE)&&!confirm('Neue Runde starten? Die offenen Beispiele werden durch neue ersetzt.'))return;
+  g.round=g.round>=100?1:g.round+1;makeRound(level);summaryRequested=false;renderEx();
+  $('exCard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+const CHECKS=[check0,check1,check2,check3];
+function runCheck(s){const e=curEx();if(e.step!==s)return;CHECKS[s](e);renderEx(e.step===DONE?null:'step');}
+$('exCard').addEventListener('click',ev=>{
+  const b=ev.target.closest('button');if(!b)return;const e=curEx();
+  if(b.dataset.go!==undefined){goTo(+b.dataset.go);return;}
+  const a=b.dataset.act;
+  if(a==='prev')goTo(curG().cur-1);
+  else if(a==='next')goTo(curG().cur+1);
+  else if(a==='go')goTo(+b.dataset.to);
+  else if(a==='newround')newRound();
+  else if(a==='sum'){summaryRequested=true;updateSummary();$('summary').scrollIntoView({behavior:'smooth',block:'start'});}
+  else if(/^check\d$/.test(a))runCheck(+a.slice(5));
+  else if(/^show\d$/.test(a)){showSolution(e,+a.slice(4));renderEx(e.step===DONE?null:'step');}
+});
+$('exCard').addEventListener('input',ev=>{
+  const t=ev.target,e=curEx();
+  const clr=()=>{t.classList.remove('ok','bad');const rm=t.parentNode.querySelector('.rowmsg');if(rm)rm.textContent='';};
+  if(t.dataset.fi!==undefined){const k=+t.dataset.fi;e.fv[k]=t.value;e.fm[k]=null;e.fh[k]='';clr();}
+  else if(t.dataset.ri!==undefined){const k=+t.dataset.ri;e.rv[k]=t.value;e.rm[k]=null;e.rh[k]='';clr();}
+  else if(t.hasAttribute('data-hn')){e.hv=t.value;e.hm=null;clr();}
+  else if(t.hasAttribute('data-nv')){e.nv=t.value;e.nm=null;clr();}
+  updatePrev(t);
+});
+$('exCard').addEventListener('keydown',ev=>{
+  if(ev.key!=='Enter'||ev.target.tagName!=='INPUT')return;
+  ev.preventDefault();const t=ev.target;
+  const all=[...document.querySelectorAll('#exCard .stepcard.active input')],nx=all.slice(all.indexOf(t)+1).find(i=>!i.value.trim());
+  if(nx){nx.focus();return;}
+  runCheck(curEx().step);
+});
+$('showSum').addEventListener('click',()=>{summaryRequested=true;updateSummary();$('summary').scrollIntoView({behavior:'smooth',block:'start'});});
+$('newRound2').addEventListener('click',newRound);
+function setLevel(l){
+  level=l;summaryRequested=curG().ex.every(e=>e.step===DONE);
+  document.querySelectorAll('.levels button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.level===l?'true':'false'));
+  try{history.replaceState(null,'',l==='ahs'?'#ahs':'#standard');}catch(x){}
+  renderEx();
+}
+document.querySelectorAll('.levels button').forEach(b=>b.addEventListener('click',()=>setLevel(b.dataset.level)));
+
+/* ================= Fortschritt: speichern (gleiches Gerät) & Code (anderes Gerät) ================= */
+const STORE='bruchterme1:',ALPH='23456789ABCDEFGHJKMNPQRSTUVWXYZ',AL=BigInt(ALPH.length),B=x=>BigInt(x);
+const normName=s=>s.trim().replace(/\s+/g,' ').toLowerCase();
+function nameHash(n){let h=2166136261;for(const ch of normName(n)){h^=ch.codePointAt(0);h=Math.imul(h,16777619);}return (h>>>0)%1024;}
+function checkChar(s){let c=0;for(let k=0;k<s.length;k++)c=(c+(k+1)*ALPH.indexOf(s[k]))%ALPH.length;return ALPH[c];}
+function makeCode(lvl){
+  const g=G[lvl],F=[],f=(v,r)=>F.push([v,r]);
+  f(lvl==='ahs'?1:0,2);f(g.seed,65536);f(g.round-1,100);f(g.cur,N_EX);
+  g.ex.forEach(e=>f(e.step*8+Math.min(e.err,3)*2+(e.shown?1:0),40));
+  f(nameHash(PUPIL),1024);
+  let N=0n;for(let k=F.length-1;k>=0;k--)N=N*B(F[k][1])+B(F[k][0]);
+  let s='';do{s=ALPH[Number(N%AL)]+s;N/=AL;}while(N>0n);
+  s+=checkChar(s);return s.match(/.{1,4}/g).join('-');
+}
+function readCode(str){
+  const bad={err:'Dieser Code ist ungültig. Kontrolliere, ob du ihn richtig abgeschrieben hast.'};
+  const s=str.toUpperCase().replace(/[\s\-–—_.]/g,'');
+  if(s.length<3||[...s].some(ch=>!ALPH.includes(ch)))return bad;
+  const body=s.slice(0,-1);
+  if(checkChar(body)!==s.slice(-1))return {err:'Im Code ist ein Tippfehler. Kontrolliere ihn Zeichen für Zeichen.'};
+  let N=0n;for(const ch of body)N=N*AL+B(ALPH.indexOf(ch));
+  const g=r=>{const v=Number(N%B(r));N/=B(r);return v;};
+  const lvl=g(2)?'ahs':'std',seed=g(65536),round=g(100)+1,cur=g(N_EX),ex=[];
+  for(let k=0;k<N_EX;k++){const v=g(40);ex.push({step:v>>3,err:(v>>1)&3,shown:!!(v&1)});}
+  const nh=g(1024);
+  if(N!==0n||ex.some(x=>x.step>DONE))return bad;
+  return {lvl,seed,round,cur,ex,nh};
+}
+function applyCode(p){
+  const g=G[p.lvl];g.seed=p.seed;g.round=p.round;makeRound(p.lvl);g.cur=p.cur;
+  p.ex.forEach((s,k)=>{const e=g.ex[k];
+    for(let st=0;st<s.step&&st<DONE;st++){if(applies(e,st))showSolution(e,st);}
+    e.msg={};e.err=s.err;e.shown=s.shown;e.step=Math.max(s.step,applies(e,0)?0:1);});
+}
+function saveProgress(lvl){
+  lvl=lvl||level;if(!PUPIL||restoring)return;
+  const code=makeCode(lvl);
+  try{const k=STORE+normName(PUPIL),o=JSON.parse(localStorage.getItem(k)||'{}');o.last=level;o[lvl]=code;localStorage.setItem(k,JSON.stringify(o));}catch(x){}
+  if(lvl===level)$('codeShow').textContent=code;
+}
+function loadSaved(name){try{return JSON.parse(localStorage.getItem(STORE+normName(name))||'null');}catch(x){return null;}}
+
+/* ================= Name zu Beginn (danach nicht mehr änderbar) ================= */
+function setLocked(on){document.body.classList.toggle('locked',on);if(on)$('main').setAttribute('inert','');else $('main').removeAttribute('inert');}
+function startErr(msg,el){const err=$('pnameErr');err.textContent=msg;err.hidden=false;el.focus();}
+function startWithName(){
+  const inpEl=$('pname'),v=inpEl.value.trim().replace(/\s+/g,' '),codeInp=$('pcode');
+  if(v.length<2){startErr('Bitte gib deinen Namen ein.',inpEl);return;}
+  let p=null;
+  if(codeInp.value.trim()){p=readCode(codeInp.value);
+    if(p.err){$('codeAsk').open=true;startErr(p.err,codeInp);return;}
+    if(p.nh!==nameHash(v)){startErr('Dieser Code gehört zu einem anderen Namen. Schreib deinen Namen genau so wie auf dem anderen Gerät.',inpEl);return;}}
+  $('pnameErr').hidden=true;PUPIL=v;
+  const saved=loadSaved(v);let msg='';
+  restoring=true;
+  try{
+    if(saved){['std','ahs'].forEach(l=>{if(saved[l]&&!(p&&p.lvl===l)){const q=readCode(saved[l]);if(!q.err&&q.nh===nameHash(v))applyCode(q);}});
+      msg='Willkommen zurück! Du machst dort weiter, wo du auf diesem Gerät aufgehört hast.';}
+    if(p){applyCode(p);msg='Dein Fortschritt vom anderen Gerät wurde übernommen.';}
+  }finally{restoring=false;}
+  saveProgress('std');saveProgress('ahs');
+  $('pnameShow').textContent=v;$('startMsg').textContent=msg;
+  $('startAsk').hidden=true;$('startDone').hidden=false;
+  setLocked(false);setLevel(p?p.lvl:(saved&&saved.last)||level);
+}
+$('startBtn').addEventListener('click',startWithName);
+['pname','pcode'].forEach(k=>$(k).addEventListener('keydown',ev=>{if(ev.key==='Enter'){ev.preventDefault();startWithName();}}));
+$('codeBtn').addEventListener('click',ev=>{const box=$('codeBox'),open=box.hidden;saveProgress();box.hidden=!open;ev.currentTarget.setAttribute('aria-expanded',open?'true':'false');});
+$('codeCopy').addEventListener('click',ev=>{const b=ev.currentTarget,txt=$('codeShow').textContent;
+  try{navigator.clipboard.writeText(txt).then(()=>{b.textContent='Kopiert ✓';setTimeout(()=>{b.textContent='Kopieren';},1500);},()=>{});}catch(x){}});
+
+/* Beispiel in der Zusammenfassung */
+(function(){const t=build([{n:[3],d:{c:2,fs:[[1,2,1]]}},{n:[1],d:{c:1,fs:[[1,2,1]]}}],1);
+  $('sumEx').innerHTML=exprH(t,false)+' = '+exprH(t,true)+' = '+fr(numLineH(t),denH(t.hn))+' = '+fr(polyH(t.N),denH(t.hn));})();
+
+/* ================= Start ================= */
+makeRound('std');makeRound('ahs');
+setLevel(level);
+setLocked(true);
+$('pname').focus();
+
+/* ================= Eingabehilfe (Bildschirm-Tastatur) ================= */
+(function(){
+  const pad=$('pad'),sysBtn=$('padSys');
+  const touch=window.matchMedia&&matchMedia('(pointer: coarse)').matches;
+  let padOnly=touch,closed=false,cur=null;
+  try{const s=localStorage.getItem('padOnly');if(s!==null)padOnly=s==='1';}catch(x){}
+  function applyMode(){
+    document.querySelectorAll('#exCard input.pin').forEach(i=>{if(padOnly)i.setAttribute('inputmode','none');else i.removeAttribute('inputmode');});
+    sysBtn.textContent=padOnly?'Handy-Tastatur einblenden':'Handy-Tastatur ausblenden';
+  }
+  window.padApply=applyMode;applyMode();
+  function show(input){cur=input;if(closed)return;pad.hidden=false;document.body.classList.add('padon');
+    const r=input.getBoundingClientRect();if(r.bottom>window.innerHeight-pad.offsetHeight-10)input.scrollIntoView({block:'center',behavior:'smooth'});}
+  function hide(){pad.hidden=true;document.body.classList.remove('padon');}
+  document.addEventListener('focusin',ev=>{const t=ev.target;if(t.tagName==='INPUT'&&t.classList.contains('pin')&&!t.readOnly)show(t);});
+  document.addEventListener('focusout',()=>setTimeout(()=>{const a=document.activeElement;if(!(a&&a.tagName==='INPUT'&&a.classList.contains('pin')))hide();},150));
+  function insert(txt){if(!cur||!cur.isConnected)return;const s=cur.selectionStart??cur.value.length,e=cur.selectionEnd??cur.value.length;
+    cur.setRangeText(txt,s,e,'end');cur.dispatchEvent(new Event('input',{bubbles:true}));}
+  /* nur pointerdown/mousedown abfangen – nie touchstart, sonst gehen die Tasten am Handy nicht */
+  pad.addEventListener('pointerdown',ev=>{if(ev.target.closest('button'))ev.preventDefault();});
+  pad.addEventListener('mousedown',ev=>{if(ev.target.closest('button'))ev.preventDefault();});
+  pad.addEventListener('click',ev=>{
+    const b=ev.target.closest('button');if(!b)return;
+    if(b.id==='padHide'){closed=true;hide();return;}
+    if(b.id==='padSys'){padOnly=!padOnly;try{localStorage.setItem('padOnly',padOnly?'1':'0');}catch(x){}applyMode();
+      if(cur&&cur.isConnected){cur.blur();setTimeout(()=>cur.focus(),60);}return;}
+    if(!cur||!cur.isConnected)return;
+    if(b.dataset.ins!==undefined)insert(b.dataset.ins);
+    else if(b.dataset.act==='clr'){cur.value='';cur.dispatchEvent(new Event('input',{bubbles:true}));}
+    else if(b.dataset.act==='left'){const s=Math.max(0,(cur.selectionStart??cur.value.length)-1);cur.setSelectionRange(s,s);}
+    else if(b.dataset.act==='right'){const s=Math.min(cur.value.length,(cur.selectionEnd??cur.value.length)+1);cur.setSelectionRange(s,s);}
+    else if(b.dataset.act==='del'){const s=cur.selectionStart??cur.value.length,e2=cur.selectionEnd??s;
+      if(s!==e2)cur.setRangeText('',s,e2,'end');else if(s>0)cur.setRangeText('',s-1,s,'end');cur.dispatchEvent(new Event('input',{bubbles:true}));}
+    else if(b.dataset.act==='ok'){cur.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));}
+    if(cur&&cur.isConnected)cur.focus({preventScroll:true});
+  });
+  document.addEventListener('click',ev=>{if(ev.target.closest('[data-go],[data-act="next"],[data-act="prev"],[data-act="newround"],#newRound2'))closed=false;});
+})();
+</script>
+</body>
+</html>
