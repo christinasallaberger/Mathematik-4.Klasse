@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Terme multiplizieren und dividieren</title>
+<!-- Angaben für die Lehrer-Übersicht (linkzusammenfassung.html) -->
+<meta name="uebersicht-kapitel" content="Terme">
+<meta name="uebersicht-thema" content="Multiplizieren und dividieren">
+<meta name="uebersicht-info" content="20 Aufgaben: Monome multiplizieren und dividieren, mit Hochzahlen und Vorzeichen; ab Aufgabe 12 auch Divisionen.">
+<meta name="uebersicht-gruppe" content="alle">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #FBFCFE;
+  --grid: #DCE7F2;
+  --ink: #1D3A8A;
+  --text: #1E2433;
+  --muted: #5B6270;
+  --margin: #E0484E;
+  --line: #C9D6E6;
+  --card: #FFFFFF;
+  --ok: #1C7A44;
+  --ok-bg: #DFF3E6;
+  --warn: #8A4B0E;
+  --warn-bg: #FCEBD9;
+  --bad: #B3262C;
+  --bad-bg: #FBE1E2;
+  --merke-bg: #FFF7D6;
+  --merke-line: #E8C64A;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #141821;
+    --grid: #1F2634;
+    --ink: #9DB6FF;
+    --text: #E6E9F0;
+    --muted: #9AA2B2;
+    --margin: #F0686D;
+    --line: #2C3546;
+    --card: #1A1F2A;
+    --ok: #8FE0AE;
+    --ok-bg: #1D3F2A;
+    --warn: #FFD2B0;
+    --warn-bg: #4A2D1A;
+    --bad: #FFB3B6;
+    --bad-bg: #4A1E22;
+    --merke-bg: #3A3216;
+    --merke-line: #B8962A;
+    color-scheme: dark;
+  }
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0;
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 22px 22px;
+  color: var(--text);
+  font-family: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+main { max-width: 760px; margin: 0 auto; padding: 2rem 1.1rem 4rem; }
+h1 {
+  font-family: "Bricolage Grotesque", "Atkinson Hyperlegible", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.9rem, 6vw, 2.8rem);
+  line-height: 1.05;
+  color: var(--ink);
+  margin: 0 0 .4rem;
+}
+h2 {
+  font-family: "Bricolage Grotesque", "Atkinson Hyperlegible", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin: 0 0 .6rem;
+}
+.lead { color: var(--muted); margin: 0 0 1.5rem; }
+.card {
+  background: var(--card);
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+button {
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: .55rem 1.1rem;
+  border: 2px solid var(--ink);
+  background: var(--card);
+  color: var(--ink);
+}
+button.primary { background: var(--ink); color: var(--paper); }
+button:disabled { opacity: .45; cursor: default; }
+button:focus-visible, input:focus-visible { outline: 3px solid var(--margin); outline-offset: 2px; }
+input[type="text"] {
+  font: inherit;
+  font-size: 1.25rem;
+  padding: .55rem .8rem;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--text);
+  width: 100%;
+}
+input[type="text"]:focus { border-color: var(--ink); outline: none; }
+
+/* Kopfzeile mit Name */
+.namebar {
+  display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; justify-content: space-between;
+  margin-bottom: 1rem; font-weight: 700;
+}
+.namebar .who { color: var(--ink); }
+.progress { color: var(--muted); font-weight: 400; }
+
+/* Nummern-Navigation */
+.nav { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: 1rem; }
+.nav button {
+  width: 2.4rem; height: 2.4rem; padding: 0; border-radius: 8px;
+  border-color: var(--line); font-size: .95rem;
+}
+.nav button.cur { border-color: var(--ink); box-shadow: 0 0 0 2px var(--ink) inset; }
+.nav button.s-richtig { background: var(--ok-bg); color: var(--ok); border-color: var(--ok); }
+.nav button.s-fehler { background: var(--warn-bg); color: var(--warn); border-color: var(--warn); }
+.nav button.s-loesung { background: var(--bad-bg); color: var(--bad); border-color: var(--bad); }
+
+/* Aufgabe */
+.aufg-kopf { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.aufg-kopf .art { color: var(--muted); font-size: .95rem; }
+.term {
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
+  margin: 1rem 0 1.25rem;
+  display: flex; align-items: center; flex-wrap: wrap; gap: .5rem;
+  font-variant-numeric: lining-nums;
+}
+.frac { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; }
+.frac > span { padding: 0 .3rem; line-height: 1.25; }
+.frac > span:first-child { border-bottom: 2px solid currentColor; }
+sup { font-size: .62em; line-height: 0; position: relative; top: -.05em; }
+.eingabe { display: flex; gap: .5rem; align-items: stretch; }
+.eingabe .gleich { font-size: 1.6rem; font-weight: 700; align-self: center; }
+.vorschau { min-height: 1.6rem; margin: .5rem 0 0; color: var(--muted); }
+.vorschau b { color: var(--text); font-weight: 400; font-size: 1.2rem; }
+.aktionen { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+.meldung { margin-top: 1rem; padding: .75rem 1rem; border-radius: 10px; display: none; }
+.meldung.ok { display: block; background: var(--ok-bg); color: var(--ok); }
+.meldung.warn { display: block; background: var(--warn-bg); color: var(--warn); }
+.meldung.bad { display: block; background: var(--bad-bg); color: var(--bad); }
+.weg { margin-top: .6rem; color: var(--text); }
+.weg div { margin: .15rem 0; }
+.weiter-zur-merke {
+  margin-top: 1rem; padding: .75rem 1rem; border-radius: 10px;
+  background: var(--merke-bg); border-left: 5px solid var(--merke-line); font-weight: 700;
+}
+.weiter-zur-merke a { color: inherit; }
+
+/* Merkkasten */
+.merke { background: var(--merke-bg); border: 2px solid var(--merke-line); }
+.merke h2 { display: flex; align-items: center; gap: .5rem; }
+.merke .heft {
+  font-weight: 700; padding: .5rem .8rem; border-radius: 8px;
+  border: 2px dashed var(--merke-line); margin-bottom: 1rem;
+}
+.merke h3 { margin: 1rem 0 .3rem; font-size: 1.1rem; }
+.merke ol { margin: .2rem 0 .5rem 1.2rem; padding: 0; }
+.merke .bsp { font-size: 1.2rem; margin: .4rem 0; display: flex; align-items: center; flex-wrap: wrap; gap: .4rem; }
+
+/* Bildschirm-Tastatur */
+#pad {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  background: var(--card); border-top: 3px solid var(--ink);
+  padding: .5rem .6rem calc(.5rem + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -4px 16px rgba(27, 47, 107, .15);
+}
+#pad .padtop { display: flex; align-items: center; gap: .5rem; max-width: 34rem; margin: 0 auto .4rem; color: var(--muted); font-size: .9rem; }
+#pad .padtop span { margin-right: auto; font-weight: 700; color: var(--ink); }
+#pad .mini { padding: .25rem .6rem; font-size: .85rem; border-color: var(--line); }
+#pad .keys { display: grid; grid-template-columns: repeat(7, 1fr); gap: .3rem; max-width: 34rem; margin: 0 auto; }
+#pad .keys button {
+  padding: .55rem 0; font-size: 1.15rem; font-weight: 700;
+  background: var(--paper); color: var(--text); border: 2px solid var(--line); border-radius: .45rem;
+  touch-action: manipulation;
+}
+#pad .keys button.var { font-style: italic; font-family: Georgia, "Times New Roman", serif; }
+#pad .keys button.op { background: var(--grid); }
+#pad .keys button.go { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+body.padon main { padding-bottom: 20rem; }
+
+/* Auswertung */
+table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+th, td { text-align: left; padding: .45rem .4rem; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.tab-wrap { overflow-x: auto; }
+.badge { font-weight: 700; padding: .1rem .55rem; border-radius: 999px; white-space: nowrap; font-size: .85rem; }
+.badge.richtig { background: var(--ok-bg); color: var(--ok); }
+.badge.fehler { background: var(--warn-bg); color: var(--warn); }
+.badge.loesung { background: var(--bad-bg); color: var(--bad); }
+.badge.offen { background: var(--grid); color: var(--muted); }
+.zahlen { display: flex; flex-wrap: wrap; gap: .75rem; margin: .75rem 0 1rem; }
+.zahlen div { padding: .5rem .9rem; border-radius: 10px; background: var(--paper); border: 2px solid var(--line); }
+.zahlen b { font-size: 1.3rem; display: block; }
+[hidden] { display: none !important; }
+
+@media print {
+  body { background: #fff; color: #000; }
+  .no-print, #aufgaben, .merke { display: none !important; }
+  .card { border-color: #999; }
+}
+</style>
+</head>
+<body>
+<main>
+  <h1>Terme multiplizieren und dividieren</h1>
+  <p class="lead">20 Aufgaben pro Runde: zuerst nur Malrechnungen, ab Aufgabe 12 auch Divisionen. Danach kannst du mit neuen Zahlen weiterüben. Gib dein Ergebnis so kurz wie möglich ein, zum Beispiel <b>6x<sup>6</sup></b> oder <b>−12ab</b>.</p>
+
+  <!-- Namenseingabe -->
+  <section class="card" id="start">
+    <h2>Wie heißt du?</h2>
+    <p>Gib zuerst deinen Vor- und Nachnamen ein. Er steht am Ende in deiner Auswertung und kann danach <b>nicht mehr geändert</b> werden. Hast du auf diesem Gerät schon geübt, machst du automatisch dort weiter, wo du aufgehört hast.</p>
+    <div class="eingabe">
+      <input type="text" id="name-in" autocomplete="name" placeholder="Vor- und Nachname" aria-label="Vor- und Nachname">
+      <button class="primary" id="start-btn" type="button">Los geht’s</button>
+    </div>
+    <p class="vorschau" id="name-hinweis"></p>
+  </section>
+
+  <!-- Aufgaben -->
+  <section id="aufgaben" hidden>
+    <div class="namebar">
+      <span class="who" id="who"></span>
+      <span class="progress" id="progress"></span>
+    </div>
+    <nav class="nav no-print" id="nav" aria-label="Aufgaben"></nav>
+
+    <div class="card">
+      <div class="aufg-kopf">
+        <h2 id="aufg-titel">Aufgabe 1</h2>
+        <span class="art" id="aufg-art"></span>
+      </div>
+      <div class="term" id="term"></div>
+
+      <div class="eingabe">
+        <span class="gleich">=</span>
+        <input type="text" id="antwort" class="pin" autocomplete="off" spellcheck="false" aria-label="Dein Ergebnis">
+      </div>
+      <p class="vorschau" id="vorschau"></p>
+
+      <div class="aktionen no-print">
+        <button type="button" id="zurueck">◀</button>
+        <button type="button" class="primary" id="pruefen">Überprüfen</button>
+        <button type="button" id="loesung" hidden>Lösung zeigen</button>
+        <button type="button" id="vor">▶</button>
+      </div>
+      <div class="meldung" id="meldung" role="status" aria-live="polite"></div>
+      <div class="weiter-zur-merke" id="merke-hinweis" hidden>
+        ✏️ Bevor du weiterrechnest: Schreib jetzt die <a href="#merke">Zusammenfassung unten</a> mit den Beispielen in dein Heft ab!
+      </div>
+    </div>
+
+    <div class="aktionen no-print" style="margin-bottom:1.25rem">
+      <button type="button" id="zur-auswertung">Auswertung anzeigen</button>
+      <button type="button" class="neue-runde">Neue Runde mit neuen Beispielen</button>
+    </div>
+
+    <!-- Zusammenfassung zum Abschreiben -->
+    <section class="card merke" id="merke">
+      <h2>📒 Zusammenfassung</h2>
+      <div class="heft">✏️ Schreib diese Zusammenfassung mit den Beispielen in dein Heft ab!</div>
+
+      <h3>Terme multiplizieren</h3>
+      <ol>
+        <li>Zuerst die <b>Zahlen</b> multiplizieren. Vorzeichen beachten: Minus mal Minus ergibt Plus.</li>
+        <li>Dann die <b>Variablen</b>: Bei gleichen Variablen werden die <b>Hochzahlen addiert</b>. Ein x ohne Hochzahl hat die Hochzahl 1.</li>
+      </ol>
+      <div class="bsp">2x<sup>2</sup> · 3x<sup>4</sup> = 2 · 3 · x<sup>2+4</sup> = <b>6x<sup>6</sup></b></div>
+      <div class="bsp">3 · 2x · (−2x) = 3 · 2 · (−2) · x<sup>1+1</sup> = <b>−12x<sup>2</sup></b></div>
+
+      <h3>Terme dividieren</h3>
+      <ol>
+        <li>Zuerst die <b>Zahlen</b> dividieren (Vorzeichenregeln wie beim Multiplizieren).</li>
+        <li>Dann die <b>Variablen</b>: Bei gleichen Variablen werden die <b>Hochzahlen subtrahiert</b> (oben minus unten). Steht eine Variable oben und unten gleich oft, kürzt sie sich weg.</li>
+      </ol>
+      <div class="bsp">
+        <span class="frac"><span>14x<sup>2</sup></span><span>2x</span></span>
+        = 14 : 2 · x<sup>2−1</sup> = <b>7x</b>
+      </div>
+      <div class="bsp">
+        <span class="frac"><span>8e · f</span><span>4f</span></span>
+        = 8 : 4 · e · f<sup>1−1</sup> = <b>2e</b>
+      </div>
+    </section>
+  </section>
+
+  <!-- Auswertung -->
+  <section class="card" id="auswertung" hidden>
+    <h2>Auswertung</h2>
+    <p id="aw-kopf"></p>
+    <div class="zahlen" id="aw-zahlen"></div>
+    <div class="tab-wrap">
+      <table>
+        <thead><tr><th>Nr.</th><th>Aufgabe</th><th>Lösung</th><th>Ergebnis</th></tr></thead>
+        <tbody id="aw-tab"></tbody>
+      </table>
+    </div>
+    <div class="aktionen no-print">
+      <button type="button" id="aw-zurueck">Zurück zu den Aufgaben</button>
+      <button type="button" class="neue-runde">Neue Runde mit neuen Beispielen</button>
+      <button type="button" class="primary" id="aw-druck">Drucken</button>
+    </div>
+  </section>
+</main>
+
+<div id="pad" class="no-print" hidden role="group" aria-label="Eingabehilfe">
+  <div class="padtop"><span>Eingabehilfe</span>
+    <button type="button" class="mini" id="padSys">Handy-Tastatur einblenden</button>
+    <button type="button" class="mini" id="padHide" aria-label="Eingabehilfe schließen">✕</button>
+  </div>
+  <div class="keys">
+    <button type="button" data-ins="7">7</button><button type="button" data-ins="8">8</button><button type="button" data-ins="9">9</button><button type="button" class="var" data-var="0">x</button><button type="button" class="var" data-var="1">y</button><button type="button" class="op" data-ins="²" aria-label="hoch 2">□²</button><button type="button" class="op" data-act="del" aria-label="Löschen">⌫</button>
+    <button type="button" data-ins="4">4</button><button type="button" data-ins="5">5</button><button type="button" data-ins="6">6</button><button type="button" class="var" data-var="2">a</button><button type="button" class="var" data-var="3">b</button><button type="button" class="op" data-ins="³" aria-label="hoch 3">□³</button><button type="button" class="op" data-act="clr" aria-label="Feld leeren">C</button>
+    <button type="button" data-ins="1">1</button><button type="button" data-ins="2">2</button><button type="button" data-ins="3">3</button><button type="button" class="op" data-ins="−" aria-label="minus">−</button><button type="button" class="op" data-ins="⁴" aria-label="hoch 4">□⁴</button><button type="button" class="op" data-ins="^" aria-label="hoch beliebige Zahl">□ⁿ</button><button type="button" class="op" data-act="left" aria-label="Cursor nach links">◀</button>
+    <button type="button" data-ins="0" style="grid-column:span 2">0</button><button type="button" class="go" data-act="ok" style="grid-column:span 4">✓ fertig</button><button type="button" class="op" data-act="right" aria-label="Cursor nach rechts">▶</button>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   Aufgaben: "oben" = Faktoren im Zähler, "unten" = Faktoren im Nenner
+   ========================================================= */
+const RUNDE1 = [
+  { oben: ["8", "x", "5"] },
+  { oben: ["3a", "4"] },
+  { oben: ["2x", "5x"] },
+  { oben: ["3", "2x", "-2x"] },
+  { oben: ["4a", "-3b"] },
+  { oben: ["x^2", "x^3"] },
+  { oben: ["2x^2", "3x^4"] },
+  { oben: ["-5y^3", "2y"] },
+  { oben: ["3ab", "4a"] },
+  { oben: ["2x^2y", "-3xy^2"] },
+  { oben: ["-2a", "-3a^2", "4a"] },
+  { oben: ["8e", "f"], unten: ["4f"] },
+  { oben: ["14x^2"], unten: ["2x"] },
+  { oben: ["15a^3"], unten: ["5a"] },
+  { oben: ["12y^5"], unten: ["4y^2"] },
+  { oben: ["-18x^4"], unten: ["3x"] },
+  { oben: ["20a^2b"], unten: ["5ab"] },
+  { oben: ["24x^3y^2"], unten: ["-6xy"] },
+  { oben: ["9m^4n^3"], unten: ["3m^2n"] },
+  { oben: ["6x", "4x^3"], unten: ["8x^2"] }
+];
+
+/* Ab Runde 2: gleiche Bauart, neue Zahlen und Variablen */
+function zufall(seed) {
+  let t = seed >>> 0;
+  return () => { t += 0x6D2B79F5; let r = Math.imul(t ^ (t >>> 15), 1 | t); r ^= r + Math.imul(r ^ (r >>> 7), 61 | r); return ((r ^ (r >>> 14)) >>> 0) / 4294967296; };
+}
+function erzeugeRunde(seed, runde) {
+  if (runde === 1) return RUNDE1;
+  const R = zufall(seed * 1000 + runde);
+  const z = (a, b) => a + Math.floor(R() * (b - a + 1));
+  const w = l => l[Math.floor(R() * l.length)];
+  const VAR = ["x", "y", "a", "b", "m", "n", "e", "f", "z", "k"];
+  const zwei = () => { const v1 = w(VAR); let v2; do v2 = w(VAR); while (v2 === v1); return [v1, v2].sort(); };
+  const h = (v, e) => v + (e === 1 ? "" : "^" + e);
+  const out = [];
+  let v, u, n, m, k, p, q;
+  v = w(VAR); out.push({ oben: [String(z(2, 9)), v, String(z(2, 9))] });
+  v = w(VAR); out.push({ oben: [z(2, 9) + v, String(z(2, 9))] });
+  v = w(VAR); out.push({ oben: [z(2, 9) + v, z(2, 9) + v] });
+  v = w(VAR); out.push({ oben: [String(z(2, 5)), z(2, 5) + v, "-" + z(2, 5) + v] });
+  [v, u] = zwei(); out.push({ oben: [z(2, 9) + v, "-" + z(2, 9) + u] });
+  v = w(VAR); out.push({ oben: [h(v, z(2, 5)), h(v, z(2, 5))] });
+  v = w(VAR); out.push({ oben: [z(2, 6) + h(v, z(2, 5)), z(2, 6) + h(v, z(2, 5))] });
+  v = w(VAR); out.push({ oben: ["-" + z(2, 9) + h(v, z(2, 4)), z(2, 6) + v] });
+  [v, u] = zwei(); out.push({ oben: [z(2, 6) + v + u, z(2, 6) + v] });
+  [v, u] = zwei(); out.push({ oben: [z(2, 5) + h(v, z(2, 3)) + u, "-" + z(2, 5) + v + h(u, z(2, 3))] });
+  v = w(VAR); out.push({ oben: ["-" + z(2, 4) + v, "-" + z(2, 4) + h(v, z(2, 3)), z(2, 4) + v] });
+  [v, u] = zwei(); m = z(2, 6); out.push({ oben: [(m * z(2, 6)) + v, u], unten: [m + u] });
+  v = w(VAR); m = z(2, 6); out.push({ oben: [(m * z(2, 9)) + h(v, z(2, 4))], unten: [m + v] });
+  v = w(VAR); m = z(2, 6); out.push({ oben: [(m * z(2, 9)) + h(v, z(3, 5))], unten: [m + v] });
+  v = w(VAR); m = z(2, 6); p = z(4, 7); q = z(2, p - 1); out.push({ oben: [(m * z(2, 9)) + h(v, p)], unten: [m + h(v, q)] });
+  v = w(VAR); m = z(2, 6); out.push({ oben: ["-" + (m * z(2, 9)) + h(v, z(3, 5))], unten: [m + v] });
+  [v, u] = zwei(); m = z(2, 6); out.push({ oben: [(m * z(2, 9)) + h(v, z(2, 3)) + u], unten: [m + v + u] });
+  [v, u] = zwei(); m = z(2, 6); out.push({ oben: [(m * z(2, 9)) + h(v, z(2, 4)) + h(u, 2)], unten: ["-" + m + v + u] });
+  [v, u] = zwei(); m = z(2, 6); p = z(3, 5); q = z(2, 4); k = z(2, p - 1);
+    out.push({ oben: [(m * z(2, 9)) + h(v, p) + h(u, q)], unten: [m + h(v, k) + u] });
+  v = w(VAR); p = z(2, 4); q = z(1, p);
+  do { n = z(2, 8); m = z(2, 8); k = w([2, 3, 4, 6, 8]); } while ((n * m) % k || n * m === k);
+    out.push({ oben: [n + v, m + h(v, p)], unten: [k + h(v, q)] });
+  return out;
+}
+let AUFGABEN = RUNDE1;
+const SPEICHER = "terme-mal-durch-v2";
+
+/* ---------- Terme lesen ---------- */
+const HOCH = { "⁰":"0","¹":"1","²":"2","³":"3","⁴":"4","⁵":"5","⁶":"6","⁷":"7","⁸":"8","⁹":"9" };
+function lies(text) {
+  let s = String(text).toLowerCase()
+    .replace(/\s+/g, "")
+    .replace(/[−–—]/g, "-")
+    .replace(/[·×*]/g, "*")
+    .replace(/,/g, ".")
+    .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g, m => "^" + [...m].map(c => HOCH[c]).join(""))
+    .replace(/[()\[\]]/g, "");
+  if (!s) return null;
+  let c = 1, v = {}, i = 0, etwas = false;
+  const zahl = () => {
+    const m = s.slice(i).match(/^\d+(\.\d+)?/);
+    if (!m) return null;
+    i += m[0].length;
+    return parseFloat(m[0]);
+  };
+  while (i < s.length) {
+    const ch = s[i];
+    if (ch === "+" || ch === "*") { i++; continue; }
+    if (ch === "-") { c = -c; i++; continue; }
+    if (/[\d.]/.test(ch)) {
+      let n = zahl();
+      if (n === null) return null;
+      if (s[i] === "^") { i++; const e = zahl(); if (e === null) return null; n = Math.pow(n, e); }
+      c *= n; etwas = true; continue;
+    }
+    if (/[a-zäöüß]/.test(ch)) {
+      i++;
+      let e = 1;
+      if (s[i] === "^") { i++; e = zahl(); if (e === null) return null; }
+      else if (/\d/.test(s[i] || "")) { e = zahl(); }
+      v[ch] = (v[ch] || 0) + e; etwas = true; continue;
+    }
+    return null;
+  }
+  return etwas ? { c, v } : null;
+}
+
+function rechne(a) {
+  let c = 1; const v = {};
+  (a.oben || []).forEach(t => { const p = lies(t); c *= p.c; for (const k in p.v) v[k] = (v[k] || 0) + p.v[k]; });
+  (a.unten || []).forEach(t => { const p = lies(t); c /= p.c; for (const k in p.v) v[k] = (v[k] || 0) - p.v[k]; });
+  for (const k in v) if (v[k] === 0) delete v[k];
+  return { c, v };
+}
+
+function gleich(p, q) {
+  if (!p || !q) return false;
+  if (Math.abs(p.c - q.c) > 1e-9) return false;
+  const a = Object.keys(p.v).filter(k => p.v[k] !== 0).sort();
+  const b = Object.keys(q.v).filter(k => q.v[k] !== 0).sort();
+  return a.length === b.length && a.every((k, i) => k === b[i] && p.v[k] === q.v[k]);
+}
+function variablenGleich(p, q) { return gleich({ c: 1, v: p.v }, { c: 1, v: q.v }); }
+
+/* ---------- Anzeigen ---------- */
+const minus = n => String(n).replace("-", "−").replace(".", ",");
+function zeig(p) {
+  if (!p) return "";
+  const vars = Object.keys(p.v).filter(k => p.v[k] !== 0).sort()
+    .map(k => k + (p.v[k] !== 1 ? `<sup>${minus(p.v[k])}</sup>` : "")).join("");
+  let z = "";
+  if (!vars) z = minus(p.c);
+  else if (p.c === 1) z = "";
+  else if (p.c === -1) z = "−";
+  else z = minus(p.c);
+  return z + vars;
+}
+function faktor(t, erster) {
+  const p = lies(t);
+  const h = zeig(p);
+  return (!erster && p.c < 0) ? `(${h})` : h;
+}
+function produkt(liste) { return liste.map((t, i) => faktor(t, i === 0)).join(" · "); }
+function termHTML(a) {
+  if (!a.unten) return produkt(a.oben);
+  return `<span class="frac"><span>${produkt(a.oben)}</span><span>${produkt(a.unten)}</span></span>`;
+}
+function termText(a) {
+  const t = h => h.replace(/<sup>(.*?)<\/sup>/g, "^$1").replace(/<[^>]+>/g, "");
+  return a.unten ? `(${t(produkt(a.oben))}) : (${t(produkt(a.unten))})` : t(produkt(a.oben));
+}
+
+function rechenweg(a) {
+  const ob = (a.oben || []).map(lies), un = (a.unten || []).map(lies);
+  // nur echte Zahlen zeigen: ein x ohne Zahl davor bringt keine 1 mit
+  const zahlen = l => {
+    const z = l.filter(p => !(Object.keys(p.v).length && p.c === 1)).map(p => p.c);
+    if (!z.length) return "1";
+    return z.map((c, i) => (i && c < 0) ? `(${minus(c)})` : minus(c)).join(" · ");
+  };
+  const erg = rechne(a);
+  let z = "";
+  const zo = zahlen(ob), zu = un.length ? zahlen(un) : "1";
+  if (zo !== "1" || zu !== "1") {
+    z = `<div><b>Zahlen:</b> ${zo}`;
+    if (un.length) z += ` : ${zu.includes(" ") || zu.startsWith("−") ? "(" + zu + ")" : zu}`;
+    z += ` = ${minus(erg.c)}</div>`;
+  }
+  const alle = [...new Set([...ob, ...un].flatMap(p => Object.keys(p.v)))].sort();
+  alle.forEach(k => {
+    const o = ob.filter(p => p.v[k]).map(p => p.v[k]);
+    const u = un.filter(p => p.v[k]).map(p => p.v[k]);
+    let r = (o.length ? o.join(" + ") : "0");
+    if (u.length) r = (o.length > 1 ? `(${r})` : r) + " − " + (u.length > 1 ? `(${u.join(" + ")})` : u[0]);
+    const e = o.reduce((s, x) => s + x, 0) - u.reduce((s, x) => s + x, 0);
+    const ende = e === 0 ? `0 → <b>${k}</b> kürzt sich weg` : `${e} → <b>${k}${e !== 1 ? `<sup>${e}</sup>` : ""}</b>`;
+    z += `<div><b>${k}:</b> Hochzahlen ${(o.length + u.length) > 1 ? r + " = " : ""}${ende}</div>`;
+  });
+  z += `<div><b>Ergebnis:</b> ${zeig(erg)}</div>`;
+  return z;
+}
+
+/* ---------- Zustand ---------- */
+const leer = () => AUFGABEN.map(() => ({ versuche: 0, status: "offen", eingabe: "" }));
+let st = { name: "", seed: Math.floor(Math.random() * 65536), runde: 1, idx: 0, a: leer() };
+function speichern() { try { localStorage.setItem(SPEICHER, JSON.stringify(st)); } catch (e) {} }
+function laden() {
+  try {
+    const d = JSON.parse(localStorage.getItem(SPEICHER) || "null");
+    if (d && d.name && Array.isArray(d.a) && d.a.length === RUNDE1.length) {
+      st = d;
+      if (!st.runde) { st.runde = 1; st.seed = Math.floor(Math.random() * 65536); }
+      AUFGABEN = erzeugeRunde(st.seed, st.runde);
+    }
+  } catch (e) {}
+}
+const $ = id => document.getElementById(id);
+
+/* ---------- Start ---------- */
+function starten() {
+  $("start").hidden = true;
+  $("aufgaben").hidden = false;
+  $("who").textContent = "Name: " + st.name;
+  zeigeAufgabe();
+}
+$("start-btn").addEventListener("click", () => {
+  const n = $("name-in").value.trim().replace(/\s+/g, " ");
+  if (n.length < 3 || !n.includes(" ")) {
+    $("name-hinweis").textContent = "Bitte gib deinen Vor- und Nachnamen ein.";
+    $("name-in").focus();
+    return;
+  }
+  st.name = n;
+  speichern();
+  starten();
+});
+$("name-in").addEventListener("keydown", e => { if (e.key === "Enter") $("start-btn").click(); });
+
+/* ---------- Aufgabe anzeigen ---------- */
+function navZeichnen() {
+  $("nav").innerHTML = AUFGABEN.map((_, i) => {
+    const s = st.a[i].status;
+    const kl = (i === st.idx ? "cur " : "") + (s !== "offen" ? "s-" + s : "");
+    return `<button type="button" class="${kl}" data-i="${i}" aria-label="Aufgabe ${i + 1}">${i + 1}</button>`;
+  }).join("");
+  const fertig = st.a.filter(x => x.status !== "offen").length;
+  $("progress").textContent = `Runde ${st.runde} · ${fertig} von ${AUFGABEN.length} fertig`;
+}
+function zeigeAufgabe() {
+  const i = st.idx, a = AUFGABEN[i], z = st.a[i];
+  $("aufg-titel").textContent = `Aufgabe ${i + 1}`;
+  $("aufg-art").textContent = a.unten ? "Dividieren" : "Multiplizieren";
+  $("term").innerHTML = termHTML(a);
+  const inp = $("antwort");
+  const fertig = z.status !== "offen";
+  inp.value = z.status === "loesung" ? zeig(rechne(a)).replace(/<sup>(.*?)<\/sup>/g, (m, d) => [...d].map(c => Object.keys(HOCH).find(k => HOCH[k] === c) || c).join("")).replace(/<[^>]+>/g, "") : z.eingabe;
+  inp.disabled = fertig;
+  $("pruefen").disabled = fertig;
+  $("loesung").hidden = fertig || z.versuche < 2;
+  $("zurueck").disabled = i === 0;
+  $("vor").disabled = i === AUFGABEN.length - 1;
+  vorschau();
+  const m = $("meldung");
+  m.className = "meldung";
+  m.innerHTML = "";
+  if (z.status === "richtig" || z.status === "fehler") {
+    m.className = "meldung ok";
+    m.innerHTML = `✔ Richtig!<div class="weg">${rechenweg(a)}</div>`;
+  } else if (z.status === "loesung") {
+    m.className = "meldung bad";
+    m.innerHTML = `Lösung angesehen:<div class="weg">${rechenweg(a)}</div>`;
+  }
+  $("merke-hinweis").hidden = !(i === 0 && fertig);
+  navZeichnen();
+  if (window.padVariablen) window.padVariablen();
+  if (!fertig) inp.focus({ preventScroll: true });
+}
+function vorschau() {
+  const t = $("antwort").value;
+  if (!t.trim() || $("antwort").disabled) { $("vorschau").innerHTML = ""; return; }
+  const p = lies(t);
+  $("vorschau").innerHTML = p ? `So lese ich deine Eingabe: <b>${zeig(p)}</b>` : "Das kann ich noch nicht lesen. Schreib z. B. 6x² oder 6x^2.";
+}
+$("antwort").addEventListener("input", () => { st.a[st.idx].eingabe = $("antwort").value; vorschau(); speichern(); });
+$("antwort").addEventListener("keydown", e => { if (e.key === "Enter") $("pruefen").click(); });
+
+
+
+/* ---------- Überprüfen ---------- */
+$("pruefen").addEventListener("click", () => {
+  const i = st.idx, a = AUFGABEN[i], z = st.a[i];
+  const p = lies($("antwort").value);
+  const m = $("meldung");
+  if (!p) {
+    m.className = "meldung warn";
+    m.textContent = "Ich kann deine Eingabe nicht lesen. Schreib das Ergebnis z. B. als 6x² oder −12ab.";
+    return;
+  }
+  const soll = rechne(a);
+  if (gleich(p, soll)) {
+    z.status = z.versuche === 0 ? "richtig" : "fehler";
+    speichern();
+    zeigeAufgabe();
+    if (st.a.every(x => x.status !== "offen")) {
+      m.innerHTML += `<div style="margin-top:.6rem"><b>Alle 20 Aufgaben geschafft!</b> Klick auf „Auswertung anzeigen“ oder starte eine neue Runde.</div>`;
+    }
+    return;
+  }
+  z.versuche++;
+  let tipp = "Noch nicht richtig.";
+  if (variablenGleich(p, soll) && Math.abs(p.c + soll.c) < 1e-9) tipp = "Fast! Achte auf das Vorzeichen.";
+  else if (variablenGleich(p, soll)) tipp = "Die Variablen stimmen. Rechne die Zahl noch einmal nach.";
+  else if (Math.abs(p.c - soll.c) < 1e-9) tipp = a.unten
+    ? "Die Zahl stimmt. Schau dir die Variablen und ihre Hochzahlen noch einmal an: beim Dividieren werden sie subtrahiert."
+    : "Die Zahl stimmt. Schau dir die Variablen und ihre Hochzahlen noch einmal an: beim Multiplizieren werden sie addiert.";
+  if (z.versuche >= 2) tipp += " Du kannst es nochmal versuchen oder dir die Lösung zeigen lassen.";
+  m.className = "meldung warn";
+  m.textContent = tipp;
+  $("loesung").hidden = z.versuche < 2;
+  speichern();
+});
+$("loesung").addEventListener("click", () => {
+  st.a[st.idx].status = "loesung";
+  speichern();
+  zeigeAufgabe();
+});
+
+/* ---------- Navigation ---------- */
+function geheZu(i) { st.idx = Math.max(0, Math.min(AUFGABEN.length - 1, i)); speichern(); zeigeAufgabe(); }
+$("zurueck").addEventListener("click", () => geheZu(st.idx - 1));
+$("vor").addEventListener("click", () => geheZu(st.idx + 1));
+$("nav").addEventListener("click", e => { const b = e.target.closest("button"); if (b) geheZu(+b.dataset.i); });
+
+/* ---------- Auswertung ---------- */
+const STATUS = { richtig: "beim 1. Versuch richtig", fehler: "nach Fehlversuch richtig", loesung: "Lösung angesehen", offen: "offen" };
+function auswerten() {
+  const n = s => st.a.filter(x => x.status === s).length;
+  const jetzt = new Date();
+  $("aw-kopf").innerHTML = `<b>${st.name.replace(/</g, "&lt;")}</b> · Runde ${st.runde} · ${jetzt.toLocaleDateString("de-AT")} um ${jetzt.toLocaleTimeString("de-AT", { hour: "2-digit", minute: "2-digit" })}`;
+  $("aw-zahlen").innerHTML = `
+    <div><b>${n("richtig")}</b>beim 1. Versuch richtig</div>
+    <div><b>${n("fehler")}</b>nach Fehlversuch richtig</div>
+    <div><b>${n("loesung")}</b>Lösung angesehen</div>
+    <div><b>${n("offen")}</b>noch offen</div>`;
+  $("aw-tab").innerHTML = AUFGABEN.map((a, i) => `<tr>
+      <td>${i + 1}</td>
+      <td>${termHTML(a)}</td>
+      <td>${zeig(rechne(a))}</td>
+      <td><span class="badge ${st.a[i].status}">${STATUS[st.a[i].status]}</span></td>
+    </tr>`).join("");
+  $("aufgaben").hidden = true;
+  $("auswertung").hidden = false;
+  window.scrollTo(0, 0);
+}
+$("zur-auswertung").addEventListener("click", auswerten);
+$("aw-zurueck").addEventListener("click", () => { $("auswertung").hidden = true; $("aufgaben").hidden = false; zeigeAufgabe(); });
+$("aw-druck").addEventListener("click", () => window.print());
+function neueRunde() {
+  if (st.a.some(x => x.status === "offen") &&
+      !confirm("Neue Runde starten? Alle Beispiele werden durch neue ersetzt, offene Beispiele gehen verloren.")) return;
+  st.runde++;
+  AUFGABEN = erzeugeRunde(st.seed, st.runde);
+  st.a = leer();
+  st.idx = 0;
+  speichern();
+  $("auswertung").hidden = true;
+  $("aufgaben").hidden = false;
+  zeigeAufgabe();
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll(".neue-runde").forEach(b => b.addEventListener("click", neueRunde));
+
+/* ---------- Bildschirm-Tastatur ---------- */
+(function () {
+  const pad = $("pad"), sysBtn = $("padSys");
+  const touch = window.matchMedia && matchMedia("(pointer: coarse)").matches;
+  let padOnly = touch, closed = false, cur = null;
+  try { const v = localStorage.getItem("padOnly"); if (v !== null) padOnly = v === "1"; } catch (e) {}
+  function modus() {
+    document.querySelectorAll("input.pin").forEach(i => padOnly ? i.setAttribute("inputmode", "none") : i.removeAttribute("inputmode"));
+    sysBtn.textContent = padOnly ? "Handy-Tastatur einblenden" : "Handy-Tastatur ausblenden";
+  }
+  modus();
+  function variablen() {
+    const a = AUFGABEN[st.idx], da = [];
+    [...(a.oben || []), ...(a.unten || [])].forEach(t => Object.keys(lies(t).v).forEach(k => { if (!da.includes(k)) da.push(k); }));
+    da.sort();
+    ["x", "y", "a", "b"].forEach(t => { if (da.length < 4 && !da.includes(t)) da.push(t); });
+    pad.querySelectorAll("[data-var]").forEach(b => { b.textContent = da[+b.dataset.var]; });
+  }
+  window.padVariablen = variablen;
+  function zeigen(inp) {
+    cur = inp; variablen();
+    if (closed) return;
+    pad.hidden = false; document.body.classList.add("padon");
+    const rr = inp.getBoundingClientRect();
+    if (rr.bottom > window.innerHeight - pad.offsetHeight - 10) inp.scrollIntoView({ block: "center", behavior: "smooth" });
+  }
+  function weg() { pad.hidden = true; document.body.classList.remove("padon"); }
+  document.addEventListener("focusin", e => { const t = e.target; if (t.matches && t.matches("input.pin") && !t.disabled) zeigen(t); });
+  document.addEventListener("focusout", () => setTimeout(() => {
+    const a = document.activeElement; if (!(a && a.matches && a.matches("input.pin"))) weg();
+  }, 150));
+  function einfuegen(txt) {
+    if (!cur || cur.disabled) return;
+    const s1 = cur.selectionStart ?? cur.value.length, s2 = cur.selectionEnd ?? cur.value.length;
+    cur.setRangeText(txt, s1, s2, "end");
+    cur.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+  /* nur pointerdown/mousedown abfangen – nie touchstart, sonst gehen die Tasten am Handy nicht */
+  pad.addEventListener("pointerdown", e => { if (e.target.closest("button")) e.preventDefault(); });
+  pad.addEventListener("mousedown", e => { if (e.target.closest("button")) e.preventDefault(); });
+  pad.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.id === "padHide") { closed = true; weg(); return; }
+    if (b.id === "padSys") {
+      padOnly = !padOnly;
+      try { localStorage.setItem("padOnly", padOnly ? "1" : "0"); } catch (x) {}
+      modus();
+      if (cur) { cur.blur(); setTimeout(() => cur.focus(), 60); }
+      return;
+    }
+    if (!cur || cur.disabled) return;
+    if (b.dataset.ins !== undefined) einfuegen(b.dataset.ins);
+    else if (b.dataset.var !== undefined) einfuegen(b.textContent);
+    else if (b.dataset.act === "clr") { cur.value = ""; cur.dispatchEvent(new Event("input", { bubbles: true })); }
+    else if (b.dataset.act === "left") { const p = Math.max(0, (cur.selectionStart ?? cur.value.length) - 1); cur.setSelectionRange(p, p); }
+    else if (b.dataset.act === "right") { const p = Math.min(cur.value.length, (cur.selectionEnd ?? cur.value.length) + 1); cur.setSelectionRange(p, p); }
+    else if (b.dataset.act === "del") {
+      const s1 = cur.selectionStart ?? cur.value.length, s2 = cur.selectionEnd ?? s1;
+      if (s1 !== s2) cur.setRangeText("", s1, s2, "end"); else if (s1 > 0) cur.setRangeText("", s1 - 1, s1, "end");
+      cur.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+    else if (b.dataset.act === "ok") { cur.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true })); }
+    if (cur && !cur.disabled) cur.focus({ preventScroll: true });
+  });
+})();
+
+/* ---------- Los ---------- */
+laden();
+if (st.name) starten();
+</script>
+</body>
+</html>
