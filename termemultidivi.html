@@ -234,6 +234,12 @@ sup { font-size: .62em; line-height: 0; position: relative; top: -.05em; }
 #pad .keys button.go { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 body.padon main { padding-bottom: 20rem; }
 
+/* Speicher-Code */
+.codefrage { margin-top: 1rem; }
+.codefrage summary { cursor: pointer; color: var(--ink); font-weight: 700; }
+.codefrage input { margin-top: .4rem; letter-spacing: .08em; text-transform: uppercase; }
+.codebox code { font-size: 1.4rem; font-weight: 700; letter-spacing: .1em; color: var(--ink); padding: .3rem .6rem; border: 2px dashed var(--line); border-radius: 8px; }
+
 /* Auswertung */
 table { width: 100%; border-collapse: collapse; font-size: .95rem; }
 th, td { text-align: left; padding: .45rem .4rem; border-bottom: 1px solid var(--line); vertical-align: middle; }
@@ -263,11 +269,16 @@ th, td { text-align: left; padding: .45rem .4rem; border-bottom: 1px solid var(-
   <!-- Namenseingabe -->
   <section class="card" id="start">
     <h2>Wie heißt du?</h2>
-    <p>Gib zuerst deinen Vor- und Nachnamen ein. Er steht am Ende in deiner Auswertung und kann danach <b>nicht mehr geändert</b> werden. Hast du auf diesem Gerät schon geübt, machst du automatisch dort weiter, wo du aufgehört hast.</p>
+    <p>Gib zuerst deinen Vor- und Nachnamen ein. Er steht am Ende in deiner Auswertung und kann danach <b>nicht mehr geändert</b> werden. Hast du auf diesem Gerät schon geübt, machst du automatisch dort weiter, wo du aufgehört hast. Auf ein anderes Gerät nimmst du deinen Fortschritt mit dem Speicher-Code mit.</p>
     <div class="eingabe">
       <input type="text" id="name-in" autocomplete="name" placeholder="Vor- und Nachname" aria-label="Vor- und Nachname">
       <button class="primary" id="start-btn" type="button">Los geht’s</button>
     </div>
+    <details class="codefrage" id="code-frage">
+      <summary>Bereits einen Speicher-Code von einem anderen Gerät?</summary>
+      <p class="hint">Gib deinen Namen oben genau so ein wie auf dem anderen Gerät und dann hier den Code.</p>
+      <input type="text" id="code-in" autocomplete="off" spellcheck="false" placeholder="z. B. 4K7P-XM2Q-9" aria-label="Speicher-Code">
+    </details>
     <p class="vorschau" id="name-hinweis"></p>
   </section>
 
@@ -276,6 +287,12 @@ th, td { text-align: left; padding: .45rem .4rem; border-bottom: 1px solid var(-
     <div class="namebar">
       <span class="who" id="who"></span>
       <span class="progress" id="progress"></span>
+      <button type="button" class="mini no-print" id="code-btn" aria-expanded="false">💾 Fortschritt mitnehmen</button>
+    </div>
+    <div class="card codebox no-print" id="code-box" hidden>
+      <p>Schreib dir diesen <b>Speicher-Code</b> auf oder kopiere ihn. Auf einem anderen Gerät gibst du beim Start deinen Namen und diesen Code ein und machst dort weiter.</p>
+      <div class="eingabe"><code id="code-show"></code><button type="button" class="mini" id="code-copy">Kopieren</button></div>
+      <p class="hint">Gelöste Aufgaben und deine Fehlversuche werden übernommen. Eine Aufgabe, die du gerade erst angefangen hast, musst du dort neu markieren.</p>
     </div>
     <nav class="nav no-print" id="nav" aria-label="Aufgaben"></nav>
 
@@ -627,7 +644,10 @@ function rechenweg(a) {
 const leer = () => AUFGABEN.map(() => ({ versuche: 0, status: "offen", eingabe: "", farben: [], markiert: false }));
 let STIFT = 1;
 let st = { name: "", seed: Math.floor(Math.random() * 65536), runde: 1, idx: 0, a: leer() };
-function speichern() { try { localStorage.setItem(SPEICHER, JSON.stringify(st)); } catch (e) {} }
+function speichern() {
+  try { localStorage.setItem(SPEICHER, JSON.stringify(st)); } catch (e) {}
+  const cs = document.getElementById("code-show"); if (cs && st.name && !document.getElementById("code-box").hidden) cs.textContent = macheCode();
+}
 function laden() {
   try {
     const d = JSON.parse(localStorage.getItem(SPEICHER) || "null");
@@ -640,6 +660,51 @@ function laden() {
   } catch (e) {}
 }
 const $ = id => document.getElementById(id);
+
+/* ---------- Speicher-Code (Fortschritt auf ein anderes Gerät mitnehmen) ---------- */
+const ALPH = "23456789ABCDEFGHJKMNPQRSTUVWXYZ", AL = BigInt(ALPH.length), Bg = x => BigInt(x);
+const normName = n => n.trim().replace(/\s+/g, " ").toLowerCase();
+function nameHash(n) { let h = 2166136261; for (const ch of normName(n)) { h ^= ch.codePointAt(0); h = Math.imul(h, 16777619); } return (h >>> 0) % 1024; }
+function pruefZeichen(t) { let c = 0; for (let k = 0; k < t.length; k++) c = (c + (k + 1) * ALPH.indexOf(t[k])) % ALPH.length; return ALPH[c]; }
+const ZST = ["offen", "richtig", "fehler", "loesung"];
+function macheCode() {
+  const F = [], f = (v, r) => F.push([v, r]);
+  f(st.seed % 65536, 65536); f((st.runde - 1) % 100, 100); f(st.idx, 20);
+  st.a.forEach(x => f(ZST.indexOf(x.status) * 4 + Math.min(x.versuche, 3), 16));
+  f(nameHash(st.name), 1024);
+  let N = 0n; for (let k = F.length - 1; k >= 0; k--) N = N * Bg(F[k][1]) + Bg(F[k][0]);
+  let t = ""; do { t = ALPH[Number(N % AL)] + t; N /= AL; } while (N > 0n);
+  t += pruefZeichen(t);
+  return t.match(/.{1,4}/g).join("-");
+}
+function leseCode(str) {
+  const bad = { err: "Dieser Code ist ungültig. Kontrolliere, ob du ihn richtig abgeschrieben hast." };
+  const t = str.toUpperCase().replace(/[\s\-–—_.]/g, "");
+  if (t.length < 3 || [...t].some(ch => !ALPH.includes(ch))) return bad;
+  const body = t.slice(0, -1);
+  if (pruefZeichen(body) !== t.slice(-1)) return { err: "Im Code ist ein Tippfehler. Kontrolliere ihn Zeichen für Zeichen." };
+  let N = 0n; for (const ch of body) N = N * AL + Bg(ALPH.indexOf(ch));
+  const g = r => { const v = Number(N % Bg(r)); N /= Bg(r); return v; };
+  const seed = g(65536), runde = g(100) + 1, idx = g(20), aufg = [];
+  for (let k = 0; k < 20; k++) { const v = g(16); aufg.push({ s: v >> 2, v: v & 3 }); }
+  const nh = g(1024);
+  if (N !== 0n) return bad;
+  return { seed, runde, idx, aufg, nh };
+}
+function codeAnwenden(c) {
+  st.seed = c.seed; st.runde = c.runde; st.idx = c.idx;
+  AUFGABEN = erzeugeRunde(st.seed, st.runde);
+  st.a = c.aufg.map(x => ({ versuche: x.v, status: ZST[x.s], eingabe: "", farben: [], markiert: ZST[x.s] !== "offen" }));
+}
+$("code-btn").addEventListener("click", () => {
+  const box = $("code-box"), auf = box.hidden;
+  $("code-show").textContent = macheCode();
+  box.hidden = !auf; $("code-btn").setAttribute("aria-expanded", auf ? "true" : "false");
+});
+$("code-copy").addEventListener("click", () => {
+  const b = $("code-copy");
+  try { navigator.clipboard.writeText($("code-show").textContent).then(() => { b.textContent = "Kopiert ✓"; setTimeout(() => { b.textContent = "Kopieren"; }, 1500); }, () => {}); } catch (e) {}
+});
 
 /* ---------- Start ---------- */
 function starten() {
@@ -655,10 +720,19 @@ $("start-btn").addEventListener("click", () => {
     $("name-in").focus();
     return;
   }
+  const codeText = $("code-in").value.trim();
+  if (codeText) {
+    const c = leseCode(codeText);
+    if (c.err) { $("code-frage").open = true; $("name-hinweis").textContent = c.err; $("code-in").focus(); return; }
+    if (c.nh !== nameHash(n)) { $("name-hinweis").textContent = "Dieser Code gehört zu einem anderen Namen. Schreib deinen Namen genau so wie auf dem anderen Gerät."; $("name-in").focus(); return; }
+    codeAnwenden(c);
+  }
   st.name = n;
   speichern();
   starten();
+  if (codeText) { const m = $("meldung"); m.className = "meldung ok"; m.textContent = "Dein Fortschritt vom anderen Gerät wurde übernommen."; }
 });
+$("code-in").addEventListener("keydown", e => { if (e.key === "Enter") $("start-btn").click(); });
 $("name-in").addEventListener("keydown", e => { if (e.key === "Enter") $("start-btn").click(); });
 
 /* ---------- Aufgabe anzeigen ---------- */
