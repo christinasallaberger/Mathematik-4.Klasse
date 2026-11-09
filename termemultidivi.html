@@ -7,7 +7,7 @@
 <!-- Angaben für die Lehrer-Übersicht (linkzusammenfassung.html) -->
 <meta name="uebersicht-kapitel" content="Terme">
 <meta name="uebersicht-thema" content="Multiplizieren und dividieren">
-<meta name="uebersicht-info" content="20 Aufgaben: Monome multiplizieren und dividieren, mit Hochzahlen und Vorzeichen; ab Aufgabe 12 auch Divisionen.">
+<meta name="uebersicht-info" content="20 Aufgaben pro Runde: zuerst markieren, was zusammengehört (Zahlen, gleiche Variablen), dann ausrechnen; mit Hochzahlen und Vorzeichen, ab Aufgabe 12 auch Divisionen.">
 <meta name="uebersicht-gruppe" content="alle">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -167,6 +167,41 @@ sup { font-size: .62em; line-height: 0; position: relative; top: -.05em; }
 }
 .weiter-zur-merke a { color: inherit; }
 
+/* Markieren */
+:root { --c1: #E0484E; --c2: #2B6CDF; --c3: #2E9E5B; --c4: #E08A1C; --c5: #8E4FD6; --c6: #12A3A8; }
+@media (prefers-color-scheme: dark) {
+  :root { --c1: #FF7A7F; --c2: #7FA8FF; --c3: #6FD69A; --c4: #FFB25C; --c5: #C29BFF; --c6: #5ED8DC; }
+}
+.schritt { font-weight: 700; color: var(--ink); margin: 1rem 0 0; }
+.schritt.aus { color: var(--muted); opacity: .6; }
+.term .mal { padding: 0 .1rem; }
+.tchip {
+  font: inherit; font-weight: 400; color: var(--text);
+  background: transparent; border: 0; border-bottom: 5px solid transparent; border-radius: 0;
+  padding: 0 .12rem .05rem; line-height: 1.35; cursor: pointer;
+}
+.tchip:hover { background: var(--grid); }
+.tchip:disabled { cursor: default; opacity: 1; }
+.tchip:disabled:hover { background: transparent; }
+.tchip.k1 { border-bottom-color: var(--c1); } .tchip.k2 { border-bottom-color: var(--c2); }
+.tchip.k3 { border-bottom-color: var(--c3); } .tchip.k4 { border-bottom-color: var(--c4); }
+.tchip.k5 { border-bottom-color: var(--c5); } .tchip.k6 { border-bottom-color: var(--c6); }
+.frac .tchip { font-size: inherit; }
+.palette { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; margin: 0 0 .3rem; }
+.hint { color: var(--muted); font-size: .95rem; margin: .3rem 0; }
+.pal {
+  width: 2.6rem; height: 2.2rem; padding: 0; position: relative;
+  background: var(--paper); border: 2px solid var(--line); border-radius: .4rem;
+}
+.pal::after { content: ""; position: absolute; left: .45rem; right: .45rem; bottom: .55rem; height: 5px; border-radius: 3px; background: currentColor; }
+.pal.u1 { color: var(--c1); } .pal.u2 { color: var(--c2); } .pal.u3 { color: var(--c3); }
+.pal.u4 { color: var(--c4); } .pal.u5 { color: var(--c5); } .pal.u6 { color: var(--c6); }
+.pal.sel { border-color: var(--ink); box-shadow: 0 0 0 3px var(--grid); }
+.mini { padding: .35rem .7rem; font-size: .9rem; border-color: var(--line); }
+.markmsg { font-size: .95rem; margin: .3rem 0 0; min-height: 1.2rem; }
+.markmsg.ok { color: var(--ok); font-weight: 700; }
+.markmsg.bad { color: var(--bad); }
+
 /* Merkkasten */
 .merke { background: var(--merke-bg); border: 2px solid var(--merke-line); }
 .merke h2 { display: flex; align-items: center; gap: .5rem; }
@@ -249,7 +284,22 @@ th, td { text-align: left; padding: .45rem .4rem; border-bottom: 1px solid var(-
         <h2 id="aufg-titel">Aufgabe 1</h2>
         <span class="art" id="aufg-art"></span>
       </div>
+      <p class="schritt">Schritt 1: Markiere, was du zusammenrechnen kannst</p>
       <div class="term" id="term"></div>
+      <div class="palette no-print" id="palette">
+        <span class="hint">Farbe wählen:</span>
+        <button type="button" class="pal u1 sel" data-pal="1" aria-label="Farbe 1"></button>
+        <button type="button" class="pal u2" data-pal="2" aria-label="Farbe 2"></button>
+        <button type="button" class="pal u3" data-pal="3" aria-label="Farbe 3"></button>
+        <button type="button" class="pal u4" data-pal="4" aria-label="Farbe 4"></button>
+        <button type="button" class="pal u5" data-pal="5" aria-label="Farbe 5"></button>
+        <button type="button" class="pal u6" data-pal="6" aria-label="Farbe 6"></button>
+        <button type="button" class="mini" id="mpruefen">Markierung prüfen</button>
+      </div>
+      <p class="hint" id="mhint">Tippe eine Farbe an und dann alles, was zusammengehört: <b>alle Zahlen</b> in einer Farbe, <b>jede Variable</b> in ihrer eigenen Farbe.</p>
+      <p class="markmsg" id="markmsg" role="status" aria-live="polite"></p>
+
+      <p class="schritt" id="schritt2">Schritt 2: Rechne aus</p>
 
       <div class="eingabe">
         <span class="gleich">=</span>
@@ -279,6 +329,7 @@ th, td { text-align: left; padding: .45rem .4rem; border-bottom: 1px solid var(-
       <h2>📒 Zusammenfassung</h2>
       <div class="heft">✏️ Schreib diese Zusammenfassung mit den Beispielen in dein Heft ab!</div>
 
+      <p><b>Tipp:</b> Markiere zuerst mit Farben, was zusammengehört: alle Zahlen in einer Farbe, jede Variable in ihrer eigenen Farbe. Im Heft machst du das mit Buntstiften.</p>
       <h3>Terme multiplizieren</h3>
       <ol>
         <li>Zuerst die <b>Zahlen</b> multiplizieren. Vorzeichen beachten: Minus mal Minus ergibt Plus.</li>
@@ -490,6 +541,58 @@ function termText(a) {
   return a.unten ? `(${t(produkt(a.oben))}) : (${t(produkt(a.unten))})` : t(produkt(a.oben));
 }
 
+/* Bausteine zum Markieren: jede Zahl und jede Variable einzeln */
+function bausteine(a) {
+  const out = [];
+  const teil = (liste, wo) => liste.forEach((t, fi) => {
+    const p = lies(t), vars = Object.keys(p.v).sort();
+    if (p.c !== 1 || !vars.length) out.push({ wo, fi, neg: p.c < 0, key: "#", h: (p.c === -1 && vars.length) ? "−" : minus(p.c) });
+    vars.forEach(v => out.push({ wo, fi, neg: p.c < 0, key: v, h: v + (p.v[v] !== 1 ? `<sup>${p.v[v]}</sup>` : "") }));
+  });
+  teil(a.oben || [], "o"); teil(a.unten || [], "u");
+  return out;
+}
+function autoFarben(a) {
+  const b = bausteine(a);
+  const keys = [...new Set(b.map(x => x.key))].sort((x, y) => (x === "#" ? -1 : y === "#" ? 1 : x.localeCompare(y)));
+  return b.map(x => 1 + keys.indexOf(x.key) % 6);
+}
+function chipsHTML(a, farben, gesperrt) {
+  const b = bausteine(a);
+  const zeile = wo => {
+    const idx = b.map((x, i) => i).filter(i => b[i].wo === wo);
+    const faktoren = [...new Set(idx.map(i => b[i].fi))];
+    return faktoren.map((fi, n) => {
+      const teil = idx.filter(i => b[i].fi === fi);
+      const inner = teil.map(i => `<button type="button" class="tchip${farben[i] ? " k" + farben[i] : ""}" data-ci="${i}"${gesperrt ? " disabled" : ""} aria-label="Baustein markieren">${b[i].h}</button>`).join("");
+      return (n > 0 && b[teil[0]].neg) ? `(${inner})` : inner;
+    }).join('<span class="mal">·</span>');
+  };
+  if (!a.unten) return zeile("o");
+  return `<span class="frac"><span>${zeile("o")}</span><span>${zeile("u")}</span></span>`;
+}
+const keyName = k => k === "#" ? "den Zahlen" : `der Variablen ${k}`;
+function markierungPruefen(a, farben) {
+  const b = bausteine(a), ks = b.map(x => x.key);
+  if (!farben.some(Boolean)) return { ok: false, text: "Wähle eine Farbe und tippe auf alles, was du zusammenrechnen kannst." };
+  for (const c of [1, 2, 3, 4, 5, 6]) {
+    const drin = new Set(ks.filter((k, i) => farben[i] === c));
+    if (drin.size > 1) {
+      return { ok: false, text: drin.has("#")
+        ? "In einer Farbe sind Zahlen und Variablen gemischt. Zahlen und Variablen rechnest du getrennt."
+        : "In einer Farbe sind verschiedene Variablen. Nur gleiche Variablen gehören zusammen." };
+    }
+  }
+  for (const k of new Set(ks)) {
+    const alle = ks.map((x, i) => x === k ? i : -1).filter(i => i >= 0);
+    if (alle.length < 2) continue;
+    const f = new Set(alle.map(i => farben[i] || 0));
+    if (f.has(0)) return { ok: false, text: `Es fehlt noch etwas: Bei ${keyName(k)} ist noch nicht alles markiert.` };
+    if (f.size > 1) return { ok: false, text: `Alles von ${keyName(k)} gehört zusammen und soll dieselbe Farbe haben.` };
+  }
+  return { ok: true, text: "✓ Super markiert! Jetzt rechne aus." };
+}
+
 function rechenweg(a) {
   const ob = (a.oben || []).map(lies), un = (a.unten || []).map(lies);
   // nur echte Zahlen zeigen: ein x ohne Zahl davor bringt keine 1 mit
@@ -521,7 +624,8 @@ function rechenweg(a) {
 }
 
 /* ---------- Zustand ---------- */
-const leer = () => AUFGABEN.map(() => ({ versuche: 0, status: "offen", eingabe: "" }));
+const leer = () => AUFGABEN.map(() => ({ versuche: 0, status: "offen", eingabe: "", farben: [], markiert: false }));
+let STIFT = 1;
 let st = { name: "", seed: Math.floor(Math.random() * 65536), runde: 1, idx: 0, a: leer() };
 function speichern() { try { localStorage.setItem(SPEICHER, JSON.stringify(st)); } catch (e) {} }
 function laden() {
@@ -531,6 +635,7 @@ function laden() {
       st = d;
       if (!st.runde) { st.runde = 1; st.seed = Math.floor(Math.random() * 65536); }
       AUFGABEN = erzeugeRunde(st.seed, st.runde);
+      st.a.forEach(x => { if (!x.farben) x.farben = []; if (x.markiert === undefined) x.markiert = x.status !== "offen"; });
     }
   } catch (e) {}
 }
@@ -570,12 +675,21 @@ function zeigeAufgabe() {
   const i = st.idx, a = AUFGABEN[i], z = st.a[i];
   $("aufg-titel").textContent = `Aufgabe ${i + 1}`;
   $("aufg-art").textContent = a.unten ? "Dividieren" : "Multiplizieren";
-  $("term").innerHTML = termHTML(a);
-  const inp = $("antwort");
   const fertig = z.status !== "offen";
+  if (!z.farben) z.farben = [];
+  if (fertig && !z.markiert) { z.markiert = true; }
+  if (fertig) z.farben = autoFarben(a);
+  $("term").innerHTML = chipsHTML(a, z.farben, z.markiert);
+  $("palette").hidden = z.markiert;
+  $("mhint").hidden = z.markiert;
+  const mm = $("markmsg");
+  mm.className = "markmsg" + (z.markiert && !fertig ? " ok" : "");
+  mm.textContent = z.markiert && !fertig ? "✓ Super markiert! Jetzt rechne aus." : "";
+  $("schritt2").classList.toggle("aus", !z.markiert);
+  const inp = $("antwort");
   inp.value = z.status === "loesung" ? zeig(rechne(a)).replace(/<sup>(.*?)<\/sup>/g, (m, d) => [...d].map(c => Object.keys(HOCH).find(k => HOCH[k] === c) || c).join("")).replace(/<[^>]+>/g, "") : z.eingabe;
-  inp.disabled = fertig;
-  $("pruefen").disabled = fertig;
+  inp.disabled = fertig || !z.markiert;
+  $("pruefen").disabled = fertig || !z.markiert;
   $("loesung").hidden = fertig || z.versuche < 2;
   $("zurueck").disabled = i === 0;
   $("vor").disabled = i === AUFGABEN.length - 1;
@@ -593,8 +707,33 @@ function zeigeAufgabe() {
   $("merke-hinweis").hidden = !(i === 0 && fertig);
   navZeichnen();
   if (window.padVariablen) window.padVariablen();
-  if (!fertig) inp.focus({ preventScroll: true });
+  if (!fertig && z.markiert) inp.focus({ preventScroll: true });
 }
+
+/* ---------- Markieren ---------- */
+$("palette").addEventListener("click", e => {
+  const b = e.target.closest("[data-pal]");
+  if (!b) return;
+  STIFT = +b.dataset.pal;
+  document.querySelectorAll(".pal").forEach(x => x.classList.toggle("sel", x === b));
+});
+$("term").addEventListener("click", e => {
+  const b = e.target.closest(".tchip");
+  const z = st.a[st.idx];
+  if (!b || z.markiert) return;
+  const i = +b.dataset.ci;
+  z.farben[i] = z.farben[i] === STIFT ? 0 : STIFT;
+  b.className = "tchip" + (z.farben[i] ? " k" + z.farben[i] : "");
+  $("markmsg").className = "markmsg"; $("markmsg").textContent = "";
+  speichern();
+});
+$("mpruefen").addEventListener("click", () => {
+  const a = AUFGABEN[st.idx], z = st.a[st.idx];
+  const r = markierungPruefen(a, z.farben);
+  if (r.ok) { z.markiert = true; speichern(); zeigeAufgabe(); return; }
+  $("markmsg").className = "markmsg bad";
+  $("markmsg").textContent = r.text;
+});
 function vorschau() {
   const t = $("antwort").value;
   if (!t.trim() || $("antwort").disabled) { $("vorschau").innerHTML = ""; return; }
@@ -641,6 +780,7 @@ $("pruefen").addEventListener("click", () => {
 });
 $("loesung").addEventListener("click", () => {
   st.a[st.idx].status = "loesung";
+  st.a[st.idx].markiert = true;
   speichern();
   zeigeAufgabe();
 });
