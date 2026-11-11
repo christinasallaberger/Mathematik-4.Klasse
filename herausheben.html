@@ -113,9 +113,14 @@ details.info p{margin:.4rem 0}
 .chip{font:inherit;font-size:1.25rem;font-weight:400;min-width:2.2rem;background:var(--field);color:var(--text);border:2px dashed var(--line);border-radius:.45rem;padding:.05rem .4rem}
 .chip.mk{background:var(--mark);border:2px solid var(--ink);padding:.05rem .4rem}
 .chip:disabled{opacity:1;cursor:default;border-style:solid}
+span.chip{display:inline-block;border-style:solid}
 .sep{color:var(--muted)}
+.markline{gap:.3rem}
+.opsign{font-size:1.35rem;font-weight:700;color:var(--ink);padding:0 .5rem}
 .finline{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;font-size:1.2rem;margin:.4rem 0}
 .finline input{width:20rem;max-width:100%}
+.finline input.pre{width:7rem}
+.finline input.inner{width:14rem}
 .donebox{margin-top:1rem;padding:.8rem 1rem;border-radius:.6rem;background:var(--okbg);border:2px solid var(--ok);display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
 .donebox b{color:var(--ok)}
 
@@ -207,7 +212,7 @@ body.padon .wrap{padding-bottom:20rem}
       <p class="rule">36<i>x</i><sup>2</sup> + 8<i>x</i> = <span class="mk">4</span> · 9 · <span class="mk"><i>x</i></span> · <i>x</i> + <span class="mk">4</span> · 2 · <span class="mk"><i>x</i></span> = 4<i>x</i> · 9<i>x</i> + 4<i>x</i> · 2 = 4<i>x</i> · (9<i>x</i> + 2)</p>
       <p><b>1.</b> Zerlege jedes Glied so, dass in allen Gliedern <b>derselbe Faktor</b> vorkommt: 36 = 4 · 9 und 8 = 4 · 2. Nimm den <b>größten</b> gemeinsamen Faktor. Potenzen schreibst du als einzelne Variablen: <i>x</i><sup>2</sup> = <i>x</i> · <i>x</i>.</p>
       <p><b>2.</b> Markiere die Faktoren, die in <b>jedem</b> Glied vorkommen.</p>
-      <p><b>3.</b> Das Produkt der markierten Faktoren ist der <b>gemeinsame Faktor</b> – er kommt vor die Klammer.</p>
+      <p><b>3.</b> Schreib selbst an: Das Produkt der markierten Faktoren ist der <b>gemeinsame Faktor</b> – er kommt vor die Klammer.</p>
       <p><b>4.</b> In die Klammer kommt, was von jedem Glied übrig bleibt. Bleibt nichts übrig, steht dort <b>1</b>.</p>
       <p><b>Probe:</b> Multiplizierst du wieder aus, muss der ursprüngliche Term herauskommen.</p>
       <p class="hint">Eingabe: Malpunkt mit · oder *, z. B. 4·9·x·x. Hochzahlen mit ^ oder ², z. B. x^2.</p>
@@ -375,7 +380,7 @@ function decToMono(d){let c=1n;const v={};
   const vv={};Object.keys(v).sort().forEach(k=>vv[k]=v[k]);return {c:rat(d.neg?-c:c),v:vv};}
 
 /* ================= Beispiele erzeugen ================= */
-const N_EX=6,DONE=4;  /* Schritte: 0 zerlegen, 1 markieren, 2 Rest, 3 Ergebnis, 4 fertig */
+const N_EX=6,DONE=3;  /* Schritte: 0 zerlegen, 1 markieren, 2 selbst anschreiben: Faktor vor der Klammer und Inhalt der Klammer, 3 fertig */
 const X1=c=>mono(c,{x:1}),X2=c=>mono(c,{x:2}),K=c=>mono(c);
 function gcdN(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a;}
 function pickCop(n,lo,hi){let xs;do{xs=Array.from({length:n},()=>rnd(lo,hi));}while(xs.reduce(gcdN)!==1);return xs;}
@@ -404,7 +409,7 @@ function newEx(data){
   const n=data.terms.length;
   return {data,common:null,step:0,err:0,shown:false,msg:{},tries:[0,0,0,0,0],
     decVals:Array(n).fill(''),decMarks:Array(n).fill(null),decHints:Array(n).fill(''),decs:null,marks:null,
-    restVals:Array(n).fill(''),restMarks:Array(n).fill(null),restHints:Array(n).fill(''),finalVal:''};
+    preVal:'',preMark:null,innerVal:'',innerMark:null};
 }
 
 /* ================= Zustand ================= */
@@ -485,47 +490,32 @@ function check1(e){
   advance(e,1,'Richtig! Das sind alle gleichen Faktoren.');return true;
 }
 
-/* Schritt 3: Was bleibt übrig? */
-function judgeRest(q,s){
-  if(!s.trim())return {empty:true,text:''};
-  const p=parseTerm(s);if(p.err)return {fmt:true,text:p.err};
-  const n=normalize(p.ms);
-  if(n.length!==1)return {text:'Hier steht genau ein Glied.'};
-  if(sameMono(n[0],q))return {ok:true};
-  if(sameMono(negMono(n[0]),q))return {text:'Achte auf das Vorzeichen des Glieds.'};
-  if(mkey(q)===''&&isOne(q.c.n<0n?rneg(q.c):q.c))return {text:'Bleibt kein Faktor übrig, bleibt 1 übrig.'};
-  return {text:'Multipliziere die Faktoren, die bei diesem Glied nicht markiert sind.'};
-}
+/* Schritt 3: selbst anschreiben – was kommt vor die Klammer, was in die Klammer? */
 function check2(e){
-  const rs=e.data.qs.map((q,k)=>judgeRest(q,e.restVals[k]));
-  return rowCheck(e,2,rs,e.restMarks,e.restHints,'Richtig! Das bleibt von jedem Glied übrig.','Nicht alles stimmt – schau dir die rot markierten Zeilen an.');
-}
-
-/* Schritt 4: Ergebnis */
-function readFactored(str){
-  const s=normIn(str).replace(/\s+/g,'');
-  if(!s)return {empty:true};
-  const i=s.indexOf('('),j=s.lastIndexOf(')');
-  if(i<0||j<i)return {err:'Vergiss die Klammer nicht, z. B. 3x · (2x + 3).'};
-  if(j!==s.length-1)return {err:'Nach der Klammer darf nichts mehr stehen.'};
-  const pre=s.slice(0,i).replace(/\*+$/,''),inner=s.slice(i+1,j);
-  if(!pre)return {err:'Vor die Klammer gehört der gemeinsame Faktor.'};
-  const P=parseTerm(pre);if(P.err)return {err:'Vor der Klammer: '+P.err};
-  if(P.ms.length!==1)return {err:'Vor der Klammer steht nur ein Glied – der gemeinsame Faktor.'};
-  const I=parseTerm(inner);if(I.err)return {err:'In der Klammer: '+I.err};
-  return {pre:P.ms[0],inner:I.ms};
-}
-function check3(e){
-  const r=readFactored(e.finalVal),d=e.data;
-  if(r.empty){hint(e,3,'Schreib das Ergebnis in das Feld.');return false;}
-  if(r.err){hint(e,3,r.err);return false;}
-  if(sameMono(r.pre,d.g)&&termSig(r.inner)===termSig(d.qs)){advance(e,3,'Richtig herausgehoben!');return true;}
-  if(sameMono(r.pre,negMono(d.g))&&termSig(r.inner)===termSig(d.qs.map(negMono))){advance(e,3,'Richtig – du hast sogar das Minus mit herausgehoben!');return true;}
-  const prod=normalize(r.inner.map(m=>mulMono(r.pre,m)));
-  if(termSig(prod)===termSig(d.terms)){hint(e,3,'Richtig umgeformt – aber du kannst noch mehr herausheben. Nimm alle markierten Faktoren zusammen.');return false;}
-  if(sameMono(r.pre,d.g))fail(e,3,'Vor der Klammer stimmt es. In der Klammer stimmt etwas nicht – vergleiche mit Schritt 3.');
-  else fail(e,3,'Vor die Klammer gehört der gemeinsame Faktor – das Produkt der markierten Faktoren.');
-  return false;
+  const d=e.data;
+  if(!e.preVal.trim()||!e.innerVal.trim()){hint(e,2,'Fülle beide Felder aus: vor der Klammer und in der Klammer.');return false;}
+  const P=parseTerm(e.preVal);if(P.err){e.preMark='bad';hint(e,2,'Vor der Klammer: '+P.err);return false;}
+  if(P.ms.length!==1){e.preMark='bad';hint(e,2,'Vor die Klammer kommt nur ein Glied – der gemeinsame Faktor.');return false;}
+  const I=parseTerm(e.innerVal);if(I.err){e.innerMark='bad';hint(e,2,'In der Klammer: '+I.err);return false;}
+  const pre=P.ms[0],inner=I.ms;
+  const preOk=sameMono(pre,d.g),preNeg=sameMono(pre,negMono(d.g));
+  const innerOk=termSig(inner)===termSig(d.qs),innerNeg=termSig(inner)===termSig(d.qs.map(negMono));
+  if(preOk&&innerOk){e.preMark=e.innerMark='ok';advance(e,2,'Richtig herausgehoben!');return true;}
+  if(preNeg&&innerNeg){e.preMark=e.innerMark='ok';advance(e,2,'Richtig – du hast sogar das Minus mit herausgehoben!');return true;}
+  e.preMark=(preOk||preNeg)?'ok':'bad';e.innerMark=(preOk&&innerOk)||(preNeg&&innerNeg)?'ok':'bad';
+  /* vor der Klammer stimmt nicht */
+  if(!preOk&&!preNeg){
+    const prod=normalize(inner.map(m=>mulMono(pre,m)));
+    if(termSig(prod)===termSig(d.terms)){e.innerMark='ok';hint(e,2,'Richtig umgeformt – aber du kannst noch mehr herausheben. Vor die Klammer kommt das Produkt <b>aller</b> markierten Faktoren.');return false;}
+    return fail(e,2,'Vor die Klammer kommt der gemeinsame Faktor: Multipliziere alle Faktoren, die du in einem Glied markiert hast.'),false;
+  }
+  /* vor der Klammer stimmt, in der Klammer nicht */
+  if(termSig(normalize(inner))===termSig(d.terms))return fail(e,2,'In die Klammer kommt nur, was von jedem Glied <b>übrig bleibt</b> – nicht das ganze Glied.'),false;
+  if(inner.length!==d.qs.length)return fail(e,2,'In der Klammer steht für jedes Glied ein Rest – hier sind es '+d.qs.length+' Glieder.'+(d.qs.some(q=>mkey(q)===''&&isOne(q.c.n<0n?rneg(q.c):q.c))?' Bleibt bei einem Glied nichts übrig, schreib <b>1</b>.':'')),false;
+  const want=preOk?d.qs:d.qs.map(negMono);
+  if(termSig(inner.map(negMono))===termSig(want)||inner.some(m=>!want.some(w=>sameMono(w,m))&&want.some(w=>sameMono(w,negMono(m)))))
+    return fail(e,2,'Kontrolliere die Vorzeichen in der Klammer: Das Vorzeichen bleibt beim Glied.'),false;
+  return fail(e,2,'In der Klammer: Multipliziere bei jedem Glied die Faktoren, die <b>nicht</b> markiert sind.'),false;
 }
 
 function canonMarks(e){
@@ -536,9 +526,8 @@ function showSolution(e,s){
   if(s===0){e.decs=canonDecs(d);e.common=commonToks(e.decs);e.decVals=e.decs.map(decPlain);e.decMarks=e.decs.map(()=>'ok');e.decHints=e.decs.map(()=>'');
     e.marks=e.decs.map(x=>x.toks.map(()=>false));e.msg[0]={kind:'shown',text:'Die Zerlegungen sind jetzt eingetragen – rechne sie nach.'};}
   if(s===1){e.marks=canonMarks(e);e.msg[1]={kind:'shown',text:'Die gleichen Faktoren sind jetzt markiert.'};}
-  if(s===2){e.restVals=d.qs.map(q=>polyPlain([q]));e.restMarks=d.qs.map(()=>'ok');e.restHints=d.qs.map(()=>'');
-    e.msg[2]={kind:'shown',text:'Die Reste sind jetzt eingetragen – vergleiche mit den nicht markierten Faktoren.'};}
-  if(s===3){e.finalVal=polyPlain([d.g])+' · ('+polyPlain(d.qs)+')';e.msg[3]={kind:'shown',text:'Lösung: '+finH(d)};}
+  if(s===2){e.preVal=polyPlain([d.g]);e.innerVal=polyPlain(d.qs);e.preMark=e.innerMark='ok';
+    e.msg[2]={kind:'shown',text:'Lösung: '+finH(d)+' – vor der Klammer das Produkt der markierten Faktoren, in der Klammer die nicht markierten Reste.'};}
   e.shown=true;e.step=s+1;
 }
 
@@ -549,6 +538,13 @@ function gqH(d){return d.qs.map((q,i)=>{const neg=q.c.n<0n;return (i?(neg?' − 
 function decLineH(e,withMarks){
   return e.decs.map((d,t)=>(t?(d.neg?' − ':' + '):(d.neg?MINUS:''))+
     d.toks.map((x,k)=>withMarks&&e.marks[t][k]?'<span class="mk">'+tokH(x)+'</span>':tokH(x)).join(' · ')).join('');
+}
+/* die ganze Rechnung in einer Zeile: Zerlegung mit Markierungen, Rechenzeichen in der Mitte */
+function markLineH(e,clickable){
+  return '<div class="row markline">'+e.decs.map((dc,t)=>(t?'<span class="opsign">'+(dc.neg?MINUS:'+')+'</span>':(dc.neg?'<span class="opsign">'+MINUS+'</span>':''))+
+    dc.toks.map((x,k)=>clickable
+      ?'<button type="button" class="chip'+(e.marks[t][k]?' mk':'')+'" data-ti="'+t+'" data-fk="'+k+'" aria-pressed="'+(e.marks[t][k]?'true':'false')+'" aria-label="Faktor '+x+' in Glied '+(t+1)+'">'+tokH(x)+'</button>'
+      :'<span class="chip'+(e.marks[t][k]?' mk':'')+'">'+tokH(x)+'</span>').join('<span class="sep">·</span>')).join('')+'</div>';
 }
 function msgHTML(e,s){const m=e.msg[s];if(!m)return '';
   return '<p class="msg '+m.kind+'">'+m.text+(m.offer&&e.step===s?' <button type="button" class="mini" data-act="show'+s+'">Lösung zeigen</button>':'')+'</p>';}
@@ -584,37 +580,21 @@ function renderEx(focus){
   if(e.step>=1){
     h+='<div class="stepcard '+(e.step===1?'active':'done')+'"><h3>2. Markiere die gleichen Faktoren</h3>';
     if(e.step===1)h+='<p>Tippe in <b>jedem</b> Glied die Faktoren an, die in allen Gliedern vorkommen. Nochmal antippen hebt die Markierung auf.</p>';
-    e.decs.forEach((dc,t)=>{
-      h+='<div class="row"><span class="badge">'+(t+1)+'</span>'+(dc.neg?'<span>'+MINUS+'</span>':'')+
-        dc.toks.map((x,k)=>'<button type="button" class="chip'+(e.marks[t][k]?' mk':'')+'" data-ti="'+t+'" data-fk="'+k+'"'+(e.step===1?'':' disabled')+
-          ' aria-pressed="'+(e.marks[t][k]?'true':'false')+'" aria-label="Faktor '+x+' in Glied '+(t+1)+'">'+tokH(x)+'</button>').join('<span class="sep">·</span>')+'</div>';
-    });
+    h+=markLineH(e,e.step===1);
     if(e.step===1)h+='<div class="actions"><button type="button" data-act="check1">Markierung prüfen</button></div>';
     h+=msgHTML(e,1)+'</div>';
   }
 
-  /* Schritt 3 */
+  /* Schritt 3: selbst anschreiben */
   if(e.step>=2){
-    h+='<div class="stepcard '+(e.step===2?'active':'done')+'"><h3>3. Was bleibt von jedem Glied übrig?</h3>';
-    if(e.step===2)h+='<p>Vor die Klammer kommt der gemeinsame Faktor: '+e.common.map(tokH).join(' · ')+' = <b>'+absH(d.g)+'</b>. Was bleibt von jedem Glied übrig? Multipliziere die <b>nicht</b> markierten Faktoren. Bleibt keiner übrig, schreib 1. Das Vorzeichen bleibt beim Glied.</p>';
-    d.terms.forEach((t,k)=>{
-      h+='<div class="row"><span class="badge">'+(k+1)+'</span>'+termH(t,true)+' = '+absH(d.g)+' · ';
-      if(e.step===2)h+=inp('data-ri="'+k+'"',e.restVals[k],e.restMarks[k]||'','Rest von Glied '+(k+1))+'<span class="prev" data-prev></span><span class="rowmsg">'+esc(e.restHints[k])+'</span>';
-      else h+='<b>'+facH(d.qs[k])+'</b>';
-      h+='</div>';
-    });
-    if(e.step===2)h+='<div class="actions"><button type="button" data-act="check2">Prüfen</button></div>';
+    h+='<div class="stepcard '+(e.step===2?'active':'done')+'"><h3>3. Schreib an: Was kommt vor die Klammer, was in die Klammer?</h3>';
+    if(e.step===2){
+      h+=markLineH(e,false)+'<div class="finline">= '+
+        inp('data-pre',e.preVal,'pre'+(e.preMark?' '+e.preMark:''),'Faktor vor der Klammer','z. B. 4x')+'<span> · (</span>'+
+        inp('data-inner',e.innerVal,'inner'+(e.innerMark?' '+e.innerMark:''),'Inhalt der Klammer','z. B. 9x + 2')+'<span>)</span></div>'+
+        '<div class="actions"><button type="button" data-act="check2">Prüfen</button></div>';
+    }else h+='<div class="finline">= <b class="donetxt">'+finH(d)+' ✓</b></div>';
     h+=msgHTML(e,2)+'</div>';
-  }
-
-  /* Schritt 4 */
-  if(e.step>=3){
-    h+='<div class="stepcard '+(e.step===3?'active':'done')+'"><h3>4. Schreib das Ergebnis an</h3>';
-    h+='<div class="finline">'+gqH(d)+'</div><div class="finline">= ';
-    if(e.step===3)h+=inp('data-fin',e.finalVal,'','Ergebnis mit Klammer','z. B. 3x · (2x + 3)')+'</div>'+
-      '<p class="hint">Gemeinsamer Faktor vor die Klammer, die Reste in die Klammer.</p><div class="actions"><button type="button" data-act="check3">Ergebnis prüfen</button></div>';
-    else h+='<b class="donetxt">'+finH(d)+' ✓</b></div>';
-    h+=msgHTML(e,3)+'</div>';
   }
 
   if(e.step===DONE){
@@ -628,7 +608,6 @@ function renderEx(focus){
   /* Heft: Rechenweg ganz unten */
   h+='<div class="heft"><p class="hefttitle">Dein Rechenweg</p><div class="task">'+polyH(d.terms)+'</div>';
   if(e.step>=1)h+='<div>= '+decLineH(e,e.step>=2)+'</div>';
-  if(e.step>=3)h+='<div>= '+gqH(d)+'</div>';
   if(e.step>=DONE)h+='<div class="fin">= '+finH(d)+'</div><div class="probe">Probe: '+gqH(d)+' = '+polyH(d.terms)+' ✓</div>';
   if(e.step>=DONE)h+='<p class="copy">✏️ <b>Schreib diesen Rechenweg ordentlich in dein Heft ab.</b></p>';
   h+='</div>';
@@ -643,8 +622,7 @@ function renderEx(focus){
     if(focus==='step'){
       if(e.step===0)f=firstBad('[data-di]');
       else if(e.step===1)f=document.querySelector('#exCard .chip');
-      else if(e.step===2)f=firstBad('[data-ri]');
-      else if(e.step===3)f=document.querySelector('#exCard [data-fin]');
+      else if(e.step===2)f=document.querySelector('#exCard .pre.bad')||document.querySelector('#exCard .inner.bad')||document.querySelector('#exCard [data-pre]');
     }else f=document.querySelector(focus);
     if(f){f.focus({preventScroll:false});if(f.select&&f.classList.contains('bad'))f.select();}
   }
@@ -697,7 +675,7 @@ function newRound(){
   g.round=g.round>=100?1:g.round+1;makeRound(level);summaryRequested=false;renderEx();
   $('exCard').scrollIntoView({behavior:'smooth',block:'start'});
 }
-const CHECKS=[check0,check1,check2,check3];
+const CHECKS=[check0,check1,check2];
 function runCheck(s){const e=curEx();if(e.step!==s)return;CHECKS[s](e);renderEx(e.step===DONE?null:'step');}
 $('exCard').addEventListener('click',ev=>{
   const t=ev.target.closest('button');if(!t)return;
@@ -721,14 +699,15 @@ $('exCard').addEventListener('input',ev=>{
   const t=ev.target,e=curEx();
   const clearRow=()=>{t.classList.remove('ok','bad');const rm=t.parentNode.querySelector('.rowmsg');if(rm)rm.textContent='';};
   if(t.dataset.di!==undefined){const k=+t.dataset.di;e.decVals[k]=t.value;e.decMarks[k]=null;e.decHints[k]='';clearRow();}
-  else if(t.dataset.ri!==undefined){const k=+t.dataset.ri;e.restVals[k]=t.value;e.restMarks[k]=null;e.restHints[k]='';clearRow();}
-  else if(t.hasAttribute('data-fin'))e.finalVal=t.value;
+  else if(t.hasAttribute('data-pre')){e.preVal=t.value;e.preMark=null;t.classList.remove('ok','bad');}
+  else if(t.hasAttribute('data-inner')){e.innerVal=t.value;e.innerMark=null;t.classList.remove('ok','bad');}
   updatePrev(t);
 });
 $('exCard').addEventListener('keydown',ev=>{
   if(ev.key!=='Enter'||ev.target.tagName!=='INPUT')return;
   ev.preventDefault();const t=ev.target;
-  const group=t.dataset.di!==undefined?'[data-di]':t.dataset.ri!==undefined?'[data-ri]':null;
+  if(t.hasAttribute('data-pre')){const n=document.querySelector('#exCard [data-inner]');if(n&&!n.value.trim()){n.focus();return;}}
+  const group=t.dataset.di!==undefined?'[data-di]':null;
   if(group){const all=[...document.querySelectorAll('#exCard '+group)],nx=all.slice(all.indexOf(t)+1).find(i=>!i.value.trim());
     if(nx){nx.focus();return;}}
   runCheck(curEx().step);
@@ -769,7 +748,8 @@ function readCode(str){
   const lvl=g(2)?'ahs':'std',seed=g(65536),round=g(100)+1,cur=g(N_EX),ex=[];
   for(let k=0;k<N_EX;k++){const v=g(48);ex.push({step:v>>3,err:(v>>1)&3,shown:!!(v&1)});}
   const nh=g(1024);
-  if(N!==0n||ex.some(x=>x.step>DONE))return bad;
+  if(N!==0n||ex.some(x=>x.step>4))return bad;
+  ex.forEach(x=>{if(x.step>DONE)x.step=DONE;});
   return {lvl,seed,round,cur,ex,nh};
 }
 function applyCode(p){
@@ -777,8 +757,7 @@ function applyCode(p){
   p.ex.forEach((s,k)=>{const e=g.ex[k],d=e.data;e.err=s.err;e.shown=s.shown;
     if(s.step>=1){e.decs=canonDecs(d);e.common=commonToks(e.decs);e.decVals=e.decs.map(decPlain);e.decMarks=e.decs.map(()=>'ok');e.marks=e.decs.map(x=>x.toks.map(()=>false));}
     if(s.step>=2)e.marks=canonMarks(e);
-    if(s.step>=3){e.restVals=d.qs.map(q=>polyPlain([q]));e.restMarks=d.qs.map(()=>'ok');}
-    if(s.step>=DONE)e.finalVal=polyPlain([d.g])+' · ('+polyPlain(d.qs)+')';
+    if(s.step>=DONE){e.preVal=polyPlain([d.g]);e.innerVal=polyPlain(d.qs);e.preMark=e.innerMark='ok';}
     e.step=s.step;});
 }
 function saveProgress(lvl){
