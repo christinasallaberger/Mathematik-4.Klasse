@@ -6,7 +6,7 @@
 <title>Binomische Formeln – a rot, b grün</title>
 <meta name="uebersicht-kapitel" content="Terme">
 <meta name="uebersicht-thema" content="Binomische Formeln – alle drei Formeln (a rot, b grün)">
-<meta name="uebersicht-info" content="a und b farbig markieren, Formel mit a und b anschreiben (oder gleich das Ergebnis – bei Fehler Pflicht zur Formel), ausrechnen – (a+b)², (a−b)², (a+b)(a−b) – Standard und Standard AHS, 12 Beispiele pro Runde (je 4 pro Formel, gemischt)">
+<meta name="uebersicht-info" content="a und b farbig markieren, leere Formel rot/grün zuteilen, a und b einsetzen, ausrechnen – (a+b)², (a−b)², (a+b)(a−b) – Standard und Standard AHS, 12 Beispiele pro Runde (je 4 pro Formel, gemischt)">
 <meta name="uebersicht-gruppe" content="3. Klasse">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -236,6 +236,11 @@ button.tok.ca,button.tok.ca:disabled{background:#F8C9C9;border-color:#D9534F;bor
 button.tok.cb,button.tok.cb:disabled{background:#C8EBCB;border-color:#3C9A47;border-style:solid}
 button.tok:disabled{opacity:1;cursor:default}
 .tline .ln .ca,.tline .ln .cb{color:var(--text)}
+.sbox{display:inline-block;min-width:2.6rem;height:2.4rem;vertical-align:middle;border:2px dashed var(--ink);border-radius:.4rem;background:var(--field);font:700 1rem "Atkinson Hyperlegible",sans-serif;color:var(--ink);padding:0 .2rem;margin:0 .1rem}
+.sbox.ca{background:#F8C9C9;border:2px solid #D9534F}.sbox.cb{background:#C8EBCB;border:2px solid #3C9A47}
+.fbx{display:inline-flex;border-radius:.45rem;padding:.12rem;margin:0 .1rem}
+.fbx.ca{background:#F8C9C9;outline:2px solid #D9534F}.fbx.cb{background:#C8EBCB;outline:2px solid #3C9A47}
+input.fin2{width:4.2rem;text-align:center;font-family:Georgia,serif;font-size:1.25rem;background:rgba(255,255,255,.75)}
 </style>
 </head>
 <body>
@@ -243,7 +248,7 @@ button.tok:disabled{opacity:1;cursor:default}
   <header>
     <div>
       <h1>Binomische Formeln <span class="acc">(a ± b)²</span></h1>
-      <p class="sub">Markiere zuerst <b>a</b> rot und <b>b</b> grün. Dann schreibst du die passende Formel mit deinem a und b an – wer sicher ist, schreibt gleich das Ergebnis. Mit ◀ ▶ oder den Nummern springst du zwischen den Beispielen.</p>
+      <p class="sub">Markiere zuerst <b>a</b> rot und <b>b</b> grün. Dann färbst du die Kästchen der leeren Formel, setzt dein a und b ein und rechnest aus. Mit ◀ ▶ oder den Nummern springst du zwischen den Beispielen.</p>
       <div class="levels" role="group" aria-label="Niveau">
         <button type="button" data-level="std" aria-pressed="true">Standard</button>
         <button type="button" data-level="ahs" aria-pressed="false">Standard AHS</button>
@@ -380,7 +385,7 @@ function parseTerm(str){
 }
 
 /* ================= Binomische Formeln: Aufgaben ================= */
-const N_EX=12,DONE=3;  /* Schritte: 0 a rot / b grün färben · 1 Formel anschreiben (oder gleich das Ergebnis) · 2 Ergebnis */
+const N_EX=12,DONE=4;  /* 0 färben · 1 leere Formel: Kästchen rot/grün zuteilen · 2 a und b einsetzen · 3 ausrechnen */  /* Schritte: 0 a rot / b grün färben · 1 Formel anschreiben (oder gleich das Ergebnis) · 2 Ergebnis */
 const applies=()=>true;
 const nextStep=(e,s)=>s+1;
 const sq=m=>mul(m,m);
@@ -405,7 +410,8 @@ function genRound(lvl,seed,round){const old=RNG;RNG=mulberry32(mixSeed(seed,lvl,
 function mixSeed(seed,lvl,round){return (Math.imul(seed^0x9E3779B9,0x85EBCA6B)^Math.imul(lvl==='ahs'?2:1,0xC2B2AE35)^Math.imul(round,0x27D4EB2F))>>>0;}
 /* Glieder zum Färben: A und B (bei Formel 3 je zweimal) */
 function slots(t){return t.kind===3?['A','B','A','B']:['A','B'];}
-function newEx(t){return {t,step:0,err:0,shown:false,msg:{},tries:[0,0,0],col:slots(t).map(()=>''),ml:'',mlm:null,rv:'',rm:null};}
+const SKEL=t=>t.kind===3?['a','b']:['a','a','b','b'];
+function newEx(t){return {t,step:0,err:0,shown:false,msg:{},tries:[0,0,0,0],col:slots(t).map(()=>''),sc:SKEL(t).map(()=>''),fv:SKEL(t).map(()=>''),fm:SKEL(t).map(()=>null),rv:'',rm:null};}
 
 /* ================= Rechnen mit Polynomen (für die Formel-Zeile) ================= */
 function padd(P,Q){return normalize(P.concat(Q));}
@@ -460,38 +466,38 @@ function formulaHint(t,p){
   return 'Schreib die Formel mit deinem a und b: '+(t.kind===1?'a² + 2 · a · b + b²':t.kind===2?'a² − 2 · a · b + b²':'a² − b²')+'.';
 }
 function check1(e){
-  const t=e.t,raw=e.ml;
-  if(!String(raw).trim())return hint(e,1,'Schreib die Formel mit deinem a und b an – oder gleich das Ergebnis.');
-  const p=parsePoly(raw);if(p.err){e.mlm='bad';return hint(e,1,p.err);}
-  const direct=p.terms.every(x=>simpleTerm(x.raw));
-  if(direct){
-    if(e.force){e.mlm='bad';return hint(e,1,'Schreib jetzt zuerst die <b>Formel</b> an, z. B. '+fH(t,true)+'.');}
-    if(samePoly(p.P,t.E)){
-      if(p.terms.length>t.E.length){e.mlm='bad';return hint(e,1,'Richtig gerechnet – fasse noch ganz zusammen.');}
-      e.direct=1;e.mlm='ok';e.rv=polyPlain(t.E);e.rm='ok';e.msg[1]={kind:'ok',text:'Super – gleich das richtige Ergebnis!'};e.step=DONE;return;}
-    e.force=1;e.mlm='bad';
-    return fail(e,1,'Das Ergebnis stimmt noch nicht. Schreib jetzt zuerst die <b>Formel</b> mit deinem a und b an – '+(t.kind===1?'a² + 2 · a · b + b²':t.kind===2?'a² − 2 · a · b + b²':'a² − b²')+'.');
-  }
-  if(samePoly(p.P,t.E)&&p.terms.length===(t.kind===3?2:3)){e.mlm='ok';return advance(e,1,'Richtig angeschrieben! Jetzt rechne aus.');}
-  e.mlm='bad';fail(e,1,formulaHint(t,p));
+  const want=SKEL(e.t);
+  if(e.sc.some(c=>!c))return hint(e,1,'Färbe <b>jedes</b> Kästchen: einmal tippen = rot (a), zweimal = grün (b).');
+  if(want.every((w,k)=>e.sc[k]===w))return advance(e,1,'Richtig zugeteilt! Jetzt schreib dein a und dein b in die Kästchen.');
+  fail(e,1,e.t.kind===3?'Bei (a + b) · (a − b) = a² − b² ist das erste Kästchen a (rot), das zweite b (grün).':'Die Formel lautet a² '+(e.t.kind===1?'+':'−')+' 2 · a · b + b²: zuerst a (rot), in der Mitte a und b, am Schluss b (grün).');
 }
 function check2(e){
+  const t=e.t,want=SKEL(t);let bad=-1,empty=false;
+  want.forEach((w,k)=>{const v=(e.fv[k]||'').trim();if(!v){empty=true;e.fm[k]=null;return;}
+    const p=parseTerm(v),m=w==='a'?t.A:t.B;const ok=!p.err&&p.ms.length===1&&p.ms[0].c===m.c&&key(p.ms[0].v)===key(m.v);
+    e.fm[k]=ok?'ok':'bad';if(!ok&&bad<0)bad=k;});
+  if(empty)return hint(e,2,'Fülle alle Kästchen aus.');
+  if(bad<0)return advance(e,2,'Richtig eingesetzt! Jetzt rechne aus.');
+  fail(e,2,want[bad]==='a'?'In die <b>roten</b> Kästchen kommt dein <b>a</b> – das rote Glied aus der Angabe, ohne Vorzeichen.':'In die <b>grünen</b> Kästchen kommt dein <b>b</b> – das grüne Glied aus der Angabe, ohne Vorzeichen.');
+}
+function check3(e){
   const t=e.t,p=parsePoly(e.rv);
-  if(!String(e.rv).trim())return hint(e,2,'Schreib das Ergebnis an.');
-  if(p.err){e.rm='bad';return hint(e,2,p.err);}
-  if(!p.terms.every(x=>simpleTerm(x.raw))){e.rm='bad';return hint(e,2,'Rechne alles aus – im Ergebnis stehen keine Klammern und keine Malpunkte mehr.');}
-  if(samePoly(p.P,t.E)){if(p.terms.length>t.E.length){e.rm='bad';return hint(e,2,'Richtig gerechnet – fasse noch ganz zusammen.');}e.rm='ok';return advance(e,2,'Richtig!');}
+  if(!String(e.rv).trim())return hint(e,3,'Schreib das Ergebnis an.');
+  if(p.err){e.rm='bad';return hint(e,3,p.err);}
+  if(!p.terms.every(x=>simpleTerm(x.raw))){e.rm='bad';return hint(e,3,'Rechne alles aus – im Ergebnis stehen keine Klammern und keine Malpunkte mehr.');}
+  if(samePoly(p.P,t.E)){if(p.terms.length>t.E.length){e.rm='bad';return hint(e,3,'Richtig gerechnet – fasse noch ganz zusammen.');}e.rm='ok';return advance(e,3,'Richtig!');}
   e.rm='bad';
   const T=p.terms;
-  if(T.length&&!samePoly(T[0].P,[sq(t.A)]))return fail(e,2,'Rechne a² nochmal: ('+monoH(t.A)+')² = '+monoH(t.A)+' · '+monoH(t.A)+'.');
-  if(t.kind!==3&&T.length===3&&!samePoly(T[1].P,[t.E[1]]))return fail(e,2,'Rechne das mittlere Glied nochmal: 2 · '+monoH(t.A)+' · '+monoH(t.B)+' – mit dem richtigen Vorzeichen.');
-  fail(e,2,'Rechne b² nochmal: '+(t.B.c!==1||Object.keys(t.B.v).length?'('+monoH(t.B)+')²':monoH(t.B)+'²')+'.');
+  if(T.length&&!samePoly(T[0].P,[sq(t.A)]))return fail(e,3,'Rechne a² nochmal: '+(needBr(t.A)?'('+monoH(t.A)+')':monoH(t.A))+'² = '+monoH(t.A)+' · '+monoH(t.A)+'.');
+  if(t.kind!==3&&T.length===3&&!samePoly(T[1].P,[t.E[1]]))return fail(e,3,'Rechne das mittlere Glied nochmal: 2 · '+monoH(t.A)+' · '+monoH(t.B)+' – mit dem richtigen Vorzeichen.');
+  fail(e,3,'Rechne b² nochmal: '+(t.B.c!==1||Object.keys(t.B.v).length?'('+monoH(t.B)+')²':monoH(t.B)+'²')+'.');
 }
 function showSolution(e,s){
   const t=e.t;
   if(s===0)e.col=slots(t).map(x=>x==='A'?'a':'b');
-  if(s===1){e.ml=fPlain(t);e.mlm='ok';}
-  if(s===2){e.rv=polyPlain(t.E);e.rm='ok';}
+  if(s===1)e.sc=SKEL(t).slice();
+  if(s===2){e.fv=SKEL(t).map(w=>polyPlain([w==='a'?t.A:t.B]));e.fm=e.fv.map(()=>'ok');}
+  if(s===3){e.rv=polyPlain(t.E);e.rm='ok';}
   e.shown=true;e.msg[s]={kind:'shown',text:'Die Lösung ist jetzt eingetragen – schau sie dir genau an.'};e.step=s+1;
 }
 /* Formel mit eingesetztem a und b */
@@ -524,12 +530,19 @@ function renderEx(focus){
   h+='<div class="heftcalc"><div class="tline task"><span class="ln">'+taskTokens(e,e.step===0)+'</span> <span class="eqs">=</span></div>';
   if(e.step===0)h+='<div class="tline tools"><button type="button" data-act="check0">Farben prüfen</button><span class="hint" style="margin:0">Tippe die Glieder an: 1× = <b class="ca">a</b> rot, 2× = <b class="cb">b</b> grün.</span></div>'+msgHTML(e,0);
   if(e.step>=1){
-    if(e.step===1)h+='<div class="tline"><span class="eqs">=</span>'+inp('data-ml',e.ml,(e.mlm||'')+' linein mline','Formel mit a und b – oder gleich das Ergebnis',e.force?'z. B. '+fPlain(t).replace(/\^2/g,'²'):'Formel mit a und b – oder gleich das Ergebnis')+'<button type="button" data-act="check1">Prüfen</button></div>'+
-      '<p class="srule">'+(e.force?'Schreib jetzt die <b>Formel</b> mit deinem <b class="ca">a</b> und <b class="cb">b</b> an: ':'Schreib die Formel mit deinem <b class="ca">a</b> und <b class="cb">b</b> an – <b>oder</b> gleich das Ergebnis: ')+'<span class="rl">'+FORMEL[t.kind]+'</span></p>'+msgHTML(e,1);
-    else if(!e.direct)h+='<div class="tline ok"><span class="eqs">=</span><span class="ln">'+fH(t)+'</span> <span class="tick">✓</span></div>';
+    const want=SKEL(t),op=t.kind===2?' − ':' + ';
+    const box=(k,mode)=>{const c=mode==='color'?e.sc[k]:want[k];
+      if(mode==='color')return '<button type="button" class="sbox'+(c?' c'+c:'')+'" data-sb="'+k+'" aria-label="Kästchen '+(k+1)+'">'+(c?c:'')+'</button>';
+      return '<span class="fbx c'+c+'">'+inp('data-fb="'+k+'"',e.fv[k],(e.fm[k]||'')+' fin2',(c==='a'?'a':'b')+' einsetzen','')+'</span>';};
+    const skel=mode=>t.kind===3?box(0,mode)+'<sup>2</sup> − '+box(1,mode)+'<sup>2</sup>':box(0,mode)+'<sup>2</sup>'+op+'2 · '+box(1,mode)+' · '+box(2,mode)+' + '+box(3,mode)+'<sup>2</sup>';
+    if(e.step===1)h+='<div class="tline"><span class="eqs">=</span><span class="ln">'+skel('color')+'</span><button type="button" data-act="check1">Farben prüfen</button></div>'+
+      '<p class="srule">Welches Kästchen wird <b class="ca">rot (a)</b>, welches <b class="cb">grün (b)</b>? Tippe die Kästchen an.</p>'+msgHTML(e,1);
+    else if(e.step===2)h+='<div class="tline"><span class="eqs">=</span><span class="ln">'+skel('fill')+'</span><button type="button" data-act="check2">Prüfen</button></div>'+
+      '<p class="srule">Schreib dein <b class="ca">a</b> in die roten und dein <b class="cb">b</b> in die grünen Kästchen – ohne Vorzeichen.</p>'+msgHTML(e,2);
+    else h+='<div class="tline ok"><span class="eqs">=</span><span class="ln">'+fH(t)+'</span> <span class="tick">✓</span></div>';
   }
-  if(e.step>=2){
-    if(e.step===2)h+='<div class="tline"><span class="eqs">=</span>'+inp('data-rv',e.rv,(e.rm||'')+' linein','Ergebnis','')+'<button type="button" data-act="check2">Prüfen</button></div>'+msgHTML(e,2);
+  if(e.step>=3){
+    if(e.step===3)h+='<div class="tline"><span class="eqs">=</span>'+inp('data-rv',e.rv,(e.rm||'')+' linein','Ergebnis','')+'<button type="button" data-act="check3">Prüfen</button></div>'+msgHTML(e,3);
   }
   if(e.step>=DONE)h+='<div class="tline ok fin"><span class="eqs">=</span><span class="ln">'+polyH(t.E)+'</span> <span class="tick">✓</span></div>';
   h+='</div>';
@@ -595,10 +608,11 @@ function newRound(){
   g.round=g.round>=100?1:g.round+1;makeRound(level);summaryRequested=false;renderEx();
   $('exCard').scrollIntoView({behavior:'smooth',block:'start'});
 }
-const CHECKS=[check0,check1,check2];
+const CHECKS=[check0,check1,check2,check3];
 function runCheck(s){const e=curEx();if(e.step!==s)return;CHECKS[s](e);renderEx(e.step===DONE?null:'step');}
 $('exCard').addEventListener('click',ev=>{
   const e=curEx(),b=ev.target.closest('button');if(!b)return;
+  if(b.dataset.sb!==undefined&&e.step===1){const k=+b.dataset.sb;e.sc[k]=e.sc[k]===''?'a':e.sc[k]==='a'?'b':'';e.msg[1]=null;renderEx();return;}
   if(b.dataset.tok!==undefined&&e.step===0){const k=+b.dataset.tok;e.col[k]=e.col[k]===''?'a':e.col[k]==='a'?'b':'';e.msg[0]=null;renderEx();return;}
   if(b.dataset.go!==undefined){goTo(+b.dataset.go);return;}
   const a=b.dataset.act;
@@ -612,7 +626,7 @@ $('exCard').addEventListener('click',ev=>{
 });
 $('exCard').addEventListener('input',ev=>{
   const t=ev.target,e=curEx();
-  if(t.hasAttribute('data-ml')){e.ml=t.value;e.mlm=null;t.classList.remove('ok','bad');}
+  if(t.dataset.fb!==undefined){const k=+t.dataset.fb;e.fv[k]=t.value;e.fm[k]=null;t.classList.remove('ok','bad');}
   else if(t.hasAttribute('data-rv')){e.rv=t.value;e.rm=null;t.classList.remove('ok','bad');}
 });
 $('exCard').addEventListener('keydown',ev=>{
@@ -631,7 +645,7 @@ function setLevel(l){
 document.querySelectorAll('.levels button').forEach(b=>b.addEventListener('click',()=>setLevel(b.dataset.level)));
 
 /* ================= Fortschritt: speichern (gleiches Gerät) & Code (anderes Gerät) ================= */
-const STORE='binformeln2:',ALPH='23456789ABCDEFGHJKMNPQRSTUVWXYZ',AL=BigInt(ALPH.length),B=x=>BigInt(x);
+const STORE='binformeln3:',ALPH='23456789ABCDEFGHJKMNPQRSTUVWXYZ',AL=BigInt(ALPH.length),B=x=>BigInt(x);
 const normName=s=>s.trim().replace(/\s+/g,' ').toLowerCase();
 function nameHash(n){let h=2166136261;for(const ch of normName(n)){h^=ch.codePointAt(0);h=Math.imul(h,16777619);}return (h>>>0)%1024;}
 function checkChar(s){let c=0;for(let k=0;k<s.length;k++)c=(c+(k+1)*ALPH.indexOf(s[k]))%ALPH.length;return ALPH[c];}
