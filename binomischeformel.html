@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Binomische Formeln – a rot, b grün</title>
+<meta name="uebersicht-kapitel" content="Terme">
+<meta name="uebersicht-thema" content="Binomische Formeln – alle drei Formeln (a rot, b grün)">
+<meta name="uebersicht-info" content="a und b farbig markieren, Formel mit a und b anschreiben (oder gleich das Ergebnis – bei Fehler Pflicht zur Formel), ausrechnen – (a+b)², (a−b)², (a+b)(a−b) – Standard und Standard AHS, 12 Beispiele pro Runde (je 4 pro Formel, gemischt)">
+<meta name="uebersicht-gruppe" content="3. Klasse">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F9FC; --grid:#DCE6F2; --ink:#1B2F6B; --text:#1E2533; --muted:#5B6578;
+  --card:#FFFFFF; --line:#C9D5E6; --ok:#217A4B; --okbg:#E3F4EA; --bad:#B3261E; --badbg:#FBE7E5;
+  --mark:#FFE873; --field:#FFFFFF; --info:#EAF1FB; --accent:#147D92;
+  --num:#0E8FB8; --var:#8E24AA; --arrow:#1D4ED8;
+  --c1:#D99A00; --c2:#1E73D6; --c3:#2E8B3A; --c4:#D81B60; --c5:#8E24AA; --c6:#E8590C;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111827; --grid:#1C2638; --ink:#A9C1FF; --text:#E6EAF2; --muted:#9AA4B8;
+    --card:#172033; --line:#2C3A55; --ok:#5FD08E; --okbg:#173326; --bad:#FF8A80; --badbg:#3A1C1C;
+    --mark:#6B5A12; --field:#0F1726; --info:#1A2740; --accent:#5CC8DC;
+    --num:#5CC8E8; --var:#CE93D8; --arrow:#8FB1FF; --c1:#FFD54F; --c2:#64B5F6; --c3:#81C784; --c4:#F48FB1; --c5:#CE93D8; --c6:#FFAB76; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111827; --grid:#1C2638; --ink:#A9C1FF; --text:#E6EAF2; --muted:#9AA4B8;
+  --card:#172033; --line:#2C3A55; --ok:#5FD08E; --okbg:#173326; --bad:#FF8A80; --badbg:#3A1C1C;
+  --mark:#6B5A12; --field:#0F1726; --info:#1A2740; --accent:#5CC8DC;
+  --num:#5CC8E8; --var:#CE93D8; --arrow:#8FB1FF; --c1:#FFD54F; --c2:#64B5F6; --c3:#81C784; --c4:#F48FB1; --c5:#CE93D8; --c6:#FFAB76; color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; color:var(--text); font-family:"Atkinson Hyperlegible",system-ui,"Segoe UI",Arial,sans-serif;
+  font-size:1.0625rem; line-height:1.5;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.wrap{max-width:60rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1rem;margin:1rem 0 2rem}
+h1{font-family:Fraunces,Georgia,serif;font-weight:800;color:var(--ink);font-size:clamp(2.1rem,6vw,3.5rem);line-height:1.02;margin:0;letter-spacing:-.01em}
+h1 .acc{color:var(--accent)}
+.sub{color:var(--muted);margin:.5rem 0 0;max-width:42rem}
+.top{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.score{font-weight:700;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:999px;padding:.35rem .9rem}
+button{font:inherit;cursor:pointer;border-radius:.5rem;border:2px solid var(--ink);background:var(--ink);color:var(--paper);padding:.45rem .9rem;font-weight:700}
+button.ghost{background:transparent;color:var(--ink)}
+button:disabled{cursor:default;opacity:.45}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+button.mini{font-size:.85rem;padding:.1rem .55rem;background:transparent;color:var(--ink);border-width:1.5px}
+section{background:var(--card);border:2px solid var(--line);border-radius:.75rem;padding:1.25rem 1.25rem 1rem;margin:0 0 1.5rem}
+.head{display:flex;gap:.8rem;align-items:baseline;flex-wrap:wrap}
+.num{font-family:Fraunces,Georgia,serif;font-weight:800;font-size:1.6rem;color:var(--ink);min-width:1.4em}
+h2{font-size:1.15rem;margin:0}
+h3{font-size:1.05rem;margin:0 0 .4rem;color:var(--ink)}
+sup{font-size:.68em;margin-left:.04em}
+.lvl{font-size:.9rem;font-weight:700;color:var(--accent)}
+input{font:inherit;font-size:1.15rem;color:var(--text);background:var(--field);border:2px solid var(--line);border-radius:.4rem;padding:.25rem .5rem}
+input.ok{border-color:var(--ok);background:var(--okbg)}
+input.bad{border-color:var(--bad);background:var(--badbg)}
+.actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.6rem}
+.hint{color:var(--muted);font-size:.95rem;margin:.4rem 0 0}
+.msg{margin:.6rem 0 0;font-size:.97rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.msg.ok{color:var(--ok);font-weight:700}.msg.bad{color:var(--bad)}.msg.shown{color:var(--muted)}
+.prev{color:var(--muted);font-size:1.1rem}
+.prev b{color:var(--text);font-weight:400}
+
+details.info{background:var(--info);border:0;border-left:6px solid var(--ink);border-radius:.5rem;padding:.7rem 1rem;margin:0 0 1.5rem}
+details.info summary{cursor:pointer;font-weight:700;color:var(--ink)}
+details.info p{margin:.5rem 0}
+.copy{background:var(--mark);color:var(--text);border-radius:.4rem;padding:.4rem .7rem;margin:.6rem 0!important}
+.rule{font-size:1.15rem}
+
+.nav{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.dots{display:flex;gap:.3rem;flex-wrap:wrap}
+.dot{width:2.2rem;height:2.2rem;border-radius:50%;padding:0;font-weight:700;font-size:.9rem;background:var(--field);color:var(--ink);border:2px solid var(--line)}
+.dot.started{background:var(--info)}
+.dot.done{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.dot.shown{border-style:dashed}
+.dot.cur{border-color:var(--ink);box-shadow:0 0 0 3px var(--mark)}
+.round{margin-left:auto;color:var(--muted);font-size:.9rem;border:1.5px solid var(--line);border-radius:999px;padding:.1rem .6rem}
+
+.taskline{font-size:1.6rem;margin:.9rem 0 .3rem;display:flex;flex-wrap:wrap;align-items:center;gap:.2rem}
+.tchip{font:inherit;font-size:1.6rem;font-weight:400;background:transparent;color:var(--text);border:0;border-bottom:5px solid transparent;border-radius:0;padding:0 .2rem .05rem;line-height:1.35;cursor:pointer}
+.tchip:hover{background:var(--info)}
+.tchip.k1{border-bottom-color:var(--c1)}.tchip.k2{border-bottom-color:var(--c2)}.tchip.k3{border-bottom-color:var(--c3)}.tchip.k4{border-bottom-color:var(--c4)}.tchip.k5{border-bottom-color:var(--c5)}.tchip.k6{border-bottom-color:var(--c6)}
+.gt{text-decoration:underline;text-decoration-thickness:4px;text-underline-offset:.3em}
+.g1{text-decoration-color:var(--c1)}.g2{text-decoration-color:var(--c2)}.g3{text-decoration-color:var(--c3)}.g4{text-decoration-color:var(--c4)}.g5{text-decoration-color:var(--c5)}.g6{text-decoration-color:var(--c6)}
+.palette{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin:.3rem 0}
+.pal{width:2.6rem;height:2.2rem;padding:0;background:var(--field);border:2px solid var(--line);border-radius:.4rem;position:relative}
+.pal::after{content:"";position:absolute;left:.45rem;right:.45rem;bottom:.55rem;height:5px;border-radius:3px;background:currentColor}
+.pal.u1{color:var(--c1)}.pal.u2{color:var(--c2)}.pal.u3{color:var(--c3)}.pal.u4{color:var(--c4)}.pal.u5{color:var(--c5)}.pal.u6{color:var(--c6)}
+.pal.sel{border-color:var(--ink);box-shadow:0 0 0 3px var(--mark)}
+.markmsg{font-size:.95rem;margin:.3rem 0 0}
+.markmsg.ok{color:var(--ok);font-weight:700}.markmsg.bad{color:var(--bad)}
+.stepcard{border:2px solid var(--ink);border-radius:.6rem;padding:.8rem 1rem;margin-top:1rem}
+.stepcard.done{border-color:var(--ok)}
+.donetxt{color:var(--ok);font-weight:700}
+.row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin:.5rem 0;font-size:1.3rem}
+.row input{width:18rem;max-width:100%}
+.donebox{margin-top:1rem;padding:.8rem 1rem;border-radius:.6rem;background:var(--okbg);border:2px solid var(--ok);display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+.donebox b{color:var(--ok)}
+
+.heft{overflow-x:auto;margin:1.2rem 0 .5rem;border:2px dashed var(--line);border-radius:.6rem;background:var(--paper);padding:.8rem 1rem}
+.heft .hefttitle{margin:0 0 .3rem;font-weight:700;color:var(--muted);font-size:.95rem}
+.heft .hl{font-size:1.35rem;color:var(--ink);margin:.3rem 0}
+.heft .fin{font-weight:700}
+.heft .small{font-size:1rem;color:var(--muted)}
+.heft .copy{font-size:1rem}
+
+.startcard{border-color:var(--ink);border-width:3px}
+.startcard h2{font-family:Fraunces,Georgia,serif;font-size:1.5rem;color:var(--ink)}
+#pname{width:16rem;max-width:100%;font-size:1.15rem}
+#startDone{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.who{font-weight:700;color:var(--ink);display:inline-flex;align-items:center;gap:.4rem;font-size:1.1rem}
+#codeAsk{margin-top:1rem}
+#codeAsk summary{cursor:pointer;color:var(--ink);font-weight:700}
+#pcode{width:17rem;max-width:100%;font-family:ui-monospace,Consolas,"Courier New",monospace;text-transform:uppercase;letter-spacing:.05em}
+#pnameErr{color:var(--bad);margin:.6rem 0 0}
+#startMsg{flex-basis:100%;margin:0;color:var(--ok);font-weight:700}
+#startMsg:empty{display:none}
+#codeBox{flex-basis:100%;background:var(--info);border-left:6px solid var(--ink);border-radius:.5rem;padding:.7rem 1rem}
+#codeBox p{margin:.3rem 0}
+.code{font-family:ui-monospace,Consolas,"Courier New",monospace;font-size:1.35rem;font-weight:700;letter-spacing:.06em;color:var(--ink);word-break:break-all}
+.finish{display:flex;justify-content:center;margin:0 0 1.5rem}
+#summary{border-color:var(--ink);border-width:3px}
+#summary .who{margin:.4rem 0 0;color:var(--muted)}
+#summary .who b{color:var(--text)}
+.summsg{font-size:1.2rem;font-weight:700;color:var(--ink);margin:.6rem 0 1rem}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:30rem}
+th,td{text-align:left;padding:.4rem .6rem;border-bottom:1px solid var(--line)}
+td.c,th.c{text-align:center}
+tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--ink)}
+body.locked #main{opacity:.35;filter:grayscale(.4);pointer-events:none;user-select:none}
+
+#pad{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:3px solid var(--ink);
+  padding:.5rem .6rem calc(.5rem + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 16px rgba(27,47,107,.15)}
+#pad .padtop{display:flex;align-items:center;gap:.5rem;max-width:34rem;margin:0 auto .4rem;color:var(--muted);font-size:.9rem}
+#pad .padtop span{margin-right:auto;font-weight:700;color:var(--ink)}
+#pad .keys{display:grid;grid-template-columns:repeat(7,1fr);gap:.3rem;max-width:34rem;margin:0 auto}
+#pad .keys button{padding:.55rem 0;font-size:1.15rem;font-weight:700;background:var(--field);color:var(--text);border:2px solid var(--line);border-radius:.45rem;touch-action:manipulation}
+#pad .keys button.var{font-style:italic;font-family:Georgia,serif}
+#pad .keys button.op{background:var(--info)}
+#pad .keys button.go{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+body.padon .wrap{padding-bottom:20rem}
+
+/* Aufgabe mit Pfeilen */
+.exprscroll{overflow-x:auto;margin:.6rem 0 .2rem;-webkit-overflow-scrolling:touch}
+.exprwrap{position:relative;display:inline-block;white-space:nowrap;padding:4.2rem .6rem 3.2rem;font-size:1.7rem;font-family:Georgia,"Times New Roman",serif}
+.exprwrap svg.arrows{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
+.exprwrap svg.arrows path{fill:none;stroke:var(--arrow);stroke-width:2.6;stroke-linecap:round}
+.exprwrap svg.arrows path.dn{stroke:var(--accent);stroke-dasharray:0}
+.tk{display:inline-block;padding:0 .12rem;border-radius:.35rem}
+.tk.fac,.tk.trm{border:2px dashed transparent}
+.picking .tk.fac,.picking .tk.trm{cursor:pointer}
+.picking .tk.fac{border-color:var(--line)}
+.tk.fac.sel{background:var(--mark);border-color:var(--ink);border-style:solid}
+.tk.trm.got{background:var(--info)}
+.tk.op{color:var(--muted);padding:0 .25rem}
+.prod i,.tk i{font-style:italic}
+.bxn{border-bottom:3px solid var(--num);padding:0 .05rem}
+.bxv{border-bottom:3px solid var(--var);padding:0 .05rem}
+.legend{font-size:.9rem;color:var(--muted);margin:.2rem 0}
+.legend .bxn,.legend .bxv{font-weight:700;color:var(--text)}
+.prodrow{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;margin:.5rem 0;font-size:1.3rem}
+.prodrow .prod{min-width:9rem;font-family:Georgia,serif}
+.prodrow input{width:9rem}
+.prodrow .rowmsg{flex-basis:100%;font-size:.92rem;color:var(--bad)}
+.prodrow .rowmsg:empty{display:none}
+.levels{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden;margin-top:1rem}
+.levels button{border:0;border-radius:0;background:transparent;color:var(--ink);padding:.45rem 1.1rem}
+.levels button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.stepcard.active{border-color:var(--ink)}
+.stepcard p{margin:.3rem 0}
+.sumafter{margin-top:.8rem;padding:.6rem .9rem;border-radius:.5rem;background:var(--mark);color:var(--text)}
+.heft .hl .prod{font-family:inherit}
+.exprwrap.mini{font-size:1.25rem;padding:3rem .3rem 3rem}
+.heft .exprwrap.mini{font-size:1.35rem;color:var(--ink)}
+#summary td .exprscroll{margin:0}
+#summary td .exprwrap.mini{font-size:1.1rem;padding-top:2.6rem;padding-bottom:2.6rem}
+.exprwrap .tk.fac,.exprwrap .tk.trm{margin:0 .3em;padding:0 .12em}
+.exprwrap .tk.mul{margin:0 .45em}
+.exprwrap svg.arrows text.anum{font:700 15px "Atkinson Hyperlegible",sans-serif;fill:var(--arrow);paint-order:stroke;stroke:var(--card);stroke-width:4px}
+.exprwrap svg.arrows text.anum.dn{fill:var(--accent)}
+.prodrow .pnum{display:inline-flex;align-items:center;justify-content:center;width:1.8rem;height:1.8rem;border-radius:50%;background:var(--info);color:var(--ink);font-weight:700;margin-right:.5rem;border:2px solid var(--arrow)}
+.prodrow input.wide{width:12rem}
+.heftcalc{border:2px solid var(--ink);border-radius:.6rem;background:var(--card);padding:.4rem .8rem .8rem;margin-top:.6rem}
+.tline{display:flex;align-items:flex-end;flex-wrap:wrap;gap:.35rem;font-family:Georgia,"Times New Roman",serif;font-size:1.55rem;margin:.2rem 0 .5rem .6rem}
+.tline.tools{font-family:"Atkinson Hyperlegible",sans-serif;font-size:1rem;align-items:center}
+.tline.ok{color:var(--ok)}
+.tline.fin{font-weight:700}
+.tline .tick{font-family:"Atkinson Hyperlegible",sans-serif;font-size:1.1rem}
+.tline .eqs{min-width:1.1rem;align-self:center}
+.tline button{font-family:"Atkinson Hyperlegible",sans-serif;font-size:1rem;align-self:center}
+.pbox{display:inline-flex;flex-direction:column;align-items:center}
+.pbox .pn{font:700 .8rem "Atkinson Hyperlegible",sans-serif;color:var(--arrow);line-height:1}
+input.pin4{width:7.2rem;font-family:Georgia,serif;font-size:1.25rem;text-align:center}
+input.linein{width:min(24rem,100%);font-family:Georgia,serif;font-size:1.3rem}
+.heftcalc .msg{margin:.1rem 0 .4rem .6rem}
+.hlist{color:var(--bad);font-size:.95rem;margin:.1rem 0 .4rem .6rem}
+.hlist div{margin:.15rem 0}
+:root{--c1:#D99A00;--c2:#1E73D6;--c3:#2E8B3A;--c4:#D81B60}
+.tchip{font:inherit;font-family:Georgia,serif;font-size:1.5rem;font-weight:400;background:transparent;color:var(--text);border:0;border-bottom:5px solid transparent;border-radius:0;padding:0 .2rem .05rem;line-height:1.35;cursor:pointer}
+.tchip:hover{background:var(--info)}
+.tchip:disabled{cursor:default;opacity:1}
+.tchip.k1{border-bottom-color:var(--c1)}.tchip.k2{border-bottom-color:var(--c2)}.tchip.k3{border-bottom-color:var(--c3)}.tchip.k4{border-bottom-color:var(--c4)}
+.tline.marks{align-items:center}
+.tline .ln{white-space:nowrap}
+.tline button.tchip{font-family:Georgia,serif;font-size:1.5rem;font-weight:400;padding:0 .25rem .05rem;margin:0 .05rem;background:transparent;color:var(--text);border:0;border-bottom:5px solid transparent;border-radius:0}
+.tline button.tchip.k1{border-bottom-color:var(--c1)}.tline button.tchip.k2{border-bottom-color:var(--c2)}.tline button.tchip.k3{border-bottom-color:var(--c3)}.tline button.tchip.k4{border-bottom-color:var(--c4)}
+.tline button.tchip:hover{background:var(--info)}
+.pin2{display:inline-flex;align-items:center;gap:.15rem}
+button.sbtn{font:700 1.3rem Georgia,serif;width:2.2rem;height:2.3rem;padding:0;border:2px dashed var(--arrow);border-radius:.45rem;background:var(--field);color:var(--muted)}
+button.sbtn.set{border-style:solid;color:var(--ink);background:var(--info)}
+input.pin4{width:6rem}
+.srule{font:.9rem "Atkinson Hyperlegible",sans-serif;color:var(--muted);margin:.1rem 0 .4rem .6rem}
+.ip{opacity:.45;font-size:.85em;margin-right:.05em}
+.srule .rl{display:inline-block;white-space:nowrap;margin:.15rem .5rem .1rem 0;padding:0 .4rem;border:1px solid var(--line);border-radius:.4rem;background:var(--info);color:var(--ink)}
+input.mline{width:min(34rem,100%)}
+.ca{background:#F8C9C9;border-radius:.25rem;padding:0 .12rem}
+.cb{background:#C8EBCB;border-radius:.25rem;padding:0 .12rem}
+.tline.task{font-size:1.8rem;align-items:center;flex-wrap:wrap}
+button.tok{font:inherit;font-family:Georgia,serif;font-size:1.8rem;font-weight:400;color:var(--text);background:var(--field);border:2px dashed var(--line);border-radius:.4rem;padding:0 .25rem;margin:0 .1rem;cursor:pointer}
+button.tok.ca,button.tok.ca:disabled{background:#F8C9C9;border-color:#D9534F;border-style:solid}
+button.tok.cb,button.tok.cb:disabled{background:#C8EBCB;border-color:#3C9A47;border-style:solid}
+button.tok:disabled{opacity:1;cursor:default}
+.tline .ln .ca,.tline .ln .cb{color:var(--text)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Binomische Formeln <span class="acc">(a ± b)²</span></h1>
+      <p class="sub">Markiere zuerst <b>a</b> rot und <b>b</b> grün. Dann schreibst du die passende Formel mit deinem a und b an – wer sicher ist, schreibt gleich das Ergebnis. Mit ◀ ▶ oder den Nummern springst du zwischen den Beispielen.</p>
+      <div class="levels" role="group" aria-label="Niveau">
+        <button type="button" data-level="std" aria-pressed="true">Standard</button>
+        <button type="button" data-level="ahs" aria-pressed="false">Standard AHS</button>
+      </div>
+    </div>
+    <div class="top"><span class="score" id="score">0 von 8 fertig</span></div>
+  </header>
+
+  <section id="start" class="startcard">
+    <div id="startAsk">
+      <h2>Wie heißt du?</h2>
+      <p class="hint">Gib zuerst deinen Namen ein. Er steht am Ende in deiner Auswertung und kann danach nicht mehr geändert werden. Hast du auf diesem Gerät schon geübt, machst du automatisch dort weiter, wo du aufgehört hast.</p>
+      <div class="actions"><input id="pname" placeholder="Vor- und Nachname" autocomplete="name" aria-label="Dein Name"><button id="startBtn" type="button">Los geht’s</button></div>
+      <details id="codeAsk">
+        <summary>Auf einem anderen Gerät angefangen? Code eingeben</summary>
+        <p class="hint">Schreib oben deinen Namen genau wie auf dem anderen Gerät und tippe hier den Code ein.</p>
+        <div class="actions"><input id="pcode" placeholder="z. B. K7MP-2XQ9" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Code vom anderen Gerät"></div>
+      </details>
+      <p id="pnameErr" hidden></p>
+    </div>
+    <div id="startDone" hidden>
+      <span class="who">👤 <b id="pnameShow"></b></span>
+      <button type="button" class="mini" id="codeBtn" aria-expanded="false">Auf anderem Gerät weitermachen</button>
+      <p id="startMsg" aria-live="polite"></p>
+      <div id="codeBox" hidden>
+        <p>Dein Code: <span class="code" id="codeShow"></span> <button type="button" class="mini" id="codeCopy">Kopieren</button></p>
+        <p class="hint">Öffne die Übung auf dem anderen Gerät, gib <b>genau denselben Namen</b> ein und tippe diesen Code ein. Der Code ändert sich, während du weiterarbeitest – schreib ihn dir erst auf, wenn du hier aufhörst.</p>
+      </div>
+    </div>
+  </section>
+
+  <div id="main">
+    <section id="exCard"></section>
+
+    <details class="info" id="howto" open>
+      <summary>Zusammenfassung – schreib sie in dein Heft!</summary>
+      <p class="copy">✏️ <b>Schreib diese Zusammenfassung mit den Beispielen ordentlich in dein Heft ab – markiere a rot und b grün!</b></p>
+      <p><b>1. binomische Formel:</b> (<span class="ca">a</span> + <span class="cb">b</span>)² = <span class="ca">a</span>² + 2 · <span class="ca">a</span> · <span class="cb">b</span> + <span class="cb">b</span>²</p>
+      <p><b>2. binomische Formel:</b> (<span class="ca">a</span> − <span class="cb">b</span>)² = <span class="ca">a</span>² − 2 · <span class="ca">a</span> · <span class="cb">b</span> + <span class="cb">b</span>²</p>
+      <p><b>3. binomische Formel:</b> (<span class="ca">a</span> + <span class="cb">b</span>) · (<span class="ca">a</span> − <span class="cb">b</span>) = <span class="ca">a</span>² − <span class="cb">b</span>²</p>
+      <p><b>Beispiele:</b></p>
+      <p class="rule">(<span class="ca">e</span> − <span class="cb">9</span>)² = <span class="ca">e</span>² − 2 · <span class="ca">e</span> · <span class="cb">9</span> + <span class="cb">9</span>² = <i>e</i>² − 18<i>e</i> + 81</p>
+      <p class="rule">(<span class="ca">3a</span> − <span class="cb">b</span>)² = <span class="ca">(3a)</span>² − 2 · <span class="ca">3a</span> · <span class="cb">b</span> + <span class="cb">b</span>² = 9<i>a</i>² − 6<i>ab</i> + <i>b</i>²</p>
+      <p class="rule">(<span class="ca">3e</span> + <span class="cb">5f</span>)² = <span class="ca">(3e)</span>² + 2 · <span class="ca">3e</span> · <span class="cb">5f</span> + <span class="cb">(5f)</span>² = 9<i>e</i>² + 30<i>ef</i> + 25<i>f</i>²</p>
+      <p class="rule">(<span class="ca">r</span> + <span class="cb">4</span>) · (<span class="ca">r</span> − <span class="cb">4</span>) = <span class="ca">r</span>² − <span class="cb">4</span>² = <i>r</i>² − 16</p>
+      <p><b>Achtung:</b> Steht vor der Variable eine Zahl, kommt sie mit in die Klammer: (3a)² = 9a². Das mittlere Glied 2 · a · b nicht vergessen!</p>
+      <p class="hint">Eingabe: Hochzahl mit ^ oder □², mal mit ·, z. B. (3a)^2 - 2·3a·b + b^2</p>
+    </details>
+
+    <div class="finish"><button class="ghost" id="showSum" type="button">Auswertung anzeigen</button></div>
+
+    <section id="summary" hidden>
+      <div class="head"><h2 id="sumTitle">Auswertung</h2></div>
+      <p id="sumWho" class="who"></p>
+      <p id="sumMsg" class="summsg"></p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Beispiel</th><th>Ergebnis</th><th>Bewertung</th><th class="c">Fehlversuche</th></tr></thead>
+        <tbody id="sumBody"></tbody>
+        <tfoot id="sumFoot"></tfoot>
+      </table></div>
+      <div class="actions" style="margin-top:1rem"><button type="button" id="newRound2">Neue Runde mit neuen Beispielen</button></div>
+    </section>
+  </div>
+</div>
+
+<div id="pad" hidden role="group" aria-label="Eingabehilfe">
+  <div class="padtop"><span>Eingabehilfe</span>
+    <button type="button" class="mini" id="padSys">Handy-Tastatur einblenden</button>
+    <button type="button" class="mini" id="padHide" aria-label="Eingabehilfe schließen">✕</button>
+  </div>
+  <div class="keys">
+    <button type="button" data-ins="7">7</button><button type="button" data-ins="8">8</button><button type="button" data-ins="9">9</button><button type="button" class="var" data-var="0">x</button><button type="button" class="var" data-var="1">y</button><button type="button" class="op" data-ins="²" aria-label="hoch 2">□²</button><button type="button" class="op" data-act="del" aria-label="Löschen">⌫</button>
+    <button type="button" data-ins="4">4</button><button type="button" data-ins="5">5</button><button type="button" data-ins="6">6</button><button type="button" class="var" data-var="2">a</button><button type="button" class="var" data-var="3">b</button><button type="button" class="op" data-ins="³" aria-label="hoch 3">□³</button><button type="button" class="op" data-act="clr" aria-label="Feld leeren">C</button>
+    <button type="button" data-ins="1">1</button><button type="button" data-ins="2">2</button><button type="button" data-ins="3">3</button><button type="button" class="op" data-ins="+">+</button><button type="button" class="op" data-ins="-" aria-label="minus">−</button><button type="button" class="op" data-ins="^" aria-label="hoch beliebige Zahl">□ⁿ</button><button type="button" class="op" data-act="left" aria-label="Cursor nach links">◀</button>
+    <button type="button" data-ins="0">0</button><button type="button" class="op" data-ins="·" aria-label="mal">·</button><button type="button" class="op" data-ins="(" aria-label="Klammer auf">(</button><button type="button" class="op" data-ins=")" aria-label="Klammer zu">)</button><button type="button" class="go" data-act="ok" style="grid-column:span 2">✓ fertig</button><button type="button" class="op" data-act="right" aria-label="Cursor nach rechts">▶</button>
+  </div>
+</div>
+
+<script>
+/* ================= Hilfsfunktionen ================= */
+let RNG=Math.random;
+const rnd=(a,b)=>a+Math.floor(RNG()*(b-a+1));
+const pick=a=>a[rnd(0,a.length-1)];
+const sg=()=>RNG()<.5?1:-1;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=rnd(0,i);[a[i],a[j]]=[a[j],a[i]];}return a;}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const MINUS='−',V=k=>'<i>'+k+'</i>',sup=e=>e>1?'<sup>'+e+'</sup>':'';
+
+/* ================= Glieder (Monome) ================= */
+const M=(c,v={})=>({c,v:Object.assign({},v)});
+const key=v=>Object.keys(v).filter(k=>v[k]>0).sort().map(k=>k+(v[k]>1?v[k]:'')).join('');
+const degOf=v=>Object.values(v).reduce((s,e)=>s+e,0);
+function mul(a,b){const v=Object.assign({},a.v);Object.keys(b.v).forEach(k=>v[k]=(v[k]||0)+b.v[k]);return M(a.c*b.c,v);}
+function dvd(a,b){const v=Object.assign({},a.v);Object.keys(b.v).forEach(k=>{v[k]=(v[k]||0)-b.v[k];if(!v[k])delete v[k];});return M(a.c/b.c,v);}
+const varsH=m=>Object.keys(m.v).sort().map(k=>V(k)+sup(m.v[k])).join('');
+function absH(m,box){const a=Math.abs(m.c),vp=varsH(m);
+  const num=(!vp||a!==1)?String(a):'';
+  if(!box)return num+vp;
+  return (num?'<span class="bxn">'+num+'</span>':'')+(vp?'<span class="bxv">'+vp+'</span>':'');}
+function monoH(m,box){return (m.c<0?MINUS:'')+absH(m,box);}
+function termH(m,first){const neg=m.c<0;return first?(neg?MINUS:'')+absH(m):(neg?' − ':' + ')+absH(m);}
+const cmp=(a,b)=>degOf(b.v)-degOf(a.v)||(key(a.v)<key(b.v)?-1:key(a.v)>key(b.v)?1:0);
+function normalize(ms){const mp=new Map();ms.forEach(m=>{const k=key(m.v),o=mp.get(k);if(o)o.c+=m.c;else mp.set(k,M(m.c,m.v));});return [...mp.values()].filter(m=>m.c!==0).sort(cmp);}
+const polyH=ms=>ms.length?ms.map((m,i)=>termH(m,!i)).join(''):'0';
+function plainT(m){const a=Math.abs(m.c),vp=Object.keys(m.v).sort().map(k=>k+(m.v[k]>1?'^'+m.v[k]:'')).join('');return vp?(a===1?'':a)+vp:String(a);}
+const polyPlain=ms=>ms.length?ms.map((m,i)=>i?(m.c<0?' - ':' + ')+plainT(m):(m.c<0?'-':'')+plainT(m)).join(''):'0';
+const sameM=(a,b)=>a.c===b.c&&key(a.v)===key(b.v);
+const keyH=k=>k===''?'den Zahlen ohne Variable':'den Gliedern mit '+k.replace(/([a-z])(\d*)/g,(m,v,e)=>V(v)+(e?'<sup>'+e+'</sup>':''));
+
+/* Eingabe lesen, z. B. -8xy oder 3x^2 - 2xy + 5 */
+function parseTerm(str){
+  const s=String(str).replace(/[−–—]/g,'-').replace(/²/g,'^2').replace(/³/g,'^3').replace(/⁴/g,'^4').replace(/[·×•*]/g,'').replace(/\s+/g,'').toLowerCase();
+  if(!s)return {err:'Schreib dein Ergebnis in das Feld.'};
+  if(/[()]/.test(s))return {err:'Schreib das Ergebnis ohne Klammern.'};
+  if(/[:\/]/.test(s))return {err:'Rechne die Division aus – im Ergebnis steht kein : mehr.'};
+  if(/[^0-9a-z+\-^]/.test(s))return {err:'Das Zeichen „'+s.match(/[^0-9a-z+\-^]/)[0]+'“ kann ich nicht lesen.'};
+  const chunks=s.match(/[+-]?[^+-]+/g)||[];
+  if(chunks.join('')!==s)return {err:'Zwischen zwei Gliedern steht genau ein + oder −.'};
+  const ms=[];
+  for(const ch of chunks){
+    const neg=ch[0]==='-',body=/^[+-]/.test(ch)?ch.slice(1):ch;
+    if(!body)return {err:'Nach einem Rechenzeichen fehlt ein Glied.'};
+    const re=/(\d+)|([a-z])(?:\^(\d+))?|(\^)/y;let pos=0,c=1,v={},num=false;
+    while(pos<body.length){re.lastIndex=pos;const m=re.exec(body);if(!m)return {err:'Das kann ich nicht lesen.'};pos=re.lastIndex;
+      if(m[4])return {err:'Vor ^ muss eine Variable stehen, z. B. x^2.'};
+      if(m[1]){if(num)return {err:'Schreib die Zahl vor die Variable, z. B. 3x.'};c*= +m[1];num=true;}
+      else{const e=m[3]?+m[3]:1;if(e<1)return {err:'Verwende Hochzahlen ab 1.'};v[m[2]]=(v[m[2]]||0)+e;}}
+    if(c===0)return {err:'Ein Glied mit 0 fällt weg – lass es einfach weg.'};
+    ms.push(M(neg?-c:c,v));
+  }
+  return {ms};
+}
+
+/* ================= Binomische Formeln: Aufgaben ================= */
+const N_EX=12,DONE=3;  /* Schritte: 0 a rot / b grün färben · 1 Formel anschreiben (oder gleich das Ergebnis) · 2 Ergebnis */
+const applies=()=>true;
+const nextStep=(e,s)=>s+1;
+const sq=m=>mul(m,m);
+function expected(t){const A=t.A,Bv=t.B;
+  if(t.kind===3)return normalize([sq(A),M(-sq(Bv).c,sq(Bv).v)]);
+  const AB=mul(mul(M(2),A),Bv);return normalize([sq(A),t.kind===1?AB:M(-AB.c,AB.v),sq(Bv)]);}
+const VARS=['x','y','a','b'];
+function genTask(i,lvl,kind){
+  const x=pick(VARS),y=pick(VARS.filter(v=>v!==x));let A,Bv;
+  if(lvl==='std'){A=i<5?M(1,{[x]:1}):M(rnd(2,5),{[x]:1});Bv=M(rnd(1,10));}
+  else{const r=i%4;
+    if(r===0){A=M(rnd(2,6),{[x]:1});Bv=M(rnd(2,9));}
+    else if(r===1){A=M(rnd(2,5),{[x]:1});Bv=M(rnd(1,5),{[y]:1});}
+    else if(r===2){A=M(1,{[x]:2});Bv=M(rnd(2,8));}
+    else{A=M(rnd(2,4),{[x]:1,[y]:1});Bv=M(rnd(2,6));}}
+  const swap=kind===3&&RNG()<.4;
+  return {kind,A,B:Bv,swap,E:expected({kind,A,B:Bv})};
+}
+function genRound(lvl,seed,round){const old=RNG;RNG=mulberry32(mixSeed(seed,lvl,round));try{/* je 4 Beispiele pro Formel, gut durchmischt (nie dreimal hintereinander dieselbe) */
+  let kinds;do{kinds=shuffle([1,1,1,1,2,2,2,2,3,3,3,3]);}while(kinds.some((k,i)=>i>1&&k===kinds[i-1]&&k===kinds[i-2]));
+  return kinds.map((k,i)=>genTask(i,lvl,k));}finally{RNG=old;}}
+function mixSeed(seed,lvl,round){return (Math.imul(seed^0x9E3779B9,0x85EBCA6B)^Math.imul(lvl==='ahs'?2:1,0xC2B2AE35)^Math.imul(round,0x27D4EB2F))>>>0;}
+/* Glieder zum Färben: A und B (bei Formel 3 je zweimal) */
+function slots(t){return t.kind===3?['A','B','A','B']:['A','B'];}
+function newEx(t){return {t,step:0,err:0,shown:false,msg:{},tries:[0,0,0],col:slots(t).map(()=>''),ml:'',mlm:null,rv:'',rm:null};}
+
+/* ================= Rechnen mit Polynomen (für die Formel-Zeile) ================= */
+function padd(P,Q){return normalize(P.concat(Q));}
+function pmul(P,Q){const out=[];P.forEach(p=>Q.forEach(q=>out.push(mul(p,q))));return normalize(out);}
+function ppow(P,n){let R=[M(1)];for(let k=0;k<n;k++)R=pmul(R,P);return R;}
+const samePoly=(P,Q)=>{const a=normalize(P),b=normalize(Q);return a.length===b.length&&a.every(m=>b.some(n=>key(n.v)===key(m.v)&&n.c===m.c));};
+function parsePoly(str){
+  const s=String(str).replace(/[−–—]/g,'-').replace(/[*×•]/g,'·').replace(/²/g,'^2').replace(/³/g,'^3').replace(/\s+/g,'').toLowerCase();
+  if(!s)return {err:'Schreib die Zeile an.'};
+  const bad=s.match(/[^0-9a-z+\-·:^(),]/);if(bad)return {err:'Das Zeichen „'+bad[0]+'“ kann ich nicht lesen.'};
+  let i=0;const pk=()=>s[i];const terms=[];
+  function expr(top){let st=i,sign=1;if(pk()==='+'||pk()==='-'){sign=pk()==='-'?-1:1;i++;}
+    let P=term();if(sign<0)P=P.map(m=>M(-m.c,m.v));if(top)terms.push({sign,raw:s.slice(st,i).replace(/^[+-]/,''),P:P});
+    while(pk()==='+'||pk()==='-'){const sg=pk()==='-'?-1:1;i++;const st2=i;let Q=term();if(top)terms.push({sign:sg,raw:s.slice(st2,i),P:sg<0?Q.map(m=>M(-m.c,m.v)):Q});if(sg<0)Q=Q.map(m=>M(-m.c,m.v));P=padd(P,Q);}
+    return P;}
+  function term(){let P=factor();for(;;){const c=pk();if(c==='·'){i++;P=pmul(P,factor());}else if(c&&/[a-z0-9(]/.test(c)){P=pmul(P,factor());}else break;}return P;}
+  function factor(){let P=atom();if(pk()==='^'){i++;const m=s.slice(i).match(/^\d+/);if(!m)throw 'Nach ^ kommt die Hochzahl.';i+=m[0].length;P=ppow(P,+m[0]);}return P;}
+  function atom(){const c=pk();
+    if(c==='('){i++;const P=expr(false);if(pk()!==')')throw 'Eine Klammer ist nicht geschlossen.';i++;return P;}
+    if(c==='-'){i++;return atom().map(m=>M(-m.c,m.v));}
+    if(c&&/[a-z]/.test(c)){i++;return [M(1,{[c]:1})];}
+    const m=s.slice(i).match(/^\d+/);if(!m)throw 'Da fehlt eine Zahl oder Variable.';i+=m[0].length;return [M(+m[0])];}
+  try{const P=expr(true);if(i!==s.length)throw 'Prüfe Rechenzeichen und Klammern.';return {P:normalize(P),terms};}catch(m){return {err:typeof m==='string'?m:'Das kann ich nicht lesen.'};}
+}
+/* ein Glied gilt als „fertig“, wenn es kein ·, keine Klammer und keine Hochzahl auf einer Zahl hat */
+const simpleTerm=r=>!/[·(]/.test(r)&&!/\d\^/.test(r);
+
+/* ================= Prüfen ================= */
+function fail(e,s,text){e.err++;e.tries[s]++;e.msg[s]={kind:'bad',text:text+(e.tries[s]===1?' Versuch es nochmal!':''),offer:e.tries[s]>=2};}
+function hint(e,s,text){e.msg[s]={kind:'bad',text,offer:e.tries[s]>=2};}
+function advance(e,s,text){e.step=s+1;e.msg[s]={kind:'ok',text};}
+function check0(e){
+  const sl=slots(e.t);
+  if(e.col.some(c=>!c))return hint(e,0,'Färbe jedes Glied in der Klammer: Tippe so oft, bis <b>a</b> rot und <b>b</b> grün ist.');
+  const bad=sl.findIndex((s,k)=>e.col[k]!==(s==='A'?'a':'b'));
+  if(bad<0)return advance(e,0,'Richtig! <b>a</b> = '+monoH(e.t.A)+' &nbsp; <b>b</b> = '+monoH(e.t.B));
+  fail(e,0,'Das <b>erste</b> Glied in der Klammer ist <b>a</b> (rot), das <b>zweite</b> ist <b>b</b> (grün) – ohne Vorzeichen.'+(e.t.kind===3?' Färbe in <b>beiden</b> Klammern.':''));
+}
+function formulaHint(t,p){
+  const T=p.terms,E=t.E,A=t.A,Bv=t.B;
+  if(t.kind===3){
+    if(T.length===3)return 'Bei (a + b) · (a − b) fällt das mittlere Glied weg: Es bleibt a² − b².';
+    if(T.length===2&&T[1].sign>0)return 'Bei (a + b) · (a − b) steht in der Mitte ein <b>Minus</b>: a² − b².';
+  }else{
+    if(T.length===2)return 'Bei (a '+(t.kind===1?'+':'−')+' b)² gibt es <b>drei</b> Glieder – vergiss das mittlere Glied 2 · a · b nicht!';
+    if(T.length===3&&samePoly(T[0].P,[sq(A)])&&samePoly(T[2].P,[sq(Bv)])){
+      const mid=T[1];const AB=mul(mul(M(2),A),Bv);
+      if(samePoly(mid.P,[M(-1*(t.kind===1?1:-1)*AB.c,AB.v)]))return t.kind===1?'Bei (a + b)² ist das mittlere Glied <b>plus</b>.':'Bei (a − b)² ist das mittlere Glied <b>minus</b>: a² − 2ab + b².';
+      return 'Das mittlere Glied ist <b>2 · a · b</b> – also 2 · '+monoH(A)+' · '+monoH(Bv)+'.';}
+  }
+  if(T.length&&!samePoly(T[0].P,[sq(A)])&&(A.c!==1||Object.values(A.v).some(e=>e>1)))return 'Beim Quadrieren von a = '+monoH(A)+' musst du die <b>ganze</b> Zahl mit Variable quadrieren: Setze a in Klammer – ('+monoH(A)+')².';
+  return 'Schreib die Formel mit deinem a und b: '+(t.kind===1?'a² + 2 · a · b + b²':t.kind===2?'a² − 2 · a · b + b²':'a² − b²')+'.';
+}
+function check1(e){
+  const t=e.t,raw=e.ml;
+  if(!String(raw).trim())return hint(e,1,'Schreib die Formel mit deinem a und b an – oder gleich das Ergebnis.');
+  const p=parsePoly(raw);if(p.err){e.mlm='bad';return hint(e,1,p.err);}
+  const direct=p.terms.every(x=>simpleTerm(x.raw));
+  if(direct){
+    if(e.force){e.mlm='bad';return hint(e,1,'Schreib jetzt zuerst die <b>Formel</b> an, z. B. '+fH(t,true)+'.');}
+    if(samePoly(p.P,t.E)){
+      if(p.terms.length>t.E.length){e.mlm='bad';return hint(e,1,'Richtig gerechnet – fasse noch ganz zusammen.');}
+      e.direct=1;e.mlm='ok';e.rv=polyPlain(t.E);e.rm='ok';e.msg[1]={kind:'ok',text:'Super – gleich das richtige Ergebnis!'};e.step=DONE;return;}
+    e.force=1;e.mlm='bad';
+    return fail(e,1,'Das Ergebnis stimmt noch nicht. Schreib jetzt zuerst die <b>Formel</b> mit deinem a und b an – '+(t.kind===1?'a² + 2 · a · b + b²':t.kind===2?'a² − 2 · a · b + b²':'a² − b²')+'.');
+  }
+  if(samePoly(p.P,t.E)&&p.terms.length===(t.kind===3?2:3)){e.mlm='ok';return advance(e,1,'Richtig angeschrieben! Jetzt rechne aus.');}
+  e.mlm='bad';fail(e,1,formulaHint(t,p));
+}
+function check2(e){
+  const t=e.t,p=parsePoly(e.rv);
+  if(!String(e.rv).trim())return hint(e,2,'Schreib das Ergebnis an.');
+  if(p.err){e.rm='bad';return hint(e,2,p.err);}
+  if(!p.terms.every(x=>simpleTerm(x.raw))){e.rm='bad';return hint(e,2,'Rechne alles aus – im Ergebnis stehen keine Klammern und keine Malpunkte mehr.');}
+  if(samePoly(p.P,t.E)){if(p.terms.length>t.E.length){e.rm='bad';return hint(e,2,'Richtig gerechnet – fasse noch ganz zusammen.');}e.rm='ok';return advance(e,2,'Richtig!');}
+  e.rm='bad';
+  const T=p.terms;
+  if(T.length&&!samePoly(T[0].P,[sq(t.A)]))return fail(e,2,'Rechne a² nochmal: ('+monoH(t.A)+')² = '+monoH(t.A)+' · '+monoH(t.A)+'.');
+  if(t.kind!==3&&T.length===3&&!samePoly(T[1].P,[t.E[1]]))return fail(e,2,'Rechne das mittlere Glied nochmal: 2 · '+monoH(t.A)+' · '+monoH(t.B)+' – mit dem richtigen Vorzeichen.');
+  fail(e,2,'Rechne b² nochmal: '+(t.B.c!==1||Object.keys(t.B.v).length?'('+monoH(t.B)+')²':monoH(t.B)+'²')+'.');
+}
+function showSolution(e,s){
+  const t=e.t;
+  if(s===0)e.col=slots(t).map(x=>x==='A'?'a':'b');
+  if(s===1){e.ml=fPlain(t);e.mlm='ok';}
+  if(s===2){e.rv=polyPlain(t.E);e.rm='ok';}
+  e.shown=true;e.msg[s]={kind:'shown',text:'Die Lösung ist jetzt eingetragen – schau sie dir genau an.'};e.step=s+1;
+}
+/* Formel mit eingesetztem a und b */
+const needBr=m=>Object.keys(m.v).length>0&&(m.c!==1||Object.keys(m.v).length>1||Object.values(m.v).some(e=>e>1));
+const pw2=(m,cls,plain)=>{const inner=plain?polyPlain([m]):monoH(m);const body=needBr(m)?'('+inner+')':inner;return plain?body+'^2':'<span class="'+cls+'">'+body+'</span><sup>2</sup>';};
+function fH(t,noCol){const a=noCol?monoH(t.A):'<span class="ca">'+monoH(t.A)+'</span>',b=noCol?monoH(t.B):'<span class="cb">'+monoH(t.B)+'</span>';
+  const A2=noCol?(needBr(t.A)?'('+monoH(t.A)+')':monoH(t.A))+'<sup>2</sup>':pw2(t.A,'ca'),B2=noCol?(needBr(t.B)?'('+monoH(t.B)+')':monoH(t.B))+'<sup>2</sup>':pw2(t.B,'cb');
+  if(t.kind===3)return A2+' − '+B2;return A2+(t.kind===1?' + ':' − ')+'2 · '+a+' · '+b+' + '+B2;}
+function fPlain(t){const A2=pw2(t.A,'',true),B2=pw2(t.B,'',true);if(t.kind===3)return A2+' - '+B2;return A2+(t.kind===1?' + ':' - ')+'2·'+polyPlain([t.A])+'·'+polyPlain([t.B])+' + '+B2;}
+
+/* ================= Anzeige ================= */
+function taskTokens(e,interactive){
+  const t=e.t,sl=slots(t),tok=(k)=>{const m=sl[k]==='A'?t.A:t.B,c=e.col[k];return '<button type="button" class="tok'+(c?' c'+c:'')+'" data-tok="'+k+'"'+(interactive?'':' disabled')+'>'+monoH(m)+'</button>';};
+  if(t.kind===3){const p1=t.swap?' − ':' + ',p2=t.swap?' + ':' − ';return '('+tok(0)+p1+tok(1)+') · ('+tok(2)+p2+tok(3)+')';}
+  return '('+tok(0)+(t.kind===1?' + ':' − ')+tok(1)+')<sup>2</sup>';
+}
+function taskPlainH(t){if(t.kind===3)return '('+monoH(t.A)+(t.swap?' − ':' + ')+monoH(t.B)+') · ('+monoH(t.A)+(t.swap?' + ':' − ')+monoH(t.B)+')';return '('+monoH(t.A)+(t.kind===1?' + ':' − ')+monoH(t.B)+')<sup>2</sup>';}
+function msgHTML(e,s){const m=e.msg[s];if(!m||!m.text)return '';
+  return '<p class="msg '+m.kind+'">'+m.text+(m.offer&&e.step===s?' <button type="button" class="mini" data-act="show'+s+'">Lösung zeigen</button>':'')+'</p>';}
+function inp(attr,val,cls,label,ph){return '<input class="pin'+(cls?' '+cls:'')+'" '+attr+' value="'+esc(val)+'" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="'+label+'"'+(ph?' placeholder="'+ph+'"':'')+'>';}
+function exStatus(e){return e.step===DONE?(e.shown?'done shown':'done'):(e.step>0||e.col.some(Boolean)?'started':'');}
+const FORMEL=['','(a + b)² = a² + 2ab + b²','(a − b)² = a² − 2ab + b²','(a + b) · (a − b) = a² − b²'];
+function renderEx(focus){
+  const g=curG(),e=curEx(),t=e.t,cur=g.cur,allDone=g.ex.every(x=>x.step===DONE);
+  let h='<div class="nav"><button type="button" class="ghost" data-act="prev" aria-label="Vorheriges Beispiel"'+(cur===0?' disabled':'')+'>◀</button>'+
+    '<div class="dots" role="group" aria-label="Beispiele">'+g.ex.map((x,k)=>'<button type="button" class="dot '+exStatus(x)+(k===cur?' cur':'')+'" data-go="'+k+'" aria-label="Beispiel '+(k+1)+'"'+(k===cur?' aria-current="true"':'')+'>'+(k+1)+'</button>').join('')+'</div>'+
+    '<button type="button" class="ghost" data-act="next" aria-label="Nächstes Beispiel"'+(cur===N_EX-1?' disabled':'')+'>▶</button>'+
+    '<span class="round">Runde '+g.round+'</span><button type="button" class="mini" data-act="newround">Neue Runde</button></div>';
+  h+='<div class="head"><span class="num">'+(cur+1)+'</span><h2>Berechne mit der binomischen Formel!</h2></div>';
+  h+='<div class="heftcalc"><div class="tline task"><span class="ln">'+taskTokens(e,e.step===0)+'</span> <span class="eqs">=</span></div>';
+  if(e.step===0)h+='<div class="tline tools"><button type="button" data-act="check0">Farben prüfen</button><span class="hint" style="margin:0">Tippe die Glieder an: 1× = <b class="ca">a</b> rot, 2× = <b class="cb">b</b> grün.</span></div>'+msgHTML(e,0);
+  if(e.step>=1){
+    if(e.step===1)h+='<div class="tline"><span class="eqs">=</span>'+inp('data-ml',e.ml,(e.mlm||'')+' linein mline','Formel mit a und b – oder gleich das Ergebnis',e.force?'z. B. '+fPlain(t).replace(/\^2/g,'²'):'Formel mit a und b – oder gleich das Ergebnis')+'<button type="button" data-act="check1">Prüfen</button></div>'+
+      '<p class="srule">'+(e.force?'Schreib jetzt die <b>Formel</b> mit deinem <b class="ca">a</b> und <b class="cb">b</b> an: ':'Schreib die Formel mit deinem <b class="ca">a</b> und <b class="cb">b</b> an – <b>oder</b> gleich das Ergebnis: ')+'<span class="rl">'+FORMEL[t.kind]+'</span></p>'+msgHTML(e,1);
+    else if(!e.direct)h+='<div class="tline ok"><span class="eqs">=</span><span class="ln">'+fH(t)+'</span> <span class="tick">✓</span></div>';
+  }
+  if(e.step>=2){
+    if(e.step===2)h+='<div class="tline"><span class="eqs">=</span>'+inp('data-rv',e.rv,(e.rm||'')+' linein','Ergebnis','')+'<button type="button" data-act="check2">Prüfen</button></div>'+msgHTML(e,2);
+  }
+  if(e.step>=DONE)h+='<div class="tline ok fin"><span class="eqs">=</span><span class="ln">'+polyH(t.E)+'</span> <span class="tick">✓</span></div>';
+  h+='</div>';
+  if(e.step===DONE){
+    const nextOpen=g.ex.findIndex((x,k)=>k>cur&&x.step<DONE),anyOpen=g.ex.findIndex(x=>x.step<DONE);
+    if(e.direct)h+='<p class="msg ok">Super – gleich das richtige Ergebnis!</p>';
+    h+='<div class="donebox"><b>Beispiel '+(cur+1)+' geschafft!</b>'+
+      (nextOpen>=0?'<button type="button" data-act="go" data-to="'+nextOpen+'">Weiter zu Beispiel '+(nextOpen+1)+' ▶</button>'
+      :anyOpen>=0?'<button type="button" data-act="go" data-to="'+anyOpen+'">Noch offen: Beispiel '+(anyOpen+1)+' ▶</button>'
+      :'<button type="button" data-act="sum">Zur Auswertung</button>')+'</div>';
+    h+='<p class="copy">✏️ <b>Schreib die Rechnung ins Heft ab – mit <span class="ca">a</span> rot und <span class="cb">b</span> grün markiert!</b></p>';
+    if(cur===0)h+='<p class="sumafter">✏️ <b>Schreib jetzt die Zusammenfassung unten auf der Seite in dein Heft ab</b> – dann geht es mit Beispiel 2 weiter.</p>';
+  }
+  $('exCard').innerHTML=h;
+  $('score').textContent=g.ex.filter(x=>x.step===DONE).length+' von '+N_EX+' fertig';
+  if(window.padApply)window.padApply();
+  if(focus){const f=document.querySelector('#exCard input:not([disabled])');if(f)f.focus({preventScroll:true});}
+  if(allDone&&!summaryRequested&&!restoring)summaryRequested=true;
+  updateSummary();saveProgress();
+}
+
+/* ================= Zustand ================= */
+const LEVELS={std:'Standard',ahs:'Standard AHS'};
+const G={std:{seed:Math.floor(Math.random()*65536),round:1,cur:0,ex:[]},ahs:{seed:Math.floor(Math.random()*65536),round:1,cur:0,ex:[]}};
+let level=location.hash==='#ahs'?'ahs':'std',PUPIL='',restoring=false,summaryRequested=false;
+function makeRound(lvl){const g=G[lvl];g.ex=genRound(lvl,g.seed,g.round).map(newEx);g.cur=0;}
+const curG=()=>G[level],curEx=()=>curG().ex[curG().cur];
+
+
+/* ================= Auswertung ================= */
+function updateSummary(){
+  const g=curG(),sum=$('summary'),allDone=g.ex.every(e=>e.step===DONE);
+  if(!summaryRequested){sum.hidden=true;return;}
+  let T={done:0,first:0,shown:0,open:0,err:0},rows='';
+  g.ex.forEach((e,k)=>{let st;
+    if(e.step<DONE){st='offen';T.open++;}
+    else{T.done++;if(e.shown){st='Lösung angesehen';T.shown++;}else if(!e.err){st='✓ beim 1. Versuch';T.first++;}else st='✓ richtig';}
+    T.err+=e.err;
+    rows+='<tr><td><b>'+(k+1)+')</b> '+taskPlainH(e.t)+'</td><td>'+(e.step===DONE?polyH(e.t.E):'–')+'</td><td>'+st+'</td><td class="c">'+e.err+'</td></tr>';});
+  $('sumBody').innerHTML=rows;
+  $('sumFoot').innerHTML='<tr><td>Gesamt: '+T.done+' von '+N_EX+' fertig</td><td></td><td>'+T.first+' beim 1. Versuch, '+T.shown+' mit Lösung</td><td class="c">'+T.err+'</td></tr>';
+  const ok=T.done-T.shown;let msg;
+  if(T.first===N_EX)msg='Perfekt! Alle Beispiele beim ersten Versuch richtig.';
+  else if(ok===N_EX)msg='Super, alle Beispiele selbst gelöst!';
+  else if(ok/N_EX>=.75)msg='Sehr gut gemacht!';
+  else if(ok/N_EX>=.5)msg='Gut! Mit ein bisschen Übung klappt der Rest auch.';
+  else msg='Übe noch ein bisschen weiter – starte eine neue Runde und probier es nochmal.';
+  if(!allDone)msg='Noch nicht alles erledigt: '+T.open+' Beispiel'+(T.open===1?' ist':'e sind')+' noch offen. '+msg;
+  $('sumTitle').textContent=(allDone?'Geschafft'+(PUPIL?', '+PUPIL:'')+'! Deine Auswertung':'Zwischenstand'+(PUPIL?' von '+PUPIL:''))+' ('+LEVELS[level]+', Runde '+g.round+')';
+  const now=new Date(),who=$('sumWho');
+  who.innerHTML='👤 <b></b> · '+now.toLocaleDateString('de-AT')+', '+now.toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'})+' Uhr · '+LEVELS[level];
+  who.querySelector('b').textContent=PUPIL||'(kein Name)';
+  $('sumMsg').textContent=msg;
+  const wasHidden=sum.hidden;sum.hidden=false;
+  if(wasHidden&&!restoring&&allDone)setTimeout(()=>sum.scrollIntoView({behavior:'smooth',block:'start'}),300);
+}
+
+/* ================= Bedienung ================= */
+function goTo(k){const g=curG();g.cur=Math.max(0,Math.min(N_EX-1,k));renderEx();$('exCard').scrollIntoView({behavior:'smooth',block:'start'});}
+function newRound(){
+  const g=curG();
+  if(g.ex.some(e=>e.step<DONE)&&!confirm('Neue Runde starten? Die offenen Beispiele werden durch neue ersetzt.'))return;
+  g.round=g.round>=100?1:g.round+1;makeRound(level);summaryRequested=false;renderEx();
+  $('exCard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+const CHECKS=[check0,check1,check2];
+function runCheck(s){const e=curEx();if(e.step!==s)return;CHECKS[s](e);renderEx(e.step===DONE?null:'step');}
+$('exCard').addEventListener('click',ev=>{
+  const e=curEx(),b=ev.target.closest('button');if(!b)return;
+  if(b.dataset.tok!==undefined&&e.step===0){const k=+b.dataset.tok;e.col[k]=e.col[k]===''?'a':e.col[k]==='a'?'b':'';e.msg[0]=null;renderEx();return;}
+  if(b.dataset.go!==undefined){goTo(+b.dataset.go);return;}
+  const a=b.dataset.act;
+  if(a==='prev')goTo(curG().cur-1);
+  else if(a==='next')goTo(curG().cur+1);
+  else if(a==='go')goTo(+b.dataset.to);
+  else if(a==='newround')newRound();
+  else if(a==='sum'){summaryRequested=true;updateSummary();$('summary').scrollIntoView({behavior:'smooth',block:'start'});}
+  else if(/^check\d$/.test(a))runCheck(+a.slice(5));
+  else if(/^show\d$/.test(a)){showSolution(e,+a.slice(4));renderEx(e.step===DONE?null:'step');}
+});
+$('exCard').addEventListener('input',ev=>{
+  const t=ev.target,e=curEx();
+  if(t.hasAttribute('data-ml')){e.ml=t.value;e.mlm=null;t.classList.remove('ok','bad');}
+  else if(t.hasAttribute('data-rv')){e.rv=t.value;e.rm=null;t.classList.remove('ok','bad');}
+});
+$('exCard').addEventListener('keydown',ev=>{
+  if(ev.key!=='Enter'||ev.target.tagName!=='INPUT')return;
+  ev.preventDefault();const t=ev.target;
+  runCheck(curEx().step);
+});
+$('showSum').addEventListener('click',()=>{summaryRequested=true;updateSummary();$('summary').scrollIntoView({behavior:'smooth',block:'start'});});
+$('newRound2').addEventListener('click',newRound);
+function setLevel(l){
+  level=l;summaryRequested=curG().ex.every(e=>e.step===DONE);
+  document.querySelectorAll('.levels button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.level===l?'true':'false'));
+  try{history.replaceState(null,'',l==='ahs'?'#ahs':'#standard');}catch(x){}
+  renderEx();
+}
+document.querySelectorAll('.levels button').forEach(b=>b.addEventListener('click',()=>setLevel(b.dataset.level)));
+
+/* ================= Fortschritt: speichern (gleiches Gerät) & Code (anderes Gerät) ================= */
+const STORE='binformeln2:',ALPH='23456789ABCDEFGHJKMNPQRSTUVWXYZ',AL=BigInt(ALPH.length),B=x=>BigInt(x);
+const normName=s=>s.trim().replace(/\s+/g,' ').toLowerCase();
+function nameHash(n){let h=2166136261;for(const ch of normName(n)){h^=ch.codePointAt(0);h=Math.imul(h,16777619);}return (h>>>0)%1024;}
+function checkChar(s){let c=0;for(let k=0;k<s.length;k++)c=(c+(k+1)*ALPH.indexOf(s[k]))%ALPH.length;return ALPH[c];}
+function makeCode(lvl){
+  const g=G[lvl],F=[],f=(v,r)=>F.push([v,r]);
+  f(lvl==='ahs'?1:0,2);f(g.seed,65536);f(g.round-1,100);f(g.cur,N_EX);
+  g.ex.forEach(e=>f(e.step*8+Math.min(e.err,3)*2+(e.shown?1:0),40));
+  f(nameHash(PUPIL),1024);
+  let N=0n;for(let k=F.length-1;k>=0;k--)N=N*B(F[k][1])+B(F[k][0]);
+  let s='';do{s=ALPH[Number(N%AL)]+s;N/=AL;}while(N>0n);
+  s+=checkChar(s);return s.match(/.{1,4}/g).join('-');
+}
+function readCode(str){
+  const bad={err:'Dieser Code ist ungültig. Kontrolliere, ob du ihn richtig abgeschrieben hast.'};
+  const s=str.toUpperCase().replace(/[\s\-–—_.]/g,'');
+  if(s.length<3||[...s].some(ch=>!ALPH.includes(ch)))return bad;
+  const body=s.slice(0,-1);
+  if(checkChar(body)!==s.slice(-1))return {err:'Im Code ist ein Tippfehler. Kontrolliere ihn Zeichen für Zeichen.'};
+  let N=0n;for(const ch of body)N=N*AL+B(ALPH.indexOf(ch));
+  const g=r=>{const v=Number(N%B(r));N/=B(r);return v;};
+  const lvl=g(2)?'ahs':'std',seed=g(65536),round=g(100)+1,cur=g(N_EX),ex=[];
+  for(let k=0;k<N_EX;k++){const v=g(40);ex.push({step:v>>3,err:(v>>1)&3,shown:!!(v&1)});}
+  const nh=g(1024);
+  if(N!==0n||ex.some(x=>x.step>DONE))return bad;
+  return {lvl,seed,round,cur,ex,nh};
+}
+function applyCode(p){
+  const g=G[p.lvl];g.seed=p.seed;g.round=p.round;makeRound(p.lvl);g.cur=p.cur;
+  p.ex.forEach((s,k)=>{const e=g.ex[k];
+    for(let st=0;st<s.step&&st<DONE;st++){if(applies(e,st))showSolution(e,st);}
+    e.msg={};e.err=s.err;e.shown=s.shown;e.step=s.step;});
+}
+function saveProgress(lvl){
+  lvl=lvl||level;if(!PUPIL||restoring)return;
+  const code=makeCode(lvl);
+  try{const k=STORE+normName(PUPIL),o=JSON.parse(localStorage.getItem(k)||'{}');o.last=level;o[lvl]=code;localStorage.setItem(k,JSON.stringify(o));}catch(x){}
+  if(lvl===level)$('codeShow').textContent=code;
+}
+function loadSaved(name){try{return JSON.parse(localStorage.getItem(STORE+normName(name))||'null');}catch(x){return null;}}
+
+/* ================= Name zu Beginn (danach nicht mehr änderbar) ================= */
+function setLocked(on){document.body.classList.toggle('locked',on);if(on)$('main').setAttribute('inert','');else $('main').removeAttribute('inert');}
+function startErr(msg,el){const err=$('pnameErr');err.textContent=msg;err.hidden=false;el.focus();}
+function startWithName(){
+  const inpEl=$('pname'),v=inpEl.value.trim().replace(/\s+/g,' '),codeInp=$('pcode');
+  if(v.length<2){startErr('Bitte gib deinen Namen ein.',inpEl);return;}
+  let p=null;
+  if(codeInp.value.trim()){p=readCode(codeInp.value);
+    if(p.err){$('codeAsk').open=true;startErr(p.err,codeInp);return;}
+    if(p.nh!==nameHash(v)){startErr('Dieser Code gehört zu einem anderen Namen. Schreib deinen Namen genau so wie auf dem anderen Gerät.',inpEl);return;}}
+  $('pnameErr').hidden=true;PUPIL=v;
+  const saved=loadSaved(v);let msg='';
+  restoring=true;
+  try{
+    if(saved){['std','ahs'].forEach(l=>{if(saved[l]&&!(p&&p.lvl===l)){const q=readCode(saved[l]);if(!q.err&&q.nh===nameHash(v))applyCode(q);}});
+      msg='Willkommen zurück! Du machst dort weiter, wo du auf diesem Gerät aufgehört hast.';}
+    if(p){applyCode(p);msg='Dein Fortschritt vom anderen Gerät wurde übernommen.';}
+  }finally{restoring=false;}
+  saveProgress('std');saveProgress('ahs');
+  $('pnameShow').textContent=v;$('startMsg').textContent=msg;
+  $('startAsk').hidden=true;$('startDone').hidden=false;
+  setLocked(false);setLevel(p?p.lvl:(saved&&saved.last)||level);
+}
+$('startBtn').addEventListener('click',startWithName);
+['pname','pcode'].forEach(k=>$(k).addEventListener('keydown',ev=>{if(ev.key==='Enter'){ev.preventDefault();startWithName();}}));
+$('codeBtn').addEventListener('click',ev=>{const box=$('codeBox'),open=box.hidden;saveProgress();box.hidden=!open;ev.currentTarget.setAttribute('aria-expanded',open?'true':'false');});
+$('codeCopy').addEventListener('click',ev=>{const b=ev.currentTarget,txt=$('codeShow').textContent;
+  try{navigator.clipboard.writeText(txt).then(()=>{b.textContent='Kopiert ✓';setTimeout(()=>{b.textContent='Kopieren';},1500);},()=>{});}catch(x){}});
+
+/* Beispiel in der Zusammenfassung – mit Pfeilen */
+
+
+/* ================= Start ================= */
+makeRound('std');makeRound('ahs');
+setLevel(level);
+setLocked(true);
+$('pname').focus();
+
+/* ================= Eingabehilfe (Bildschirm-Tastatur) ================= */
+(function(){
+  const pad=$('pad'),sysBtn=$('padSys');
+  const touch=window.matchMedia&&matchMedia('(pointer: coarse)').matches;
+  let padOnly=touch,closed=false,cur=null;
+  try{const s=localStorage.getItem('padOnly');if(s!==null)padOnly=s==='1';}catch(x){}
+  function applyMode(){document.querySelectorAll('#exCard input.pin').forEach(i=>{if(padOnly)i.setAttribute('inputmode','none');else i.removeAttribute('inputmode');});
+    sysBtn.textContent=padOnly?'Handy-Tastatur einblenden':'Handy-Tastatur ausblenden';}
+  window.padApply=applyMode;applyMode();
+  function setVars(){const e=curEx(),found=[];[e.t.A,e.t.B].forEach(m=>Object.keys(m.v).forEach(k=>{if(!found.includes(k))found.push(k);}));
+    ['x','y','a','b'].forEach(t=>{if(found.length<4&&!found.includes(t))found.push(t);});pad.querySelectorAll('[data-var]').forEach(b=>{b.textContent=found[+b.dataset.var];});}
+  function show(input){cur=input;setVars();if(closed)return;pad.hidden=false;document.body.classList.add('padon');
+    const r=input.getBoundingClientRect();if(r.bottom>window.innerHeight-pad.offsetHeight-10)input.scrollIntoView({block:'center',behavior:'smooth'});}
+  function hide(){pad.hidden=true;document.body.classList.remove('padon');}
+  document.addEventListener('focusin',ev=>{const t=ev.target;if(t.tagName==='INPUT'&&t.classList.contains('pin')&&!t.readOnly)show(t);});
+  document.addEventListener('focusout',()=>setTimeout(()=>{const a=document.activeElement;if(!(a&&a.tagName==='INPUT'&&a.classList.contains('pin')))hide();},150));
+  function insert(txt){if(!cur||!cur.isConnected)return;const s=cur.selectionStart??cur.value.length,e=cur.selectionEnd??cur.value.length;cur.setRangeText(txt,s,e,'end');cur.dispatchEvent(new Event('input',{bubbles:true}));}
+  /* nur pointerdown/mousedown abfangen – nie touchstart, sonst gehen die Tasten am Handy nicht */
+  pad.addEventListener('pointerdown',ev=>{if(ev.target.closest('button'))ev.preventDefault();});
+  pad.addEventListener('mousedown',ev=>{if(ev.target.closest('button'))ev.preventDefault();});
+  pad.addEventListener('click',ev=>{
+    const b=ev.target.closest('button');if(!b)return;
+    if(b.id==='padHide'){closed=true;hide();return;}
+    if(b.id==='padSys'){padOnly=!padOnly;try{localStorage.setItem('padOnly',padOnly?'1':'0');}catch(x){}applyMode();if(cur&&cur.isConnected){cur.blur();setTimeout(()=>cur.focus(),60);}return;}
+    if(!cur||!cur.isConnected)return;
+    if(b.dataset.ins!==undefined)insert(b.dataset.ins);
+    else if(b.dataset.var!==undefined)insert(b.textContent);
+    else if(b.dataset.act==='clr'){cur.value='';cur.dispatchEvent(new Event('input',{bubbles:true}));}
+    else if(b.dataset.act==='left'){const s=Math.max(0,(cur.selectionStart??cur.value.length)-1);cur.setSelectionRange(s,s);}
+    else if(b.dataset.act==='right'){const s=Math.min(cur.value.length,(cur.selectionEnd??cur.value.length)+1);cur.setSelectionRange(s,s);}
+    else if(b.dataset.act==='del'){const s=cur.selectionStart??cur.value.length,e2=cur.selectionEnd??s;if(s!==e2)cur.setRangeText('',s,e2,'end');else if(s>0)cur.setRangeText('',s-1,s,'end');cur.dispatchEvent(new Event('input',{bubbles:true}));}
+    else if(b.dataset.act==='ok'){cur.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));}
+    if(cur&&cur.isConnected)cur.focus({preventScroll:true});
+  });
+  document.addEventListener('click',ev=>{if(ev.target.closest('[data-go],[data-act="next"],[data-act="prev"],[data-act="newround"],#newRound2'))closed=false;});
+})();
+</script>
+</body>
+</html>
