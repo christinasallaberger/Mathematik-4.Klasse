@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Binomische Formeln rückwärts – Lücken und Start finden</title>
+<meta name="uebersicht-kapitel" content="Terme">
+<meta name="uebersicht-thema" content="Binomische Formeln rückwärts – Lücken füllen und Start finden">
+<meta name="uebersicht-info" content="Formeln rückwärts (x² + 2xy + y² → Start), Lücken in Start und Ergebnis füllen (1./2. und 3. Formel), aus dem Ergebnis den Start finden – Standard und Standard AHS">
+<meta name="uebersicht-gruppe" content="3. Klasse">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F9FC; --grid:#DCE6F2; --ink:#1B2F6B; --text:#1E2533; --muted:#5B6578;
+  --card:#FFFFFF; --line:#C9D5E6; --ok:#217A4B; --okbg:#E3F4EA; --bad:#B3261E; --badbg:#FBE7E5;
+  --mark:#FFE873; --field:#FFFFFF; --info:#EAF1FB; --accent:#147D92;
+  --c1:#D99A00; --c2:#1E73D6; --c3:#2E8B3A; --c4:#D81B60; --c5:#8E24AA; --c6:#E8590C;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111827; --grid:#1C2638; --ink:#A9C1FF; --text:#E6EAF2; --muted:#9AA4B8;
+    --card:#172033; --line:#2C3A55; --ok:#5FD08E; --okbg:#173326; --bad:#FF8A80; --badbg:#3A1C1C;
+    --mark:#6B5A12; --field:#0F1726; --info:#1A2740; --accent:#5CC8DC;
+    --c1:#FFD54F; --c2:#64B5F6; --c3:#81C784; --c4:#F48FB1; --c5:#CE93D8; --c6:#FFAB76; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111827; --grid:#1C2638; --ink:#A9C1FF; --text:#E6EAF2; --muted:#9AA4B8;
+  --card:#172033; --line:#2C3A55; --ok:#5FD08E; --okbg:#173326; --bad:#FF8A80; --badbg:#3A1C1C;
+  --mark:#6B5A12; --field:#0F1726; --info:#1A2740; --accent:#5CC8DC;
+  --c1:#FFD54F; --c2:#64B5F6; --c3:#81C784; --c4:#F48FB1; --c5:#CE93D8; --c6:#FFAB76; color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; color:var(--text); font-family:"Atkinson Hyperlegible",system-ui,"Segoe UI",Arial,sans-serif;
+  font-size:1.0625rem; line-height:1.5;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.wrap{max-width:60rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1rem;margin:1rem 0 2rem}
+h1{font-family:Fraunces,Georgia,serif;font-weight:800;color:var(--ink);font-size:clamp(2.1rem,6vw,3.5rem);line-height:1.02;margin:0;letter-spacing:-.01em}
+h1 .acc{color:var(--accent)}
+.sub{color:var(--muted);margin:.5rem 0 0;max-width:42rem}
+.top{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.score{font-weight:700;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:999px;padding:.35rem .9rem}
+button{font:inherit;cursor:pointer;border-radius:.5rem;border:2px solid var(--ink);background:var(--ink);color:var(--paper);padding:.45rem .9rem;font-weight:700}
+button.ghost{background:transparent;color:var(--ink)}
+button:disabled{cursor:default;opacity:.45}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+button.mini{font-size:.85rem;padding:.1rem .55rem;background:transparent;color:var(--ink);border-width:1.5px}
+section{background:var(--card);border:2px solid var(--line);border-radius:.75rem;padding:1.25rem 1.25rem 1rem;margin:0 0 1.5rem}
+.head{display:flex;gap:.8rem;align-items:baseline;flex-wrap:wrap}
+.num{font-family:Fraunces,Georgia,serif;font-weight:800;font-size:1.6rem;color:var(--ink);min-width:1.4em}
+h2{font-size:1.15rem;margin:0}
+h3{font-size:1.05rem;margin:0 0 .4rem;color:var(--ink)}
+sup{font-size:.68em;margin-left:.04em}
+.lvl{font-size:.9rem;font-weight:700;color:var(--accent)}
+input{font:inherit;font-size:1.15rem;color:var(--text);background:var(--field);border:2px solid var(--line);border-radius:.4rem;padding:.25rem .5rem}
+input.ok{border-color:var(--ok);background:var(--okbg)}
+input.bad{border-color:var(--bad);background:var(--badbg)}
+.actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.6rem}
+.hint{color:var(--muted);font-size:.95rem;margin:.4rem 0 0}
+.msg{margin:.6rem 0 0;font-size:.97rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.msg.ok{color:var(--ok);font-weight:700}.msg.bad{color:var(--bad)}.msg.shown{color:var(--muted)}
+.prev{color:var(--muted);font-size:1.1rem}
+.prev b{color:var(--text);font-weight:400}
+
+details.info{background:var(--info);border:0;border-left:6px solid var(--ink);border-radius:.5rem;padding:.7rem 1rem;margin:0 0 1.5rem}
+details.info summary{cursor:pointer;font-weight:700;color:var(--ink)}
+details.info p{margin:.5rem 0}
+.copy{background:var(--mark);color:var(--text);border-radius:.4rem;padding:.4rem .7rem;margin:.6rem 0!important}
+.rule{font-size:1.15rem}
+
+.nav{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.dots{display:flex;gap:.3rem;flex-wrap:wrap}
+.dot{width:2.2rem;height:2.2rem;border-radius:50%;padding:0;font-weight:700;font-size:.9rem;background:var(--field);color:var(--ink);border:2px solid var(--line)}
+.dot.started{background:var(--info)}
+.dot.done{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.dot.shown{border-style:dashed}
+.dot.cur{border-color:var(--ink);box-shadow:0 0 0 3px var(--mark)}
+.round{margin-left:auto;color:var(--muted);font-size:.9rem;border:1.5px solid var(--line);border-radius:999px;padding:.1rem .6rem}
+
+.taskline{font-size:1.6rem;margin:.9rem 0 .3rem;display:flex;flex-wrap:wrap;align-items:center;gap:.2rem}
+.tchip{font:inherit;font-size:1.6rem;font-weight:400;background:transparent;color:var(--text);border:0;border-bottom:5px solid transparent;border-radius:0;padding:0 .2rem .05rem;line-height:1.35;cursor:pointer}
+.tchip:hover{background:var(--info)}
+.tchip.k1{border-bottom-color:var(--c1)}.tchip.k2{border-bottom-color:var(--c2)}.tchip.k3{border-bottom-color:var(--c3)}.tchip.k4{border-bottom-color:var(--c4)}.tchip.k5{border-bottom-color:var(--c5)}.tchip.k6{border-bottom-color:var(--c6)}
+.gt{text-decoration:underline;text-decoration-thickness:4px;text-underline-offset:.3em}
+.g1{text-decoration-color:var(--c1)}.g2{text-decoration-color:var(--c2)}.g3{text-decoration-color:var(--c3)}.g4{text-decoration-color:var(--c4)}.g5{text-decoration-color:var(--c5)}.g6{text-decoration-color:var(--c6)}
+.palette{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin:.3rem 0}
+.pal{width:2.6rem;height:2.2rem;padding:0;background:var(--field);border:2px solid var(--line);border-radius:.4rem;position:relative}
+.pal::after{content:"";position:absolute;left:.45rem;right:.45rem;bottom:.55rem;height:5px;border-radius:3px;background:currentColor}
+.pal.u1{color:var(--c1)}.pal.u2{color:var(--c2)}.pal.u3{color:var(--c3)}.pal.u4{color:var(--c4)}.pal.u5{color:var(--c5)}.pal.u6{color:var(--c6)}
+.pal.sel{border-color:var(--ink);box-shadow:0 0 0 3px var(--mark)}
+.markmsg{font-size:.95rem;margin:.3rem 0 0}
+.markmsg.ok{color:var(--ok);font-weight:700}.markmsg.bad{color:var(--bad)}
+.stepcard{border:2px solid var(--ink);border-radius:.6rem;padding:.8rem 1rem;margin-top:1rem}
+.stepcard.done{border-color:var(--ok)}
+.donetxt{color:var(--ok);font-weight:700}
+.row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin:.5rem 0;font-size:1.3rem}
+.row input{width:18rem;max-width:100%}
+.donebox{margin-top:1rem;padding:.8rem 1rem;border-radius:.6rem;background:var(--okbg);border:2px solid var(--ok);display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+.donebox b{color:var(--ok)}
+
+.heft{overflow-x:auto;margin:1.2rem 0 .5rem;border:2px dashed var(--line);border-radius:.6rem;background:var(--paper);padding:.8rem 1rem}
+.heft .hefttitle{margin:0 0 .3rem;font-weight:700;color:var(--muted);font-size:.95rem}
+.heft .hl{font-size:1.35rem;color:var(--ink);margin:.3rem 0}
+.heft .fin{font-weight:700}
+.heft .small{font-size:1rem;color:var(--muted)}
+.heft .copy{font-size:1rem}
+
+.startcard{border-color:var(--ink);border-width:3px}
+.startcard h2{font-family:Fraunces,Georgia,serif;font-size:1.5rem;color:var(--ink)}
+#pname{width:16rem;max-width:100%;font-size:1.15rem}
+#startDone{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.who{font-weight:700;color:var(--ink);display:inline-flex;align-items:center;gap:.4rem;font-size:1.1rem}
+#codeAsk{margin-top:1rem}
+#codeAsk summary{cursor:pointer;color:var(--ink);font-weight:700}
+#pcode{width:17rem;max-width:100%;font-family:ui-monospace,Consolas,"Courier New",monospace;text-transform:uppercase;letter-spacing:.05em}
+#pnameErr{color:var(--bad);margin:.6rem 0 0}
+#startMsg{flex-basis:100%;margin:0;color:var(--ok);font-weight:700}
+#startMsg:empty{display:none}
+#codeBox{flex-basis:100%;background:var(--info);border-left:6px solid var(--ink);border-radius:.5rem;padding:.7rem 1rem}
+#codeBox p{margin:.3rem 0}
+.code{font-family:ui-monospace,Consolas,"Courier New",monospace;font-size:1.35rem;font-weight:700;letter-spacing:.06em;color:var(--ink);word-break:break-all}
+.finish{display:flex;justify-content:center;margin:0 0 1.5rem}
+#summary{border-color:var(--ink);border-width:3px}
+#summary .who{margin:.4rem 0 0;color:var(--muted)}
+#summary .who b{color:var(--text)}
+.summsg{font-size:1.2rem;font-weight:700;color:var(--ink);margin:.6rem 0 1rem}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:30rem}
+th,td{text-align:left;padding:.4rem .6rem;border-bottom:1px solid var(--line)}
+td.c,th.c{text-align:center}
+tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--ink)}
+body.locked #main{opacity:.35;filter:grayscale(.4);pointer-events:none;user-select:none}
+
+#pad{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:3px solid var(--ink);
+  padding:.5rem .6rem calc(.5rem + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 16px rgba(27,47,107,.15)}
+#pad .padtop{display:flex;align-items:center;gap:.5rem;max-width:34rem;margin:0 auto .4rem;color:var(--muted);font-size:.9rem}
+#pad .padtop span{margin-right:auto;font-weight:700;color:var(--ink)}
+#pad .keys{display:grid;grid-template-columns:repeat(7,1fr);gap:.3rem;max-width:34rem;margin:0 auto}
+#pad .keys button{padding:.55rem 0;font-size:1.15rem;font-weight:700;background:var(--field);color:var(--text);border:2px solid var(--line);border-radius:.45rem;touch-action:manipulation}
+#pad .keys button.var{font-style:italic;font-family:Georgia,serif}
+#pad .keys button.op{background:var(--info)}
+#pad .keys button.go{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+body.padon .wrap{padding-bottom:20rem}
+
+.levels{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden;margin-top:1rem}
+.levels button{border:0;border-radius:0;background:transparent;color:var(--ink);padding:.45rem 1.1rem}
+.levels button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.sec{background:var(--card);border:2px solid var(--line);border-radius:.75rem;padding:1.1rem 1.1rem .9rem;margin:0 0 1.5rem}
+.sec .head .num{min-width:1.4em}
+.sec .info{background:var(--info);border-left:6px solid var(--ink);border-radius:.5rem;padding:.6rem .9rem;margin:.7rem 0 0}
+.sec .info p{margin:.2rem 0}
+.tasks{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(17rem,100%),1fr));gap:.7rem 1.2rem;margin:.9rem 0}
+.tasks.wide{grid-template-columns:1fr}
+.task{display:flex;flex-direction:column;gap:.35rem;padding:.5rem .6rem;border-radius:.55rem;border:2px solid var(--line);background:var(--field)}
+.task.ok{background:var(--okbg);border-color:var(--ok)}
+.task.bad{background:var(--badbg);border-color:var(--bad)}
+.task.shown{border-style:dashed}
+.trow{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;font-size:1.2rem}
+.lbl{font-weight:700;color:var(--ink)}
+.task input{width:6.5rem;font-size:1.15rem}
+.task .sol{font-size:.95rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.task .sol.bad{color:var(--bad)}.task .sol.ok{color:var(--ok);font-weight:700}.task .sol.shown{color:var(--muted)}
+.choice{display:inline-flex;gap:.3rem;flex-wrap:wrap}
+.choice button{min-width:2.8rem;font-size:1.25rem;font-weight:700;background:var(--field);color:var(--text);border:2px solid var(--line);padding:.15rem .6rem}
+.choice button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.big{font-size:1.4rem;font-family:Georgia,"Times New Roman",serif}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1;margin:0 .1em;font-size:.85em}
+.fr>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .2em}
+.fr>span:last-child{padding:0 .2em}
+.nl{width:100%;height:auto;display:block;touch-action:manipulation}
+.nl .axis{stroke:var(--text);stroke-width:2}
+.nl .tk{stroke:var(--text);stroke-width:1.5}
+.nl .tk.minor{stroke:var(--muted);stroke-width:1}
+.nl text{font-size:13px;fill:var(--text);font-family:"Atkinson Hyperlegible",sans-serif}
+.nl .pt{fill:var(--accent)}
+.nl .ptl{font-weight:700;fill:var(--accent);font-size:15px}
+.nl .mine{fill:#E8590C}
+.nl .hitarea{fill:transparent;cursor:crosshair}
+.tiles{display:flex;flex-wrap:wrap;gap:.35rem}
+.tile{font-size:1.2rem;background:var(--field);color:var(--text);border:2px solid var(--line);padding:.15rem .6rem;font-weight:400;font-family:Georgia,serif}
+.tile:disabled{opacity:.3}
+.seq{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;min-height:2.4rem;border-top:2px dashed var(--line);padding-top:.4rem}
+.seq .lt{color:var(--muted);font-size:1.2rem}
+.seq .pl{font-size:1.2rem;border:2px solid var(--ink);border-radius:.45rem;padding:.1rem .5rem;font-family:Georgia,serif}
+.setbtn{min-width:3rem;font-size:1.3rem;font-family:Georgia,serif}
+.sumafter{margin-top:.8rem;padding:.6rem .9rem;border-radius:.5rem;background:var(--mark);color:var(--text)}
+.secactions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.secactions .res{color:var(--muted);font-weight:700}
+.secactions .round{margin-left:auto}
+.rnote{color:var(--muted);font-weight:400;font-size:.9em}
+button.ready{background:var(--ink);color:var(--paper)}
+.ca{background:#F8C9C9;border-radius:.25rem;padding:0 .1rem}.cb{background:#C8EBCB;border-radius:.25rem;padding:0 .1rem}
+.gapline{font-family:Georgia,serif;font-size:1.45rem;flex-wrap:wrap}.gapline input{font-family:Georgia,serif;font-size:1.2rem;text-align:center}.echo{color:var(--muted)}.choice button{min-width:3rem}
+#pad .keys button.var{font-style:italic;font-family:Georgia,serif}
+.trow.big{display:block;line-height:2.1}
+.trow.big input{vertical-align:middle;margin:0 .1rem}
+</style></head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Binomische Formeln <span class="acc">rückwärts</span></h1>
+      <p class="sub">Das Ergebnis steht schon da – finde die Formel, fülle die Lücken und finde den Start. Jede Aufgabe wird sofort kontrolliert. Jede Übung hat ihre eigene „Neue Runde“.</p>
+      <div class="levels" role="group" aria-label="Niveau">
+        <button type="button" data-level="std" aria-pressed="true">Standard</button>
+        <button type="button" data-level="ahs" aria-pressed="false">Standard AHS</button>
+      </div>
+    </div>
+    <div class="top"><span class="score" id="score">0 von 0 richtig</span></div>
+  </header>
+  <section id="start" class="startcard">
+    <div id="startAsk">
+      <h2>Wie heißt du?</h2>
+      <p class="hint">Gib zuerst deinen Namen ein. Er steht am Ende in deiner Auswertung und kann danach nicht mehr geändert werden. Hast du auf diesem Gerät schon geübt, machst du automatisch dort weiter, wo du aufgehört hast.</p>
+      <div class="actions"><input id="pname" placeholder="Vor- und Nachname" autocomplete="name" aria-label="Dein Name"><button id="startBtn" type="button">Los geht’s</button></div>
+      <details id="codeAsk">
+        <summary>Auf einem anderen Gerät angefangen? Code eingeben</summary>
+        <p class="hint">Schreib oben deinen Namen genau wie auf dem anderen Gerät und tippe hier den Code ein.</p>
+        <div class="actions"><input id="pcode" placeholder="z. B. K7MP-2XQ9" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Code vom anderen Gerät"></div>
+      </details>
+      <p id="pnameErr" hidden></p>
+    </div>
+    <div id="startDone" hidden>
+      <span class="who">👤 <b id="pnameShow"></b></span>
+      <button type="button" class="mini" id="codeBtn" aria-expanded="false">Auf anderem Gerät weitermachen</button>
+      <p id="startMsg" aria-live="polite"></p>
+      <div id="codeBox" hidden>
+        <p>Dein Code: <span class="code" id="codeShow"></span> <button type="button" class="mini" id="codeCopy">Kopieren</button></p>
+        <p class="hint">Öffne die Übung auf dem anderen Gerät, gib <b>genau denselben Namen</b> ein und tippe diesen Code ein. Der Code ändert sich, während du weiterarbeitest – schreib ihn dir erst auf, wenn du hier aufhörst.</p>
+      </div>
+    </div>
+  </section>
+  <div id="main">
+    <div id="secs"></div>
+    <div class="finish" style="gap:.6rem;flex-wrap:wrap"><button class="ghost" id="showSum" type="button">Auswertung anzeigen</button><button class="ghost" id="newAll" type="button">Alle Übungen neu</button></div>
+
+    <details class="info" id="howto" open>
+      <summary>Zusammenfassung – schreib sie in dein Heft!</summary>
+      <p class="copy">✏️ <b>Schreib diese Zusammenfassung mit den Beispielen ordentlich in dein Heft ab.</b></p>
+      <p><b>Die drei binomischen Formeln:</b><br>1. (<span class="ca">a</span> + <span class="cb">b</span>)² = <span class="ca">a</span>² + 2<span class="ca">a</span><span class="cb">b</span> + <span class="cb">b</span>²<br>2. (<span class="ca">a</span> − <span class="cb">b</span>)² = <span class="ca">a</span>² − 2<span class="ca">a</span><span class="cb">b</span> + <span class="cb">b</span>²<br>3. (<span class="ca">a</span> + <span class="cb">b</span>)(<span class="ca">a</span> − <span class="cb">b</span>) = <span class="ca">a</span>² − <span class="cb">b</span>²</p>
+      <p><b>Welche Formel?</b> Drei Glieder → 1. oder 2. Formel: mittleres Glied plus → 1., minus → 2. &nbsp;Zwei Glieder mit Minus → 3. Formel.</p>
+      <p><b>Rückwärts rechnen:</b> 1. a aus a² finden, 2. b aus b² finden, 3. Probe mit dem mittleren Glied 2 · a · b.</p>
+      <p class="rule"><i>x</i>² + 10<i>x</i> + 25 → <span class="ca">a</span> = <i>x</i>, <span class="cb">b</span> = 5, Probe 2 · <i>x</i> · 5 = 10<i>x</i> ✓ → (<i>x</i> + 5)²</p>
+      <p class="rule">4<i>a</i>² − 12<i>a</i> + 9 → <span class="ca">a</span> = 2<i>a</i>, <span class="cb">b</span> = 3, Probe 2 · 2<i>a</i> · 3 = 12<i>a</i> ✓, Minus → (2<i>a</i> − 3)²</p>
+      <p class="rule">25<i>x</i>² − 16 → <span class="ca">a</span> = 5<i>x</i>, <span class="cb">b</span> = 4 → (5<i>x</i> + 4)(5<i>x</i> − 4)</p>
+      <p class="hint">Eingabe: Hochzahl mit ^ oder □², z. B. 9a^2 oder (x+5)^2.</p>
+    </details>
+
+    <section id="summary" hidden>
+      <div class="head"><h2 id="sumTitle">Auswertung</h2></div>
+      <p id="sumWho" class="who"></p>
+      <p id="sumMsg" class="summsg"></p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Übung</th><th class="c">beim 1. Versuch</th><th class="c">mit Fehlern</th><th class="c">Lösung angesehen</th><th class="c">offen</th></tr></thead>
+        <tbody id="sumBody"></tbody>
+        <tfoot id="sumFoot"></tfoot>
+      </table></div>
+    </section>
+  </div>
+</div>
+
+<div id="pad" hidden role="group" aria-label="Eingabehilfe">
+  <div class="padtop"><span>Eingabehilfe</span>
+    <button type="button" class="mini" id="padSys">Handy-Tastatur einblenden</button>
+    <button type="button" class="mini" id="padHide" aria-label="Eingabehilfe schließen">✕</button>
+  </div>
+  <div class="keys">
+    <button type="button" data-ins="7">7</button><button type="button" data-ins="8">8</button><button type="button" data-ins="9">9</button><button type="button" class="var" data-ins="x">x</button><button type="button" class="var" data-ins="y">y</button><button type="button" class="op" data-ins="²" aria-label="hoch 2">□²</button><button type="button" class="op" data-act="del" aria-label="Löschen">⌫</button>
+    <button type="button" data-ins="4">4</button><button type="button" data-ins="5">5</button><button type="button" data-ins="6">6</button><button type="button" class="var" data-ins="a">a</button><button type="button" class="var" data-ins="b">b</button><button type="button" class="op" data-ins="^" aria-label="hoch">□ⁿ</button><button type="button" class="op" data-act="clr" aria-label="Feld leeren">C</button>
+    <button type="button" data-ins="1">1</button><button type="button" data-ins="2">2</button><button type="button" data-ins="3">3</button><button type="button" class="op" data-ins="+">+</button><button type="button" class="op" data-ins="-" aria-label="minus">−</button><button type="button" class="op" data-ins="(">(</button><button type="button" class="op" data-ins=")">)</button>
+    <button type="button" data-ins="0">0</button><button type="button" class="op" data-ins="·" aria-label="mal">·</button><button type="button" class="op" data-act="left" aria-label="Cursor nach links">◀</button><button type="button" class="op" data-act="right" aria-label="Cursor nach rechts">▶</button><button type="button" class="go" data-act="ok" style="grid-column:span 3">✓ fertig</button>
+  </div>
+</div>
+<script>
+/* ================= Binomische Formeln rückwärts & Lücken ================= */
+const STORE='binrueck3:';
+const inpF=(f,val,label,ph,w)=>'<input class="pin" data-f="'+f+'" value="'+esc(val||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="'+label+'"'+(ph?' placeholder="'+ph+'"':'')+' style="width:'+(w||'4.2rem')+'">';
+/* Monome: {c: Zahl, v: {x:2, y:1}} */
+const MO=(c,v)=>({c,v:v||{}});
+const mmul=(p,q)=>{const v=Object.assign({},p.v);Object.keys(q.v).forEach(k=>v[k]=(v[k]||0)+q.v[k]);return MO(p.c*q.c,v);};
+const mkey=m=>Object.keys(m.v).filter(k=>m.v[k]).sort().map(k=>k+m.v[k]).join('');
+const meq=(p,q)=>p.c===q.c&&mkey(p)===mkey(q);
+function moH(m,first){const neg=m.c<0,a=Math.abs(m.c),vs=Object.keys(m.v).sort().map(k=>'<i>'+k+'</i>'+(m.v[k]>1?'<sup>'+m.v[k]+'</sup>':'')).join('');
+  const body=(a===1&&vs?'':a)+vs;return (neg?MINUS:'')+body;}
+function moPlain(m){const a=Math.abs(m.c),vs=Object.keys(m.v).sort().map(k=>k+(m.v[k]>1?'^'+m.v[k]:'')).join('');return (m.c<0?'-':'')+(a===1&&vs?'':a)+vs;}
+/* ein Monom lesen: 12x, 4a^2, 9, 3ab, x² */
+function readMono(str){
+  let s=String(str||'').replace(/[−–—]/g,'-').replace(/²/g,'^2').replace(/³/g,'^3').replace(/\s+/g,'').replace(/[·*]/g,'').toLowerCase();
+  if(!s)return null;const m=s.match(/^([+-]?)(\d*)((?:[a-z](?:\^\d+)?)*)$/);if(!m||(!m[2]&&!m[3]))return null;
+  const v={};(m[3].match(/[a-z](\^\d+)?/g)||[]).forEach(t=>{const k=t[0],e=t.length>1?+t.slice(2):1;v[k]=(v[k]||0)+e;});
+  return MO((m[1]==='-'?-1:1)*(m[2]?+m[2]:1),v);
+}
+/* Ausdruck mit Variablen an Zufallsstellen auswerten (für die Probe beim Rückwärts-Rechnen) */
+const VALS=[{x:1.3,y:-0.7,a:2.1,b:-1.6},{x:-2.2,y:1.9,a:-0.4,b:2.7},{x:0.6,y:3.1,a:1.7,b:0.9}];
+function evalAt(str,vals){
+  let s=String(str).replace(/[−–—]/g,'-').replace(/²/g,'^2').replace(/³/g,'^3').replace(/·/g,'*').replace(/\s+/g,'').toLowerCase();
+  if(/[^0-9a-z+\-*/().^,]/.test(s))return NaN;
+  s=s.replace(/,/g,'.').replace(/([0-9a-z)])(?=[a-z(])/g,'$1*').replace(/\^/g,'**');
+  s=s.replace(/[a-z]/g,c=>'('+(vals[c]!==undefined?vals[c]:0)+')');
+  try{return Function('"use strict";return ('+s+')')();}catch(e){return NaN;}
+}
+const polyVal=(ms,vals)=>ms.reduce((acc,m)=>acc+m.c*Object.keys(m.v).reduce((p,k)=>p*Math.pow(vals[k],m.v[k]),1),0);
+const sameVal=(str,ms)=>VALS.every(v=>{const a=evalAt(str,v),b=polyVal(ms,v);return isFinite(a)&&Math.abs(a-b)<1e-6*Math.max(1,Math.abs(b));});
+
+/* Aufgaben erzeugen */
+const VV=['x','a','y','b'];
+function binom(lvl,kind,i){
+  const x=pick(VV),y=pick(VV.filter(v=>v!==x));let A,B;
+  if(lvl==='std'){A=i<2?MO(1,{[x]:1}):MO(rnd(1,5),{[x]:1});B=MO(rnd(2,10));}
+  else{const r=rnd(0,3);if(r===0){A=MO(rnd(2,6),{[x]:1});B=MO(rnd(2,9));}else if(r===1){A=MO(rnd(2,5),{[x]:1});B=MO(rnd(1,5),{[y]:1});}else if(r===2){A=MO(1,{[x]:2});B=MO(rnd(2,8));}else{A=MO(rnd(2,4),{[x]:1});B=MO(rnd(2,7),{[y]:1});}}
+  const A2=mmul(A,A),B2=mmul(B,B),AB2=mmul(MO(2),mmul(A,B));
+  const res=kind===3?[A2,MO(-B2.c,B2.v)]:[A2,kind===1?AB2:MO(-AB2.c,AB2.v),B2];
+  return {kind,A,B,A2,B2,AB2,res};
+}
+const FNAME=['','1. Formel: (a + b)²','2. Formel: (a − b)²','3. Formel: (a + b)(a − b)'];
+const resH=t=>t.res.map((m,k)=>k?(m.c<0?' − ':' + ')+moH(MO(Math.abs(m.c),m.v)):moH(m)).join('');
+const startH=t=>t.kind===3?'('+moH(t.A)+' + '+moH(t.B)+') · ('+moH(t.A)+' − '+moH(t.B)+')':'('+moH(t.A)+(t.kind===1?' + ':' − ')+moH(t.B)+')<sup>2</sup>';
+const startPlain=t=>t.kind===3?'('+moPlain(t.A)+'+'+moPlain(t.B)+')('+moPlain(t.A)+'-'+moPlain(t.B)+')':'('+moPlain(t.A)+(t.kind===1?'+':'-')+moPlain(t.B)+')^2';
+
+/* 1) Welche Formel? */
+const WHICH={
+  complete:(t,s)=>!!s.v.c,autoCheck:true,
+  gen(i,lvl){return binom(lvl,[1,2,3,2,1,3][i%6],i);},
+  render(t,s){return '<div class="trow big">'+resH(t)+'</div><div class="trow choice" role="group" aria-label="Welche Formel">'+[1,2,3].map(k=>'<button type="button" data-set="c" data-v="'+k+'" aria-pressed="'+(s.v.c===String(k))+'">'+k+'.</button>').join('')+'</div>';},
+  check(t,s){if(+s.v.c===t.kind)return true;
+    if(t.kind===3)return 'Nur zwei Glieder, dazwischen ein Minus, beide sind Quadrate → das ist die <b>3.</b> Formel: a² − b².';
+    return 'Drei Glieder → 1. oder 2. Formel. Schau auf das <b>mittlere</b> Glied: plus → 1. Formel, minus → 2. Formel.';},
+  solve(t,s){s.v.c=String(t.kind);},
+  solH(t){return FNAME[t.kind]+' – '+startH(t);}
+};
+/* 2) und 3) Lücken füllen */
+function gapGen(i,lvl,kinds){
+  const t=binom(lvl,kinds[i%kinds.length],i);
+  const els=t.kind===3?['A','B','A2','B2']:['A','B','A2','AB2','B2'];
+  const n=lvl==='std'?(i<2?1:2):(i<2?2:3);
+  for(let g=0;g<200;g++){
+    const gaps=shuffle(els.slice()).slice(0,n);
+    if(gaps.includes('A')&&gaps.includes('A2'))continue;
+    if(gaps.includes('B')&&gaps.includes('B2'))continue;
+    if(t.kind!==3&&gaps.includes('AB2')&&(gaps.includes('A')||gaps.includes('A2'))&&(gaps.includes('B')||gaps.includes('B2')))continue;
+    t.gaps=gaps;return t;}
+  t.gaps=['B'];return t;
+}
+const VAL=(t,k)=>k==='A'?t.A:k==='B'?t.B:k==='A2'?t.A2:k==='B2'?t.B2:t.AB2;
+const GAPLBL={A:'a',B:'b',A2:'a²',AB2:'2ab',B2:'b²'};
+function gapRender(t,s){
+  const G=k=>t.gaps.includes(k)?inpF('g'+k,s.v['g'+k],'Lücke '+GAPLBL[k],'',k.length>1?'5rem':'4.2rem'):moH(VAL(t,k));
+  let st,rs;
+  const G2=k=>t.gaps.includes(k)?inpF('h'+k,s.v['h'+k],'Lücke '+GAPLBL[k]+' in der zweiten Klammer','','4.2rem'):moH(VAL(t,k));
+  if(t.kind===3){st='('+G('A')+' + '+G('B')+') · ('+G2('A')+' − '+G2('B')+')';rs=G('A2')+' − '+G('B2');}
+  else{st='('+G('A')+(t.kind===1?' + ':' − ')+G('B')+')<sup>2</sup>';rs=G('A2')+(t.kind===1?' + ':' − ')+G('AB2')+' + '+G('B2');}
+  return '<div class="trow big gapline">'+st+' = '+rs+'</div>';
+}
+function gapCheck(t,s){
+  if(t.kind===3)for(const k of t.gaps.filter(k=>k==='A'||k==='B')){const u=readMono(s.v['h'+k]),w=VAL(t,k);
+    if(!u||!meq(u,w))return 'Bei (a + b)(a − b) steht in <b>beiden</b> Klammern dasselbe '+GAPLBL[k]+' – fülle auch die Lücke in der zweiten Klammer aus.';}
+  for(const k of t.gaps){const u=readMono(s.v['g'+k]);const w=VAL(t,k);
+    if(!u)return 'Schreib in jede Lücke ein Glied, z. B. 5, 3x oder 9a^2.';
+    if(meq(u,w))continue;
+    if(u.c===-w.c&&mkey(u)===mkey(w))return 'Die Lücke für '+GAPLBL[k]+' hat kein Minus – das Vorzeichen steht schon davor.';
+    if(k==='AB2')return 'Das mittlere Glied ist <b>2 · a · b</b>. Vergiss die 2 nicht!';
+    if(k==='A2'||k==='B2')return 'Hier steht ein <b>Quadrat</b>: '+(k==='A2'?'a · a':'b · b')+' – Zahl und Variable werden quadriert, z. B. (3x)² = 9x².';
+    if(k==='A')return t.gaps.includes('A2')?'':'a² ist gegeben – welches Glied mal sich selbst ergibt '+moH(t.A2)+'?';
+    return t.gaps.includes('B2')?'Das mittlere Glied ist 2 · a · b – rechne zurück: b = mittleres Glied : (2 · a).':'b² ist gegeben – welches Glied mal sich selbst ergibt '+moH(t.B2)+'?';
+  }
+  return true;
+}
+const GAP=kinds=>({
+  complete:(t,s)=>t.gaps.every(k=>(s.v['g'+k]||'').trim()!==''&&(t.kind!==3||!(k==='A'||k==='B')||(s.v['h'+k]||'').trim()!=='')),
+  gen:(i,lvl)=>gapGen(i,lvl,kinds),
+  render:gapRender,
+  check:(t,s)=>{const r=gapCheck(t,s);return r===''?'Rechne nochmal nach.':r;},
+  solve(t,s){t.gaps.forEach(k=>{s.v['g'+k]=moPlain(VAL(t,k));if(t.kind===3&&(k==='A'||k==='B'))s.v['h'+k]=moPlain(VAL(t,k));});},
+  solH(t){return startH(t)+' = '+resH(t);}
+});
+/* 1) Die Formeln selbst: x² + 2xy + y² → Start anschreiben */
+const PAIRS=[['x','y'],['a','b'],['x','a'],['y','b'],['a','x'],['b','y']];
+const GENSTART=Object.assign({},null,{
+  fields:{s:1},
+  /* von der reinen Formel zu immer schwierigeren Aufgaben */
+  gen(i,lvl){
+    const [p,q]=i===0?['x','y']:pick(PAIRS);
+    const kind=[1,2,3,pick([1,2]),pick([1,2]),3,pick([1,2]),pick([2,3])][i%8];
+    let A,B;
+    if(i<3){A=MO(1,{[p]:1});B=MO(1,{[q]:1});}                       /* x² + 2xy + y² */
+    else if(i<5){A=MO(1,{[p]:1});B=MO(rnd(2,9));}                      /* x² + 10x + 25 */
+    else if(i<7){A=MO(rnd(2,lvl==='std'?5:7),{[p]:1});B=lvl==='std'?MO(rnd(1,9)):MO(rnd(2,5),{[q]:1});} /* 4a² − 12a + 9 bzw. 4x² + 12xy + 9y² */
+    else{A=lvl==='std'?MO(rnd(2,6),{[p]:1}):pick([MO(1,{[p]:2}),MO(rnd(2,4),{[p]:1,[q]:1})]);B=lvl==='std'?MO(rnd(2,4),{[q]:1}):MO(rnd(2,9));}
+    const A2=mmul(A,A),B2=mmul(B,B),AB2=mmul(MO(2),mmul(A,B));
+    return {kind,A,B,A2,B2,AB2,res:kind===3?[A2,MO(-B2.c,B2.v)]:[A2,kind===1?AB2:MO(-AB2.c,AB2.v),B2]};}
+});
+/* 4) Finde den Start */
+const BACK={
+  fields:{s:1},
+  gen(i,lvl){return binom(lvl,[1,2,3,1,2,3][i%6],i);},
+  render(t,s){return '<div class="trow big">'+resH(t)+' = '+inpF('s',s.v.s,'Start der binomischen Formel',t.kind===3?'(  +  )(  −  )':'(  ±  )²','11rem')+'</div>';},
+  check(t,s){
+    const raw=String(s.v.s||'').replace(/\s+/g,'').replace(/[−–—]/g,'-').replace(/²/g,'^2');
+    const isSq=/^\([^()]+\)\^2$/.test(raw),isProd=/^\([^()]+\)[·*]?\([^()]+\)$/.test(raw);
+    if(!isSq&&!isProd)return 'Schreib den Start als Binom mit Klammer: z. B. (x + 5)^2 oder (x + 3)(x − 3).';
+    if(sameVal(raw,t.res)){
+      if(t.kind!==3&&isProd&&!isSq)return {soft:'Richtig gerechnet – schreib es noch kürzer als Quadrat, z. B. (x + 5)^2.'};
+      return true;}
+    if(t.kind===3&&isSq)return 'Zwei Glieder mit Minus dazwischen → das ist die 3. Formel: (a + b)(a − b).';
+    if(t.kind!==3&&isProd&&/\+.*\).*\(.*-|-.*\).*\(.*\+/.test(raw))return 'Drei Glieder → das ist ein <b>Quadrat</b> (1. oder 2. Formel), nicht die 3. Formel.';
+    if(t.kind!==3){const flip=startPlain({kind:t.kind===1?2:1,A:t.A,B:t.B});if(sameVal(flip,[t.A2,t.kind===1?MO(-t.AB2.c,t.AB2.v):t.AB2,t.B2])&&sameVal(raw,[t.A2,t.kind===1?MO(-t.AB2.c,t.AB2.v):t.AB2,t.B2]))return 'Schau auf das mittlere Glied: '+(t.kind===1?'plus → (a + b)²':'minus → (a − b)²')+'.';}
+    return 'Suche a und b: a² = '+moH(t.A2)+' → a = ? &nbsp; b² = '+moH(t.B2)+' → b = ?'+(t.kind!==3?' Mach die Probe mit dem mittleren Glied 2 · a · b.':'');
+  },
+  solve(t,s){s.v.s=startPlain(t);},
+  solH(t){return startH(t);}
+};
+
+Object.assign(GENSTART,{render:(t,s)=>BACK.render(t,s),check:(t,s)=>BACK.check(t,s),solve:(t,s)=>BACK.solve(t,s),solH:t=>BACK.solH(t)});
+const INFO_F='<p>1. (a + b)² = a² + 2ab + b² &nbsp;·&nbsp; 2. (a − b)² = a² − 2ab + b² &nbsp;·&nbsp; 3. (a + b)(a − b) = a² − b²</p>';
+const SECS={
+  std:[
+    {title:'Schreib den Start an!',name:'Formeln rückwärts',info:INFO_F+'<p>Drei Glieder → Quadrat: mittleres Glied plus → (a + b)², minus → (a − b)². Zwei Glieder mit Minus → (a + b)(a − b).</p>',hint:'Eingabe z. B. (x+y)^2 oder (x+y)(x-y).',n:8,wide:true,type:GENSTART},
+    {title:'Fülle die Lücken – 1. und 2. Formel',name:'Lücken 1./2. Formel',info:'<p>(<i>x</i> + ☐)² = <i>x</i>² + ☐<i>x</i> + 49: b² = 49 → b = 7, mittleres Glied 2 · <i>x</i> · 7 = 14<i>x</i>.</p>',hint:'Ins Lückenfeld schreibst du nur das Glied, z. B. 7, 14x oder 9a^2.',n:6,wide:true,type:GAP([1,2])},
+    {title:'Fülle die Lücken – 3. Formel',name:'Lücken 3. Formel',info:'<p>(☐ + 4)(☐ − 4) = 25<i>x</i>² − ☐: a² = 25x² → a = 5x, b² = 4 · 4 = 16.</p>',n:4,wide:true,type:GAP([3])},
+    {title:'Finde den Start!',name:'Rückwärts',info:'<p><i>x</i>² + 10<i>x</i> + 25: a² = <i>x</i>² → a = <i>x</i>, b² = 25 → b = 5, Probe: 2 · <i>x</i> · 5 = 10<i>x</i> ✓, mittleres Glied plus → (<i>x</i> + 5)²</p>',hint:'Eingabe z. B. (x+5)^2 oder (a+3)(a-3).',n:6,wide:true,type:BACK}
+  ],
+  ahs:[
+    {title:'Schreib den Start an!',name:'Formeln rückwärts',info:INFO_F,hint:'Eingabe z. B. (x+y)^2 oder (x+y)(x-y).',n:8,wide:true,type:GENSTART},
+    {title:'Fülle die Lücken – 1. und 2. Formel',name:'Lücken 1./2. Formel',info:'<p>(☐ − 3<i>y</i>)² = 16<i>x</i>² − ☐ + ☐: a = 4<i>x</i>, 2ab = 2 · 4<i>x</i> · 3<i>y</i> = 24<i>xy</i>, b² = 9<i>y</i>².</p>',hint:'Ins Lückenfeld schreibst du nur das Glied, z. B. 24xy oder 9y^2.',n:6,wide:true,type:GAP([1,2])},
+    {title:'Fülle die Lücken – 3. Formel',name:'Lücken 3. Formel',info:'<p>(☐ + ☐)(☐ − ☐) = 49<i>a</i>² − 4<i>b</i>² → a = 7<i>a</i>, b = 2<i>b</i>.</p>',n:4,wide:true,type:GAP([3])},
+    {title:'Finde den Start!',name:'Rückwärts',info:'<p>9<i>x</i>² − 30<i>xy</i> + 25<i>y</i>²: a = 3<i>x</i>, b = 5<i>y</i>, Probe 2 · 3<i>x</i> · 5<i>y</i> = 30<i>xy</i> ✓, mittleres Glied minus → (3<i>x</i> − 5<i>y</i>)²</p>',hint:'Eingabe z. B. (3x-5y)^2.',n:6,wide:true,type:BACK}
+  ]
+};
+/* ================= Zufall (reproduzierbar) ================= */
+let RNG=Math.random;
+const rnd=(a,b)=>a+Math.floor(RNG()*(b-a+1));
+const pick=a=>a[rnd(0,a.length-1)];
+const sg=()=>RNG()<.5?1:-1;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=rnd(0,i);[a[i],a[j]]=[a[j],a[i]];}return a;}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const MINUS='−',LBL='abcdefghijkl';
+
+/* ================= Rationale Zahlen (exakt) ================= */
+const B=x=>BigInt(x);
+function gcd(a,b){a=a<0n?-a:a;b=b<0n?-b:b;while(b){[a,b]=[b,a%b];}return a;}
+function rat(n,d=1n){n=B(n);d=B(d);if(d<0n){n=-n;d=-d;}const g=gcd(n,d)||1n;return {n:n/g,d:d/g};}
+const R=(n,d=1)=>rat(n,d);
+const rneg=a=>({n:-a.n,d:a.d});
+const rabs=a=>({n:a.n<0n?-a.n:a.n,d:a.d});
+const radd=(a,b)=>rat(a.n*b.d+b.n*a.d,a.d*b.d);
+const rsub=(a,b)=>radd(a,rneg(b));
+const rmul=(a,b)=>rat(a.n*b.n,a.d*b.d);
+const rdiv=(a,b)=>rat(a.n*b.d,a.d*b.n);
+const req=(a,b)=>a.n*b.d===b.n*a.d;
+const rcmp=(a,b)=>{const x=a.n*b.d,y=b.n*a.d;return x<y?-1:x>y?1:0;};
+const rnum=a=>Number(a.n)/Number(a.d);
+const isInt=a=>a.d===1n;
+const isDecable=r=>{let d=r.d;while(d%2n===0n)d/=2n;while(d%5n===0n)d/=5n;return d===1n;};
+function decStr(r){let p=0;while(p<12&&(10n**B(p))%r.d!==0n)p++;const neg=r.n<0n;let s=((neg?-r.n:r.n)*(10n**B(p))/r.d).toString();
+  if(p>0){s=s.padStart(p+1,'0');s=s.slice(0,s.length-p)+','+s.slice(s.length-p);}return (neg?'-':'')+s;}
+const fracH=(n,d)=>'<span class="fr"><span>'+n+'</span><span>'+d+'</span></span>';
+/* Anzeige: mode 'dec' (Dezimalzahl), 'frac' (Bruch), 'mixed' (gemischte Zahl) */
+function rH(r,mode){
+  const neg=r.n<0n,a=rabs(r),sgn=neg?MINUS:'';
+  if(isInt(a))return sgn+a.n;
+  if(mode==='dec'&&isDecable(a))return sgn+decStr(a);
+  if(mode==='mixed'&&a.n>a.d)return sgn+(a.n/a.d)+'&#8202;'+fracH(a.n%a.d,a.d);
+  return sgn+fracH(a.n,a.d);
+}
+function rPlain(r,mode){if(isInt(r))return String(r.n);if(mode==='dec'&&isDecable(r))return decStr(r);return r.n+'/'+r.d;}
+/* Eingabe lesen: -3,5 · -3.5 · -7/2 · -1 3/4 */
+function readRat(str){
+  let s=String(str).replace(/[−–—]/g,'-').replace(/\u202F|\u00A0/g,' ').trim();
+  if(!s)return null;
+  let m=s.match(/^([+-]?)\s*(\d+)\s+(\d+)\s*\/\s*(\d+)$/);
+  if(m){if(+m[4]===0)return null;const w=B(m[2]),z=B(m[3]),n=B(m[4]);const r=rat(w*n+z,n);return {r:m[1]==='-'?rneg(r):r,frac:true,mixed:true,rn:z,rd:n};}
+  s=s.replace(/\s+/g,'');
+  m=s.match(/^([+-]?)(\d+)\/(\d+)$/);
+  if(m){if(+m[3]===0)return null;const r=rat(B(m[2]),B(m[3]));return {r:m[1]==='-'?rneg(r):r,frac:true,rn:B(m[2]),rd:B(m[3])};}
+  s=s.replace('.',',');
+  m=s.match(/^([+-]?)(\d*)(?:,(\d+))?$/);
+  if(!m||(!m[2]&&!m[3]))return null;
+  const f=m[3]||'';const r=rat(B((m[2]||'0')+f),10n**B(f.length));
+  return {r:m[1]==='-'?rneg(r):r,frac:false};
+}
+/* gemeinsame Hinweise für Zahl-Eingaben */
+function judgeNum(u,want,ctx){
+  if(!u)return 'Gib eine Zahl ein, z. B. −2,5 oder −3/4.';
+  if(req(u.r,want)){if(u.frac&&gcd(u.rn,u.rd)>1n)return 'Richtig – kürze den Bruch aber noch!';return true;}
+  if(req(u.r,rneg(want)))return 'Achte auf das Vorzeichen'+(ctx||'')+'.';
+  return false;
+}
+
+/* ================= Zahlengerade (SVG) ================= */
+/* o: {lo,hi,minor,label (Abstand der Beschriftungen),pts:[{v,label,cls}],click:true} */
+function nlSVG(o){
+  const W=360,H=78,x0=18,x1=W-18,y=40,lo=rnum(o.lo),hi=rnum(o.hi),mi=rnum(o.minor);
+  const X=v=>x0+(v-lo)/(hi-lo)*(x1-x0);
+  let h='<svg class="nl" viewBox="0 0 '+W+' '+H+'" data-lo="'+lo+'" data-hi="'+hi+'" data-x0="'+x0+'" data-x1="'+x1+'" role="img" aria-label="Zahlengerade von '+lo+' bis '+hi+'">';
+  h+='<line class="axis" x1="'+(x0-8)+'" y1="'+y+'" x2="'+(x1+10)+'" y2="'+y+'"/><path d="M'+(x1+10)+','+(y-5)+' L'+(x1+16)+','+y+' L'+(x1+10)+','+(y+5)+'" fill="none" stroke="currentColor" stroke-width="2"/>';
+  const n=Math.round((hi-lo)/mi);
+  const lab=o.label||1;
+  for(let k=0;k<=n;k++){
+    const v=lo+k*mi,isLab=Math.abs(v/lab-Math.round(v/lab))<1e-9,x=X(v);
+    h+='<line class="tk'+(isLab?'':' minor')+'" x1="'+x+'" y1="'+(y-(isLab?9:5))+'" x2="'+x+'" y2="'+(y+(isLab?9:5))+'"/>';
+    if(isLab){const t=Math.round(v*100)/100;h+='<text x="'+x+'" y="'+(y+26)+'" text-anchor="middle">'+(t<0?MINUS+(-t):String(t)).replace('.',',')+'</text>';}
+  }
+  (o.pts||[]).forEach(p=>{const x=X(rnum(p.v));h+='<circle class="'+(p.cls||'pt')+'" cx="'+x+'" cy="'+y+'" r="5.5"/>'+(p.label?'<text class="ptl" x="'+x+'" y="'+(y-14)+'" text-anchor="middle">'+p.label+'</text>':'');});
+  if(o.click)h+='<rect class="hitarea" data-nl="1" x="0" y="0" width="'+W+'" height="'+H+'"/>';
+  return h+'</svg>';
+}
+/* Klick auf die Zahlengerade → Wert auf den nächsten kleinen Strich gerundet */
+function nlValue(svg,ev,minor){
+  const b=svg.getBoundingClientRect(),W=360,px=(ev.clientX-b.left)/b.width*W;
+  const lo=+svg.dataset.lo,hi=+svg.dataset.hi,x0=+svg.dataset.x0,x1=+svg.dataset.x1;
+  let v=lo+(px-x0)/(x1-x0)*(hi-lo);v=Math.max(lo,Math.min(hi,v));
+  const steps=Math.round((v-lo)/rnum(minor));
+  return radd(rat(B(Math.round(lo*1000)),1000n),rmul(minor,R(steps)));
+}
+
+/* ================= Zustand ================= */
+const LEVELS={std:'Standard',ahs:'Standard AHS'};
+const G={};['std','ahs'].forEach(l=>{G[l]={seed:Math.floor(Math.random()*65536),rounds:SECS[l].map(()=>1),tasks:[],st:[]};});
+let level=location.hash==='#ahs'?'ahs':'std',PUPIL='',restoring=false,summaryRequested=false;
+function mixSeed(seed,lvl,sec,round){return (Math.imul(seed^0x9E3779B9,0x85EBCA6B)^Math.imul(lvl==='ahs'?2:1,0xC2B2AE35)^Math.imul(sec+1,0x165667B1)^Math.imul(round,0x27D4EB2F))>>>0;}
+function genSec(lvl,k){
+  const g=G[lvl],S=SECS[lvl][k],old=RNG;RNG=mulberry32(mixSeed(g.seed,lvl,k,g.rounds[k]));
+  try{const out=[],seen=new Set();for(let i=0;out.length<S.n&&i<400;i++){const t=S.type.gen(out.length,lvl);const key=JSON.stringify(t,(kk,v)=>typeof v==='bigint'?String(v):v);if(seen.has(key))continue;seen.add(key);out.push(t);}
+    g.tasks[k]=out;g.st[k]=out.map(()=>({v:{},res:null,tries:0,msg:null,errs:0}));}finally{RNG=old;}
+}
+function genAll(lvl){SECS[lvl].forEach((s,k)=>genSec(lvl,k));}
+const curG=()=>G[level];
+
+/* ================= Anzeige ================= */
+function taskInner(k,i){
+  const S=SECS[level][k],t=curG().tasks[k][i],s=curG().st[k][i];
+  let h='<div class="trow"><span class="lbl">'+LBL[i]+')</span></div>'+S.type.render(t,s,k,i);
+  if(s.msg)h+='<div class="sol '+s.msg.kind+'">'+s.msg.text+(s.msg.offer&&s.res!=='shown'&&s.res!==true?' <button type="button" class="mini" data-show="1">Lösung zeigen</button>':'')+'</div>';
+  return h;
+}
+function taskCls(s){return 'task'+(s.res===true?' ok':s.res==='shown'?' shown':s.res===false?' bad':'');}
+function renderTask(k,i,focusSel){
+  const el=document.querySelector('.task[data-k="'+k+'"][data-i="'+i+'"]');if(!el)return;
+  const s=curG().st[k][i];el.className=taskCls(s);el.innerHTML=taskInner(k,i);
+  if(window.padApply)window.padApply();
+  if(focusSel){const f=el.querySelector(focusSel);if(f)f.focus({preventScroll:true});}
+}
+function renderAll(){
+  const box=$('secs');
+  box.innerHTML=SECS[level].map((S,k)=>'<section class="sec" id="sec'+k+'"><div class="head"><span class="num">'+(k+1)+'</span><h2>'+S.title+'</h2></div>'+
+    (S.info?'<div class="info">'+S.info+'</div>':'')+(S.hint?'<p class="hint">'+S.hint+'</p>':'')+
+    '<div class="tasks'+(S.wide?' wide':'')+'">'+curG().tasks[k].map((t,i)=>'<div class="'+taskCls(curG().st[k][i])+'" data-k="'+k+'" data-i="'+i+'">'+taskInner(k,i)+'</div>').join('')+'</div>'+
+    '<div class="secactions"><button type="button" class="ghost" data-checkall="'+k+'">Alle überprüfen</button><button type="button" class="ghost" data-newround="'+k+'">Neue Runde</button><span class="res" id="res'+k+'"></span><span class="round" id="round'+k+'"></span></div></section>').join('');
+  if(window.padApply)window.padApply();
+  updateScores();
+}
+function updateScores(){
+  const g=curG();let ok=0,n=0;
+  SECS[level].forEach((S,k)=>{const st=g.st[k],o=st.filter(s=>s.res===true).length;ok+=o;n+=st.length;
+    const r=$('res'+k);if(r)r.textContent=o+' von '+st.length+' richtig'+(o===st.length?' – super!':'');
+    const rd=$('round'+k);if(rd)rd.textContent='Runde '+g.rounds[k];
+    const nb=document.querySelector('[data-newround="'+k+'"]');if(nb){const done=st.every(s=>s.res===true||s.res==='shown');nb.textContent=done?'Noch eine Runde üben':'Neue Runde';nb.classList.toggle('ready',done);}});
+  $('score').textContent=ok+' von '+n+' richtig';
+  updateSummary();saveProgress();
+}
+
+/* ================= Prüfen ================= */
+function checkTask(k,i,force){
+  const S=SECS[level][k],t=curG().tasks[k][i],s=curG().st[k][i],T=S.type;
+  if(s.res===true||s.res==='shown')return;
+  const complete=T.complete?T.complete(t,s):Object.keys(T.fields||{}).every(f=>(s.v[f]||'').toString().trim()!=='');
+  if(!complete){if(force){s.msg={kind:'bad',text:T.incomplete||'Bitte zuerst alles ausfüllen.'};renderTask(k,i);}return;}
+  const r=T.check(t,s);
+  if(r===true){s.res=true;s.msg={kind:'ok',text:'Richtig!'};}
+  else if(r&&r.soft){s.res=null;s.msg={kind:r.good?'ok':'bad',text:r.soft};}
+  else{s.res=false;s.tries++;s.errs++;const h=typeof r==='string'?r:null;
+    s.msg={kind:'bad',text:(h||(s.tries===1?'Leider falsch – versuch es nochmal!':'Noch nicht richtig.'))+(h&&s.tries===1?' Versuch es nochmal!':''),offer:s.tries>=2};}
+  renderTask(k,i);updateScores();
+}
+function showSolution(k,i){
+  const S=SECS[level][k],t=curG().tasks[k][i],s=curG().st[k][i];
+  S.type.solve(t,s);s.res='shown';s.msg={kind:'shown',text:'Lösung: '+S.type.solH(t)};renderTask(k,i);updateScores();
+}
+
+/* ================= Bedienung ================= */
+function taskOf(el){const tk=el.closest('.task');return tk?[+tk.dataset.k,+tk.dataset.i]:null;}
+$('secs').addEventListener('click',ev=>{
+  const ca=ev.target.closest('[data-checkall]');if(ca){const k=+ca.dataset.checkall;curG().tasks[k].forEach((t,i)=>checkTask(k,i,true));return;}
+  const nr=ev.target.closest('[data-newround]');if(nr){const k=+nr.dataset.newround,g=curG();
+    if(g.st[k].some(s=>s.res!==true&&s.res!=='shown')&&!confirm('Neue Runde für diese Übung? Offene Aufgaben werden durch neue ersetzt.'))return;
+    g.rounds[k]=g.rounds[k]>=MAXR?1:g.rounds[k]+1;genSec(level,k);summaryRequested=false;renderAll();$('sec'+k).scrollIntoView({behavior:'smooth',block:'start'});return;}
+  const ti=taskOf(ev.target);if(!ti)return;const [k,i]=ti,S=SECS[level][k],t=curG().tasks[k][i],s=curG().st[k][i];
+  if(ev.target.closest('[data-show]')){showSolution(k,i);return;}
+  if(s.res===true||s.res==='shown')return;
+  const setb=ev.target.closest('[data-set]');
+  if(setb){s.v[setb.dataset.set]=setb.dataset.v;if(s.res===false)s.res=null;s.msg=null;
+    if(S.type.autoCheck)checkTask(k,i,false);else renderTask(k,i);return;}
+  const act=ev.target.closest('[data-act]');
+  if(act&&S.type.onAct){const r=S.type.onAct(t,s,act.dataset.act,act);if(s.res===false)s.res=null;if(r==='check')checkTask(k,i,true);else renderTask(k,i);return;}
+  const nl=ev.target.closest('[data-nl]');
+  if(nl&&S.type.onLine){S.type.onLine(t,s,nl.closest('svg'),ev);if(s.res===false)s.res=null;s.msg=null;renderTask(k,i);return;}
+});
+$('secs').addEventListener('input',ev=>{
+  const inp=ev.target;if(!inp.dataset.f)return;const ti=taskOf(inp);if(!ti)return;const [k,i]=ti,s=curG().st[k][i];
+  s.v[inp.dataset.f]=inp.value;if(s.res===false){s.res=null;const tk=inp.closest('.task');tk.className=taskCls(s);}
+});
+$('secs').addEventListener('keydown',ev=>{
+  if(ev.key!=='Enter'||ev.target.tagName!=='INPUT')return;ev.preventDefault();
+  const ti=taskOf(ev.target);if(!ti)return;const [k,i]=ti;
+  const own=[...ev.target.closest('.task').querySelectorAll('input')],nx=own.slice(own.indexOf(ev.target)+1).find(x=>!x.value.trim());
+  if(nx){nx.focus();return;}
+  checkTask(k,i,true);
+  if(curG().st[k][i].res===true){const n=document.querySelector('.task[data-k="'+k+'"][data-i="'+(i+1)+'"] input');if(n)n.focus();}
+});
+$('secs').addEventListener('focusout',ev=>{
+  const tk=ev.target.closest&&ev.target.closest('.task');if(!tk||ev.target.tagName!=='INPUT')return;
+  setTimeout(()=>{if(!tk.contains(document.activeElement)&&tk.isConnected)checkTask(+tk.dataset.k,+tk.dataset.i,false);},0);
+});
+
+/* ================= Auswertung ================= */
+function updateSummary(){
+  const g=curG(),sum=$('summary');
+  const all=g.st.every(st=>st.every(s=>s.res===true||s.res==='shown'));
+  if(all&&!summaryRequested&&!restoring)summaryRequested=true;
+  if(!summaryRequested){sum.hidden=true;return;}
+  let T={first:0,later:0,shown:0,open:0,n:0},rows='';
+  SECS[level].forEach((S,k)=>{const st=g.st[k];
+    const first=st.filter(s=>s.res===true&&!s.errs).length,later=st.filter(s=>s.res===true&&s.errs).length,shown=st.filter(s=>s.res==='shown').length,open=st.length-first-later-shown;
+    T.first+=first;T.later+=later;T.shown+=shown;T.open+=open;T.n+=st.length;
+    rows+='<tr><td>'+(k+1)+' '+S.name+(g.rounds[k]>1?' <span class="rnote">(Runde '+g.rounds[k]+')</span>':'')+'</td><td class="c">'+first+'</td><td class="c">'+later+'</td><td class="c">'+shown+'</td><td class="c">'+open+'</td></tr>';});
+  $('sumBody').innerHTML=rows;
+  $('sumFoot').innerHTML='<tr><td>Gesamt ('+T.n+' Aufgaben)</td><td class="c">'+T.first+'</td><td class="c">'+T.later+'</td><td class="c">'+T.shown+'</td><td class="c">'+T.open+'</td></tr>';
+  const ok=T.first+T.later;let msg;
+  if(T.first===T.n)msg='Perfekt! Alle Aufgaben beim ersten Versuch richtig.';
+  else if(ok===T.n)msg='Super, alle Aufgaben selbst gelöst!';
+  else if(ok/T.n>=.75)msg='Sehr gut gemacht!';
+  else if(ok/T.n>=.5)msg='Gut! Mit ein bisschen Übung klappt der Rest auch.';
+  else msg='Übe noch ein bisschen weiter – starte neue Runden und probier es nochmal.';
+  if(!all)msg='Noch nicht alles erledigt: '+T.open+' Aufgabe'+(T.open===1?' ist':'n sind')+' noch offen. '+msg;
+  $('sumTitle').textContent=(all?'Geschafft'+(PUPIL?', '+PUPIL:'')+'! Deine Auswertung':'Zwischenstand'+(PUPIL?' von '+PUPIL:''))+' ('+LEVELS[level]+')';
+  const now=new Date(),who=$('sumWho');
+  who.innerHTML='👤 <b></b> · '+now.toLocaleDateString('de-AT')+', '+now.toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'})+' Uhr · '+LEVELS[level];
+  who.querySelector('b').textContent=PUPIL||'(kein Name)';
+  $('sumMsg').textContent=msg;
+  const wasHidden=sum.hidden;sum.hidden=false;
+  if(wasHidden&&!restoring&&all)setTimeout(()=>sum.scrollIntoView({behavior:'smooth',block:'start'}),300);
+}
+$('showSum').addEventListener('click',()=>{summaryRequested=true;updateSummary();$('summary').scrollIntoView({behavior:'smooth',block:'start'});});
+$('newAll').addEventListener('click',()=>{const g=curG();if(!confirm('Alle Übungen mit neuen Aufgaben starten?'))return;
+  SECS[level].forEach((S,k)=>{g.rounds[k]=g.rounds[k]>=MAXR?1:g.rounds[k]+1;genSec(level,k);});summaryRequested=false;renderAll();window.scrollTo({top:0,behavior:'smooth'});});
+function setLevel(l){
+  level=l;summaryRequested=false;
+  document.querySelectorAll('.levels button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.level===l?'true':'false'));
+  try{history.replaceState(null,'',l==='ahs'?'#ahs':'#standard');}catch(x){}
+  renderAll();
+}
+document.querySelectorAll('.levels button').forEach(b=>b.addEventListener('click',()=>setLevel(b.dataset.level)));
+
+/* ================= Fortschritt: speichern (gleiches Gerät) & Code (anderes Gerät) ================= */
+const ALPH='23456789ABCDEFGHJKMNPQRSTUVWXYZ',AL=B(ALPH.length);
+/* Kurzer Code: pro Aufgabe nur „fertig“, pro Übung Merker für Fehler und angesehene Lösungen, Runden 1–8 */
+const COMPACT=typeof CODE_COMPACT!=='undefined'&&CODE_COMPACT,MAXR=COMPACT?8:31;
+const normName=s=>s.trim().replace(/\s+/g,' ').toLowerCase();
+function nameHash(n){let h=2166136261;for(const ch of normName(n)){h^=ch.codePointAt(0);h=Math.imul(h,16777619);}return (h>>>0)%1024;}
+function checkChar(s){let c=0;for(let k=0;k<s.length;k++)c=(c+(k+1)*ALPH.indexOf(s[k]))%ALPH.length;return ALPH[c];}
+const stCode=s=>s.res===true?(s.errs?2:1):s.res==='shown'?3:0;
+function makeCode(lvl){
+  const g=G[lvl],F=[],f=(v,r)=>F.push([v,r]);
+  f(lvl==='ahs'?1:0,2);f(g.seed,65536);
+  SECS[lvl].forEach((S,k)=>{if(COMPACT){f(g.rounds[k]-1,8);const st=g.st[k];f(st.some(s=>s.res===true&&s.errs)?1:0,2);f(st.some(s=>s.res==='shown')?1:0,2);st.forEach(s=>f(s.res===true||s.res==='shown'?1:0,2));}
+    else{f(g.rounds[k]-1,32);g.st[k].forEach(s=>f(stCode(s),4));}});
+  f(nameHash(PUPIL),1024);
+  let N=0n;for(let k=F.length-1;k>=0;k--)N=N*B(F[k][1])+B(F[k][0]);
+  let s='';do{s=ALPH[Number(N%AL)]+s;N/=AL;}while(N>0n);
+  s+=checkChar(s);return s.match(/.{1,4}/g).join('-');
+}
+function readCode(str){
+  const bad={err:'Dieser Code ist ungültig. Kontrolliere, ob du ihn richtig abgeschrieben hast.'};
+  const s=str.toUpperCase().replace(/[\s\-–—_.]/g,'');
+  if(s.length<3||[...s].some(ch=>!ALPH.includes(ch)))return bad;
+  const body=s.slice(0,-1);
+  if(checkChar(body)!==s.slice(-1))return {err:'Im Code ist ein Tippfehler. Kontrolliere ihn Zeichen für Zeichen.'};
+  let N=0n;for(const ch of body)N=N*AL+B(ALPH.indexOf(ch));
+  const g=r=>{const v=Number(N%B(r));N/=B(r);return v;};
+  const lvl=g(2)?'ahs':'std',seed=g(65536),secs=[];
+  for(const S of SECS[lvl]){if(COMPACT){const round=g(8)+1,er=g(2),sh=g(2),st=[];for(let i=0;i<S.n;i++){const d=g(2);st.push(d?(sh?3:er?2:1):0);}
+      /* „angesehen“ nur einmal pro Übung merken, die übrigen als richtig */
+      if(sh){let first=true;for(let i=0;i<st.length;i++)if(st[i]===3){if(first)first=false;else st[i]=er?2:1;}}
+      secs.push({round,st});}
+    else{const round=g(32)+1,st=[];for(let i=0;i<S.n;i++)st.push(g(4));secs.push({round,st});}}
+  const nh=g(1024);if(N!==0n)return bad;
+  return {lvl,seed,secs,nh};
+}
+function applyCode(p){
+  const g=G[p.lvl];g.seed=p.seed;
+  p.secs.forEach((x,k)=>{g.rounds[k]=x.round;genSec(p.lvl,k);
+    x.st.forEach((c,i)=>{if(!c)return;const s=g.st[k][i],t=g.tasks[k][i],T=SECS[p.lvl][k].type;T.solve(t,s);
+      if(c===3){s.res='shown';s.msg={kind:'shown',text:'Lösung: '+T.solH(t)};}else{s.res=true;s.errs=c===2?1:0;s.msg={kind:'ok',text:'Richtig!'};}});});
+}
+function saveProgress(lvl){
+  lvl=lvl||level;if(!PUPIL||restoring)return;
+  const code=makeCode(lvl);
+  try{const k=STORE+normName(PUPIL),o=JSON.parse(localStorage.getItem(k)||'{}');o.last=level;o[lvl]=code;localStorage.setItem(k,JSON.stringify(o));}catch(x){}
+  if(lvl===level)$('codeShow').textContent=code;
+}
+function loadSaved(name){try{return JSON.parse(localStorage.getItem(STORE+normName(name))||'null');}catch(x){return null;}}
+
+/* ================= Name zu Beginn (danach nicht mehr änderbar) ================= */
+function setLocked(on){document.body.classList.toggle('locked',on);if(on)$('main').setAttribute('inert','');else $('main').removeAttribute('inert');}
+function startErr(msg,el){const err=$('pnameErr');err.textContent=msg;err.hidden=false;el.focus();}
+function startWithName(){
+  const inpEl=$('pname'),v=inpEl.value.trim().replace(/\s+/g,' '),codeInp=$('pcode');
+  if(v.length<2){startErr('Bitte gib deinen Namen ein.',inpEl);return;}
+  let p=null;
+  if(codeInp.value.trim()){p=readCode(codeInp.value);
+    if(p.err){$('codeAsk').open=true;startErr(p.err,codeInp);return;}
+    if(p.nh!==nameHash(v)){startErr('Dieser Code gehört zu einem anderen Namen. Schreib deinen Namen genau so wie auf dem anderen Gerät.',inpEl);return;}}
+  $('pnameErr').hidden=true;PUPIL=v;
+  const saved=loadSaved(v);let msg='';
+  restoring=true;
+  try{
+    if(saved){['std','ahs'].forEach(l=>{if(saved[l]&&!(p&&p.lvl===l)){const q=readCode(saved[l]);if(!q.err&&q.nh===nameHash(v))applyCode(q);}});
+      msg='Willkommen zurück! Du machst dort weiter, wo du auf diesem Gerät aufgehört hast.';}
+    if(p){applyCode(p);msg='Dein Fortschritt vom anderen Gerät wurde übernommen.';}
+  }finally{restoring=false;}
+  saveProgress('std');saveProgress('ahs');
+  $('pnameShow').textContent=v;$('startMsg').textContent=msg;
+  $('startAsk').hidden=true;$('startDone').hidden=false;
+  setLocked(false);setLevel(p?p.lvl:(saved&&saved.last)||level);
+}
+$('startBtn').addEventListener('click',startWithName);
+['pname','pcode'].forEach(k=>$(k).addEventListener('keydown',ev=>{if(ev.key==='Enter'){ev.preventDefault();startWithName();}}));
+$('codeBtn').addEventListener('click',ev=>{const box=$('codeBox'),open=box.hidden;saveProgress();box.hidden=!open;ev.currentTarget.setAttribute('aria-expanded',open?'true':'false');});
+$('codeCopy').addEventListener('click',ev=>{const b=ev.currentTarget,txt=$('codeShow').textContent;
+  try{navigator.clipboard.writeText(txt).then(()=>{b.textContent='Kopiert ✓';setTimeout(()=>{b.textContent='Kopieren';},1500);},()=>{});}catch(x){}});
+
+/* ================= Start ================= */
+genAll('std');genAll('ahs');
+setLevel(level);
+setLocked(true);
+$('pname').focus();
+
+/* ================= Eingabehilfe (Bildschirm-Tastatur) ================= */
+(function(){
+  const pad=$('pad'),sysBtn=$('padSys');
+  const touch=window.matchMedia&&matchMedia('(pointer: coarse)').matches;
+  let padOnly=touch,closed=false,cur=null;
+  try{const s=localStorage.getItem('padOnly');if(s!==null)padOnly=s==='1';}catch(x){}
+  function applyMode(){document.querySelectorAll('#secs input.pin').forEach(i=>{if(padOnly)i.setAttribute('inputmode','none');else i.setAttribute('inputmode','text');});
+    sysBtn.textContent=padOnly?'Handy-Tastatur einblenden':'Handy-Tastatur ausblenden';}
+  window.padApply=applyMode;applyMode();
+  function show(input){cur=input;if(closed)return;pad.hidden=false;document.body.classList.add('padon');
+    const r=input.getBoundingClientRect();if(r.bottom>window.innerHeight-pad.offsetHeight-10)input.scrollIntoView({block:'center',behavior:'smooth'});}
+  function hide(){pad.hidden=true;document.body.classList.remove('padon');}
+  document.addEventListener('focusin',ev=>{const t=ev.target;if(t.tagName==='INPUT'&&t.classList.contains('pin')&&!t.readOnly)show(t);});
+  document.addEventListener('focusout',()=>setTimeout(()=>{const a=document.activeElement;if(!(a&&a.tagName==='INPUT'&&a.classList.contains('pin')))hide();},150));
+  function insert(txt){if(!cur||!cur.isConnected)return;const s=cur.selectionStart??cur.value.length,e=cur.selectionEnd??cur.value.length;cur.setRangeText(txt,s,e,'end');cur.dispatchEvent(new Event('input',{bubbles:true}));}
+  /* nur pointerdown/mousedown abfangen – nie touchstart, sonst gehen die Tasten am Handy nicht */
+  pad.addEventListener('pointerdown',ev=>{if(ev.target.closest('button'))ev.preventDefault();});
+  pad.addEventListener('mousedown',ev=>{if(ev.target.closest('button'))ev.preventDefault();});
+  pad.addEventListener('click',ev=>{
+    const b=ev.target.closest('button');if(!b)return;
+    if(b.id==='padHide'){closed=true;hide();return;}
+    if(b.id==='padSys'){padOnly=!padOnly;try{localStorage.setItem('padOnly',padOnly?'1':'0');}catch(x){}applyMode();if(cur&&cur.isConnected){cur.blur();setTimeout(()=>cur.focus(),60);}return;}
+    if(!cur||!cur.isConnected)return;
+    if(b.dataset.ins!==undefined)insert(b.dataset.ins);
+    else if(b.dataset.act==='clr'){cur.value='';cur.dispatchEvent(new Event('input',{bubbles:true}));}
+    else if(b.dataset.act==='left'){const s=Math.max(0,(cur.selectionStart??cur.value.length)-1);cur.setSelectionRange(s,s);}
+    else if(b.dataset.act==='right'){const s=Math.min(cur.value.length,(cur.selectionEnd??cur.value.length)+1);cur.setSelectionRange(s,s);}
+    else if(b.dataset.act==='del'){const s=cur.selectionStart??cur.value.length,e2=cur.selectionEnd??s;if(s!==e2)cur.setRangeText('',s,e2,'end');else if(s>0)cur.setRangeText('',s-1,s,'end');cur.dispatchEvent(new Event('input',{bubbles:true}));}
+    else if(b.dataset.act==='ok'){cur.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));}
+    if(cur&&cur.isConnected)cur.focus({preventScroll:true});
+  });
+  document.addEventListener('click',ev=>{if(ev.target.closest('[data-newround],#newAll'))closed=false;});
+})();
+</script></body></html>
