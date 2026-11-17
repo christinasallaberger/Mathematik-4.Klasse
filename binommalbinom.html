@@ -228,6 +228,9 @@ input.pin4{width:6rem}
 .ip{opacity:.45;font-size:.85em;margin-right:.05em}
 .srule .rl{display:inline-block;white-space:nowrap;margin:.15rem .5rem .1rem 0;padding:0 .4rem;border:1px solid var(--line);border-radius:.4rem;background:var(--info);color:var(--ink)}
 input.mline{width:min(34rem,100%)}
+.mic.on{background:#C62828;color:#fff;border-color:#C62828}
+.micmsg{max-width:34rem;margin:0 auto .4rem;font-size:.95rem;padding:.35rem .6rem;border-radius:.4rem;background:var(--info);color:var(--ink)}
+.micmsg.ok{background:var(--okbg);color:var(--ok)}.micmsg.bad{background:var(--badbg);color:var(--bad)}
 </style>
 </head>
 <body>
@@ -305,9 +308,11 @@ input.mline{width:min(34rem,100%)}
 
 <div id="pad" hidden role="group" aria-label="Eingabehilfe">
   <div class="padtop"><span>Eingabehilfe</span>
+    <button type="button" class="mini mic" id="padMic" hidden aria-label="Sprechen">🎤 Sprechen</button>
     <button type="button" class="mini" id="padSys">Handy-Tastatur einblenden</button>
     <button type="button" class="mini" id="padHide" aria-label="Eingabehilfe schließen">✕</button>
   </div>
+  <div id="micMsg" class="micmsg" hidden aria-live="polite"></div>
   <div class="keys">
     <button type="button" data-ins="7">7</button><button type="button" data-ins="8">8</button><button type="button" data-ins="9">9</button><button type="button" class="var" data-var="0">x</button><button type="button" class="var" data-var="1">y</button><button type="button" class="op" data-ins="²" aria-label="hoch 2">□²</button><button type="button" class="op" data-act="del" aria-label="Löschen">⌫</button>
     <button type="button" data-ins="4">4</button><button type="button" data-ins="5">5</button><button type="button" data-ins="6">6</button><button type="button" class="var" data-var="2">a</button><button type="button" class="var" data-var="3">b</button><button type="button" class="op" data-ins="³" aria-label="hoch 3">□³</button><button type="button" class="op" data-act="clr" aria-label="Feld leeren">C</button>
@@ -905,6 +910,77 @@ $('pname').focus();
     if(cur&&cur.isConnected)cur.focus({preventScroll:true});
   });
   document.addEventListener('click',ev=>{if(ev.target.closest('[data-go],[data-act="next"],[data-act="prev"],[data-act="newround"],#newRound2'))closed=false;});
+})();
+/* ================= Spracheingabe: gesprochenen Term in Schreibweise umwandeln ================= */
+const ZAHL={null:0,eins:1,ein:1,eine:1,einen:1,zwei:2,zwo:2,drei:3,vier:4,fünf:5,sechs:6,sieben:7,acht:8,neun:9,zehn:10,elf:11,zwölf:12,
+  dreizehn:13,vierzehn:14,fünfzehn:15,sechzehn:16,siebzehn:17,achtzehn:18,neunzehn:19,zwanzig:20,dreißig:30,vierzig:40,fünfzig:50,sechzig:60,siebzig:70,achtzig:80,neunzig:90,hundert:100};
+function wortZahl(w){
+  if(ZAHL[w]!==undefined)return ZAHL[w];
+  let m=w.match(/^(ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun)und(zwanzig|dreißig|vierzig|fünfzig|sechzig|siebzig|achtzig|neunzig)$/);
+  if(m)return ZAHL[m[1]==='ein'?'eins':m[1]]+ZAHL[m[2]];
+  m=w.match(/^(ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun)?hundert(.*)$/);
+  if(m){const h=m[1]?ZAHL[m[1]==='ein'?'eins':m[1]]:1,r=m[2]?wortZahl(m[2].replace(/^und/,'')):0;if(r!==null)return h*100+r;}
+  return null;
+}
+function speechToTerm(text){
+  let s=' '+String(text).toLowerCase().replace(/[.,!?;]+(?=\s|$)/g,' ').replace(/\s+/g,' ')+' ';
+  const R=(a,b)=>{s=s.replace(a,b);};
+  /* Sonderzeichen, die die Erkennung manchmal schon liefert */
+  R(/×|\*/g,' mal ');R(/÷/g,' durch ');R(/²/g,' hoch 2 ');R(/³/g,' hoch 3 ');R(/−|–/g,' minus ');R(/\+/g,' plus ');R(/(\d)\s*\^\s*(\d)/g,'$1 hoch $2');
+  /* Wörter für Rechenzeichen */
+  R(/ geteilt durch | dividiert durch /g,' durch ');R(/ multipliziert mit /g,' mal ');
+  R(/ zum quadrat | im quadrat | quadrat /g,' hoch 2 ');R(/ hoch zwei /g,' hoch 2 ');R(/ hoch drei /g,' hoch 3 ');
+  R(/ klammer auf | klammer öffnen | offene klammer /g,' ( ');R(/ klammer zu | klammer schließen | geschlossene klammer /g,' ) ');
+  R(/ ist gleich | gleich /g,' = ');R(/ komma /g,' , ');
+  /* Buchstaben, wie sie oft erkannt werden */
+  R(/ ix | iks | x-?mal /g,' x ');R(/ ypsilon | üpsilon | yps | ü /g,' y ');R(/ be | bé | bee /g,' b ');R(/ ce | zeh | tse /g,' c ');R(/ ah | aa /g,' a ');
+  /* Zahlwörter */
+  s=s.replace(/[a-zäöüß]+/g,w=>{const n=wortZahl(w);return n===null?w:String(n);});
+  /* Grundrechenarten */
+  R(/ plus /g,' + ');R(/ minus /g,' - ');R(/ mal /g,' · ');R(/ durch /g,' : ');R(/ hoch (\d+)/g,'^$1');R(/ hoch /g,'^');
+  /* übrig gebliebene Wörter: einzelne Buchstaben behalten, sonst verwerfen */
+  s=s.replace(/[a-zäöüß]{2,}/g,'');
+  /* zusammenschreiben: Zahl + Buchstabe → 3x, Buchstabe + Buchstabe → xy */
+  s=s.replace(/\s+/g,' ').trim();
+  s=s.replace(/(\d)\s+,\s+(\d)/g,'$1,$2').replace(/(\d)\s+(?=[a-z(])/g,'$1').replace(/([a-z])\s+(?=[a-z])/g,'$1').replace(/\s*\^\s*/g,'^').replace(/\(\s+/g,'(').replace(/\s+\)/g,')');
+  s=s.replace(/\s*([+\-·:=])\s*/g,' $1 ').replace(/\s+/g,' ').trim();
+  s=s.replace(/^\+ /,'').replace(/^- /,'-');
+  s=s.replace(/\(\s*-\s*/g,'(-');
+  return s;
+}
+
+
+/* Mikrofon-Knopf: Spracherkennung des Browsers (Safari am iPad, Chrome) */
+(function(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition,btn=$('padMic'),msg=$('micMsg');
+  if(!SR)return;            /* Gerät/Browser kann es nicht → Knopf bleibt versteckt */
+  btn.hidden=false;
+  let last=null,rec=null,busy=false;
+  document.addEventListener('focusin',ev=>{if(ev.target.tagName==='INPUT'&&ev.target.classList.contains('pin'))last=ev.target;});
+  const show=(t,kind)=>{msg.hidden=false;msg.className='micmsg'+(kind?' '+kind:'');msg.innerHTML=t;};
+  const pretty=t=>esc(t).replace(/\^2/g,'²').replace(/\^3/g,'³').replace(/-/g,'−');
+  function insert(txt){if(!last||!last.isConnected){show('Tippe zuerst in ein Eingabefeld.','bad');return;}
+    const a=last.selectionStart??last.value.length,b=last.selectionEnd??a;last.setRangeText(txt,a,b,'end');
+    last.dispatchEvent(new Event('input',{bubbles:true}));last.focus({preventScroll:true});}
+  function stop(){busy=false;btn.classList.remove('on');btn.textContent='🎤 Sprechen';}
+  btn.addEventListener('pointerdown',ev=>ev.preventDefault());btn.addEventListener('mousedown',ev=>ev.preventDefault());
+  btn.addEventListener('click',()=>{
+    if(busy){rec&&rec.stop();return;}
+    if(!last||!last.isConnected){show('Tippe zuerst in ein Eingabefeld.','bad');return;}
+    rec=new SR();rec.lang='de-DE';rec.interimResults=true;rec.maxAlternatives=3;rec.continuous=false;
+    busy=true;btn.classList.add('on');btn.textContent='⏹ Stopp';show('Ich höre zu … sprich z. B. „y mal y plus y mal Klammer auf minus vier Klammer zu“ oder „y Quadrat minus vier y“.');
+    rec.onresult=ev=>{const r=ev.results[ev.results.length-1];
+      if(!r.isFinal){show('Ich höre: „'+esc(r[0].transcript)+'“');return;}
+      const alts=[...r].map(a=>a.transcript),conv=alts.map(speechToTerm);
+      let best=conv.find(c=>c&&!parseTerm(c).err)||conv[0]||'';
+      if(!best){show('Das habe ich nicht verstanden. Versuch es nochmal – langsam und deutlich.','bad');return;}
+      insert(best);show('Gehört: „'+esc(alts[0])+'“ → <b>'+pretty(best)+'</b><br><span class="small">Kontrolliere den Term und drück dann ✓.</span>','ok');};
+    rec.onerror=ev=>{stop();
+      const t={'not-allowed':'Das Mikrofon ist gesperrt. Erlaube den Zugriff aufs Mikrofon (bzw. Diktieren) in den Einstellungen.','service-not-allowed':'Die Spracherkennung ist auf diesem Gerät gesperrt (z. B. Diktieren ausgeschaltet).','no-speech':'Ich habe nichts gehört. Tippe nochmal auf 🎤 und sprich gleich los.','network':'Für die Spracherkennung braucht das Gerät Internet.','audio-capture':'Es wurde kein Mikrofon gefunden.'}[ev.error];
+      show(t||'Die Spracherkennung hat nicht geklappt. Tippe den Term einfach ein.','bad');};
+    rec.onend=stop;
+    try{rec.start();}catch(e){stop();show('Die Spracherkennung konnte nicht starten.','bad');}
+  });
 })();
 </script>
 </body>
