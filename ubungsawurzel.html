@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zahlenmengen, Quadratzahlen und Wurzeln – Schularbeitsvorbereitung</title>
+<meta name="uebersicht-kapitel" content="Reelle Zahlen">
+<meta name="uebersicht-thema" content="Zahlenmengen, Quadratzahlen und Wurzeln (Schularbeit)">
+<meta name="uebersicht-info" content="ℕ, ℤ, ℚ, 𝕀 definieren und zuordnen, Quadratzahlen bis 15², Quadrieren, Wurzeln im Kopf, Brüche quadrieren und Wurzel aus Brüchen, Wurzelregeln, teilweises Wurzelziehen, irrationale Zahlen – Standard und Standard AHS, danach Arbeitsblatt">
+<meta name="uebersicht-gruppe" content="4. Klasse">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F9FC; --grid:#DCE6F2; --ink:#1B2F6B; --text:#1E2533; --muted:#5B6578;
+  --card:#FFFFFF; --line:#C9D5E6; --ok:#217A4B; --okbg:#E3F4EA; --bad:#B3261E; --badbg:#FBE7E5;
+  --mark:#FFE873; --field:#FFFFFF; --info:#EAF1FB; --accent:#147D92;
+  --c1:#D99A00; --c2:#1E73D6; --c3:#2E8B3A; --c4:#D81B60; --c5:#8E24AA; --c6:#E8590C;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111827; --grid:#1C2638; --ink:#A9C1FF; --text:#E6EAF2; --muted:#9AA4B8;
+    --card:#172033; --line:#2C3A55; --ok:#5FD08E; --okbg:#173326; --bad:#FF8A80; --badbg:#3A1C1C;
+    --mark:#6B5A12; --field:#0F1726; --info:#1A2740; --accent:#5CC8DC;
+    --c1:#FFD54F; --c2:#64B5F6; --c3:#81C784; --c4:#F48FB1; --c5:#CE93D8; --c6:#FFAB76; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111827; --grid:#1C2638; --ink:#A9C1FF; --text:#E6EAF2; --muted:#9AA4B8;
+  --card:#172033; --line:#2C3A55; --ok:#5FD08E; --okbg:#173326; --bad:#FF8A80; --badbg:#3A1C1C;
+  --mark:#6B5A12; --field:#0F1726; --info:#1A2740; --accent:#5CC8DC;
+  --c1:#FFD54F; --c2:#64B5F6; --c3:#81C784; --c4:#F48FB1; --c5:#CE93D8; --c6:#FFAB76; color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; color:var(--text); font-family:"Atkinson Hyperlegible",system-ui,"Segoe UI",Arial,sans-serif;
+  font-size:1.0625rem; line-height:1.5;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.wrap{max-width:60rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1rem;margin:1rem 0 2rem}
+h1{font-family:Fraunces,Georgia,serif;font-weight:800;color:var(--ink);font-size:clamp(2.1rem,6vw,3.5rem);line-height:1.02;margin:0;letter-spacing:-.01em}
+h1 .acc{color:var(--accent)}
+.sub{color:var(--muted);margin:.5rem 0 0;max-width:42rem}
+.top{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.score{font-weight:700;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:999px;padding:.35rem .9rem}
+button{font:inherit;cursor:pointer;border-radius:.5rem;border:2px solid var(--ink);background:var(--ink);color:var(--paper);padding:.45rem .9rem;font-weight:700}
+button.ghost{background:transparent;color:var(--ink)}
+button:disabled{cursor:default;opacity:.45}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+button.mini{font-size:.85rem;padding:.1rem .55rem;background:transparent;color:var(--ink);border-width:1.5px}
+section{background:var(--card);border:2px solid var(--line);border-radius:.75rem;padding:1.25rem 1.25rem 1rem;margin:0 0 1.5rem}
+.head{display:flex;gap:.8rem;align-items:baseline;flex-wrap:wrap}
+.num{font-family:Fraunces,Georgia,serif;font-weight:800;font-size:1.6rem;color:var(--ink);min-width:1.4em}
+h2{font-size:1.15rem;margin:0}
+h3{font-size:1.05rem;margin:0 0 .4rem;color:var(--ink)}
+sup{font-size:.68em;margin-left:.04em}
+.lvl{font-size:.9rem;font-weight:700;color:var(--accent)}
+input{font:inherit;font-size:1.15rem;color:var(--text);background:var(--field);border:2px solid var(--line);border-radius:.4rem;padding:.25rem .5rem}
+input.ok{border-color:var(--ok);background:var(--okbg)}
+input.bad{border-color:var(--bad);background:var(--badbg)}
+.actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.6rem}
+.hint{color:var(--muted);font-size:.95rem;margin:.4rem 0 0}
+.msg{margin:.6rem 0 0;font-size:.97rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.msg.ok{color:var(--ok);font-weight:700}.msg.bad{color:var(--bad)}.msg.shown{color:var(--muted)}
+.prev{color:var(--muted);font-size:1.1rem}
+.prev b{color:var(--text);font-weight:400}
+
+details.info{background:var(--info);border:0;border-left:6px solid var(--ink);border-radius:.5rem;padding:.7rem 1rem;margin:0 0 1.5rem}
+details.info summary{cursor:pointer;font-weight:700;color:var(--ink)}
+details.info p{margin:.5rem 0}
+.copy{background:var(--mark);color:var(--text);border-radius:.4rem;padding:.4rem .7rem;margin:.6rem 0!important}
+.rule{font-size:1.15rem}
+
+.nav{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.dots{display:flex;gap:.3rem;flex-wrap:wrap}
+.dot{width:2.2rem;height:2.2rem;border-radius:50%;padding:0;font-weight:700;font-size:.9rem;background:var(--field);color:var(--ink);border:2px solid var(--line)}
+.dot.started{background:var(--info)}
+.dot.done{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.dot.shown{border-style:dashed}
+.dot.cur{border-color:var(--ink);box-shadow:0 0 0 3px var(--mark)}
+.round{margin-left:auto;color:var(--muted);font-size:.9rem;border:1.5px solid var(--line);border-radius:999px;padding:.1rem .6rem}
+
+.taskline{font-size:1.6rem;margin:.9rem 0 .3rem;display:flex;flex-wrap:wrap;align-items:center;gap:.2rem}
+.tchip{font:inherit;font-size:1.6rem;font-weight:400;background:transparent;color:var(--text);border:0;border-bottom:5px solid transparent;border-radius:0;padding:0 .2rem .05rem;line-height:1.35;cursor:pointer}
+.tchip:hover{background:var(--info)}
+.tchip.k1{border-bottom-color:var(--c1)}.tchip.k2{border-bottom-color:var(--c2)}.tchip.k3{border-bottom-color:var(--c3)}.tchip.k4{border-bottom-color:var(--c4)}.tchip.k5{border-bottom-color:var(--c5)}.tchip.k6{border-bottom-color:var(--c6)}
+.gt{text-decoration:underline;text-decoration-thickness:4px;text-underline-offset:.3em}
+.g1{text-decoration-color:var(--c1)}.g2{text-decoration-color:var(--c2)}.g3{text-decoration-color:var(--c3)}.g4{text-decoration-color:var(--c4)}.g5{text-decoration-color:var(--c5)}.g6{text-decoration-color:var(--c6)}
+.palette{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin:.3rem 0}
+.pal{width:2.6rem;height:2.2rem;padding:0;background:var(--field);border:2px solid var(--line);border-radius:.4rem;position:relative}
+.pal::after{content:"";position:absolute;left:.45rem;right:.45rem;bottom:.55rem;height:5px;border-radius:3px;background:currentColor}
+.pal.u1{color:var(--c1)}.pal.u2{color:var(--c2)}.pal.u3{color:var(--c3)}.pal.u4{color:var(--c4)}.pal.u5{color:var(--c5)}.pal.u6{color:var(--c6)}
+.pal.sel{border-color:var(--ink);box-shadow:0 0 0 3px var(--mark)}
+.markmsg{font-size:.95rem;margin:.3rem 0 0}
+.markmsg.ok{color:var(--ok);font-weight:700}.markmsg.bad{color:var(--bad)}
+.stepcard{border:2px solid var(--ink);border-radius:.6rem;padding:.8rem 1rem;margin-top:1rem}
+.stepcard.done{border-color:var(--ok)}
+.donetxt{color:var(--ok);font-weight:700}
+.row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin:.5rem 0;font-size:1.3rem}
+.row input{width:18rem;max-width:100%}
+.donebox{margin-top:1rem;padding:.8rem 1rem;border-radius:.6rem;background:var(--okbg);border:2px solid var(--ok);display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+.donebox b{color:var(--ok)}
+
+.heft{overflow-x:auto;margin:1.2rem 0 .5rem;border:2px dashed var(--line);border-radius:.6rem;background:var(--paper);padding:.8rem 1rem}
+.heft .hefttitle{margin:0 0 .3rem;font-weight:700;color:var(--muted);font-size:.95rem}
+.heft .hl{font-size:1.35rem;color:var(--ink);margin:.3rem 0}
+.heft .fin{font-weight:700}
+.heft .small{font-size:1rem;color:var(--muted)}
+.heft .copy{font-size:1rem}
+
+.startcard{border-color:var(--ink);border-width:3px}
+.startcard h2{font-family:Fraunces,Georgia,serif;font-size:1.5rem;color:var(--ink)}
+#pname{width:16rem;max-width:100%;font-size:1.15rem}
+#startDone{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.who{font-weight:700;color:var(--ink);display:inline-flex;align-items:center;gap:.4rem;font-size:1.1rem}
+#codeAsk{margin-top:1rem}
+#codeAsk summary{cursor:pointer;color:var(--ink);font-weight:700}
+#pcode{width:17rem;max-width:100%;font-family:ui-monospace,Consolas,"Courier New",monospace;text-transform:uppercase;letter-spacing:.05em}
+#pnameErr{color:var(--bad);margin:.6rem 0 0}
+#startMsg{flex-basis:100%;margin:0;color:var(--ok);font-weight:700}
+#startMsg:empty{display:none}
+#codeBox{flex-basis:100%;background:var(--info);border-left:6px solid var(--ink);border-radius:.5rem;padding:.7rem 1rem}
+#codeBox p{margin:.3rem 0}
+.code{font-family:ui-monospace,Consolas,"Courier New",monospace;font-size:1.35rem;font-weight:700;letter-spacing:.06em;color:var(--ink);word-break:break-all}
+.finish{display:flex;justify-content:center;margin:0 0 1.5rem}
+#summary{border-color:var(--ink);border-width:3px}
+#summary .who{margin:.4rem 0 0;color:var(--muted)}
+#summary .who b{color:var(--text)}
+.summsg{font-size:1.2rem;font-weight:700;color:var(--ink);margin:.6rem 0 1rem}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:30rem}
+th,td{text-align:left;padding:.4rem .6rem;border-bottom:1px solid var(--line)}
+td.c,th.c{text-align:center}
+tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--ink)}
+body.locked #main{opacity:.35;filter:grayscale(.4);pointer-events:none;user-select:none}
+
+#pad{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:3px solid var(--ink);
+  padding:.5rem .6rem calc(.5rem + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 16px rgba(27,47,107,.15)}
+#pad .padtop{display:flex;align-items:center;gap:.5rem;max-width:34rem;margin:0 auto .4rem;color:var(--muted);font-size:.9rem}
+#pad .padtop span{margin-right:auto;font-weight:700;color:var(--ink)}
+#pad .keys{display:grid;grid-template-columns:repeat(7,1fr);gap:.3rem;max-width:34rem;margin:0 auto}
+#pad .keys button{padding:.55rem 0;font-size:1.15rem;font-weight:700;background:var(--field);color:var(--text);border:2px solid var(--line);border-radius:.45rem;touch-action:manipulation}
+#pad .keys button.gone{display:none}
+#pad .keys button.off{visibility:hidden;pointer-events:none}
+#pad .keys button.var{font-style:italic;font-family:Georgia,serif}
+#pad .keys button.op{background:var(--info)}
+#pad .keys button.go{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+body.padon .wrap{padding-bottom:20rem}
+
+.levels{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden;margin-top:1rem}
+.levels button{border:0;border-radius:0;background:transparent;color:var(--ink);padding:.45rem 1.1rem}
+.levels button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.sec{background:var(--card);border:2px solid var(--line);border-radius:.75rem;padding:1.1rem 1.1rem .9rem;margin:0 0 1.5rem}
+.sec .head .num{min-width:1.4em}
+.sec .info{background:var(--info);border-left:6px solid var(--ink);border-radius:.5rem;padding:.6rem .9rem;margin:.7rem 0 0}
+.sec .info p{margin:.2rem 0}
+.tasks{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(17rem,100%),1fr));gap:.7rem 1.2rem;margin:.9rem 0}
+.tasks.wide{grid-template-columns:1fr}
+.task{display:flex;flex-direction:column;gap:.35rem;padding:.5rem .6rem;border-radius:.55rem;border:2px solid var(--line);background:var(--field)}
+.task.ok{background:var(--okbg);border-color:var(--ok)}
+.task.bad{background:var(--badbg);border-color:var(--bad)}
+.task.shown{border-style:dashed}
+.trow{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;font-size:1.2rem}
+.lbl{font-weight:700;color:var(--ink)}
+.task input{width:6.5rem;font-size:1.15rem}
+.task .sol{font-size:.95rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.task .sol.bad{color:var(--bad)}.task .sol.ok{color:var(--ok);font-weight:700}.task .sol.shown{color:var(--muted)}
+.choice{display:inline-flex;gap:.3rem;flex-wrap:wrap}
+.choice button{min-width:2.8rem;font-size:1.25rem;font-weight:700;background:var(--field);color:var(--text);border:2px solid var(--line);padding:.15rem .6rem}
+.choice button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.big{font-size:1.4rem;font-family:Georgia,"Times New Roman",serif}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1;margin:0 .1em;font-size:.85em}
+.fr>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .2em}
+.fr>span:last-child{padding:0 .2em}
+.nl{width:100%;height:auto;display:block;touch-action:manipulation}
+.nl .axis{stroke:var(--text);stroke-width:2}
+.nl .tk{stroke:var(--text);stroke-width:1.5}
+.nl .tk.minor{stroke:var(--muted);stroke-width:1}
+.nl text{font-size:13px;fill:var(--text);font-family:"Atkinson Hyperlegible",sans-serif}
+.nl .pt{fill:var(--accent)}
+.nl .ptl{font-weight:700;fill:var(--accent);font-size:15px}
+.nl .mine{fill:#E8590C}
+.nl .hitarea{fill:transparent;cursor:crosshair}
+.tiles{display:flex;flex-wrap:wrap;gap:.35rem}
+.tile{font-size:1.2rem;background:var(--field);color:var(--text);border:2px solid var(--line);padding:.15rem .6rem;font-weight:400;font-family:Georgia,serif}
+.tile:disabled{opacity:.3}
+.seq{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;min-height:2.4rem;border-top:2px dashed var(--line);padding-top:.4rem}
+.seq .lt{color:var(--muted);font-size:1.2rem}
+.seq .pl{font-size:1.2rem;border:2px solid var(--ink);border-radius:.45rem;padding:.1rem .5rem;font-family:Georgia,serif}
+.setbtn{min-width:3rem;font-size:1.3rem;font-family:Georgia,serif}
+.sumafter{margin-top:.8rem;padding:.6rem .9rem;border-radius:.5rem;background:var(--mark);color:var(--text)}
+.secactions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.secactions .res{color:var(--muted);font-weight:700}
+.secactions .round{margin-left:auto}
+.rnote{color:var(--muted);font-weight:400;font-size:.9em}
+button.ready{background:var(--ink);color:var(--paper)}
+.zq{margin:.2rem 0 .5rem;line-height:1.6}
+.opts{display:flex;flex-direction:column;gap:.4rem}
+.opt{font:inherit;text-align:left;font-weight:400;background:var(--field);color:var(--text);border:2px solid var(--line);padding:.45rem .7rem}
+.opt[aria-pressed="true"]{border-color:var(--ink);background:var(--info)}
+.mopt{font:inherit;font-size:1.15rem;background:var(--field);color:var(--text);border:2px solid var(--line);font-weight:400;min-width:3.4rem}
+.mopt[aria-pressed="true"]{background:var(--mark);border-color:var(--ink)}
+.rf{display:flex;flex-direction:column;gap:.45rem}
+.rfrow{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:.4rem}
+.rft{flex:1 1 12rem;font-size:1.15rem}
+.rfrow .choice button{min-width:2.8rem;font-weight:700;font-size:1.1rem}
+.trow.big{display:block;line-height:2.3;font-size:1.3rem}
+.trow.big input{vertical-align:middle;font-size:1.2rem;text-align:center}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1;margin:0 .1em;font-size:.9em}
+.fr>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .2em}
+.rt{white-space:nowrap}.rt .rad{border-top:1.5px solid currentColor;padding:0 .15em;margin-left:.05em}
+.gridtab{overflow-x:auto}.gridtab table{border-collapse:collapse;margin:.3rem 0;font-size:1.15rem}
+.gridtab th,.gridtab td{border:1px solid var(--line);padding:.2rem .35rem;text-align:center;min-width:2.9rem}
+.gridtab th{background:var(--info)}.gridtab td.gz{min-width:4.5rem;white-space:nowrap}
+.gx{width:2.6rem;height:2.3rem;font:700 1.3rem system-ui;background:var(--field);border:2px solid var(--line);border-radius:.4rem;color:var(--ink)}
+.gx[aria-pressed="true"]{background:var(--mark);border-color:var(--ink)}
+.vlist{flex-direction:column;align-items:stretch}.vlist .mopt{text-align:left;font-size:1rem;min-width:0}
+</style></head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Zahlenmengen, Quadrate <span class="acc">und Wurzeln</span></h1>
+      <p class="sub">Zahlenmengen ℕ, ℤ, ℚ, 𝕀, Quadratzahlen, Quadrieren, Wurzeln im Kopf, Brüche quadrieren und Wurzel ziehen, Wurzelregeln, teilweises Wurzelziehen und irrationale Zahlen – Schularbeitsvorbereitung. Jede Aufgabe wird sofort kontrolliert. Jede Übung hat ihre eigene „Neue Runde“.</p>
+      <div class="levels" role="group" aria-label="Niveau">
+        <button type="button" data-level="std" aria-pressed="true">Standard</button>
+        <button type="button" data-level="ahs" aria-pressed="false">Standard AHS</button>
+      </div>
+    </div>
+    <div class="top"><span class="score" id="score">0 von 0 richtig</span></div>
+  </header>
+  <section id="start" class="startcard">
+    <div id="startAsk">
+      <h2>Wie heißt du?</h2>
+      <p class="hint">Gib zuerst deinen Namen ein. Er steht am Ende in deiner Auswertung und kann danach nicht mehr geändert werden. Hast du auf diesem Gerät schon geübt, machst du automatisch dort weiter, wo du aufgehört hast.</p>
+      <div class="actions"><input id="pname" placeholder="Vor- und Nachname" autocomplete="name" aria-label="Dein Name"><button id="startBtn" type="button">Los geht’s</button></div>
+      <details id="codeAsk">
+        <summary>Auf einem anderen Gerät angefangen? Code eingeben</summary>
+        <p class="hint">Schreib oben deinen Namen genau wie auf dem anderen Gerät und tippe hier den Code ein.</p>
+        <div class="actions"><input id="pcode" placeholder="z. B. K7MP-2XQ9" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Code vom anderen Gerät"></div>
+      </details>
+      <p id="pnameErr" hidden></p>
+    </div>
+    <div id="startDone" hidden>
+      <span class="who">👤 <b id="pnameShow"></b></span>
+      <button type="button" class="mini" id="codeBtn" aria-expanded="false">Auf anderem Gerät weitermachen</button>
+      <p id="startMsg" aria-live="polite"></p>
+      <div id="codeBox" hidden>
+        <p>Dein Code: <span class="code" id="codeShow"></span> <button type="button" class="mini" id="codeCopy">Kopieren</button></p>
+        <p class="hint">Öffne die Übung auf dem anderen Gerät, gib <b>genau denselben Namen</b> ein und tippe diesen Code ein. Der Code ändert sich, während du weiterarbeitest – schreib ihn dir erst auf, wenn du hier aufhörst.</p>
+      </div>
+    </div>
+  </section>
+  <div id="main">
+    <div id="secs"></div>
+    <div class="finish" style="gap:.6rem;flex-wrap:wrap"><button class="ghost" id="showSum" type="button">Auswertung anzeigen</button><button class="ghost" id="newAll" type="button">Alle Übungen neu</button></div>
+
+    <details class="info" id="howto" open>
+      <summary>Zusammenfassung – schreib sie in dein Heft!</summary>
+      <p class="copy">✏️ <b>Schreib diese Zusammenfassung mit den Beispielen ordentlich in dein Heft ab.</b></p>
+      <p><b>Zahlenmengen:</b> ℕ = {0, 1, 2, …} · ℤ = {…, −2, −1, 0, 1, 2, …} · ℚ = alle Zahlen, die man als Bruch schreiben kann (auch endliche und periodische Dezimalzahlen) · 𝕀 = irrationale Zahlen: unendlich, nicht periodisch, nicht als Bruch darstellbar · ℝ = ℚ ∪ 𝕀 · <b>ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ</b></p>
+      <p><b>Quadratzahlen bis 15²:</b> 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225 – sie enden nie auf 2, 3, 7 oder 8.</p>
+      <p><b>Quadrieren:</b> 30² = 900 (Nullen verdoppeln) · 0,3² = 0,09 (Kommastellen verdoppeln) · (a · b)² = a² · b² · (a/b)² = a²/b² · (−4)² = 16, aber −4² = −16</p>
+      <p><b>Brüche:</b> (2/3)² = 4/9 · (−3/5)² = 9/25, aber −(3/5)² = −9/25 · √(16/49) = 4/7 · zuerst kürzen: √(8/18) = √(4/9) = 2/3</p>
+      <p><b>Wurzeln:</b> √144 = 12 · √0,09 = 0,3 · √1600 = 40 · √(9/16) = 3/4 · √(a · b) = √a · √b · √(a : b) = √a : √b · <b>Achtung:</b> √(a + b) ≠ √a + √b</p>
+      <p><b>Wurzel aus einem Produkt:</b> √(4 · 7) = √4 · √7 = 2√7 · √(3 · 25) = 5√3 – aus der Quadratzahl die Wurzel ziehen, die andere Zahl bleibt unter der Wurzel.</p>
+      <p><b>Teilweises Wurzelziehen:</b> größte Quadratzahl suchen: √72 = √(36 · 2) = 6√2 · mit Primfaktoren: √180 = √(2 · 2 · 3 · 3 · 5) = 2 · 3 · √5 = 6√5</p>
+      <p><b>Wurzeln mit Variablen</b> (Variablen positiv): Hochzahl halbieren: √(x²) = x · √(a⁴) = a² · √(25a²) = 5a · √(12x²) = √(4x² · 3) = 2x√3 · √(x³) = √(x² · x) = x√x</p>
+      <p><b>Irrationale Zahlen:</b> √2, √3, √5, π, 0,1010010001… – aber √16 = 4 ist rational, 0,3̅ = 1/3 auch!</p>
+      <p class="hint">Eingabe: Dezimalzahl mit Komma (0,25), Bruch mit / (3/4), Wurzel mit √ aus der Eingabehilfe (2√7).</p>
+    </details>
+
+    <section id="summary" hidden>
+      <div class="head"><h2 id="sumTitle">Auswertung</h2></div>
+      <p id="sumWho" class="who"></p>
+      <p id="sumMsg" class="summsg"></p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Übung</th><th class="c">beim 1. Versuch</th><th class="c">mit Fehlern</th><th class="c">Lösung angesehen</th><th class="c">offen</th></tr></thead>
+        <tbody id="sumBody"></tbody>
+        <tfoot id="sumFoot"></tfoot>
+      </table></div>
+    </section>
+  </div>
+</div>
+
+<div id="pad" hidden role="group" aria-label="Eingabehilfe">
+  <div class="padtop"><span>Eingabehilfe</span>
+    <button type="button" class="mini" id="padSys">Handy-Tastatur einblenden</button>
+    <button type="button" class="mini" id="padHide" aria-label="Eingabehilfe schließen">✕</button>
+  </div>
+  <div class="keys">
+    <button type="button" data-ins="7">7</button><button type="button" data-ins="8">8</button><button type="button" data-ins="9">9</button><button type="button" class="op" data-ins="-" aria-label="minus">−</button><button type="button" class="op" data-ins="," aria-label="Komma">,</button><button type="button" class="op" data-act="del" aria-label="Löschen">⌫</button><button type="button" class="op" data-act="clr" aria-label="Feld leeren">C</button>
+    <button type="button" data-ins="4">4</button><button type="button" data-ins="5">5</button><button type="button" data-ins="6">6</button><button type="button" class="op" data-ins="/" aria-label="Bruchstrich">/</button><button type="button" class="op" data-ins="√" aria-label="Wurzel">√</button><button type="button" class="op" data-act="left" aria-label="Cursor nach links">◀</button><button type="button" class="op" data-act="right" aria-label="Cursor nach rechts">▶</button>
+    <button type="button" data-ins="1">1</button><button type="button" data-ins="2">2</button><button type="button" data-ins="3">3</button><button type="button" data-ins="0">0</button><button type="button" class="op" data-ins="·" aria-label="mal">·</button><button type="button" class="go" data-act="ok" style="grid-column:span 2">✓ fertig</button>
+    <button type="button" class="var vk" data-ins="x">x</button><button type="button" class="var vk" data-ins="y">y</button><button type="button" class="var vk" data-ins="a">a</button><button type="button" class="var vk" data-ins="b">b</button><button type="button" class="op vk" data-ins="²" aria-label="hoch 2">▢²</button><button type="button" class="op vk" data-ins="³" aria-label="hoch 3">▢³</button>
+  </div>
+</div>
+<script>
+/* ================= Zahlenmengen · Quadratzahlen · Wurzeln ================= */
+const STORE='zahlenmengen10:';
+const inpF=(f,val,label,ph,w)=>'<input class="pin" data-f="'+f+'" value="'+esc(val||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="'+label+'"'+(ph?' placeholder="'+ph+'"':'')+' style="width:'+(w||'5rem')+'">';
+const cm=x=>{let s=String(Math.round(x*1e6)/1e6);return s.replace('-','−').replace('.',',');};
+const FR=(a,b)=>'<span class="fr"><span>'+a+'</span><span>'+b+'</span></span>';
+const RT=x=>'<span class="rt">√<span class="rad">'+x+'</span></span>';
+const ggt=(x,y)=>y?ggt(y,x%y):x;
+/* Zahl lesen: 12 · −3 · 0,25 · 3/4 · 1 1/2 */
+/* Wurzelausdruck lesen: 2√7 · 2·√7 · 2*√7 · √7 → {a, b}; ohne √ → null */
+function readRoot(s){s=String(s||'').replace(/\s+/g,'').replace(/[·*×]/g,'');const m=s.match(/^(\d+)?√\(?(\d+)\)?$/);return m?{a:m[1]?+m[1]:1,b:+m[2]}:null;}
+function num(s){s=String(s||'').replace(/[−–—]/g,'-').replace(/\s+/g,' ').trim().replace(/[a-zA-Z°€%²]+$/,'').trim();if(!s)return NaN;
+  let m=s.match(/^(-?)(\d+) (\d+)\/(\d+)$/);if(m)return (m[1]?-1:1)*(+m[2]+m[3]/m[4]);
+  m=s.match(/^(-?\d+(?:,\d+)?)\/(\d+(?:,\d+)?)$/);if(m)return +m[1].replace(',','.')/+m[2].replace(',','.');
+  s=s.replace(',','.');return /^-?\d+(\.\d+)?$/.test(s)?+s:NaN;}
+const near=(a,b)=>Math.abs(a-b)<1e-9*Math.max(1,Math.abs(b));
+/* ---------- gemeinsamer Aufgabentyp ---------- */
+const ZM=(gen)=>({
+  complete(t,s){if(t.type==='pfz')return (s.v.z||'').trim()!==''&&(s.v.r||'').trim()!=='';if(t.type==='grid')return true;if(t.type==='vfrac')return (s.v.r||'').trim()!=='';if(t.type==='vroot')return (s.v.r||'').trim()!=='';if(t.type==='root')return (s.v.r||'').trim()!=='';if(t.type==='mc')return s.v.c!==undefined;if(t.type==='multi')return true;if(t.type==='rf')return t.items.every((_,k)=>s.v['r'+k]!==undefined);
+    return t.parts.every((_,k)=>(s.v['n'+k]||'').trim()!=='');},
+  incomplete:'Beantworte zuerst alles.',autoCheck:true,gen,
+  render(t,s){let h='<div class="zq">'+t.q+'</div>';
+    if(t.type==='mc')h+='<div class="opts">'+t.o.map((o,k)=>'<button type="button" class="opt" data-set="c" data-v="'+k+'" aria-pressed="'+(s.v.c===String(k))+'">'+o+'</button>').join('')+'</div>';
+    if(t.type==='multi')h+='<div class="trow choice'+(t.vertical?' vlist':'')+'">'+t.o.map((o,k)=>'<button type="button" class="mopt" data-act="m'+k+'" aria-pressed="'+(s.v['m'+k]==='1')+'">'+o+'</button>').join('')+'<button type="button" class="mini" data-act="chk">Prüfen</button></div>';
+    if(t.type==='rf')h+='<div class="rf">'+t.items.map((it,k)=>'<div class="rfrow"><div class="rft">'+it+'</div><div class="choice">'+t.lab.map((l,j)=>'<button type="button" data-set="r'+k+'" data-v="'+j+'" aria-pressed="'+(s.v['r'+k]===String(j))+'">'+l+'</button>').join('')+'</div></div>').join('')+'</div>';
+    if(t.type==='pfz')h+='<div class="trow big">'+t.n+' = '+inpF('z',s.v.z,'Primfaktorzerlegung','z. B. 2·2·3','10rem')+'</div><div class="trow big">'+RT(t.n)+' = '+inpF('r',s.v.r,'Ergebnis','z. B. 2√3','6rem')+'</div>';
+    if(t.type==='vfrac')h+='<div class="trow big">'+t.lhs+' = '+inpF('r',s.v.r,'Ergebnis als Bruch','z. B. x/5','7rem')+'</div>';
+    if(t.type==='grid')h+='<div class="gridtab"><table><tr><th>Zahl</th>'+t.cols.map(c=>'<th>'+c+'</th>').join('')+'</tr>'+t.rows.map((r,k)=>'<tr><td class="gz">'+r+'</td>'+t.cols.map((c,j)=>'<td><button type="button" class="gx" data-act="x'+k+'_'+j+'" aria-pressed="'+(s.v['x'+k+'_'+j]==='1')+'" aria-label="'+c+'">'+(s.v['x'+k+'_'+j]==='1'?'✗':'')+'</button></td>').join('')+'</tr>').join('')+'</table></div><div class="trow"><button type="button" class="mini" data-act="chk">Prüfen</button></div>';
+    if(t.type==='vroot')h+='<div class="trow big">'+t.lhs+' = '+inpF('r',s.v.r,'Ergebnis','z. B. 2x√3','8rem')+'</div>';
+    if(t.type==='root')h+='<div class="trow big">'+t.lhs+' = '+inpF('r',s.v.r,'Ergebnis mit Wurzel','z. B. 2√7','7rem')+'</div>';
+    if(t.type==='nums')h+='<div class="trow big">'+t.parts.map((p,k)=>p[0]+inpF('n'+k,s.v['n'+k],'Antwort '+(k+1),'',p[3]||'5rem')+(p[1]||'')).join(' ')+'</div>';
+    return h;},
+  onAct(t,s,a){if(a==='chk')return 'check';if(a[0]==='x'){s.v[a]=s.v[a]==='1'?'0':'1';s.msg=null;return null;}if(a[0]==='m'){s.v[a]=s.v[a]==='1'?'0':'1';s.msg=null;}return null;},
+  check(t,s){
+    if(t.type==='mc')return +s.v.c===t.a?true:t.h;
+    if(t.type==='multi'){const got=t.o.map((_,k)=>s.v['m'+k]==='1');if(!got.some(Boolean))return {soft:'Tippe alle zutreffenden an.'};return got.every((g,k)=>g===t.a.includes(k))?true:t.h;}
+    if(t.type==='pfz'){const f=readFactors(s.v.z);if(!f)return {soft:'Schreib die Primfaktoren mit Malpunkt, z. B. 2 · 2 · 3 · 3 · 5.'};
+      const prod=f.reduce((x,y)=>x*y,1);if(prod!==t.n)return 'Das Produkt deiner Faktoren ist '+prod+', nicht '+t.n+'. Teile immer wieder durch die kleinste Primzahl.';
+      const np=f.find(p=>!isPrime(p));if(np)return np+' ist keine Primzahl – zerlege '+np+' noch weiter.';
+      const u=readRoot(s.v.r);if(!u){const v=num(s.v.r);return isNaN(v)?{soft:'Schreib das Ergebnis mit √, z. B. 2√3.'}:'Das Ergebnis ist keine ganze Zahl – schreib es mit Wurzel, z. B. 2√3.';}
+      if(u.a===t.a&&u.b===t.b)return true;
+      if(u.a*u.a*u.b===t.a*t.a*t.b)return u.b>t.b?'Die Zerlegung stimmt! Unter der Wurzel ist aber noch ein Paar – zieh es auch heraus.':'Prüfe nochmal, welche Faktoren ein Paar bilden.';
+      return 'Die Zerlegung stimmt! Jetzt: Aus jedem Paar kommt ein Faktor vor die Wurzel, alle anderen bleiben darunter. '+t.h;}
+    if(t.type==='grid'){let w=0,miss=0,extra=0;t.rows.forEach((_,k)=>t.cols.forEach((_,j)=>{const g=s.v['x'+k+'_'+j]==='1'?1:0;if(g!==t.a[k][j]){w++;if(g)extra++;else miss++;}}));
+      if(!w)return true;return (miss&&!extra?'Es fehlen noch Kreuze. ':extra&&!miss?'Da sind Kreuze zu viel. ':'')+t.h;}
+    if(t.type==='vfrac'){const raw=String(s.v.r||'').replace(/\s+/g,'').replace(/[()·]/g,''),p=raw.split(/[\/:]/);
+      if(p.length!==2)return {soft:'Schreib das Ergebnis als Bruch mit /, z. B. x/5 oder 2a/3.'};const u=readMono(p[0]),d=+p[1];
+      if(!u||!d)return {soft:'Schreib das Ergebnis als Bruch mit /, z. B. x/5 oder 2a/3.'};
+      if(Math.abs(u.c/d-t.nc/t.d)<1e-9&&vEq(u.v,t.nv))return true;
+      if(vEq(u.v,{[Object.keys(t.nv)[0]]:2}))return 'Bei der Variable wird die Hochzahl halbiert: √(x²) = x.';return t.h;}
+    if(t.type==='vroot'){const u=readVRoot(s.v.r);if(!u)return {soft:'Schreib das Ergebnis z. B. als 3a, 2x√3 oder x√7 – Hochzahlen mit der Taste ².'};
+      if(u.o.c===t.oc&&vEq(u.o.v,t.ov)&&u.r.c===t.rc&&vEq(u.r.v,t.rv))return true;
+      /* gleicher Wert, aber noch nicht fertig? */
+      const radC=u.o.c*u.o.c*u.r.c,radV={};Object.keys(u.o.v).forEach(n=>radV[n]=2*u.o.v[n]);Object.keys(u.r.v).forEach(n=>radV[n]=(radV[n]||0)+u.r.v[n]);
+      if(radC===t.radC&&vEq(radV,t.radV))return 'Richtig umgeformt, aber es geht noch weiter: Unter der Wurzel steckt noch eine Quadratzahl oder ein Quadrat einer Variable.';
+      if(u.o.c===t.oc&&u.r.c===t.rc)return 'Die Zahlen stimmen – kontrolliere die Variablen: Beim Wurzelziehen wird die Hochzahl halbiert, z. B. √(x²) = x, √(a⁴) = a².';
+      if(vEq(u.o.v,t.ov)&&vEq(u.r.v,t.rv))return 'Die Variablen stimmen – kontrolliere die Zahl: Suche die größte Quadratzahl in '+t.radC+'.';
+      return t.h;}
+    if(t.type==='root'){const u=readRoot(s.v.r);
+      if(!u){const v=num(s.v.r);return isNaN(v)?{soft:'Schreib das Ergebnis mit dem Wurzelzeichen √ aus der Eingabehilfe, z. B. 2√7.'}:'Das Ergebnis ist keine ganze Zahl – schreib es mit Wurzel, z. B. 2√7.';}
+      if(u.a===t.a&&u.b===t.b)return true;
+      if(u.a*u.a*u.b===t.a*t.a*t.b)return u.b>t.b?'Richtig umgeformt, aber es geht noch weiter: Unter der Wurzel steckt noch eine Quadratzahl.':'Die Zahl unter der Wurzel ist zu klein – prüfe deine Zerlegung.';
+      return t.h;}
+    if(t.type==='rf'){const w=t.items.filter((_,k)=>+s.v['r'+k]!==t.a[k]).length;return w?(w===1?'Eine Zeile stimmt noch nicht. ':w+' Zeilen stimmen noch nicht. ')+t.h:true;}
+    for(let k=0;k<t.parts.length;k++){const u=num(s.v['n'+k]);if(isNaN(u))return {soft:'Schreib eine Zahl, z. B. 12, 0,25 oder 3/4.'};if(!near(u,t.parts[k][2]))return (t.hk&&t.hk(k,u))||t.h;}
+    return true;},
+  solve(t,s){if(t.type==='mc')s.v.c=String(t.a);if(t.type==='multi')t.o.forEach((_,k)=>s.v['m'+k]=t.a.includes(k)?'1':'0');
+    if(t.type==='rf')t.items.forEach((_,k)=>s.v['r'+k]=String(t.a[k]));if(t.type==='root')s.v.r=(t.a===1?'':t.a)+'√'+t.b;if(t.type==='pfz'){s.v.z=t.f.join(' · ');s.v.r=t.a+'√'+t.b;}if(t.type==='vfrac')s.v.r=(t.nc===1?'':t.nc)+Object.keys(t.nv)[0]+'/'+t.d;if(t.type==='grid')t.rows.forEach((_,k)=>t.cols.forEach((_,j)=>s.v['x'+k+'_'+j]=t.a[k][j]?'1':'0'));if(t.type==='vroot')s.v.r=monoP(t.oc,t.ov).replace(/\^2/g,'²').replace(/\^3/g,'³')+(t.rc===1&&!Object.keys(t.rv).length?'':'√'+monoP(t.rc,t.rv));if(t.type==='nums')t.parts.forEach((p,k)=>s.v['n'+k]=p[4]||cm(p[2]));},
+  solH(t){if(t.type==='pfz')return t.sol;if(t.type==='grid')return t.rows.map((r,k)=>r+': '+t.cols.filter((c,j)=>t.a[k][j]).join(', ')).join(' · ');if(t.type==='vfrac')return t.sol;if(t.type==='mc')return t.o[t.a];if(t.type==='multi')return t.a.map(k=>t.o[k]).join(', ');if(t.type==='rf')return t.items.map((it,k)=>it+': '+t.lab[t.a[k]]).join(' · ');
+    return t.sol||t.parts.map(p=>p[0]+(p[4]||cm(p[2]))+(p[1]||'')).join(' ');}
+});
+function mix(t){if(t.type==='mc'){const idx=shuffle(t.o.map((_,k)=>k)),o=t.o;t.o=idx.map(k=>o[k]);t.a=idx.indexOf(t.a);}
+  if(t.type==='multi'){const idx=shuffle(t.o.map((_,k)=>k)),o=t.o;t.o=idx.map(k=>o[k]);t.a=t.a.map(j=>idx.indexOf(j)).sort((x,y)=>x-y);}return t;}
+const SET=['ℕ','ℤ','ℚ','𝕀'];
+
+/* 1 Zahlenmengen definieren */
+const DEF_STD=[
+ ['Jede natürliche Zahl ist auch eine ganze Zahl.',0],['Jede ganze Zahl ist auch eine natürliche Zahl.',1],['Jede ganze Zahl ist auch eine rationale Zahl.',0],
+ ['Jede rationale Zahl kann man als Bruch zweier ganzer Zahlen schreiben.',0],['Zu ℚ gehören auch alle endlichen und periodischen Dezimalzahlen.',0],['−5 ist eine natürliche Zahl.',1],
+ ['Irrationale Zahlen (𝕀) sind unendliche, nicht periodische Dezimalzahlen.',0],['0 gehört zu den natürlichen Zahlen ℕ.',0],['√2 ist eine rationale Zahl.',1],['ℚ und 𝕀 zusammen ergeben die reellen Zahlen ℝ.',0],
+ ['Jede Bruchzahl ist auch eine ganze Zahl.',1],['π gehört zu ℚ, weil π ≈ 3,14 ist.',1]];
+const DEF_AHS=DEF_STD.concat([['ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ',0],['Eine Zahl kann gleichzeitig rational und irrational sein.',1],['Zwischen zwei rationalen Zahlen liegt immer noch eine weitere rationale Zahl.',0],['Die Summe zweier irrationaler Zahlen ist immer irrational.',1]]);
+const DEFMC=[
+ {q:'Welche Menge sind die <b>natürlichen Zahlen</b>?',o:['ℕ = {0, 1, 2, 3, …}','ℕ = {…, −2, −1, 0, 1, 2, …}','ℕ = alle Brüche','ℕ = {1, 2, 3} ohne Fortsetzung'],a:0},
+ {q:'Welche Menge sind die <b>ganzen Zahlen</b>?',o:['ℤ = {…, −2, −1, 0, 1, 2, …}','ℤ = {0, 1, 2, 3, …}','ℤ = alle Dezimalzahlen','ℤ = nur negative Zahlen'],a:0},
+ {q:'Was sind <b>rationale Zahlen</b> (ℚ)?',o:['Zahlen, die man als Bruch a/b mit ganzen Zahlen a, b (b ≠ 0) schreiben kann','nur die positiven Zahlen','Zahlen mit unendlich vielen Kommastellen ohne Periode','nur die ganzen Zahlen'],a:0},
+ {q:'Was sind <b>irrationale Zahlen</b> (𝕀)?',o:['unendliche, nicht periodische Dezimalzahlen – man kann sie nicht als Bruch schreiben','alle negativen Zahlen','Zahlen mit einer Periode, z. B. 0,333…','alle Wurzeln'],a:0},
+ {q:'Welche Darstellung stimmt?',o:['ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ','ℚ ⊂ ℤ ⊂ ℕ ⊂ ℝ','ℤ ⊂ ℕ ⊂ ℚ ⊂ ℝ','ℝ ⊂ ℚ ⊂ ℤ ⊂ ℕ'],a:0}];
+function genDef(i,lvl){
+  if(i<2){const it=DEFMC[i===0?rnd(0,2):rnd(3,4)];return mix({type:'mc',q:it.q,o:it.o.slice(),a:it.a,h:'ℕ ⊂ ℤ ⊂ ℚ: Jede Menge enthält die vorige. 𝕀 sind die Zahlen, die man nicht als Bruch schreiben kann.'});}
+  const pool=shuffle((lvl==='std'?DEF_STD:DEF_AHS).slice()).slice(0,4);
+  return {type:'rf',q:'<b>Richtig oder falsch?</b>',items:pool.map(p=>p[0]),lab:['richtig','falsch'],a:pool.map(p=>p[1]),h:'ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ. Rationale Zahlen lassen sich als Bruch schreiben, irrationale (𝕀) nicht.'};
+}
+/* 2 Zahlen den Zahlenmengen zuordnen */
+function zahlPool(lvl){
+  const a=rnd(2,20),b=rnd(2,9),q=pick([4,9,16,25,36,49,64,81,100,121,144]),nq=pick([2,3,5,6,7,8,10,11,12,13,15]),p=rnd(1,9);
+  const L=[[String(a),0],['−'+b,1],['0',0],[cm(rnd(1,99)/100),2],[FR(rnd(1,4),pick([3,5,7])),2],[RT(q),0],[RT(nq),3],['π',3],['−'+RT(q),1],['0,'+p+'<span style="text-decoration:overline">'+p+'</span>',2],
+    [FR(2*b,2),0],['−'+cm(rnd(11,99)/10),2],[RT(nq)+' · '+RT(nq),0]];
+  if(lvl==='ahs')L.push(['2 + '+RT(nq),3],[FR(RT(q),2),Number.isInteger(Math.sqrt(q)/2)?0:2],['0,1010010001…',3],['−'+FR(RT(nq*nq*4),2),1]);
+  return L;
+}
+function genZuord(i,lvl){const L=shuffle(zahlPool(lvl)).slice(0,5);
+  return {type:'rf',q:'In welchem <b>kleinsten</b> Zahlenbereich liegt die Zahl?',items:L.map(x=>x[0]),lab:SET,a:L.map(x=>x[1]),h:'Zuerst ausrechnen: √16 = 4 ist natürlich, 6/2 = 3 auch. Brüche und Dezimalzahlen mit Ende oder Periode sind rational (ℚ). √ von Nicht-Quadratzahlen und π sind irrational (𝕀).'};}
+/* 3 Quadratzahlen */
+function genQuad(i,lvl){
+  if(i%3===2){const sq=rnd(4,15)**2,noq=pick([sq+rnd(1,5),sq-rnd(1,3)*2,rnd(2,9)*100+pick([2,3,7,8])]),cand=shuffle([sq,noq,(rnd(4,15))**2,rnd(11,99)*10+pick([2,3,7,8])]).slice(0,4);
+    const isQ=n=>Number.isInteger(Math.sqrt(n));
+    return {type:'rf',q:'<b>Ist die Zahl eine Quadratzahl?</b> Tipp: Quadratzahlen enden nie auf 2, 3, 7 oder 8.',items:cand.map(String),lab:['ja','nein'],a:cand.map(n=>isQ(n)?0:1),h:'Endet die Zahl auf 2, 3, 7 oder 8, ist sie keine Quadratzahl. Sonst prüfe, ob √ eine ganze Zahl ist.'};}
+  const n=rnd(lvl==='std'?2:6,15);let m=rnd(2,15);while(m===n)m=rnd(2,15);
+  if(i%3===0)return {type:'nums',q:'<b>Berechne im Kopf.</b>',parts:[[n+'² = ','',n*n],['  '+m+'² = ','',m*m]],h:'Die Quadratzahlen bis 15² solltest du auswendig können: 11² = 121, 12² = 144, 13² = 169, 14² = 196, 15² = 225.'};
+  const z=pick([36,49,64,81,100,121,144,169,196,225]);
+  return {type:'nums',q:'<b>Welche Zahl wurde quadriert?</b>',parts:[['☐² = '+z+' → ☐ = ','',Math.sqrt(z)]],h:'Denk an die Quadratzahlen bis 15².'};
+}
+/* 4 Quadrieren: natürliche Zahlen, Dezimalzahlen, Produkte, Quotienten */
+function genQuadr(i,lvl){
+  const k=i%8,ahs=lvl==='ahs';
+  if(k===6){let a,b;do{a=rnd(1,ahs?12:9);b=rnd(a+1,ahs?15:12);}while(ggt(a,b)!==1);const neg=RNG()<.5;
+    return {type:'nums',q:'<b>Quadriere den Bruch – achte auf das Vorzeichen!</b>',parts:[[(neg?'(−'+FR(a,b)+')²':'−('+FR(a,b)+')²')+' = ','',(neg?1:-1)*a*a/(b*b),'6rem',(neg?'':'-')+(a*a)+'/'+(b*b)]],h:neg?'Minus mal Minus ist Plus: (−a/b)² ist positiv.':'Hier wird nur der Bruch quadriert – das Minus davor bleibt.'};}
+  if(k===7){let a,b;do{a=rnd(2,ahs?15:11);b=rnd(2,ahs?9:7);}while(ggt(a,b)!==1||a<=b);
+    return {type:'nums',q:'<b>Quadriere den unechten Bruch.</b>',parts:[['('+FR(a,b)+')² = ','',a*a/(b*b),'6rem',(a*a)+'/'+(b*b)]],h:'Zähler und Nenner einzeln quadrieren: '+a+'² = '+(a*a)+', '+b+'² = '+(b*b)+'.'};}
+  if(k===0){const a=rnd(2,9)*10,b=ahs?rnd(2,9)*100:rnd(11,15)*10;return {type:'nums',q:'<b>Quadriere.</b> Tipp: Nullen verdoppeln.',parts:[[a+'² = ','',a*a,'6rem'],['  '+b+'² = ','',b*b,'7rem']],h:'30² = 3² · 10² = 900: die Ziffer quadrieren und doppelt so viele Nullen anhängen.'};}
+  if(k===1){const a=rnd(2,9),b=rnd(11,15);return {type:'nums',q:'<b>Quadriere die Dezimalzahlen.</b>',parts:[['(0,'+a+')² = ','',a*a/100],['  ('+cm(b/10)+')² = ','',b*b/100]],h:'Doppelt so viele Kommastellen: (0,3)² = 0,09 – nicht 0,9!'};}
+  if(k===2){const a=rnd(2,9),b=rnd(2,9);return {type:'nums',q:'<b>Quadriere das Produkt.</b> (a · b)² = a² · b²',parts:[['('+a+' · '+b+')² = ','',a*a*b*b,'6rem']],h:'Jeden Faktor quadrieren und dann multiplizieren: ('+a+' · '+b+')² = '+(a*a)+' · '+(b*b)+'.'};}
+  if(k===3){let a,b;do{a=rnd(1,7);b=rnd(a+1,11);}while(ggt(a,b)!==1);return {type:'nums',q:'<b>Quadriere den Bruch.</b> Ergebnis als Bruch, z. B. 4/9',parts:[['('+FR(a,b)+')² = ','',a*a/(b*b),'6rem',(a*a)+'/'+(b*b)]],h:'Zähler und Nenner einzeln quadrieren: (a/b)² = a²/b².'};}
+  if(k===4){const a=rnd(2,12);return {type:'nums',q:'<b>Achtung Vorzeichen!</b>',parts:[['(−'+a+')² = ','',a*a],['  −'+a+'² = ','',-a*a]],h:'(−'+a+')² = (−'+a+') · (−'+a+') ist positiv. Bei −'+a+'² wird nur '+a+' quadriert, das Minus bleibt.'};}
+  const a=rnd(2,6),b=rnd(2,6);return ahs?{type:'nums',q:'<b>Quadriere.</b>',parts:[['(0,'+a+' · '+b+'0)² = ','',(a*b)**2]],h:'Zuerst das Produkt ausrechnen: 0,'+a+' · '+b+'0 = '+(a*b)+', dann quadrieren.'}
+    :{type:'nums',q:'<b>Quadriere.</b>',parts:[['('+a+' · 10)² = ','',a*a*100]],h:'('+a+' · 10)² = '+a+'² · 10² = '+(a*a)+' · 100.'};
+}
+/* 5 Wurzeln im Kopf */
+function genWurzel(i,lvl){
+  const k=i%6,ahs=lvl==='ahs';
+  if(k===4){let a,b;do{a=rnd(1,ahs?12:9);b=rnd(a+1,ahs?15:12);}while(ggt(a,b)!==1);const f=pick([2,3,5]);
+    return {type:'nums',q:'<b>Zuerst kürzen, dann die Wurzel ziehen.</b> Ergebnis als Bruch',parts:[[RT(FR(f*a*a,f*b*b))+' = ','',a/b,'5rem',a+'/'+b]],h:'Kürze zuerst durch '+f+': '+(f*a*a)+'/'+(f*b*b)+' = '+(a*a)+'/'+(b*b)+'. Dann Wurzel aus Zähler und Nenner.'};}
+  if(k===5){let a,b;do{a=rnd(2,ahs?15:11);b=rnd(2,ahs?9:7);}while(ggt(a,b)!==1||a<=b);
+    return {type:'nums',q:'<b>Zieh die Wurzel aus dem unechten Bruch.</b> Ergebnis als Bruch',parts:[[RT(FR(a*a,b*b))+' = ','',a/b,'5rem',a+'/'+b]],h:'Wurzel aus Zähler und Nenner einzeln: √'+(a*a)+' = '+a+', √'+(b*b)+' = '+b+'.'};}
+  if(k===0){const a=rnd(6,15);let b=rnd(2,15);while(b===a)b=rnd(2,15);return {type:'nums',q:'<b>Berechne im Kopf.</b>',parts:[[RT(a*a)+' = ','',a],['  '+RT(b*b)+' = ','',b]],h:'Welche Zahl mal sich selbst ergibt die Zahl unter der Wurzel?'};}
+  if(k===1){const a=rnd(2,9);return {type:'nums',q:'<b>Wurzel aus Dezimalzahlen.</b>',parts:[[RT('0,'+String(a*a).padStart(2,'0'))+' = ','',a/10]],h:'0,'+String(a*a).padStart(2,'0')+' hat zwei Kommastellen – die Wurzel hat eine: √0,09 = 0,3.'};}
+  if(k===2){const a=rnd(2,9);return {type:'nums',q:'<b>Wurzel aus Zahlen mit Nullen.</b>',parts:[[RT(a*a*100)+' = ','',a*10],['  '+RT(a*a*10000)+' = ','',a*100]],h:'Für je zwei Nullen unter der Wurzel kommt eine Null ins Ergebnis: √1600 = 40.'};}
+  let a,b;do{a=rnd(1,9);b=rnd(a+1,12);}while(ggt(a,b)!==1);return {type:'nums',q:'<b>Wurzel aus einem Bruch.</b> Ergebnis als Bruch',parts:[[RT(FR(a*a,b*b))+' = ','',a/b,'5rem',a+'/'+b]],h:'Wurzel aus Zähler und Nenner einzeln: √(a²/b²) = a/b.'};
+}
+/* 5b Wurzel aus einem Produkt: ein Faktor ist eine Quadratzahl, der andere nicht */
+function genProd(i,lvl){
+  const ahs=lvl==='ahs';
+  const SQ=ahs?[4,9,16,25,36,49,64,81,100,121,144,169,196]:[4,9,16,25,36,49,64,81,100];
+  const NS=ahs?[2,3,5,6,7,10,11,13,14,15,17]:[2,3,5,6,7,10,11];
+  const q=pick(SQ),n=pick(NS),r=Math.sqrt(q);
+  /* AHS: manchmal zwei Quadratzahlen und eine andere Zahl */
+  if(ahs&&i%4===3){let q2=pick([4,9,16,25]);while(q2===q)q2=pick([4,9,16,25]);const r2=Math.sqrt(q2),ord=shuffle([q,q2,n]);
+    return {type:'root',q:'<b>Zieh die Wurzel, wo es geht.</b> Was keine Quadratzahl ist, bleibt unter der Wurzel.',lhs:RT(ord.join(' · ')),a:r*r2,b:n,sol:RT(ord.join(' · '))+' = '+r+' · '+r2+' · √'+n+' = '+(r*r2)+'√'+n,
+      h:'Zieh aus beiden Quadratzahlen die Wurzel und multipliziere: √'+q+' · √'+q2+' = '+r+' · '+r2+'. √'+n+' bleibt.'};}
+  const sw=RNG()<.4,expr=sw?n+' · '+q:q+' · '+n;
+  return {type:'root',q:'<b>Zieh die Wurzel, wo es geht.</b> √(a · b) = √a · √b – die Zahl, die keine Quadratzahl ist, bleibt unter der Wurzel.',
+    lhs:RT(expr),a:r,b:n,sol:RT(expr)+' = √'+q+' · √'+n+' = '+r+'√'+n,
+    h:'Nur aus der Quadratzahl '+q+' kannst du die Wurzel ziehen: √'+q+' = '+r+'. '+n+' bleibt unter der Wurzel → '+r+'√'+n+'.'};
+}
+/* 6 Regeln: Wurzel aus Produkt und Quotient */
+function genRegeln(i,lvl){
+  const k=i%4,ahs=lvl==='ahs';
+  if(k===0){const a=pick([4,9,16,25,36]),b=pick([4,9,25,49,64,81]);return {type:'nums',q:'√(a · b) = √a · √b',parts:[[RT(a+' · '+b)+' = ','',Math.sqrt(a*b)]],h:'√'+a+' · √'+b+' = '+Math.sqrt(a)+' · '+Math.sqrt(b)+'.'};}
+  if(k===1){const P=ahs?[[2,8],[3,12],[2,32],[5,20],[3,27],[6,24],[2,50],[7,28]]:[[2,8],[3,12],[2,18],[5,20],[3,27],[2,50]];const [a,b]=pick(P);return {type:'nums',q:'Unter <b>eine</b> Wurzel schreiben: √a · √b = √(a · b)',parts:[[RT(a)+' · '+RT(b)+' = ','',Math.sqrt(a*b)]],h:'√'+a+' · √'+b+' = √'+(a*b)+' – das ist eine Quadratzahl.'};}
+  if(k===2){const P=[[50,2],[72,2],[48,3],[75,3],[98,2],[200,2],[45,5],[63,7]];const [a,b]=pick(P);return {type:'nums',q:'√a : √b = √(a : b)',parts:[[RT(a)+' : '+RT(b)+' = ','',Math.sqrt(a/b)]],h:'√'+a+' : √'+b+' = √'+(a/b)+'.'};}
+  return mix({type:'mc',q:'<b>Welche Regel stimmt?</b>',o:['√(a · b) = √a · √b','√(a + b) = √a + √b','√(a − b) = √a − √b','(a + b)² = a² + b²'],a:0,h:'Probier es mit Zahlen: √(9 + 16) = √25 = 5, aber √9 + √16 = 7. Wurzeln „teilen“ darf man nur bei · und :.'});
+}
+/* 7 Teilweise Wurzelziehen */
+const TW_STD=[[8,2,2],[12,2,3],[18,3,2],[20,2,5],[27,3,3],[28,2,7],[32,4,2],[45,3,5],[48,4,3],[50,5,2],[72,6,2],[75,5,3],[98,7,2],[200,10,2]];
+const TW_AHS=TW_STD.concat([[108,6,3],[180,6,5],[243,9,3],[288,12,2],[300,10,3],[500,10,5],[392,14,2],[150,5,6],[252,6,7]]);
+function pfz(n){const f=[];let m=n,p=2;while(m>1){while(m%p===0){f.push(p);m/=p;}p++;}return f.join(' · ');}
+function genTeil(i,lvl){const [n,a,b]=pick(lvl==='std'?TW_STD:TW_AHS);
+  const pre=i%3===2?'Primfaktorzerlegung: '+n+' = '+pfz(n)+'<br>':'';
+  return {type:'root',q:pre+'<b>Zieh teilweise die Wurzel.</b> Zerlege so, dass eine Quadratzahl dabei ist: √50 = √(25 · 2) = 5√2',
+    lhs:RT(n),a,b,sol:RT(n)+' = √('+(a*a)+' · '+b+') = '+a+'√'+b,
+    h:'Suche die größte Quadratzahl, die in '+n+' steckt: '+n+' = '+(a*a)+' · '+b+' → √'+n+' = '+a+'√'+b+'.'};}
+/* 7b Wurzeln mit Variablen (Variablen stehen für positive Zahlen) */
+const SUPM={'²':2,'³':3,'⁴':4,'⁵':5,'⁶':6};
+/* Monom lesen: 5ab², 3x^2y, x → {c, v:{a:1,b:2}} */
+function readMono(s){s=String(s||'').replace(/[()]/g,'');if(s==='')return {c:1,v:{}};
+  const m=s.match(/^(\d*)((?:[a-zA-Z](?:\^\d+|[²³⁴⁵⁶])?)*)$/);if(!m)return null;
+  const c=m[1]===''?1:+m[1],v={};for(const t of m[2].matchAll(/([a-zA-Z])(?:\^(\d+)|([²³⁴⁵⁶]))?/g)){const n=t[1].toLowerCase(),e=t[2]?+t[2]:t[3]?SUPM[t[3]]:1;v[n]=(v[n]||0)+e;}
+  return {c,v};}
+/* 2x√3 · 2x·√(3a) · 5a · √7 → {o:Monom außen, r:Monom unter der Wurzel} */
+function readVRoot(s){s=String(s||'').replace(/\s+/g,'').replace(/[·*×]/g,'');const i=s.indexOf('√');
+  const o=readMono(i<0?s:s.slice(0,i)),r=i<0?{c:1,v:{}}:readMono(s.slice(i+1));return o&&r?{o,r}:null;}
+const vEq=(a,b)=>{const k=new Set([...Object.keys(a),...Object.keys(b)]);return [...k].every(n=>(a[n]||0)===(b[n]||0));};
+const monoV=(c,v)=>(c===1&&Object.keys(v).length?'':String(c))+Object.keys(v).sort().map(n=>'<i>'+n+'</i>'+(v[n]>1?'<sup>'+v[n]+'</sup>':'')).join('');
+const monoP=(c,v)=>(c===1&&Object.keys(v).length?'':String(c))+Object.keys(v).sort().map(n=>n+(v[n]>1?'^'+v[n]:'')).join('');
+const vrootH=(oc,ov,rc,rv)=>{const out=(oc!==1||Object.keys(ov).length)?monoV(oc,ov):'',inn=(rc!==1||Object.keys(rv).length)?monoV(rc,rv):'';const ip=monoP(rc,rv);return inn?out+'√'+(ip.length>1&&!/^\d+$/.test(ip)?'('+inn+')':inn):out||'1';};
+function genVar(i,lvl){
+  const ahs=lvl==='ahs',L=pick(['x','a','y']),L2=pick(['b','y','x'].filter(z=>z!==L)),k=i%(ahs?6:5);
+  let oc,ov,rc,rv,q,info;
+  if(k===0){oc=rnd(2,ahs?15:12);ov={[L]:1};rc=1;rv={};q='<b>Zieh die Wurzel.</b>';}
+  else if(k===1){oc=rnd(2,ahs?15:9);ov={[L]:1,[L2]:1};rc=1;rv={};q='<b>Zieh die Wurzel.</b> Jede Variable steht für eine positive Zahl.';}
+  else if(k===2){oc=1;ov={[L]:1};rc=pick([2,3,5,6,7,10,11]);rv={};q='<b>Zieh die Wurzel, wo es geht.</b> Was keine Quadratzahl ist, bleibt unter der Wurzel.';}
+  else if(k===3){const [n,a,b]=pick(TW_STD.slice(0,ahs?14:10));oc=a;ov={[L]:1};rc=b;rv={};q='<b>Zieh teilweise die Wurzel.</b>';}
+  else if(k===4){oc=rnd(2,ahs?12:9);const e=ahs?pick([2,3]):2;ov={[L]:e};rc=1;rv={};q='<b>Zieh die Wurzel.</b> Tipp: <i>'+L+'</i><sup>'+(2*e)+'</sup> = <i>'+L+'</i><sup>'+e+'</sup> · <i>'+L+'</i><sup>'+e+'</sup>';}
+  else{const [n,a,b]=pick([[8,2,2],[12,2,3],[18,3,2],[27,3,3],[50,5,2]]);oc=a;ov={[L]:1};rc=b;rv={[L]:1};q='<b>Zieh teilweise die Wurzel.</b> Tipp: <i>'+L+'</i><sup>3</sup> = <i>'+L+'</i><sup>2</sup> · <i>'+L+'</i>';}
+  /* Radikand = oc² · rc, Variablen doppelt plus Rest */
+  const radC=oc*oc*rc,radV={};Object.keys(ov).forEach(n=>radV[n]=2*ov[n]);Object.keys(rv).forEach(n=>radV[n]=(radV[n]||0)+rv[n]);
+  return {type:'vroot',q,lhs:RT(monoV(radC,radV)),oc,ov,rc,rv,radC,radV,sol:RT(monoV(radC,radV))+' = '+vrootH(oc,ov,rc,rv),
+    h:'Zerlege in eine Quadratzahl mal Rest und Variablen in Quadrate: √('+monoP(radC,radV).replace(/\^(\d)/g,'^$1')+') → Zahl: '+radC+' = '+(oc*oc)+' · '+rc+', bei den Variablen wird die Hochzahl halbiert.'};
+}
+/* ================= Standard: Aufgaben wie in der Schularbeit (andere Zahlen, mehr Beispiele) ================= */
+const MEM=[['ℕ',z=>z.n],['ℤ',z=>z.z],['ℚ',z=>z.q],['𝕀',z=>!z.q],['ℝ',z=>true]];
+function zahl(){const a=rnd(2,99),b=rnd(2,9),q=pick([4,9,16,25,36,49,64,81,100,121,144]),nq=pick([2,3,5,6,7,8,10,11,13]);
+  return pick([{t:String(a*pick([1,1,10])),n:1,z:1,q:1},{t:'0',n:1,z:1,q:1},{t:'−'+a,n:0,z:1,q:1},{t:'−'+rnd(100,500),n:0,z:1,q:1},{t:(()=>{let x;do{x=rnd(1,b-1);}while(ggt(x,b)!==1);return FR(x,b);})(),n:0,z:0,q:1},
+    {t:'−'+cm(rnd(11,99)/10),n:0,z:0,q:1},{t:cm(rnd(1,99)/100),n:0,z:0,q:1},{t:RT(q),n:1,z:1,q:1},{t:'−'+RT(q),n:0,z:1,q:1},{t:RT(nq),n:0,z:0,q:0},{t:'π',n:0,z:0,q:0},{t:'−'+RT(nq),n:0,z:0,q:0},{t:FR(2*b,2),n:1,z:1,q:1}]);}
+/* a) Berechne */
+function genSAa(i){const k=i%4;
+  if(k===0){let n;do{n=rnd(2,15);}while(n===7);return {type:'nums',q:'<b>Berechne!</b>',parts:[[n+'² = ','',n*n]],h:n+'² = '+n+' · '+n+'.'};}
+  if(k===1){let n;do{n=rnd(2,15);}while(n===13);return {type:'nums',q:'<b>Berechne!</b> Achte auf das Vorzeichen.',parts:[['(−'+n+')² = ','',n*n]],h:'(−'+n+')² = (−'+n+') · (−'+n+') – minus mal minus ergibt plus.'};}
+  if(k===2){let a,b;do{a=rnd(2,9);b=rnd(2,9);}while(a*b===15);return {type:'nums',q:'<b>Berechne!</b>',parts:[['('+a+' · '+b+')² = ','',a*a*b*b,'6rem']],h:'Zuerst in der Klammer rechnen: '+a+' · '+b+' = '+(a*b)+', dann quadrieren. Oder: '+(a*a)+' · '+(b*b)+'.'};}
+  let a,b;do{a=rnd(1,9);b=rnd(a+1,12);}while(ggt(a,b)!==1||(a===4&&b===7));return {type:'nums',q:'<b>Berechne!</b> Ergebnis als Bruch',parts:[['('+FR(a,b)+')² = ','',a*a/(b*b),'6rem',(a*a)+'/'+(b*b)]],h:'Zähler und Nenner einzeln quadrieren: '+a+'² = '+(a*a)+', '+b+'² = '+(b*b)+'.'};}
+/* b) Wurzelziehen oder teilweises Wurzelziehen */
+function mkVR(q,lhs,oc,ov,rc,rv,h){const radC=oc*oc*rc,radV={};Object.keys(ov).forEach(n=>radV[n]=2*ov[n]);Object.keys(rv).forEach(n=>radV[n]=(radV[n]||0)+rv[n]);
+  return {type:'vroot',q,lhs,oc,ov,rc,rv,radC,radV,sol:lhs+' = '+vrootH(oc,ov,rc,rv),h};}
+function genSAb(i){const k=i%6,L=pick(['x','a','y','b']),L2=pick(['y','b','z'].filter(z=>z!==L)),SQ=[4,9,16,25,36,49,64,81,100,121,144,169,196];
+  if(k===0){let n;do{n=rnd(2,15);}while(n===9);return {type:'nums',q:'<b>Zieh die Wurzel!</b>',parts:[[RT(n*n)+' = ','',n]],h:'Welche Zahl mal sich selbst ergibt '+(n*n)+'?'};}
+  if(k===1){let d,c;do{d=rnd(2,12);c=pick([1,1,2,3,4,5]);}while(d===5&&c===1);return {type:'vfrac',q:'<b>Zieh die Wurzel!</b> Die Variable steht für eine positive Zahl.',lhs:RT(FR(monoV(c*c,{[L]:2}),d*d)),nc:c,nv:{[L]:1},d,sol:'√('+(c*c===1?'':c*c)+L+'²/'+(d*d)+') = '+(c===1?'':c)+L+'/'+d,
+    h:'Zähler und Nenner einzeln: √('+(c*c===1?'':c*c)+L+'²) = '+(c===1?'':c)+L+', √'+(d*d)+' = '+d+'. Ergebnis als Bruch, z. B. '+L+'/'+d+'.'};}
+  if(k===2){const q=pick(SQ),m=pick([2,3,5,6,7,10,11]),sw=RNG()<.5,r=Math.sqrt(q);return mkVR('<b>Zieh die Wurzel, wo es geht!</b>',RT(sw?m+' · '+q:q+' · '+m),r,{},m,{},'√'+q+' = '+r+', '+m+' ist keine Quadratzahl und bleibt unter der Wurzel → '+r+'√'+m+'.');}
+  if(k===3){const q=pick(SQ.filter(x=>x!==169)),[m,s,kk]=pick([[8,2,2],[12,2,3],[18,3,2],[20,2,5],[27,3,3],[28,2,7],[32,4,2],[45,3,5],[50,5,2]]),r=Math.sqrt(q);
+    return mkVR('<b>Teilweises Wurzelziehen!</b> Achtung: Auch in der zweiten Zahl steckt eine Quadratzahl.',RT(m+' · '+q),r*s,{},kk,{},'√'+q+' = '+r+' und √'+m+' = √('+(s*s)+' · '+kk+') = '+s+'√'+kk+' → '+r+' · '+s+'√'+kk+' = '+(r*s)+'√'+kk+'.');}
+  if(k===4){let c;do{c=rnd(2,12);}while(c===6);return mkVR('<b>Teilweises Wurzelziehen!</b> Die Variablen stehen für positive Zahlen.',RT(monoV(c*c,{[L]:1,[L2]:2})),c,{[L2]:1},1,{[L]:1},'√'+(c*c)+' = '+c+', √('+L2+'²) = '+L2+' – aber '+L+' hat keine Hochzahl 2 und bleibt unter der Wurzel → '+c+L2+'√'+L+'.');}
+  const c=rnd(2,15),two=RNG()<.5;return mkVR('<b>Zieh die Wurzel!</b> Die Variablen stehen für positive Zahlen.',RT(monoV(c*c,two?{[L]:2,[L2]:2}:{[L]:2})),c,two?{[L]:1,[L2]:1}:{[L]:1},1,{},'√'+(c*c)+' = '+c+', bei den Variablen wird die Hochzahl halbiert.');}
+/* c) ∈ oder ∉ */
+function genSAc(i){const rows=[];while(rows.length<4){const z=zahl(),S=pick([0,1,2,3,4,3]),set=S===3&&RNG()<.5?'ℚ′':MEM[S][0];
+    const key=z.t+set;if(rows.some(r=>r.key===key))continue;rows.push({key,t:z.t+' &nbsp;▢&nbsp; '+set,a:MEM[S][1](z)?0:1});}
+  return {type:'rf',q:'<b>Setze ∈ oder ∉ so, dass eine wahre Aussage entsteht!</b>',items:rows.map(r=>r.t),lab:['∈','∉'],a:rows.map(r=>r.a),h:'ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ. 𝕀 (auch ℚ′ geschrieben) sind die irrationalen Zahlen – sie gehören nicht zu ℚ. Rechne Wurzeln zuerst aus: √81 = 9.'};}
+/* Tabelle: alle passenden Zahlenmengen ankreuzen */
+function genSAt(i){const rows=[];while(rows.length<4){const z=zahl();if(rows.some(r=>r.t===z.t))continue;rows.push(z);}
+  if(!rows.some(r=>!r.q))rows[3]={t:RT(pick([2,3,5,7,10])),n:0,z:0,q:0};
+  return {type:'grid',q:'<b>Zu welchen Zahlenmengen gehören die Zahlen?</b> Kreuze an, wenn die Zahl dazu gehört – es können mehrere sein!',rows:rows.map(r=>r.t),cols:MEM.map(m=>m[0]),a:rows.map(r=>MEM.map(m=>m[1](r)?1:0)),
+    h:'Was zu ℕ gehört, gehört auch zu ℤ, ℚ und ℝ. Irrationale Zahlen (𝕀) gehören nur zu 𝕀 und ℝ. Jede Zahl gehört zu ℝ!'};}
+/* d) wahre Aussagen ankreuzen */
+const AUSS=[['Jede natürliche Zahl ist auch eine ganze Zahl.',1],['Jede ganze Zahl ist auch eine natürliche Zahl.',0],['Jede ganze Zahl kann man als Bruch schreiben.',1],['Jeder Bruch ist eine ganze Zahl.',0],
+  ['Es gibt negative natürliche Zahlen.',0],['Eine ganze Zahl kann negativ sein.',1],['Jede irrationale Zahl gehört zu ℝ.',1],['Jede reelle Zahl ist rational.',0],['Es gibt Zahlen, die zu ℚ und zu 𝕀 gehören.',0],
+  ['Wurzeln aus natürlichen Zahlen sind nie natürliche Zahlen.',0],['Die Wurzel einer natürlichen Zahl kann eine natürliche Zahl sein.',1],['Es gibt Brüche, die keine ganzen Zahlen sind.',1],['Es gibt ganze Zahlen, die keine natürlichen Zahlen sind.',1],
+  ['Jeder Bruch ist eine rationale Zahl.',1],['π ist eine rationale Zahl.',0],['0 ist eine natürliche Zahl.',1],['Jede periodische Dezimalzahl ist irrational.',0],['Jede rationale Zahl ist auch eine reelle Zahl.',1],['√2 gehört zu ℚ′.',1],['Zu ℝ gehören die rationalen und die irrationalen Zahlen.',1]];
+function genSAd(i){let P;do{P=shuffle(AUSS.slice()).slice(0,7);}while(!P.some(p=>p[1])||P.every(p=>p[1]));
+  return {type:'multi',vertical:true,q:'<b>Kreuze an!</b> Tippe alle <b>wahren</b> Aussagen an.',o:P.map((p,k)=>'<b>'+'ABCDEFG'[k]+'</b> &nbsp;'+p[0]),a:P.map((p,k)=>p[1]?k:-1).filter(k=>k>=0),h:'Prüfe jede Aussage einzeln: ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ, 𝕀 ⊂ ℝ. Eine Zahl ist entweder rational oder irrational.'};}
+/* ===== Standard Version 2: gleiche Fähigkeiten, andere Aufgabenformen, ein paar schwerere ===== */
+const OV=d=>'0,<span style="text-decoration:overline">'+d+'</span>';
+function zahl2(){const q=pick([4,9,16,25,36,49,64,81,100,121,144]),nq=pick([2,3,5,6,7,10,11,15]),b=pick([3,4,5,6,8]),p=rnd(1,8);
+  return pick([{t:String(rnd(2,60)),n:1,z:1,q:1},{t:'−'+rnd(2,90),n:0,z:1,q:1},{t:FR(3*b,b),n:1,z:1,q:1},{t:'−'+FR(2*b,b),n:0,z:1,q:1},{t:OV(p),n:0,z:0,q:1},{t:cm(rnd(11,99)/10),n:0,z:0,q:1},
+    {t:RT(cm(pick([0.25,0.49,0.64,0.81,0.36]))),n:0,z:0,q:1},{t:'−'+RT(q),n:0,z:1,q:1},{t:RT(q)+' : 2',n:Number.isInteger(Math.sqrt(q)/2)?1:0,z:Number.isInteger(Math.sqrt(q)/2)?1:0,q:1},{t:RT(nq),n:0,z:0,q:0},{t:'2 · π',n:0,z:0,q:0},RNG()<.4?{t:'0,1010010001…',n:0,z:0,q:0}:{t:RT(pick([3,7,13])),n:0,z:0,q:0}]);}
+function genV2q(i){const k=i%6;
+  if(k===0){const n=rnd(2,15);return {type:'nums',q:'<b>Quadriere.</b>',parts:[[n+'² = ','',n*n]],h:n+' · '+n+'.'};}
+  if(k===1){const n=rnd(2,12);return {type:'nums',q:'<b>Achtung – zwei verschiedene Aufgaben!</b>',parts:[['−'+n+'² = ','',-n*n],['  (−'+n+')² = ','',n*n]],h:'Bei −'+n+'² wird nur '+n+' quadriert, das Minus bleibt. Bei (−'+n+')² wird die ganze Klammer quadriert: minus mal minus = plus.'};}
+  if(k===2){const a=rnd(2,9);return {type:'nums',q:'<b>Quadriere die Dezimalzahl.</b>',parts:[['(0,'+a+')² = ','',a*a/100]],h:'(0,'+a+')² = 0,'+a+' · 0,'+a+' – doppelt so viele Kommastellen: '+cm(a*a/100)+'.'};}
+  if(k===3){let a,b;do{a=rnd(1,9);b=rnd(a+1,12);}while(ggt(a,b)!==1);return {type:'nums',q:'<b>Quadriere.</b> Ergebnis als Bruch',parts:[['(−'+FR(a,b)+')² = ','',a*a/(b*b),'6rem',(a*a)+'/'+(b*b)]],h:'Minus mal minus ist plus. Zähler und Nenner einzeln quadrieren.'};}
+  if(k===4){const n=rnd(4,15);return {type:'nums',q:'<b>Welche positive Zahl gehört ins Kästchen?</b>',parts:[['☐² = '+(n*n)+' → ☐ = ','',n]],h:'Welche Zahl mal sich selbst ergibt '+(n*n)+'? Denk an die Quadratzahlen bis 15².'};}
+  const a=rnd(2,5),b=rnd(2,5),c=pick([2,3]);return {type:'nums',q:'<b>Etwas schwerer:</b> Quadriere das Produkt.',parts:[['('+a+' · '+b+' · '+c+')² = ','',(a*b*c)**2,'6rem']],h:'Zuerst in der Klammer: '+a+' · '+b+' · '+c+' = '+(a*b*c)+', dann quadrieren.'};}
+function genV2w(i){const k=i%7,L=pick(['x','a','y','b']),L2=pick(['y','b','z'].filter(z=>z!==L));
+  if(k===0){const n=rnd(4,15);return {type:'nums',q:'<b>Zieh die Wurzel.</b>',parts:[[RT(n*n)+' = ','',n]],h:'Welche Zahl mal sich selbst ergibt '+(n*n)+'?'};}
+  if(k===1){const a=rnd(2,9);return {type:'nums',q:'<b>Wurzel aus einer Dezimalzahl.</b>',parts:[[RT('0,'+String(a*a).padStart(2,'0'))+' = ','',a/10]],h:'Zwei Kommastellen unter der Wurzel → eine Kommastelle im Ergebnis: √0,'+String(a*a).padStart(2,'0')+' = 0,'+a+'.'};}
+  if(k===2){let d,c;do{d=rnd(2,12);c=rnd(2,9);}while(ggt(c,d)!==1);return {type:'vfrac',q:'<b>Zieh die Wurzel.</b> Die Variable steht für eine positive Zahl.',lhs:RT(FR(monoV(c*c,{[L]:2}),d*d)),nc:c,nv:{[L]:1},d,sol:'= '+c+L+'/'+d,h:'Zähler und Nenner einzeln: √('+(c*c)+L+'²) = '+c+L+', √'+(d*d)+' = '+d+'.'};}
+  if(k===3){const [n,a,b]=pick([[12,2,3],[18,3,2],[20,2,5],[27,3,3],[32,4,2],[45,3,5],[48,4,3],[72,6,2],[75,5,3],[98,7,2]]);return mkVR('<b>Zieh teilweise die Wurzel.</b> Suche selbst die größte Quadratzahl, die in '+n+' steckt.',RT(n),a,{},b,{},n+' = '+(a*a)+' · '+b+' → √'+n+' = '+a+'√'+b+'.');}
+  if(k===4){const q=pick([4,9,16,25,36,49,64,81,100]),[m,s2,kk]=pick([[8,2,2],[12,2,3],[18,3,2],[20,2,5],[27,3,3],[50,5,2]]),r=Math.sqrt(q);return mkVR('<b>Etwas schwerer:</b> Zieh die Wurzel, wo es geht.',RT(q+' · '+m),r*s2,{},kk,{},'√'+q+' = '+r+' und √'+m+' = '+s2+'√'+kk+' → '+(r*s2)+'√'+kk+'.');}
+  if(k===5){const c=rnd(2,10);return mkVR('<b>Zieh die Wurzel, wo es geht.</b> Die Variablen stehen für positive Zahlen.',RT(monoV(c*c,{[L]:2,[L2]:1})),c,{[L]:1},1,{[L2]:1},'√'+(c*c)+' = '+c+', √('+L+'²) = '+L+', '+L2+' bleibt unter der Wurzel.');}
+  const c=rnd(2,8);return mkVR('<b>Etwas schwerer:</b> Tipp: '+'<i>'+L+'</i><sup>3</sup> = <i>'+L+'</i><sup>2</sup> · <i>'+L+'</i>',RT(monoV(c*c,{[L]:3})),c,{[L]:1},1,{[L]:1},'√('+(c*c)+L+'³) = √('+(c*c)+L+'² · '+L+') = '+c+L+'√'+L+'.');}
+function genV2e(i){const rows=[];while(rows.length<4){const z=zahl2(),S=pick([0,1,2,3,4]),set=S===3&&RNG()<.4?'ℚ′':MEM[S][0],key=z.t+set;if(rows.some(r=>r.key===key))continue;rows.push({key,t:z.t+' &nbsp;▢&nbsp; '+set,a:MEM[S][1](z)?0:1});}
+  return {type:'rf',q:'<b>Element oder nicht?</b> Rechne zuerst aus, wenn es geht.',items:rows.map(r=>r.t),lab:['∈','∉'],a:rows.map(r=>r.a),h:'Zuerst ausrechnen: 12/4 = 3, √0,25 = 0,5, √16 : 2 = 2. Periodische Dezimalzahlen sind rational. ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ, 𝕀 (= ℚ′) ⊂ ℝ.'};}
+function genV2t(i){const rows=[];while(rows.length<4){const z=zahl2();if(rows.some(r=>r.t===z.t))continue;rows.push(z);}
+  return {type:'grid',q:'<b>Zahlenmengen-Tabelle:</b> Kreuze <b>alle</b> Mengen an, zu denen die Zahl gehört.',rows:rows.map(r=>r.t),cols:MEM.map(m=>m[0]),a:rows.map(r=>MEM.map(m=>m[1](r)?1:0)),h:'Zuerst ausrechnen, wenn es geht. Was zu ℕ gehört, gehört auch zu ℤ, ℚ und ℝ. Irrationale Zahlen gehören nur zu 𝕀 und ℝ.'};}
+const DENK=[
+ {q:'Welche Zahl gehört zu <b>ℤ, aber nicht zu ℕ</b>?',o:['−6','6','0,6','√6'],a:0},
+ {q:'Welche Zahl gehört zu <b>ℚ, aber nicht zu ℤ</b>?',o:['3/8','−3','√9','12/4'],a:0},
+ {q:'Welche Zahl gehört zu <b>ℝ, aber nicht zu ℚ</b>?',o:['√20','√25','0,2̅','−20'],a:0},
+ {q:'Lisa rechnet: √(9 · 2) = 9√2. <b>Was ist falsch?</b>',o:['Aus 9 muss die Wurzel gezogen werden: √(9 · 2) = 3√2.','Man darf √(9 · 2) nicht aufteilen.','Es müsste 2√9 heißen.','Nichts, das stimmt.'],a:0},
+ {q:'Tom rechnet: (0,3)² = 0,9. <b>Was ist falsch?</b>',o:['Beim Quadrieren verdoppeln sich die Kommastellen: (0,3)² = 0,09.','Es müsste 0,6 heißen.','Man darf Dezimalzahlen nicht quadrieren.','Nichts, das stimmt.'],a:0},
+ {q:'Mia rechnet: −5² = 25. <b>Was ist falsch?</b>',o:['Ohne Klammer wird nur 5 quadriert: −5² = −25.','Es müsste −10 heißen.','Quadratzahlen sind nie negativ, also stimmt es.','Nichts, das stimmt.'],a:0},
+ {q:'Ben sagt: „0,4̅ ist irrational, weil es unendlich viele Kommastellen hat.“ <b>Stimmt das?</b>',o:['Nein – periodische Dezimalzahlen sind rational (0,4̅ = 4/9).','Ja, alle unendlichen Dezimalzahlen sind irrational.','Ja, weil man 0,4̅ nicht aufschreiben kann.','Nein, 0,4̅ ist eine natürliche Zahl.'],a:0},
+ {q:'Warum ist <b>√12/√3</b> eine natürliche Zahl?',o:['Weil √12 : √3 = √(12 : 3) = √4 = 2.','Weil 12 : 3 = 4 ist.','Weil jede Wurzel natürlich ist.','Sie ist keine natürliche Zahl.'],a:0},
+ {q:'Welche Aussage stimmt?',o:['Jede ganze Zahl ist auch rational.','Jede rationale Zahl ist auch ganz.','√2 gehört zu ℚ.','−1 gehört zu ℕ.'],a:0},
+ {q:'Welche Zahl liegt <b>zwischen 6 und 7</b> und ist irrational?',o:['√40','√36','√49','6,5']}];
+DENK[DENK.length-1].a=0;
+let DORD=[];function genV2d(i){if(i===0||!DORD.length)DORD=shuffle(DENK.map((_,k)=>k));const it=DENK[DORD[i%DORD.length]];return mix({type:'mc',q:it.q,o:it.o.slice(),a:it.a,h:'Überlege Schritt für Schritt: zuerst ausrechnen, dann die Regel anwenden.'});}
+/* Teilweises Wurzelziehen mit Primfaktorzerlegung */
+const PFZ_STD=[[12,2,3],[18,3,2],[20,2,5],[28,2,7],[45,3,5],[48,4,3],[50,5,2],[63,3,7],[72,6,2],[75,5,3],[98,7,2],[108,6,3],[180,6,5],[200,10,2]];
+const PFZ_AHS=PFZ_STD.concat([[242,11,2],[288,12,2],[300,10,3],[252,6,7],[392,14,2],[500,10,5],[600,10,6],[540,6,15]]);
+function primes(n){const f=[];let m=n,p=2;while(m>1){while(m%p===0){f.push(p);m/=p;}p++;}return f;}
+function readFactors(s){s=String(s||'').replace(/\s+/g,'').replace(/[*×.]/g,'·');if(!s)return null;const out=[];
+  for(const part of s.split('·')){const m=part.match(/^(\d+)(?:\^(\d+)|([²³⁴⁵]))?$/);if(!m)return null;const e=m[2]?+m[2]:m[3]?SUPM[m[3]]:1;for(let k=0;k<e;k++)out.push(+m[1]);}return out;}
+const isPrime=n=>n>1&&primes(n).length===1;
+function genPfz(i,lvl){const [n,a,b]=pick(lvl==='std'?PFZ_STD:PFZ_AHS),f=primes(n);
+  return {type:'pfz',q:'<b>Zerlege '+n+' in Primfaktoren</b> und zieh dann teilweise die Wurzel. Bilde Paare gleicher Primfaktoren – aus jedem Paar kommt <b>ein</b> Faktor vor die Wurzel.',
+    n,a,b,f,sol:n+' = '+f.join(' · ')+' → √'+n+' = '+a+'√'+b,h:'Teile immer durch die kleinste Primzahl: '+n+' = '+f.join(' · ')+'. Paare: '+(()=>{const c={};f.forEach(p=>c[p]=(c[p]||0)+1);return Object.keys(c).map(p=>c[p]>=2?p+' · '+p+' → '+p+' vor die Wurzel'+(c[p]%2?', ein '+p+' bleibt':''):p+' bleibt unter der Wurzel').join('; ');})()+'.'};}
+/* 8 Nichtrationale Zahlen */
+function genIrr(i,lvl){
+  if(i%2===0){const L=shuffle([[RT(2),1],['π',1],[RT(16),0],['0,5',0],[FR(1,3),0],[RT(3),1],[RT(49),0],['0,121221222…',1],['2,'+'<span style="text-decoration:overline">7</span>',0],[RT(10),1],['−'+RT(25),0]]).slice(0,6);
+    if(!L.some(x=>x[1]))L[0]=[RT(5),1];
+    return {type:'multi',q:'<b>Tippe alle irrationalen Zahlen (𝕀) an.</b>',o:L.map(x=>x[0]),a:L.map((x,k)=>x[1]?k:-1).filter(k=>k>=0),h:'Rechne Wurzeln aus: √16 = 4 ist rational. Periodische Dezimalzahlen (mit Strich) sind rational. Irrational: Wurzel aus Nicht-Quadratzahlen, π, Dezimalzahlen ohne Ende und ohne Periode.'};}
+  const it=pick([{q:'Warum ist <b>√2</b> eine irrationale Zahl?',o:['Weil man √2 nicht als Bruch zweier ganzer Zahlen schreiben kann – die Dezimalzahl ist unendlich und nicht periodisch.','Weil jede Wurzel irrational ist.','Weil √2 kleiner als 2 ist.','Weil man √2 nicht auf der Zahlengeraden darstellen kann.'],a:0},
+    {q:'Welche Aussage über <b>0,333…</b> (Periode 3) stimmt?',o:['Sie ist rational, denn 0,333… = 1/3.','Sie ist irrational, weil sie unendlich viele Stellen hat.','Sie ist eine ganze Zahl.','Sie ist eine natürliche Zahl.'],a:0},
+    {q:'Welche Zahl ist <b>irrational</b>?',o:['√7','√36','3/8','−1,25'],a:0},
+    {q:'Gib ein Beispiel für eine <b>irrationale Zahl zwischen 3 und 4</b>.',o:['√10','√9','3,5','√16'],a:0}]);
+  return mix({type:'mc',q:it.q,o:it.o.slice(),a:it.a,h:'Irrational heißt: nicht als Bruch darstellbar, unendlich viele Kommastellen ohne Periode. √9 = 3 und √16 = 4 sind ganze Zahlen.'});
+}
+const INFO={
+ va:'<p>Variablen stehen für positive Zahlen. Beim Wurzelziehen wird die Hochzahl halbiert: √(x²) = x · √(a⁴) = a² · √(25a²) = 5a · √(7x²) = x√7 · √(12x²) = √(4x² · 3) = 2x√3 · √(x³) = √(x² · x) = x√x</p>',
+ def:'<p>ℕ = {0, 1, 2, 3, …} natürliche Zahlen · ℤ = {…, −2, −1, 0, 1, 2, …} ganze Zahlen · ℚ = alle Zahlen, die man als Bruch schreiben kann · 𝕀 = irrationale Zahlen (nicht als Bruch darstellbar) · ℝ = ℚ ∪ 𝕀</p><p>ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ</p>',
+ zu:'<p>Zuerst ausrechnen: √16 = 4 → ℕ · 6/2 = 3 → ℕ · −√9 = −3 → ℤ · 0,25 und 0,3̅ → ℚ · √5, π → 𝕀</p>',
+ qu:'<p>Quadratzahlen bis 15²: 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225. Sie enden nie auf 2, 3, 7 oder 8.</p>',
+ qr:'<p>30² = 900 (Nullen verdoppeln) · 0,3² = 0,09 (Kommastellen verdoppeln) · (3 · 5)² = 3² · 5² · (2/3)² = 4/9 · (−4)² = 16, aber −4² = −16</p>',
+ wu:'<p>√144 = 12 · √0,09 = 0,3 · √1600 = 40 · √(9/16) = 3/4</p>',
+ pr:'<p>√(4 · 7) = √4 · √7 = 2 · √7 = 2√7 · √(3 · 25) = √3 · √25 = 5√3 · √(4 · 9 · 5) = 2 · 3 · √5 = 6√5 – aus der Quadratzahl die Wurzel ziehen, die andere Zahl bleibt unter der Wurzel.</p>',
+ br:'<p>(2/3)² = 4/9 · (−3/5)² = 9/25, aber −(3/5)² = −9/25 · (7/4)² = 49/16 · √(16/49) = 4/7 · zuerst kürzen: √(8/18) = √(4/9) = 2/3</p>',
+ re:'<p>√(a · b) = √a · √b · √(a : b) = √a : √b · Achtung: √(a + b) ≠ √a + √b!</p>',
+ tw:'<p>√50 = √(25 · 2) = √25 · √2 = 5√2 · Mit Primfaktoren: √180 = √(2 · 2 · 3 · 3 · 5) = 2 · 3 · √5 = 6√5</p>',
+ ir:'<p>Irrationale Zahlen (𝕀) sind unendliche, nicht periodische Dezimalzahlen und lassen sich nicht als Bruch schreiben: √2, √3, √5, π …</p>'};
+const SECS0=lvl=>[
+ {title:'Zahlenmengen definieren',name:'Zahlenmengen',info:INFO.def,n:6,wide:true,type:ZM(genDef)},
+ {title:'Zahlen den Zahlenmengen zuordnen',name:'Zuordnen',info:INFO.zu,n:4,wide:true,type:ZM(genZuord)},
+ {title:'Quadratzahlen bis 15²',name:'Quadratzahlen',info:INFO.qu,n:6,type:ZM(genQuad)},
+ {title:'Quadrieren: Zahlen, Dezimalzahlen, Produkte, Brüche',name:'Quadrieren',info:INFO.qr+INFO.br,n:8,wide:true,type:ZM(genQuadr)},
+ {title:'Wurzeln im Kopf – auch aus Brüchen',name:'Wurzeln im Kopf',info:INFO.wu,hint:'Brüche als Bruch eingeben, z. B. 3/4.',n:12,type:ZM(genWurzel)},
+ {title:'Wurzel aus einem Produkt: ein Faktor ist eine Quadratzahl',name:'Wurzel aus Produkt',info:INFO.pr,hint:'Schreib das Ergebnis mit dem Wurzelzeichen √ aus der Eingabehilfe, z. B. 2√7.',n:10,type:ZM(genProd)},
+ {title:'Teilweises Wurzelziehen',name:'Teilweise Wurzel',info:INFO.tw,hint:'Schreib das Ergebnis mit dem Wurzelzeichen √ aus der Eingabehilfe, z. B. 5√2.',n:8,type:ZM(genTeil)},
+ {title:'Teilweises Wurzelziehen mit Primfaktorzerlegung',name:'Primfaktoren',info:'<p>180 = 2 · 2 · 3 · 3 · 5 → √180 = √(2 · 2 · 3 · 3 · 5) = 2 · 3 · √5 = 6√5. Aus jedem <b>Paar</b> gleicher Primfaktoren kommt ein Faktor vor die Wurzel, der Rest bleibt darunter.</p>',hint:'Primfaktoren mit Malpunkt · eingeben, z. B. 2·2·3·3·5. Ergebnis mit √.',n:8,type:ZM(genPfz)},
+ {title:'Wurzeln mit Variablen',name:'Wurzeln mit Variablen',info:INFO.va,hint:'Variablen stehen für positive Zahlen. Hochzahl mit der Taste ², z. B. a². Beispiel: 2x√3.',n:10,type:ZM(genVar)},
+ {title:'Nichtrationale (irrationale) Zahlen',name:'Irrationale Zahlen',info:INFO.ir,n:6,wide:true,type:ZM(genIrr)}];
+const SECS_STD=[
+ {title:'Zahlenmengen definieren',name:'Zahlenmengen',info:INFO.def,n:4,wide:true,type:ZM(genDef)},
+ {title:'Zahlenmengen-Tabelle',name:'Tabelle',info:INFO.def+'<p>Es können <b>mehrere</b> Kreuze pro Zahl sein. 𝕀 wird auch ℚ′ geschrieben.</p>',n:4,wide:true,type:ZM(genV2t)},
+ {title:'Element oder nicht?',name:'Element',info:'<p>∈ „ist Element von“, ∉ „ist nicht Element von“. Zuerst ausrechnen: 12/4 = 3 ∈ ℕ, √0,25 = 0,5 ∈ ℚ. Periodische Dezimalzahlen wie 0,3̅ sind rational.</p>',n:4,wide:true,type:ZM(genV2e)},
+ {title:'Quadratzahlen bis 15²',name:'Quadratzahlen',info:INFO.qu,n:6,type:ZM(genQuad)},
+ {title:'Quadrieren',name:'Quadrieren S',info:INFO.qr,hint:'Brüche als Bruch eingeben, z. B. 9/49.',n:12,type:ZM(genV2q)},
+ {title:'Wurzeln im Kopf – auch aus Brüchen',name:'Wurzeln im Kopf',info:INFO.wu,hint:'Brüche als Bruch eingeben, z. B. 3/4.',n:8,type:ZM(genWurzel)},
+ {title:'Wurzel aus einem Produkt',name:'Wurzel aus Produkt',info:INFO.pr,hint:'Schreib das Ergebnis mit dem Wurzelzeichen √ aus der Eingabehilfe, z. B. 2√7.',n:8,type:ZM(genProd)},
+ {title:'Wurzeln gemischt – auch etwas schwerer',name:'Wurzeln S',info:INFO.wu+INFO.tw+INFO.va,hint:'Wurzel mit √, Bruch mit /, Hochzahl mit ▢², z. B. 6√2, 3x/4, 2a√a.',n:8,type:ZM(genV2w)},
+ {title:'Teilweises Wurzelziehen mit Primfaktorzerlegung',name:'Primfaktoren',info:'<p>180 = 2 · 2 · 3 · 3 · 5 → √180 = √(2 · 2 · 3 · 3 · 5) = 2 · 3 · √5 = 6√5. Aus jedem <b>Paar</b> gleicher Primfaktoren kommt ein Faktor vor die Wurzel, der Rest bleibt darunter.</p>',hint:'Primfaktoren mit Malpunkt · eingeben, z. B. 2·2·3·3·5. Ergebnis mit √.',n:8,type:ZM(genPfz)},
+ {title:'Irrationale Zahlen',name:'Irrationale Zahlen',info:INFO.ir,n:4,wide:true,type:ZM(genIrr)},
+ {title:'Denken und begründen',name:'Denken',info:INFO.ir,n:4,wide:true,type:ZM(genV2d)},
+ {title:'Mehr Übung: Wurzeln mit Variablen',name:'Wurzeln mit Variablen',info:INFO.va,hint:'Variablen stehen für positive Zahlen. Hochzahl mit der Taste ², z. B. a².',n:8,type:ZM(genVar)}];
+const SECS={std:SECS_STD,ahs:SECS0('ahs')};
+/* ================= Zufall (reproduzierbar) ================= */
+let RNG=Math.random;
+const rnd=(a,b)=>a+Math.floor(RNG()*(b-a+1));
+const pick=a=>a[rnd(0,a.length-1)];
+const sg=()=>RNG()<.5?1:-1;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=rnd(0,i);[a[i],a[j]]=[a[j],a[i]];}return a;}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const MINUS='−',LBL='abcdefghijkl';
+
+/* ================= Rationale Zahlen (exakt) ================= */
+const B=x=>BigInt(x);
+function gcd(a,b){a=a<0n?-a:a;b=b<0n?-b:b;while(b){[a,b]=[b,a%b];}return a;}
+function rat(n,d=1n){n=B(n);d=B(d);if(d<0n){n=-n;d=-d;}const g=gcd(n,d)||1n;return {n:n/g,d:d/g};}
+const R=(n,d=1)=>rat(n,d);
+const rneg=a=>({n:-a.n,d:a.d});
+const rabs=a=>({n:a.n<0n?-a.n:a.n,d:a.d});
+const radd=(a,b)=>rat(a.n*b.d+b.n*a.d,a.d*b.d);
+const rsub=(a,b)=>radd(a,rneg(b));
+const rmul=(a,b)=>rat(a.n*b.n,a.d*b.d);
+const rdiv=(a,b)=>rat(a.n*b.d,a.d*b.n);
+const req=(a,b)=>a.n*b.d===b.n*a.d;
+const rcmp=(a,b)=>{const x=a.n*b.d,y=b.n*a.d;return x<y?-1:x>y?1:0;};
+const rnum=a=>Number(a.n)/Number(a.d);
+const isInt=a=>a.d===1n;
+const isDecable=r=>{let d=r.d;while(d%2n===0n)d/=2n;while(d%5n===0n)d/=5n;return d===1n;};
+function decStr(r){let p=0;while(p<12&&(10n**B(p))%r.d!==0n)p++;const neg=r.n<0n;let s=((neg?-r.n:r.n)*(10n**B(p))/r.d).toString();
+  if(p>0){s=s.padStart(p+1,'0');s=s.slice(0,s.length-p)+','+s.slice(s.length-p);}return (neg?'-':'')+s;}
+const fracH=(n,d)=>'<span class="fr"><span>'+n+'</span><span>'+d+'</span></span>';
+/* Anzeige: mode 'dec' (Dezimalzahl), 'frac' (Bruch), 'mixed' (gemischte Zahl) */
+function rH(r,mode){
+  const neg=r.n<0n,a=rabs(r),sgn=neg?MINUS:'';
+  if(isInt(a))return sgn+a.n;
+  if(mode==='dec'&&isDecable(a))return sgn+decStr(a);
+  if(mode==='mixed'&&a.n>a.d)return sgn+(a.n/a.d)+'&#8202;'+fracH(a.n%a.d,a.d);
+  return sgn+fracH(a.n,a.d);
+}
+function rPlain(r,mode){if(isInt(r))return String(r.n);if(mode==='dec'&&isDecable(r))return decStr(r);return r.n+'/'+r.d;}
+/* Eingabe lesen: -3,5 · -3.5 · -7/2 · -1 3/4 */
+function readRat(str){
+  let s=String(str).replace(/[−–—]/g,'-').replace(/\u202F|\u00A0/g,' ').trim();
+  if(!s)return null;
+  let m=s.match(/^([+-]?)\s*(\d+)\s+(\d+)\s*\/\s*(\d+)$/);
+  if(m){if(+m[4]===0)return null;const w=B(m[2]),z=B(m[3]),n=B(m[4]);const r=rat(w*n+z,n);return {r:m[1]==='-'?rneg(r):r,frac:true,mixed:true,rn:z,rd:n};}
+  s=s.replace(/\s+/g,'');
+  m=s.match(/^([+-]?)(\d+)\/(\d+)$/);
+  if(m){if(+m[3]===0)return null;const r=rat(B(m[2]),B(m[3]));return {r:m[1]==='-'?rneg(r):r,frac:true,rn:B(m[2]),rd:B(m[3])};}
+  s=s.replace('.',',');
+  m=s.match(/^([+-]?)(\d*)(?:,(\d+))?$/);
+  if(!m||(!m[2]&&!m[3]))return null;
+  const f=m[3]||'';const r=rat(B((m[2]||'0')+f),10n**B(f.length));
+  return {r:m[1]==='-'?rneg(r):r,frac:false};
+}
+/* gemeinsame Hinweise für Zahl-Eingaben */
+function judgeNum(u,want,ctx){
+  if(!u)return 'Gib eine Zahl ein, z. B. −2,5 oder −3/4.';
+  if(req(u.r,want)){if(u.frac&&gcd(u.rn,u.rd)>1n)return 'Richtig – kürze den Bruch aber noch!';return true;}
+  if(req(u.r,rneg(want)))return 'Achte auf das Vorzeichen'+(ctx||'')+'.';
+  return false;
+}
+
+/* ================= Zahlengerade (SVG) ================= */
+/* o: {lo,hi,minor,label (Abstand der Beschriftungen),pts:[{v,label,cls}],click:true} */
+function nlSVG(o){
+  const W=360,H=78,x0=18,x1=W-18,y=40,lo=rnum(o.lo),hi=rnum(o.hi),mi=rnum(o.minor);
+  const X=v=>x0+(v-lo)/(hi-lo)*(x1-x0);
+  let h='<svg class="nl" viewBox="0 0 '+W+' '+H+'" data-lo="'+lo+'" data-hi="'+hi+'" data-x0="'+x0+'" data-x1="'+x1+'" role="img" aria-label="Zahlengerade von '+lo+' bis '+hi+'">';
+  h+='<line class="axis" x1="'+(x0-8)+'" y1="'+y+'" x2="'+(x1+10)+'" y2="'+y+'"/><path d="M'+(x1+10)+','+(y-5)+' L'+(x1+16)+','+y+' L'+(x1+10)+','+(y+5)+'" fill="none" stroke="currentColor" stroke-width="2"/>';
+  const n=Math.round((hi-lo)/mi);
+  const lab=o.label||1;
+  for(let k=0;k<=n;k++){
+    const v=lo+k*mi,isLab=Math.abs(v/lab-Math.round(v/lab))<1e-9,x=X(v);
+    h+='<line class="tk'+(isLab?'':' minor')+'" x1="'+x+'" y1="'+(y-(isLab?9:5))+'" x2="'+x+'" y2="'+(y+(isLab?9:5))+'"/>';
+    if(isLab){const t=Math.round(v*100)/100;h+='<text x="'+x+'" y="'+(y+26)+'" text-anchor="middle">'+(t<0?MINUS+(-t):String(t)).replace('.',',')+'</text>';}
+  }
+  (o.pts||[]).forEach(p=>{const x=X(rnum(p.v));h+='<circle class="'+(p.cls||'pt')+'" cx="'+x+'" cy="'+y+'" r="5.5"/>'+(p.label?'<text class="ptl" x="'+x+'" y="'+(y-14)+'" text-anchor="middle">'+p.label+'</text>':'');});
+  if(o.click)h+='<rect class="hitarea" data-nl="1" x="0" y="0" width="'+W+'" height="'+H+'"/>';
+  return h+'</svg>';
+}
+/* Klick auf die Zahlengerade → Wert auf den nächsten kleinen Strich gerundet */
+function nlValue(svg,ev,minor){
+  const b=svg.getBoundingClientRect(),W=360,px=(ev.clientX-b.left)/b.width*W;
+  const lo=+svg.dataset.lo,hi=+svg.dataset.hi,x0=+svg.dataset.x0,x1=+svg.dataset.x1;
+  let v=lo+(px-x0)/(x1-x0)*(hi-lo);v=Math.max(lo,Math.min(hi,v));
+  const steps=Math.round((v-lo)/rnum(minor));
+  return radd(rat(B(Math.round(lo*1000)),1000n),rmul(minor,R(steps)));
+}
+
+/* ================= Zustand ================= */
+const LEVELS={std:'Standard',ahs:'Standard AHS'};
+const G={};['std','ahs'].forEach(l=>{G[l]={seed:Math.floor(Math.random()*65536),rounds:SECS[l].map(()=>1),tasks:[],st:[]};});
+let level=location.hash==='#ahs'?'ahs':'std',PUPIL='',restoring=false,summaryRequested=false;
+function mixSeed(seed,lvl,sec,round){return (Math.imul(seed^0x9E3779B9,0x85EBCA6B)^Math.imul(lvl==='ahs'?2:1,0xC2B2AE35)^Math.imul(sec+1,0x165667B1)^Math.imul(round,0x27D4EB2F))>>>0;}
+function genSec(lvl,k){
+  const g=G[lvl],S=SECS[lvl][k],old=RNG;RNG=mulberry32(mixSeed(g.seed,lvl,k,g.rounds[k]));
+  try{const out=[],seen=new Set();for(let i=0;out.length<S.n&&i<400;i++){const t=S.type.gen(out.length,lvl);const key=JSON.stringify(t,(kk,v)=>typeof v==='bigint'?String(v):v);if(seen.has(key))continue;seen.add(key);out.push(t);}
+    g.tasks[k]=out;g.st[k]=out.map(()=>({v:{},res:null,tries:0,msg:null,errs:0}));}finally{RNG=old;}
+}
+function genAll(lvl){SECS[lvl].forEach((s,k)=>genSec(lvl,k));}
+const curG=()=>G[level];
+
+/* ================= Anzeige ================= */
+function taskInner(k,i){
+  const S=SECS[level][k],t=curG().tasks[k][i],s=curG().st[k][i];
+  let h='<div class="trow"><span class="lbl">'+LBL[i]+')</span></div>'+S.type.render(t,s,k,i);
+  if(s.msg)h+='<div class="sol '+s.msg.kind+'">'+s.msg.text+(s.msg.offer&&s.res!=='shown'&&s.res!==true?' <button type="button" class="mini" data-show="1">Lösung zeigen</button>':'')+'</div>';
+  return h;
+}
+function taskCls(s){return 'task'+(s.res===true?' ok':s.res==='shown'?' shown':s.res===false?' bad':'');}
+function renderTask(k,i,focusSel){
+  const el=document.querySelector('.task[data-k="'+k+'"][data-i="'+i+'"]');if(!el)return;
+  const s=curG().st[k][i];el.className=taskCls(s);el.innerHTML=taskInner(k,i);
+  if(window.padApply)window.padApply();
+  if(focusSel){const f=el.querySelector(focusSel);if(f)f.focus({preventScroll:true});}
+}
+function renderAll(){
+  const box=$('secs');
+  box.innerHTML=SECS[level].map((S,k)=>'<section class="sec" id="sec'+k+'"><div class="head"><span class="num">'+(k+1)+'</span><h2>'+S.title+'</h2></div>'+
+    (S.info?'<div class="info">'+S.info+'</div>':'')+(S.hint?'<p class="hint">'+S.hint+'</p>':'')+
+    '<div class="tasks'+(S.wide?' wide':'')+'">'+curG().tasks[k].map((t,i)=>'<div class="'+taskCls(curG().st[k][i])+'" data-k="'+k+'" data-i="'+i+'">'+taskInner(k,i)+'</div>').join('')+'</div>'+
+    '<div class="secactions"><button type="button" class="ghost" data-checkall="'+k+'">Alle überprüfen</button><button type="button" class="ghost" data-newround="'+k+'">Neue Runde</button><span class="res" id="res'+k+'"></span><span class="round" id="round'+k+'"></span></div></section>').join('');
+  if(window.padApply)window.padApply();
+  updateScores();
+}
+function updateScores(){
+  const g=curG();let ok=0,n=0;
+  SECS[level].forEach((S,k)=>{const st=g.st[k],o=st.filter(s=>s.res===true).length;ok+=o;n+=st.length;
+    const r=$('res'+k);if(r)r.textContent=o+' von '+st.length+' richtig'+(o===st.length?' – super!':'');
+    const rd=$('round'+k);if(rd)rd.textContent='Runde '+g.rounds[k];
+    const nb=document.querySelector('[data-newround="'+k+'"]');if(nb){const done=st.every(s=>s.res===true||s.res==='shown');nb.textContent=done?'Noch eine Runde üben':'Neue Runde';nb.classList.toggle('ready',done);}});
+  $('score').textContent=ok+' von '+n+' richtig';
+  updateSummary();saveProgress();
+}
+
+/* ================= Prüfen ================= */
+function checkTask(k,i,force){
+  const S=SECS[level][k],t=curG().tasks[k][i],s=curG().st[k][i],T=S.type;
+  if(s.res===true||s.res==='shown')return;
+  const complete=T.complete?T.complete(t,s):Object.keys(T.fields||{}).every(f=>(s.v[f]||'').toString().trim()!=='');
+  if(!complete){if(force)s.msg={kind:'bad',text:T.incomplete||'Bitte zuerst alles ausfüllen.'};renderTask(k,i);return;}  /* immer neu zeichnen, damit die gewählte Antwort sofort markiert ist */
+  const r=T.check(t,s);
+  if(r===true){s.res=true;s.msg={kind:'ok',text:'Richtig!'};}
+  else if(r&&r.soft){s.res=null;s.msg={kind:'bad',text:r.soft};}
+  else{s.res=false;s.tries++;s.errs++;const h=typeof r==='string'?r:null;
+    s.msg={kind:'bad',text:(h||(s.tries===1?'Leider falsch – versuch es nochmal!':'Noch nicht richtig.'))+(h&&s.tries===1?' Versuch es nochmal!':''),offer:s.tries>=2};}
+  renderTask(k,i);updateScores();
+}
+function showSolution(k,i){
+  const S=SECS[level][k],t=curG().tasks[k][i],s=curG().st[k][i];
+  S.type.solve(t,s);s.res='shown';s.msg={kind:'shown',text:'Lösung: '+S.type.solH(t)};renderTask(k,i);updateScores();
+}
+
+/* ================= Bedienung ================= */
+function taskOf(el){const tk=el.closest('.task');return tk?[+tk.dataset.k,+tk.dataset.i]:null;}
+$('secs').addEventListener('click',ev=>{
+  const ca=ev.target.closest('[data-checkall]');if(ca){const k=+ca.dataset.checkall;curG().tasks[k].forEach((t,i)=>checkTask(k,i,true));return;}
+  const nr=ev.target.closest('[data-newround]');if(nr){const k=+nr.dataset.newround,g=curG();
+    if(g.st[k].some(s=>s.res!==true&&s.res!=='shown')&&!confirm('Neue Runde für diese Übung? Offene Aufgaben werden durch neue ersetzt.'))return;
+    g.rounds[k]=g.rounds[k]>=31?1:g.rounds[k]+1;genSec(level,k);summaryRequested=false;renderAll();$('sec'+k).scrollIntoView({behavior:'smooth',block:'start'});return;}
+  const ti=taskOf(ev.target);if(!ti)return;const [k,i]=ti,S=SECS[level][k],t=curG().tasks[k][i],s=curG().st[k][i];
+  if(ev.target.closest('[data-show]')){showSolution(k,i);return;}
+  if(s.res===true||s.res==='shown')return;
+  const setb=ev.target.closest('[data-set]');
+  if(setb){s.v[setb.dataset.set]=setb.dataset.v;if(s.res===false)s.res=null;s.msg=null;
+    if(S.type.autoCheck)checkTask(k,i,false);else renderTask(k,i);return;}
+  const act=ev.target.closest('[data-act]');
+  if(act&&S.type.onAct){const r=S.type.onAct(t,s,act.dataset.act,act);if(s.res===false)s.res=null;if(r==='check')checkTask(k,i,true);else renderTask(k,i);return;}
+  const nl=ev.target.closest('[data-nl]');
+  if(nl&&S.type.onLine){S.type.onLine(t,s,nl.closest('svg'),ev);if(s.res===false)s.res=null;s.msg=null;renderTask(k,i);return;}
+});
+$('secs').addEventListener('input',ev=>{
+  const inp=ev.target;if(!inp.dataset.f)return;const ti=taskOf(inp);if(!ti)return;const [k,i]=ti,s=curG().st[k][i];
+  s.v[inp.dataset.f]=inp.value;if(s.res===false){s.res=null;const tk=inp.closest('.task');tk.className=taskCls(s);}
+});
+$('secs').addEventListener('keydown',ev=>{
+  if(ev.key!=='Enter'||ev.target.tagName!=='INPUT')return;ev.preventDefault();
+  const ti=taskOf(ev.target);if(!ti)return;const [k,i]=ti;
+  const own=[...ev.target.closest('.task').querySelectorAll('input')],nx=own.slice(own.indexOf(ev.target)+1).find(x=>!x.value.trim());
+  if(nx){nx.focus();return;}
+  checkTask(k,i,true);
+  if(curG().st[k][i].res===true){const n=document.querySelector('.task[data-k="'+k+'"][data-i="'+(i+1)+'"] input');if(n)n.focus();}
+});
+$('secs').addEventListener('focusout',ev=>{
+  const tk=ev.target.closest&&ev.target.closest('.task');if(!tk||ev.target.tagName!=='INPUT')return;
+  setTimeout(()=>{if(!tk.contains(document.activeElement)&&tk.isConnected)checkTask(+tk.dataset.k,+tk.dataset.i,false);},0);
+});
+
+/* ================= Auswertung ================= */
+function updateSummary(){
+  const g=curG(),sum=$('summary');
+  const all=g.st.every(st=>st.every(s=>s.res===true||s.res==='shown'));
+  if(all&&!summaryRequested&&!restoring)summaryRequested=true;
+  if(!summaryRequested){sum.hidden=true;return;}
+  let T={first:0,later:0,shown:0,open:0,n:0},rows='';
+  SECS[level].forEach((S,k)=>{const st=g.st[k];
+    const first=st.filter(s=>s.res===true&&!s.errs).length,later=st.filter(s=>s.res===true&&s.errs).length,shown=st.filter(s=>s.res==='shown').length,open=st.length-first-later-shown;
+    T.first+=first;T.later+=later;T.shown+=shown;T.open+=open;T.n+=st.length;
+    rows+='<tr><td>'+(k+1)+' '+S.name+(g.rounds[k]>1?' <span class="rnote">(Runde '+g.rounds[k]+')</span>':'')+'</td><td class="c">'+first+'</td><td class="c">'+later+'</td><td class="c">'+shown+'</td><td class="c">'+open+'</td></tr>';});
+  $('sumBody').innerHTML=rows;
+  $('sumFoot').innerHTML='<tr><td>Gesamt ('+T.n+' Aufgaben)</td><td class="c">'+T.first+'</td><td class="c">'+T.later+'</td><td class="c">'+T.shown+'</td><td class="c">'+T.open+'</td></tr>';
+  const ok=T.first+T.later;let msg;
+  if(T.first===T.n)msg='Perfekt! Alle Aufgaben beim ersten Versuch richtig.';
+  else if(ok===T.n)msg='Super, alle Aufgaben selbst gelöst!';
+  else if(ok/T.n>=.75)msg='Sehr gut gemacht!';
+  else if(ok/T.n>=.5)msg='Gut! Mit ein bisschen Übung klappt der Rest auch.';
+  else msg='Übe noch ein bisschen weiter – starte neue Runden und probier es nochmal.';
+  if(!all)msg='Noch nicht alles erledigt: '+T.open+' Aufgabe'+(T.open===1?' ist':'n sind')+' noch offen. '+msg;
+  $('sumTitle').textContent=(all?'Geschafft'+(PUPIL?', '+PUPIL:'')+'! Deine Auswertung':'Zwischenstand'+(PUPIL?' von '+PUPIL:''))+' ('+LEVELS[level]+')';
+  const now=new Date(),who=$('sumWho');
+  who.innerHTML='👤 <b></b> · '+now.toLocaleDateString('de-AT')+', '+now.toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'})+' Uhr · '+LEVELS[level];
+  who.querySelector('b').textContent=PUPIL||'(kein Name)';
+  $('sumMsg').textContent=msg;
+  const wasHidden=sum.hidden;sum.hidden=false;
+  if(wasHidden&&!restoring&&all)setTimeout(()=>sum.scrollIntoView({behavior:'smooth',block:'start'}),300);
+}
+$('showSum').addEventListener('click',()=>{summaryRequested=true;updateSummary();$('summary').scrollIntoView({behavior:'smooth',block:'start'});});
+$('newAll').addEventListener('click',()=>{const g=curG();if(!confirm('Alle Übungen mit neuen Aufgaben starten?'))return;
+  SECS[level].forEach((S,k)=>{g.rounds[k]=g.rounds[k]>=31?1:g.rounds[k]+1;genSec(level,k);});summaryRequested=false;renderAll();window.scrollTo({top:0,behavior:'smooth'});});
+function setLevel(l){
+  level=l;summaryRequested=false;
+  document.querySelectorAll('.levels button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.level===l?'true':'false'));
+  try{history.replaceState(null,'',l==='ahs'?'#ahs':'#standard');}catch(x){}
+  renderAll();
+}
+document.querySelectorAll('.levels button').forEach(b=>b.addEventListener('click',()=>setLevel(b.dataset.level)));
+
+/* ================= Fortschritt: speichern (gleiches Gerät) & Code (anderes Gerät) ================= */
+const ALPH='23456789ABCDEFGHJKMNPQRSTUVWXYZ',AL=B(ALPH.length);
+const normName=s=>s.trim().replace(/\s+/g,' ').toLowerCase();
+function nameHash(n){let h=2166136261;for(const ch of normName(n)){h^=ch.codePointAt(0);h=Math.imul(h,16777619);}return (h>>>0)%1024;}
+function checkChar(s){let c=0;for(let k=0;k<s.length;k++)c=(c+(k+1)*ALPH.indexOf(s[k]))%ALPH.length;return ALPH[c];}
+const stCode=s=>s.res===true?(s.errs?2:1):s.res==='shown'?3:0;
+function makeCode(lvl){
+  const g=G[lvl],F=[],f=(v,r)=>F.push([v,r]);
+  f(lvl==='ahs'?1:0,2);f(g.seed,65536);
+  SECS[lvl].forEach((S,k)=>{f(g.rounds[k]-1,32);g.st[k].forEach(s=>f(stCode(s),4));});
+  f(nameHash(PUPIL),1024);
+  let N=0n;for(let k=F.length-1;k>=0;k--)N=N*B(F[k][1])+B(F[k][0]);
+  let s='';do{s=ALPH[Number(N%AL)]+s;N/=AL;}while(N>0n);
+  s+=checkChar(s);return s.match(/.{1,4}/g).join('-');
+}
+function readCode(str){
+  const bad={err:'Dieser Code ist ungültig. Kontrolliere, ob du ihn richtig abgeschrieben hast.'};
+  const s=str.toUpperCase().replace(/[\s\-–—_.]/g,'');
+  if(s.length<3||[...s].some(ch=>!ALPH.includes(ch)))return bad;
+  const body=s.slice(0,-1);
+  if(checkChar(body)!==s.slice(-1))return {err:'Im Code ist ein Tippfehler. Kontrolliere ihn Zeichen für Zeichen.'};
+  let N=0n;for(const ch of body)N=N*AL+B(ALPH.indexOf(ch));
+  const g=r=>{const v=Number(N%B(r));N/=B(r);return v;};
+  const lvl=g(2)?'ahs':'std',seed=g(65536),secs=[];
+  for(const S of SECS[lvl]){const round=g(32)+1,st=[];for(let i=0;i<S.n;i++)st.push(g(4));secs.push({round,st});}
+  const nh=g(1024);if(N!==0n)return bad;
+  return {lvl,seed,secs,nh};
+}
+function applyCode(p){
+  const g=G[p.lvl];g.seed=p.seed;
+  p.secs.forEach((x,k)=>{g.rounds[k]=x.round;genSec(p.lvl,k);
+    x.st.forEach((c,i)=>{if(!c)return;const s=g.st[k][i],t=g.tasks[k][i],T=SECS[p.lvl][k].type;T.solve(t,s);
+      if(c===3){s.res='shown';s.msg={kind:'shown',text:'Lösung: '+T.solH(t)};}else{s.res=true;s.errs=c===2?1:0;s.msg={kind:'ok',text:'Richtig!'};}});});
+}
+function saveProgress(lvl){
+  lvl=lvl||level;if(!PUPIL||restoring)return;
+  const code=makeCode(lvl);
+  try{const k=STORE+normName(PUPIL),o=JSON.parse(localStorage.getItem(k)||'{}');o.last=level;o[lvl]=code;localStorage.setItem(k,JSON.stringify(o));}catch(x){}
+  if(lvl===level)$('codeShow').textContent=code;
+}
+function loadSaved(name){try{return JSON.parse(localStorage.getItem(STORE+normName(name))||'null');}catch(x){return null;}}
+
+/* ================= Name zu Beginn (danach nicht mehr änderbar) ================= */
+function setLocked(on){document.body.classList.toggle('locked',on);if(on)$('main').setAttribute('inert','');else $('main').removeAttribute('inert');}
+function startErr(msg,el){const err=$('pnameErr');err.textContent=msg;err.hidden=false;el.focus();}
+function startWithName(){
+  const inpEl=$('pname'),v=inpEl.value.trim().replace(/\s+/g,' '),codeInp=$('pcode');
+  if(v.length<2){startErr('Bitte gib deinen Namen ein.',inpEl);return;}
+  let p=null;
+  if(codeInp.value.trim()){p=readCode(codeInp.value);
+    if(p.err){$('codeAsk').open=true;startErr(p.err,codeInp);return;}
+    if(p.nh!==nameHash(v)){startErr('Dieser Code gehört zu einem anderen Namen. Schreib deinen Namen genau so wie auf dem anderen Gerät.',inpEl);return;}}
+  $('pnameErr').hidden=true;PUPIL=v;
+  const saved=loadSaved(v);let msg='';
+  restoring=true;
+  try{
+    if(saved){['std','ahs'].forEach(l=>{if(saved[l]&&!(p&&p.lvl===l)){const q=readCode(saved[l]);if(!q.err&&q.nh===nameHash(v))applyCode(q);}});
+      msg='Willkommen zurück! Du machst dort weiter, wo du auf diesem Gerät aufgehört hast.';}
+    if(p){applyCode(p);msg='Dein Fortschritt vom anderen Gerät wurde übernommen.';}
+  }finally{restoring=false;}
+  saveProgress('std');saveProgress('ahs');
+  $('pnameShow').textContent=v;$('startMsg').textContent=msg;
+  $('startAsk').hidden=true;$('startDone').hidden=false;
+  setLocked(false);setLevel(p?p.lvl:(saved&&saved.last)||level);
+}
+$('startBtn').addEventListener('click',startWithName);
+['pname','pcode'].forEach(k=>$(k).addEventListener('keydown',ev=>{if(ev.key==='Enter'){ev.preventDefault();startWithName();}}));
+$('codeBtn').addEventListener('click',ev=>{const box=$('codeBox'),open=box.hidden;saveProgress();box.hidden=!open;ev.currentTarget.setAttribute('aria-expanded',open?'true':'false');});
+$('codeCopy').addEventListener('click',ev=>{const b=ev.currentTarget,txt=$('codeShow').textContent;
+  try{navigator.clipboard.writeText(txt).then(()=>{b.textContent='Kopiert ✓';setTimeout(()=>{b.textContent='Kopieren';},1500);},()=>{});}catch(x){}});
+
+/* ================= Start ================= */
+genAll('std');genAll('ahs');
+setLevel(level);
+setLocked(true);
+$('pname').focus();
+
+/* ================= Eingabehilfe (Bildschirm-Tastatur) ================= */
+(function(){
+  const pad=$('pad'),sysBtn=$('padSys');
+  const touch=window.matchMedia&&matchMedia('(pointer: coarse)').matches;
+  let padOnly=touch,closed=false,cur=null;
+  try{const s=localStorage.getItem('padOnly');if(s!==null)padOnly=s==='1';}catch(x){}
+  function applyMode(){document.querySelectorAll('#secs input.pin').forEach(i=>{if(padOnly)i.setAttribute('inputmode','none');else i.setAttribute('inputmode','text');});
+    sysBtn.textContent=padOnly?'Handy-Tastatur einblenden':'Handy-Tastatur ausblenden';}
+  window.padApply=applyMode;applyMode();
+  /* Tasten passend zur Übung: √ nur beim Wurzelziehen, Bruchstrich und Komma nur wo Brüche/Dezimalzahlen vorkommen */
+  function fitKeys(input){const tk=input.closest('.task'),S=tk&&SECS[level][+tk.dataset.k],nm=S?S.name:'';
+    const vr=['Wurzeln mit Variablen','Wurzeln S'].includes(nm),root=['Wurzel aus Produkt','Teilweise Wurzel','Wurzeln mit Variablen','Wurzeln S','Primfaktoren'].includes(nm),dec=['Quadrieren','Wurzeln im Kopf','Quadrieren S','Wurzeln S'].includes(nm);
+    const off=(sel,b)=>{const k=pad.querySelector(sel);k.classList.toggle('off',b);k.tabIndex=b?-1:0;k.setAttribute('aria-hidden',b?'true':'false');};
+    off('[data-ins="√"]',!root);off('[data-ins="·"]',!root);pad.querySelectorAll('.vk').forEach(k=>k.classList.toggle('gone',!vr));off('[data-ins="/"]',!dec);off('[data-ins=","]',!dec);off('[data-ins="-"]',root||nm==='Quadratzahlen');}
+  function show(input){cur=input;fitKeys(input);if(closed)return;pad.hidden=false;document.body.classList.add('padon');
+    const r=input.getBoundingClientRect();if(r.bottom>window.innerHeight-pad.offsetHeight-10)input.scrollIntoView({block:'center',behavior:'smooth'});}
+  function hide(){pad.hidden=true;document.body.classList.remove('padon');}
+  document.addEventListener('focusin',ev=>{const t=ev.target;if(t.tagName==='INPUT'&&t.classList.contains('pin')&&!t.readOnly)show(t);});
+  document.addEventListener('focusout',()=>setTimeout(()=>{const a=document.activeElement;if(!(a&&a.tagName==='INPUT'&&a.classList.contains('pin')))hide();},150));
+  function insert(txt){if(!cur||!cur.isConnected)return;const s=cur.selectionStart??cur.value.length,e=cur.selectionEnd??cur.value.length;cur.setRangeText(txt,s,e,'end');cur.dispatchEvent(new Event('input',{bubbles:true}));}
+  /* nur pointerdown/mousedown abfangen – nie touchstart, sonst gehen die Tasten am Handy nicht */
+  pad.addEventListener('pointerdown',ev=>{if(ev.target.closest('button'))ev.preventDefault();});
+  pad.addEventListener('mousedown',ev=>{if(ev.target.closest('button'))ev.preventDefault();});
+  pad.addEventListener('click',ev=>{
+    const b=ev.target.closest('button');if(!b)return;
+    if(b.id==='padHide'){closed=true;hide();return;}
+    if(b.id==='padSys'){padOnly=!padOnly;try{localStorage.setItem('padOnly',padOnly?'1':'0');}catch(x){}applyMode();if(cur&&cur.isConnected){cur.blur();setTimeout(()=>cur.focus(),60);}return;}
+    if(!cur||!cur.isConnected)return;
+    if(b.dataset.ins!==undefined)insert(b.dataset.ins);
+    else if(b.dataset.act==='clr'){cur.value='';cur.dispatchEvent(new Event('input',{bubbles:true}));}
+    else if(b.dataset.act==='left'){const s=Math.max(0,(cur.selectionStart??cur.value.length)-1);cur.setSelectionRange(s,s);}
+    else if(b.dataset.act==='right'){const s=Math.min(cur.value.length,(cur.selectionEnd??cur.value.length)+1);cur.setSelectionRange(s,s);}
+    else if(b.dataset.act==='del'){const s=cur.selectionStart??cur.value.length,e2=cur.selectionEnd??s;if(s!==e2)cur.setRangeText('',s,e2,'end');else if(s>0)cur.setRangeText('',s-1,s,'end');cur.dispatchEvent(new Event('input',{bubbles:true}));}
+    else if(b.dataset.act==='ok'){cur.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));}
+    if(cur&&cur.isConnected)cur.focus({preventScroll:true});
+  });
+  document.addEventListener('click',ev=>{if(ev.target.closest('[data-newround],#newAll'))closed=false;});
+})();
+</script></body></html>
