@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<script>/* Bestätigungsfenster: In manchen Apps (z. B. Vorschau am iPhone) werden sie blockiert und liefern sofort „Nein“ – dann trotzdem weitermachen */(function(){const n=window.confirm.bind(window);window.confirm=function(m){const t=Date.now();let r=false;try{r=n(m);}catch(x){return true;}return r||Date.now()-t<60;};})();</script>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pythagoras 2 – Rechteck, Quadrat, gleichschenkliges Dreieck, Sachaufgaben</title>
+<meta name="uebersicht-kapitel" content="Pythagoras">
+<meta name="uebersicht-thema" content="Satz des Pythagoras 2 – Pythagoras in Figuren und Sachaufgaben">
+<meta name="uebersicht-info" content="Rechtwinkliges Dreieck finden, Rechteck- und Quadratdiagonale (auch aus Fläche/Umfang), gleichschenkliges und gleichseitiges Dreieck (Höhe, Fläche), Sachaufgaben – Standard und Standard AHS, danach Arbeitsblatt">
+<meta name="uebersicht-gruppe" content="4. Klasse">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F9FC; --grid:#DCE6F2; --ink:#1B2F6B; --text:#1E2533; --muted:#5B6578;
+  --card:#FFFFFF; --line:#C9D5E6; --ok:#217A4B; --okbg:#E3F4EA; --bad:#B3261E; --badbg:#FBE7E5;
+  --mark:#FFE873; --field:#FFFFFF; --info:#EAF1FB; --accent:#147D92;
+  --c1:#D99A00; --c2:#1E73D6; --c3:#2E8B3A; --c4:#D81B60; --c5:#8E24AA; --c6:#E8590C;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111827; --grid:#1C2638; --ink:#A9C1FF; --text:#E6EAF2; --muted:#9AA4B8;
+    --card:#172033; --line:#2C3A55; --ok:#5FD08E; --okbg:#173326; --bad:#FF8A80; --badbg:#3A1C1C;
+    --mark:#6B5A12; --field:#0F1726; --info:#1A2740; --accent:#5CC8DC;
+    --c1:#FFD54F; --c2:#64B5F6; --c3:#81C784; --c4:#F48FB1; --c5:#CE93D8; --c6:#FFAB76; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111827; --grid:#1C2638; --ink:#A9C1FF; --text:#E6EAF2; --muted:#9AA4B8;
+  --card:#172033; --line:#2C3A55; --ok:#5FD08E; --okbg:#173326; --bad:#FF8A80; --badbg:#3A1C1C;
+  --mark:#6B5A12; --field:#0F1726; --info:#1A2740; --accent:#5CC8DC;
+  --c1:#FFD54F; --c2:#64B5F6; --c3:#81C784; --c4:#F48FB1; --c5:#CE93D8; --c6:#FFAB76; color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; color:var(--text); font-family:"Atkinson Hyperlegible",system-ui,"Segoe UI",Arial,sans-serif;
+  font-size:1.0625rem; line-height:1.5;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.wrap{max-width:60rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1rem;margin:1rem 0 2rem}
+h1{font-family:Fraunces,Georgia,serif;font-weight:800;color:var(--ink);font-size:clamp(2.1rem,6vw,3.5rem);line-height:1.02;margin:0;letter-spacing:-.01em}
+h1 .acc{color:var(--accent)}
+.sub{color:var(--muted);margin:.5rem 0 0;max-width:42rem}
+.top{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.score{font-weight:700;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:999px;padding:.35rem .9rem}
+button{font:inherit;cursor:pointer;border-radius:.5rem;border:2px solid var(--ink);background:var(--ink);color:var(--paper);padding:.45rem .9rem;font-weight:700}
+button.ghost{background:transparent;color:var(--ink)}
+button:disabled{cursor:default;opacity:.45}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+button.mini{font-size:.85rem;padding:.1rem .55rem;background:transparent;color:var(--ink);border-width:1.5px}
+section{background:var(--card);border:2px solid var(--line);border-radius:.75rem;padding:1.25rem 1.25rem 1rem;margin:0 0 1.5rem}
+.head{display:flex;gap:.8rem;align-items:baseline;flex-wrap:wrap}
+.num{font-family:Fraunces,Georgia,serif;font-weight:800;font-size:1.6rem;color:var(--ink);min-width:1.4em}
+h2{font-size:1.15rem;margin:0}
+h3{font-size:1.05rem;margin:0 0 .4rem;color:var(--ink)}
+sup{font-size:.68em;margin-left:.04em}
+.lvl{font-size:.9rem;font-weight:700;color:var(--accent)}
+input{font:inherit;font-size:1.15rem;color:var(--text);background:var(--field);border:2px solid var(--line);border-radius:.4rem;padding:.25rem .5rem}
+input.ok{border-color:var(--ok);background:var(--okbg)}
+input.bad{border-color:var(--bad);background:var(--badbg)}
+.actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.6rem}
+.hint{color:var(--muted);font-size:.95rem;margin:.4rem 0 0}
+.msg{margin:.6rem 0 0;font-size:.97rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.msg.ok{color:var(--ok);font-weight:700}.msg.bad{color:var(--bad)}.msg.shown{color:var(--muted)}
+.prev{color:var(--muted);font-size:1.1rem}
+.prev b{color:var(--text);font-weight:400}
+
+details.info{background:var(--info);border:0;border-left:6px solid var(--ink);border-radius:.5rem;padding:.7rem 1rem;margin:0 0 1.5rem}
+details.info summary{cursor:pointer;font-weight:700;color:var(--ink)}
+details.info p{margin:.5rem 0}
+.copy{background:var(--mark);color:var(--text);border-radius:.4rem;padding:.4rem .7rem;margin:.6rem 0!important}
+.rule{font-size:1.15rem}
+
+.nav{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.dots{display:flex;gap:.3rem;flex-wrap:wrap}
+.dot{width:2.2rem;height:2.2rem;border-radius:50%;padding:0;font-weight:700;font-size:.9rem;background:var(--field);color:var(--ink);border:2px solid var(--line)}
+.dot.started{background:var(--info)}
+.dot.done{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.dot.shown{border-style:dashed}
+.dot.cur{border-color:var(--ink);box-shadow:0 0 0 3px var(--mark)}
+.round{margin-left:auto;color:var(--muted);font-size:.9rem;border:1.5px solid var(--line);border-radius:999px;padding:.1rem .6rem}
+
+.taskline{font-size:1.6rem;margin:.9rem 0 .3rem;display:flex;flex-wrap:wrap;align-items:center;gap:.2rem}
+.tchip{font:inherit;font-size:1.6rem;font-weight:400;background:transparent;color:var(--text);border:0;border-bottom:5px solid transparent;border-radius:0;padding:0 .2rem .05rem;line-height:1.35;cursor:pointer}
+.tchip:hover{background:var(--info)}
+.tchip.k1{border-bottom-color:var(--c1)}.tchip.k2{border-bottom-color:var(--c2)}.tchip.k3{border-bottom-color:var(--c3)}.tchip.k4{border-bottom-color:var(--c4)}.tchip.k5{border-bottom-color:var(--c5)}.tchip.k6{border-bottom-color:var(--c6)}
+.gt{text-decoration:underline;text-decoration-thickness:4px;text-underline-offset:.3em}
+.g1{text-decoration-color:var(--c1)}.g2{text-decoration-color:var(--c2)}.g3{text-decoration-color:var(--c3)}.g4{text-decoration-color:var(--c4)}.g5{text-decoration-color:var(--c5)}.g6{text-decoration-color:var(--c6)}
+.palette{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin:.3rem 0}
+.pal{width:2.6rem;height:2.2rem;padding:0;background:var(--field);border:2px solid var(--line);border-radius:.4rem;position:relative}
+.pal::after{content:"";position:absolute;left:.45rem;right:.45rem;bottom:.55rem;height:5px;border-radius:3px;background:currentColor}
+.pal.u1{color:var(--c1)}.pal.u2{color:var(--c2)}.pal.u3{color:var(--c3)}.pal.u4{color:var(--c4)}.pal.u5{color:var(--c5)}.pal.u6{color:var(--c6)}
+.pal.sel{border-color:var(--ink);box-shadow:0 0 0 3px var(--mark)}
+.markmsg{font-size:.95rem;margin:.3rem 0 0}
+.markmsg.ok{color:var(--ok);font-weight:700}.markmsg.bad{color:var(--bad)}
+.stepcard{border:2px solid var(--ink);border-radius:.6rem;padding:.8rem 1rem;margin-top:1rem}
+.stepcard.done{border-color:var(--ok)}
+.donetxt{color:var(--ok);font-weight:700}
+.row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin:.5rem 0;font-size:1.3rem}
+.row input{width:18rem;max-width:100%}
+.donebox{margin-top:1rem;padding:.8rem 1rem;border-radius:.6rem;background:var(--okbg);border:2px solid var(--ok);display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+.donebox b{color:var(--ok)}
+
+.heft{overflow-x:auto;margin:1.2rem 0 .5rem;border:2px dashed var(--line);border-radius:.6rem;background:var(--paper);padding:.8rem 1rem}
+.heft .hefttitle{margin:0 0 .3rem;font-weight:700;color:var(--muted);font-size:.95rem}
+.heft .hl{font-size:1.35rem;color:var(--ink);margin:.3rem 0}
+.heft .fin{font-weight:700}
+.heft .small{font-size:1rem;color:var(--muted)}
+.heft .copy{font-size:1rem}
+
+.startcard{border-color:var(--ink);border-width:3px}
+.startcard h2{font-family:Fraunces,Georgia,serif;font-size:1.5rem;color:var(--ink)}
+#pname{width:16rem;max-width:100%;font-size:1.15rem}
+#startDone{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.who{font-weight:700;color:var(--ink);display:inline-flex;align-items:center;gap:.4rem;font-size:1.1rem}
+#codeAsk{margin-top:1rem}
+#codeAsk summary{cursor:pointer;color:var(--ink);font-weight:700}
+#pcode{width:17rem;max-width:100%;font-family:ui-monospace,Consolas,"Courier New",monospace;text-transform:uppercase;letter-spacing:.05em}
+#pnameErr{color:var(--bad);margin:.6rem 0 0}
+#startMsg{flex-basis:100%;margin:0;color:var(--ok);font-weight:700}
+#startMsg:empty{display:none}
+#codeBox{flex-basis:100%;background:var(--info);border-left:6px solid var(--ink);border-radius:.5rem;padding:.7rem 1rem}
+#codeBox p{margin:.3rem 0}
+.code{font-family:ui-monospace,Consolas,"Courier New",monospace;font-size:1.35rem;font-weight:700;letter-spacing:.06em;color:var(--ink);word-break:break-all}
+.finish{display:flex;justify-content:center;margin:0 0 1.5rem}
+#summary{border-color:var(--ink);border-width:3px}
+#summary .who{margin:.4rem 0 0;color:var(--muted)}
+#summary .who b{color:var(--text)}
+.summsg{font-size:1.2rem;font-weight:700;color:var(--ink);margin:.6rem 0 1rem}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:30rem}
+th,td{text-align:left;padding:.4rem .6rem;border-bottom:1px solid var(--line)}
+td.c,th.c{text-align:center}
+tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--ink)}
+body.locked #main{opacity:.35;filter:grayscale(.4);pointer-events:none;user-select:none}
+
+#pad{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:3px solid var(--ink);
+  padding:.5rem .6rem calc(.5rem + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 16px rgba(27,47,107,.15)}
+#pad .padtop{display:flex;align-items:center;gap:.5rem;max-width:34rem;margin:0 auto .4rem;color:var(--muted);font-size:.9rem}
+#pad .padtop span{margin-right:auto;font-weight:700;color:var(--ink)}
+#pad .keys{display:grid;grid-template-columns:repeat(7,1fr);gap:.3rem;max-width:34rem;margin:0 auto}
+#pad .keys button{padding:.55rem 0;font-size:1.15rem;font-weight:700;background:var(--field);color:var(--text);border:2px solid var(--line);border-radius:.45rem;touch-action:manipulation}
+#pad .keys button.var{font-style:italic;font-family:Georgia,serif}
+#pad .keys button.op{background:var(--info)}
+#pad .keys button.go{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+body.padon .wrap{padding-bottom:20rem}
+
+.levels{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden;margin-top:1rem}
+.levels button{border:0;border-radius:0;background:transparent;color:var(--ink);padding:.45rem 1.1rem}
+.levels button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.sec{background:var(--card);border:2px solid var(--line);border-radius:.75rem;padding:1.1rem 1.1rem .9rem;margin:0 0 1.5rem}
+.sec .head .num{min-width:1.4em}
+.sec .info{background:var(--info);border-left:6px solid var(--ink);border-radius:.5rem;padding:.6rem .9rem;margin:.7rem 0 0}
+.sec .info p{margin:.2rem 0}
+.tasks{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(17rem,100%),1fr));gap:.7rem 1.2rem;margin:.9rem 0}
+.tasks.wide{grid-template-columns:1fr}
+.task{display:flex;flex-direction:column;gap:.35rem;padding:.5rem .6rem;border-radius:.55rem;border:2px solid var(--line);background:var(--field)}
+.task.ok{background:var(--okbg);border-color:var(--ok)}
+.task.bad{background:var(--badbg);border-color:var(--bad)}
+.task.shown{border-style:dashed}
+.trow{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;font-size:1.2rem}
+.lbl{font-weight:700;color:var(--ink)}
+.task input{width:6.5rem;font-size:1.15rem}
+.task .sol{font-size:.95rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.task .sol.bad{color:var(--bad)}.task .sol.ok{color:var(--ok);font-weight:700}.task .sol.shown{color:var(--muted)}
+.choice{display:inline-flex;gap:.3rem;flex-wrap:wrap}
+.choice button{min-width:2.8rem;font-size:1.25rem;font-weight:700;background:var(--field);color:var(--text);border:2px solid var(--line);padding:.15rem .6rem}
+.choice button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.big{font-size:1.4rem;font-family:Georgia,"Times New Roman",serif}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1;margin:0 .1em;font-size:.85em}
+.fr>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .2em}
+.fr>span:last-child{padding:0 .2em}
+.nl{width:100%;height:auto;display:block;touch-action:manipulation}
+.nl .axis{stroke:var(--text);stroke-width:2}
+.nl .tk{stroke:var(--text);stroke-width:1.5}
+.nl .tk.minor{stroke:var(--muted);stroke-width:1}
+.nl text{font-size:13px;fill:var(--text);font-family:"Atkinson Hyperlegible",sans-serif}
+.nl .pt{fill:var(--accent)}
+.nl .ptl{font-weight:700;fill:var(--accent);font-size:15px}
+.nl .mine{fill:#E8590C}
+.nl .hitarea{fill:transparent;cursor:crosshair}
+.tiles{display:flex;flex-wrap:wrap;gap:.35rem}
+.tile{font-size:1.2rem;background:var(--field);color:var(--text);border:2px solid var(--line);padding:.15rem .6rem;font-weight:400;font-family:Georgia,serif}
+.tile:disabled{opacity:.3}
+.seq{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;min-height:2.4rem;border-top:2px dashed var(--line);padding-top:.4rem}
+.seq .lt{color:var(--muted);font-size:1.2rem}
+.seq .pl{font-size:1.2rem;border:2px solid var(--ink);border-radius:.45rem;padding:.1rem .5rem;font-family:Georgia,serif}
+.setbtn{min-width:3rem;font-size:1.3rem;font-family:Georgia,serif}
+.sumafter{margin-top:.8rem;padding:.6rem .9rem;border-radius:.5rem;background:var(--mark);color:var(--text)}
+.secactions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.secactions .res{color:var(--muted);font-weight:700}
+.secactions .round{margin-left:auto}
+.rnote{color:var(--muted);font-weight:400;font-size:.9em}
+button.ready{background:var(--ink);color:var(--paper)}
+.zq{margin:.2rem 0 .5rem;line-height:1.6}
+.opts{display:flex;flex-direction:column;gap:.4rem}
+.opt{font:inherit;text-align:left;font-weight:400;background:var(--field);color:var(--text);border:2px solid var(--line);padding:.45rem .7rem;font-family:Georgia,serif;font-size:1.15rem}
+.opt[aria-pressed="true"]{border-color:var(--ink);background:var(--info)}
+.rf{display:flex;flex-direction:column;gap:.45rem}
+.rfrow{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:.4rem}
+.rft{flex:1 1 14rem}
+.rfrow .choice button{min-width:4.5rem;font-weight:700}
+.trow.big{display:block;line-height:2.3;font-size:1.2rem}
+.trow.big input{vertical-align:middle;font-size:1.15rem;text-align:center}
+svg.tri{width:100%;max-width:340px;height:auto;display:block;margin:.2rem auto}
+svg.tri .tlab{font:italic 18px Georgia,serif;fill:var(--text)}
+svg.tri .hit{cursor:pointer}
+svg.fig{width:100%;max-width:340px;height:auto;display:block;margin:.2rem auto}svg.fig .tlab{font:italic 17px Georgia,serif;fill:var(--text)}
+</style></head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Pythagoras <span class="acc">in Figuren</span></h1>
+      <p class="sub">Rechtwinklige Dreiecke in Rechteck, Quadrat, gleichschenkligem und gleichseitigem Dreieck finden und Diagonalen, Höhen und Seiten berechnen – mit vielen Sachaufgaben. Jede Übung hat ihre eigene „Neue Runde“. Ein Taschenrechner ist erlaubt.</p>
+      <div class="levels" role="group" aria-label="Niveau">
+        <button type="button" data-level="std" aria-pressed="true">Standard</button>
+        <button type="button" data-level="ahs" aria-pressed="false">Standard AHS</button>
+      </div>
+    </div>
+    <div class="top"><span class="score" id="score">0 von 0 richtig</span></div>
+  </header>
+  <section id="start" class="startcard">
+    <div id="startAsk">
+      <h2>Wie heißt du?</h2>
+      <p class="hint">Gib zuerst deinen Namen ein. Er steht am Ende in deiner Auswertung und kann danach nicht mehr geändert werden. Hast du auf diesem Gerät schon geübt, machst du automatisch dort weiter, wo du aufgehört hast.</p>
+      <div class="actions"><input id="pname" placeholder="Vor- und Nachname" autocomplete="name" aria-label="Dein Name"><button id="startBtn" type="button">Los geht’s</button></div>
+      <details id="codeAsk">
+        <summary>Auf einem anderen Gerät angefangen? Code eingeben</summary>
+        <p class="hint">Schreib oben deinen Namen genau wie auf dem anderen Gerät und tippe hier den Code ein.</p>
+        <div class="actions"><input id="pcode" placeholder="z. B. K7MP-2XQ9" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Code vom anderen Gerät"></div>
+      </details>
+      <p id="pnameErr" hidden></p>
+    </div>
+    <div id="startDone" hidden>
+      <span class="who">👤 <b id="pnameShow"></b></span>
+      <button type="button" class="mini" id="codeBtn" aria-expanded="false">Auf anderem Gerät weitermachen</button>
+      <p id="startMsg" aria-live="polite"></p>
+      <div id="codeBox" hidden>
+        <p>Dein Code: <span class="code" id="codeShow"></span> <button type="button" class="mini" id="codeCopy">Kopieren</button></p>
+        <p class="hint">Öffne die Übung auf dem anderen Gerät, gib <b>genau denselben Namen</b> ein und tippe diesen Code ein. Der Code ändert sich, während du weiterarbeitest – schreib ihn dir erst auf, wenn du hier aufhörst.</p>
+      </div>
+    </div>
+  </section>
+  <div id="main">
+    <div id="secs"></div>
+    <div class="finish" style="gap:.6rem;flex-wrap:wrap"><button class="ghost" id="showSum" type="button">Auswertung anzeigen</button><button class="ghost" id="newAll" type="button">Alle Übungen neu</button></div>
+
+    <details class="info" id="howto" open>
+      <summary>Zusammenfassung – schreib sie in dein Heft!</summary>
+      <p class="copy">✏️ <b>Schreib diese Zusammenfassung mit den Beispielen ordentlich in dein Heft ab.</b></p>
+      <p><b>So gehst du vor:</b> 1. Rechtwinkliges Dreieck in der Figur suchen (Diagonale oder Höhe einzeichnen). 2. Hypotenuse markieren – sie liegt dem rechten Winkel gegenüber. 3. Pythagoras: plus, wenn die Hypotenuse gesucht ist, minus, wenn eine Kathete gesucht ist.</p>
+      <p><b>Rechteck:</b> d = √(l² + b²) &nbsp;·&nbsp; <b>Quadrat:</b> d = √(a² + a²), a = √A, a = u : 4</p>
+      <p><b>Gleichschenkliges Dreieck:</b> Die Höhe halbiert die Basis: h = √(a² − (c/2)²), Fläche A = c · h : 2</p>
+      <p><b>Gleichseitiges Dreieck:</b> h = √(s² − (s/2)²)</p>
+      <p class="rule">Beispiel: Rechteck l = 9 cm, b = 5 cm → d = √(9² + 5²) = √(81 + 25) = √106 ≈ 10,30 cm</p>
+      <p class="rule">Beispiel: gleichschenklig a = 10 cm, c = 12 cm → c/2 = 6 cm → h = √(10² − 6²) = √64 = 8 cm</p>
+      <p class="hint">Eingabe: Dezimalzahl mit Komma, z. B. 7,21 – auf 2 Dezimalstellen runden.</p>
+    </details>
+
+    <section id="summary" hidden>
+      <div class="head"><h2 id="sumTitle">Auswertung</h2></div>
+      <p id="sumWho" class="who"></p>
+      <p id="sumMsg" class="summsg"></p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Übung</th><th class="c">beim 1. Versuch</th><th class="c">mit Fehlern</th><th class="c">Lösung angesehen</th><th class="c">offen</th></tr></thead>
+        <tbody id="sumBody"></tbody>
+        <tfoot id="sumFoot"></tfoot>
+      </table></div>
+    </section>
+  </div>
+</div>
+
+<div id="pad" hidden role="group" aria-label="Eingabehilfe">
+  <div class="padtop"><span>Eingabehilfe</span>
+    <button type="button" class="mini" id="padSys">Handy-Tastatur einblenden</button>
+    <button type="button" class="mini" id="padHide" aria-label="Eingabehilfe schließen">✕</button>
+  </div>
+  <div class="keys">
+    <button type="button" data-ins="7">7</button><button type="button" data-ins="8">8</button><button type="button" data-ins="9">9</button><button type="button" class="op" data-ins="-" aria-label="minus">−</button><button type="button" class="op" data-ins="," aria-label="Komma">,</button><button type="button" class="op" data-act="del" aria-label="Löschen">⌫</button><button type="button" class="op" data-act="clr" aria-label="Feld leeren">C</button>
+    <button type="button" data-ins="4">4</button><button type="button" data-ins="5">5</button><button type="button" data-ins="6">6</button><button type="button" class="op" data-ins="/" aria-label="Bruchstrich">/</button><button type="button" class="op" data-ins=" " aria-label="Leerzeichen">␣</button><button type="button" class="op" data-act="left" aria-label="Cursor nach links">◀</button><button type="button" class="op" data-act="right" aria-label="Cursor nach rechts">▶</button>
+    <button type="button" data-ins="1">1</button><button type="button" data-ins="2">2</button><button type="button" data-ins="3">3</button><button type="button" data-ins="0">0</button><button type="button" class="go" data-act="ok" style="grid-column:span 3">✓ fertig</button>
+  </div>
+</div>
+<script>
+const inpF=(f,val,label,ph,w)=>'<input class="pin" data-f="'+f+'" value="'+esc(val||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="'+label+'"'+(ph?' placeholder="'+ph+'"':'')+' style="width:'+(w||'6rem')+'">';
+const eq=x=>Math.abs(x-Math.round(x))<1e-9?' = ':' ≈ ';
+const cm=x=>{let s=String(Math.round(x*100)/100);return s.replace('-','−').replace('.',',');};
+function num(s){s=String(s||'').replace(/[−–—]/g,'-').replace(/\s+/g,'').replace(/[a-zA-Z²]+$/,'').replace(',','.');return /^-?\d+(\.\d+)?$/.test(s)?+s:NaN;}
+/* ---------- gemeinsamer Aufgabentyp ---------- */
+const PY=(gen)=>({
+  complete(t,s){if(t.type==='tap')return s.v.sel!==undefined;if(t.type==='mc')return s.v.c!==undefined;if(t.type==='rf')return t.items.every((_,k)=>s.v['r'+k]!==undefined);
+    return t.parts.every((_,k)=>(s.v['n'+k]||'').trim()!=='');},
+  incomplete:'Beantworte zuerst alles.',autoCheck:true,gen,
+  render(t,s){let h='<div class="zq">'+t.q+'</div>';
+    if(t.svg)h+='<div class="trow">'+(t.type==='tap'?triSVG.apply(null,t.svgArgs.concat([true,s.v.sel===undefined?null:+s.v.sel])):t.svg)+'</div>';
+    if(t.type==='tap')h+='<p class="small">Tippe direkt auf eine Seite des Dreiecks.</p>';
+    if(t.type==='mc')h+='<div class="opts">'+t.o.map((o,k)=>'<button type="button" class="opt" data-set="c" data-v="'+k+'" aria-pressed="'+(s.v.c===String(k))+'">'+o+'</button>').join('')+'</div>';
+    if(t.type==='rf')h+='<div class="rf">'+t.items.map((it,k)=>'<div class="rfrow"><div class="rft">'+it+'</div><div class="choice">'+t.lab.map((l,j)=>'<button type="button" data-set="r'+k+'" data-v="'+j+'" aria-pressed="'+(s.v['r'+k]===String(j))+'">'+l+'</button>').join('')+'</div></div>').join('')+'</div>';
+    if(t.type==='nums')h+='<div class="trow big">'+t.parts.map((p,k)=>p[0]+inpF('n'+k,s.v['n'+k],'Antwort '+(k+1),'','6rem')+(p[1]||'')).join(' &nbsp; ')+'</div>'+(t.round?'<p class="small">Runde auf 2 Dezimalstellen.</p>':'');
+    return h;},
+  onAct(t,s,a){if(t.type==='tap'&&a.startsWith('side')){s.v.sel=a.slice(4);s.msg=null;return 'check';}return null;},
+  check(t,s){
+    if(t.type==='tap')return +s.v.sel===0?true:'Die Hypotenuse liegt dem rechten Winkel <b>gegenüber</b> – sie ist die längste Seite. Die beiden anderen Seiten bilden den rechten Winkel: das sind die Katheten.';
+    if(t.type==='mc')return +s.v.c===t.a?true:t.h;
+    if(t.type==='rf'){const w=t.items.filter((_,k)=>+s.v['r'+k]!==t.a[k]).length;return w?(w===1?'Eine Aussage stimmt noch nicht. ':w+' Aussagen stimmen noch nicht. ')+t.h:true;}
+    for(let k=0;k<t.parts.length;k++){const u=num(s.v['n'+k]),w=t.parts[k][2];if(isNaN(u))return {soft:'Schreib eine Zahl, z. B. 7,21.'};
+      if(Math.abs(u-w)>(t.parts[k][3]||t.tol||0.011)){const hk=t.hk&&t.hk(k,u);return hk||t.h;}}
+    return true;},
+  solve(t,s){if(t.type==='tap')s.v.sel='0';if(t.type==='mc')s.v.c=String(t.a);if(t.type==='rf')t.items.forEach((_,k)=>s.v['r'+k]=String(t.a[k]));
+    if(t.type==='nums')t.parts.forEach((p,k)=>s.v['n'+k]=cm(p[2]));},
+  solH(t){if(t.type==='tap')return 'Die Hypotenuse ist '+t.nm[0]+'.';if(t.type==='mc')return t.o[t.a];if(t.type==='rf')return t.items.map((it,k)=>t.lab[t.a[k]]).join(' · ');
+    return t.sol||t.parts.map(p=>p[0]+cm(p[2])+(p[1]||'')).join('  ');}
+});
+const mix=t=>{const idx=shuffle(t.o.map((_,k)=>k)),o=t.o;t.o=idx.map(k=>o[k]);t.a=idx.indexOf(t.a);return t;};
+/* ================= Pythagoras 2: Pythagoras in Figuren ================= */
+const STORE='pythagoras2cs:';
+const triSVG=()=>'';
+/* ---------- Figuren als SVG ---------- */
+const svgOpen=(w,h)=>'<svg class="fig" viewBox="0 0 '+w+' '+h+'" role="img" aria-label="Skizze">';
+const T_=(x,y,t,a)=>'<text x="'+x+'" y="'+y+'" text-anchor="'+(a||'middle')+'" class="tlab">'+t+'</text>';
+const RW=(x,y,dx1,dy1,dx2,dy2)=>{const s=12;return '<polyline points="'+(x+dx1*s)+','+(y+dy1*s)+' '+(x+(dx1+dx2)*s)+','+(y+(dy1+dy2)*s)+' '+(x+dx2*s)+','+(y+dy2*s)+'" fill="none" stroke="var(--ink)" stroke-width="1.4"/><circle cx="'+(x+(dx1+dx2)*s/2)+'" cy="'+(y+(dy1+dy2)*s/2)+'" r="1.7" fill="var(--ink)"/>';};
+function rectSVG(l,b,lab,diag){/* lab: [l, b, d] */
+  let r=b/l;r=Math.max(.35,Math.min(1,r));const W=330,H=230,w=230,h=Math.max(70,Math.min(170,w*r)),x0=(W-w)/2,y0=(H-h)/2+5;
+  let s=svgOpen(W,H)+'<rect x="'+x0+'" y="'+y0+'" width="'+w+'" height="'+h+'" fill="var(--info)" stroke="var(--ink)" stroke-width="2.5"/>';
+  if(diag!==false)s+='<line x1="'+x0+'" y1="'+(y0+h)+'" x2="'+(x0+w)+'" y2="'+y0+'" stroke="#C62828" stroke-width="2.5" stroke-dasharray="'+(diag==='dash'?'6 5':'0')+'"/>'+RW(x0+w,y0+h,-1,0,0,-1);
+  s+=T_(x0+w/2,y0+h+24,lab[0])+T_(x0+w+10,y0+h/2+5,lab[1],'start');if(diag!==false)s+=T_(x0+w/2-10,y0+h/2-8,lab[2],'end');
+  return s+'</svg>';}
+function sqSVG(lab,diag){const W=300,H=230,a=170,x0=(W-a)/2,y0=25;
+  let s=svgOpen(W,H)+'<rect x="'+x0+'" y="'+y0+'" width="'+a+'" height="'+a+'" fill="var(--info)" stroke="var(--ink)" stroke-width="2.5"/>';
+  if(diag!==false)s+='<line x1="'+x0+'" y1="'+(y0+a)+'" x2="'+(x0+a)+'" y2="'+y0+'" stroke="#C62828" stroke-width="2.5"/>'+RW(x0+a,y0+a,-1,0,0,-1);
+  s+=T_(x0+a/2,y0+a+24,lab[0])+T_(x0+a+10,y0+a/2+5,lab[0],'start');if(diag!==false)s+=T_(x0+a/2-10,y0+a/2-8,lab[1],'end');return s+'</svg>';}
+function isoSVG(c,a,lab,height){/* lab: [Schenkel, Basis, Höhe, halbe Basis] */
+  const W=330,H=240,bw=220,hh=Math.max(90,Math.min(190,bw*Math.sqrt(Math.max(a*a-c*c/4,.01))/c)),x0=(W-bw)/2,yb=H-35,top=[W/2,yb-hh];
+  let s=svgOpen(W,H)+'<polygon points="'+x0+','+yb+' '+(x0+bw)+','+yb+' '+top.join(',')+'" fill="var(--info)" stroke="var(--ink)" stroke-width="2.5"/>';
+  if(height!==false)s+='<polygon points="'+(W/2)+','+yb+' '+(x0+bw)+','+yb+' '+top.join(',')+'" fill="#d9e6f7"/><line x1="'+(W/2)+'" y1="'+yb+'" x2="'+(W/2)+'" y2="'+top[1]+'" stroke="#C62828" stroke-width="2.3" stroke-dasharray="6 4"/>'+RW(W/2,yb,1,0,0,-1)+T_(W/2+8,yb-hh*.3,lab[2],'start')+(lab[3]?T_(W/2+bw/4,yb-8,lab[3]):'');
+  s+=T_(x0+bw*.3-12,yb-hh*.6,lab[0],'end')+T_(x0+bw*.7+12,yb-hh*.6,lab[0],'start')+T_(W/2,yb+24,lab[1]);return s+'</svg>';}
+function rhSVG(lab){/* Raute mit Diagonalen: lab [Seite, e, f] */
+  const W=320,H=230,cx=W/2,cy=H/2,e=125,f=80;
+  return svgOpen(W,H)+'<polygon points="'+(cx-e)+','+cy+' '+cx+','+(cy-f)+' '+(cx+e)+','+cy+' '+cx+','+(cy+f)+'" fill="var(--info)" stroke="var(--ink)" stroke-width="2.5"/>'+
+    '<line x1="'+(cx-e)+'" y1="'+cy+'" x2="'+(cx+e)+'" y2="'+cy+'" stroke="#C62828" stroke-width="2" stroke-dasharray="6 4"/><line x1="'+cx+'" y1="'+(cy-f)+'" x2="'+cx+'" y2="'+(cy+f)+'" stroke="#C62828" stroke-width="2" stroke-dasharray="6 4"/>'+RW(cx,cy,1,0,0,-1)+
+    T_(cx+e/2+18,cy-f/2-8,lab[0],'start')+T_(cx-e/2,cy+18,lab[1])+T_(cx+8,cy+f/2+8,lab[2],'start')+'</svg>';}
+function trapSVG(lab){/* gleichschenkliges Trapez: lab [a unten, c oben, Schenkel, h] */
+  const W=340,H=210,a=240,c=130,h=110,x0=(W-a)/2,y0=H-40,xc=(W-c)/2;
+  return svgOpen(W,H)+'<polygon points="'+x0+','+y0+' '+(x0+a)+','+y0+' '+(xc+c)+','+(y0-h)+' '+xc+','+(y0-h)+'" fill="var(--info)" stroke="var(--ink)" stroke-width="2.5"/>'+
+    '<line x1="'+xc+'" y1="'+(y0-h)+'" x2="'+xc+'" y2="'+y0+'" stroke="#C62828" stroke-width="2.2" stroke-dasharray="6 4"/>'+RW(xc,y0,1,0,0,-1)+
+    T_(W/2,y0+24,lab[0])+T_(W/2,y0-h-10,lab[1])+T_(x0+(xc-x0)/2-12,y0-h/2,lab[2],'end')+T_(xc+8,y0-h/2,lab[3],'start')+'</svg>';}
+/* ---------- Hilfen ---------- */
+const nice1=()=>rnd(3,25)+(RNG()<.5?rnd(1,9)/10:0);
+const U2=['cm','m','dm'];
+const R2=x=>Math.round(x*100)/100;
+const eqs=x=>Math.abs(x-Math.round(x))<1e-9?' = ':' ≈ ';
+/* 1 Rechteck */
+const WIESE=[[45,60],[30,40],[90,120],[50,120],[24,70],[36,48],[75,100],[40,96]];
+function genRect(i,lvl){
+  if(lvl==='ahs'&&i%3===0){/* Regal durch die Tür */let w,hh;do{w=rnd(80,100);hh=rnd(195,210);}while(w===90&&hh===200);const d=Math.hypot(w,hh),S=Math.round(d)+pick([-9,-6,-4,-3,3,5,8]),diff=d-S;
+    return {type:'nums',q:'🚪 Ein Kasten ist <b>'+(S/100).toFixed(2).replace('.',',')+' m</b> hoch. Die Türöffnung ist <b>'+w+' cm</b> breit und <b>'+(hh/100).toFixed(2).replace('.',',')+' m</b> hoch. Der Kasten soll <b>hochkant</b> durch die Tür getragen werden (seine Breite spielt keine Rolle).<br><b>Berechne die Diagonale der Türöffnung und den Unterschied „Diagonale − Kastenhöhe“.</b> Ist der Unterschied negativ, passt der Kasten nicht durch.',
+      svg:rectSVG(w,hh,['b = '+w+' cm','h = '+hh+' cm','d = ?']),round:1,parts:[['d = ',' cm',d],['Unterschied = ',' cm',diff,.2]],
+      sol:'d = √('+w+'² + '+hh+'²) ≈ '+cm(d)+' cm · Unterschied ≈ '+cm(d-S)+' cm → '+(diff>0?'der Kasten passt (knapp) durch.':'der Kasten passt nicht durch.'),
+      h:'Alles in dieselbe Einheit (cm) umrechnen. Die Diagonale der Tür ist die Hypotenuse: √(Breite² + Höhe²). Dann Diagonale minus Kastenhöhe.'};}
+  if(lvl==='ahs'&&i%3===1){/* Abkürzung über die Wiese */const [l,b]=pick(WIESE),d=Math.hypot(l,b);
+    return {type:'nums',q:'🌾 Eine rechteckige Wiese ist <b>'+l+' m</b> lang und <b>'+b+' m</b> breit. Bisher gingen alle diagonal hinüber, jetzt wird sie eingezäunt und man muss außen an zwei Seiten entlanggehen.<br><b>Berechne den diagonalen Weg, den Weg außen herum und wie viel Meter der neue Weg länger ist.</b>',
+      svg:rectSVG(l,b,['l = '+l+' m','b = '+b+' m','d = ?']),round:1,parts:[['Diagonale = ',' m',d],['außen herum = ',' m',l+b],['länger um ',' m',l+b-d]],
+      sol:'d = √('+l+'² + '+b+'²) = '+cm(d)+' m · außen: '+l+' + '+b+' = '+(l+b)+' m · Unterschied: '+(l+b)+' − '+cm(d)+' = '+cm(l+b-d)+' m',
+      h:'Diagonale = √(l² + b²). Außen herum geht man Länge + Breite. Dann die beiden Wege subtrahieren.'};}
+  const std=lvl==='std',u=pick(U2);
+  if(i%3===2){/* Seite aus Diagonale */
+    const l=std?rnd(8,20):nice1(),b=std?rnd(4,l-1):Math.round(l*(.4+RNG()*.5)*10)/10,d=Math.round(Math.hypot(l,b)*10)/10,x=Math.sqrt(d*d-l*l);
+    return {type:'nums',q:'Ein Rechteck ist <b>'+cm(l)+' '+u+'</b> lang, seine Diagonale ist <b>'+cm(d)+' '+u+'</b> lang.<br><b>Wie breit ist das Rechteck?</b>',svg:rectSVG(l,b,['l = '+cm(l)+' '+u,'b = ?','d = '+cm(d)+' '+u]),round:1,
+      parts:[['b = ',' '+u,x]],sol:'b = √('+cm(d)+'² − '+cm(l)+'²)'+eqs(x)+cm(x)+' '+u,h:'Die Diagonale ist die Hypotenuse. Gesucht ist eine Kathete: b = √(d² − l²).'};}
+  const l=std?rnd(5,20)+(i%3===1?rnd(1,9)/10:0):nice1(),b=std?rnd(3,Math.max(4,Math.floor(l)))+(i%3===1?rnd(1,9)/10:0):Math.round(l*(.3+RNG()*.6)*10)/10,d=Math.hypot(l,b);
+  return {type:'nums',q:'<b>Berechne die Länge der Diagonale d.</b>',svg:rectSVG(l,b,['l = '+cm(l)+' '+u,'b = '+cm(b)+' '+u,'d = ?']),round:1,parts:[['d = ',' '+u,d]],
+    sol:'d = √('+cm(l)+'² + '+cm(b)+'²)'+eqs(d)+cm(d)+' '+u,hk:(k,v)=>Math.abs(v-(l+b))<.02?'Nicht einfach addieren: zuerst quadrieren, dann addieren, dann die Wurzel ziehen.':null,
+    h:'Die Diagonale teilt das Rechteck in zwei rechtwinklige Dreiecke. d ist die Hypotenuse: d = √(l² + b²).'};}
+/* 2 Quadrat */
+function genSq(i,lvl){
+  if(lvl==='ahs'&&i%4===2){/* quadratischer Platz: diagonal statt außen herum */const a=rnd(18,75),d=a*Math.SQRT2;
+    return {type:'nums',q:'🏟️ Ein quadratischer Platz hat die Seitenlänge <b>'+a+' m</b>. Statt außen herum (über zwei Seiten) geht Mia diagonal über den Platz.<br><b>Wie lang ist ihr Weg, und wie viele Meter spart sie?</b>',svg:sqSVG(['a = '+a+' m','d = ?']),round:1,
+      parts:[['Diagonale = ',' m',d],['gespart = ',' m',2*a-d]],sol:'d = √('+a+'² + '+a+'²) ≈ '+cm(d)+' m · außen 2 · '+a+' = '+(2*a)+' m · gespart ≈ '+cm(2*a-d)+' m',h:'d = √(a² + a²). Außen herum: a + a. Ersparnis = Umweg − Diagonale.'};}
+  const std=lvl==='std',u=pick(['cm','m']),k=i%4;
+  if(k===0){const a=std?rnd(3,15):nice1(),d=a*Math.SQRT2;return {type:'nums',q:'Ein Quadrat hat die Seitenlänge <b>a = '+cm(a)+' '+u+'</b>.<br><b>Berechne die Diagonale.</b>',svg:sqSVG(['a = '+cm(a)+' '+u,'d = ?']),round:1,parts:[['d = ',' '+u,d]],
+    sol:'d = √('+cm(a)+'² + '+cm(a)+'²) = √'+cm(2*a*a)+' ≈ '+cm(d)+' '+u,h:'Beide Katheten sind gleich lang: d = √(a² + a²).'};}
+  if(k===1){const a=std?pick([5,6,7,8,9,10,12,15,20,25]):pick([11,13,14,16,18,24,30,35]),A=a*a,d=a*Math.SQRT2;
+    return {type:'nums',q:'Ein quadratisches Grundstück hat einen <b>Flächeninhalt von '+A+' m²</b>.<br><b>Berechne zuerst die Seitenlänge, dann die Diagonale.</b>',round:1,parts:[['a = ',' m',a],['d = ',' m',d]],
+      sol:'a = √'+A+' = '+a+' m · d = √('+a+'² + '+a+'²) ≈ '+cm(d)+' m',hk:(k,v)=>k===0&&Math.abs(v-A/4)<.02?'Die Fläche ist a · a – nicht 4 · a. Zieh die Wurzel aus dem Flächeninhalt.':null,
+      h:'Fläche A = a · a → a = √A. Dann wie gewohnt: d = √(a² + a²).'};}
+  if(k===2){const a=std?pick([4,5,6,8,9,12,15]):rnd(5,30)+rnd(0,9)/10,U_=4*a,d=a*Math.SQRT2;
+    return {type:'nums',q:'Ein Quadrat hat einen <b>Umfang von '+cm(U_)+' cm</b>.<br><b>Berechne die Seitenlänge und die Diagonale.</b>',round:1,parts:[['a = ',' cm',a],['d = ',' cm',d]],
+      sol:'a = '+cm(U_)+' : 4 = '+cm(a)+' cm · d ≈ '+cm(d)+' cm',h:'Umfang = 4 · a → a = Umfang : 4. Dann d = √(a² + a²).'};}
+  const a=std?pick([3,4,5,6,7,8,10]):rnd(4,20),d=Math.round(a*Math.SQRT2*100)/100,aa=Math.sqrt(d*d/2);
+  return std?{type:'nums',q:'Ein quadratisches Tuch hat die Seitenlänge <b>'+a+' dm</b>. Es wird entlang der Diagonale gefaltet.<br><b>Wie lang ist die Faltkante?</b>',round:1,parts:[['d = ',' dm',a*Math.SQRT2]],sol:'d = √('+a+'² + '+a+'²) ≈ '+cm(a*Math.SQRT2)+' dm',h:'Die Faltkante ist die Diagonale: d = √(a² + a²).'}
+    :{type:'nums',q:'Die Diagonale eines Quadrats ist <b>'+cm(d)+' cm</b> lang.<br><b>Wie lang ist eine Seite?</b>',svg:sqSVG(['a = ?','d = '+cm(d)+' cm']),round:1,parts:[['a = ',' cm',aa]],sol:'d² = a² + a² = 2a² → a = √('+cm(d)+'² : 2) ≈ '+cm(aa)+' cm',h:'d² = a² + a² = 2 · a². Also a² = d² : 2 und a = √(d² : 2).'};}
+/* 3 Gleichschenkliges Dreieck */
+function genIso(i,lvl){
+  if(lvl==='ahs'&&i%3===2){/* Stehleiter (wie Schularbeitsübung, andere Zahlen) */let D,H;do{D=rnd(10,18)/10;H=rnd(14,22)/10;}while(D===1.2||H===1.6);const a=Math.hypot(H,D/2);
+    return {type:'nums',q:'🪜 Eine <b>Stehleiter</b> ist gleichschenklig aufgebaut. Die beiden Leiterfüße stehen <b>'+cm(D)+' m</b> auseinander, die Spitze ist <b>'+cm(H)+' m</b> über dem Boden.<br><b>Wie lang ist ein Leiterschenkel a?</b> Skizze: Höhe von der Spitze senkrecht zum Boden einzeichnen.',svg:isoSVG(D,a,['a = ?',cm(D)+' m','h = '+cm(H)+' m',cm(D/2)+' m'],true),round:1,
+      parts:[['halber Abstand = ',' m',D/2],['a = ',' m',a]],sol:'halber Abstand = '+cm(D)+' : 2 = '+cm(D/2)+' m · Schenkel = √('+cm(H)+'² + '+cm(D/2)+'²) ≈ '+cm(a)+' m',
+      h:'Die Höhe halbiert den Abstand der Füße. Im rechtwinkligen Teildreieck ist der Schenkel die Hypotenuse: √(h² + (Abstand/2)²).'};}
+  const std=lvl==='std',u=pick(['cm','m','mm']),k=i%3;
+  let c,a;do{c=std?2*rnd(3,15):Math.round((rnd(6,30)+rnd(0,9)/10)*10)/10;a=std?rnd(Math.ceil(c/2)+1,c+8):Math.round((c/2+1+RNG()*c)*10)/10;}while(a<=c/2+.5);
+  const h=Math.sqrt(a*a-c*c/4);
+  if(k===0)return {type:'nums',q:'<b>Berechne die Höhe h des gleichschenkligen Dreiecks.</b>',svg:isoSVG(c,a,['a = '+cm(a)+' '+u,'c = '+cm(c)+' '+u,'h = ?','c/2']),round:1,parts:[['h = ',' '+u,h]],
+    sol:'c/2 = '+cm(c/2)+' '+u+' · h = √('+cm(a)+'² − '+cm(c/2)+'²)'+eqs(h)+cm(h)+' '+u,hk:(k,v)=>Math.abs(v-Math.sqrt(Math.abs(a*a-c*c)))<.02?'Achtung: Im rechtwinkligen Dreieck liegt nur die <b>halbe</b> Basis!':null,
+    h:'Die Höhe teilt die Basis in zwei Hälften. Im rechtwinkligen Teildreieck ist der Schenkel a die Hypotenuse: h = √(a² − (c/2)²).'};
+  if(k===1)return {type:'nums',q:'Ein gleichschenkliges Dreieck hat die Basis <b>c = '+cm(c)+' '+u+'</b> und die Schenkel <b>a = '+cm(a)+' '+u+'</b>.<br><b>Berechne die Höhe und den Flächeninhalt.</b>',svg:isoSVG(c,a,['a','c','h',''],true),round:1,
+    parts:[['h = ',' '+u,h],['A = ',' '+u+'²',R2(h)*c/2,.2]],sol:'h ≈ '+cm(h)+' '+u+' · A = c · h : 2 ≈ '+cm(R2(h)*c/2)+' '+u+'²',h:'Zuerst h = √(a² − (c/2)²). Dann A = c · h : 2.'};
+  const hh=std?rnd(4,15):Math.round((rnd(4,25)+rnd(0,9)/10)*10)/10,aa=Math.hypot(hh,c/2);
+  return {type:'nums',q:'Ein gleichschenkliges Dreieck hat die Basis <b>c = '+cm(c)+' '+u+'</b> und die Höhe <b>h = '+cm(hh)+' '+u+'</b>.<br><b>Wie lang ist ein Schenkel?</b>',svg:isoSVG(c,aa,['a = ?','c = '+cm(c)+' '+u,'h = '+cm(hh)+' '+u,'c/2']),round:1,
+    parts:[['a = ',' '+u,aa]],sol:'a = √('+cm(hh)+'² + '+cm(c/2)+'²)'+eqs(aa)+cm(aa)+' '+u,h:'Jetzt ist der Schenkel gesucht – er ist die Hypotenuse: a = √(h² + (c/2)²).'};}
+/* 4 Gleichseitiges Dreieck */
+const EQF=L=>[[L+'² = h² + ('+L+'/2)²',0],['h² = '+L+'² + ('+L+'/2)²',1],['h² = '+L+'² − ('+L+'/2)²',0],[L+'² = h² − ('+L+'/2)²',1],['h² + '+L+'² = ('+L+'/2)²',1],[L+'² = ('+L+'/2)² + h²',0],
+  ['h = √('+L+'² − ('+L+'/2)²)',0],['h² = '+L+'² − '+L+'²/4',0],[L+'² = h² + '+L+'²/4',0],['h² = 3'+L+'²/4',0],['h = '+L+'/2',1],['h² = '+L+'²/2',1],['h = √('+L+'² + ('+L+'/2)²)',1]];
+function genEq(i,lvl){
+  if(lvl==='ahs'&&i%3===1){/* Formeln richtig oder falsch – wie Schularbeitsübung, andere Buchstaben */const L=pick(['s','b','x','k']),P=shuffle(EQF(L).slice()).slice(0,6);
+    return {type:'rf',q:'<b>Gleichseitiges Dreieck mit Seitenlänge '+L+' und Höhe h.</b> Welche Formeln sind richtig, welche falsch?',svg:isoSVG(6,6,[L,L,'h',L+'/2'],true),items:P.map(x=>x[0]),lab:['richtig','falsch'],a:P.map(x=>x[1]),
+      h:'Im halben Dreieck ist '+L+' die Hypotenuse, h und '+L+'/2 sind die Katheten: '+L+'² = h² + ('+L+'/2)². Umgeformt: h² = '+L+'² − ('+L+'/2)² = 3'+L+'²/4.'};}
+  const std=lvl==='std',u=pick(['cm','m']);
+  if(lvl==='ahs'&&i%3===2){const hh=Math.round((rnd(4,20)+rnd(0,9)/10)*10)/10,sv=Math.sqrt(hh*hh*4/3);
+    return {type:'nums',q:'Ein gleichseitiges Dreieck ist <b>'+cm(hh)+' '+u+'</b> hoch.<br><b>Wie lang ist eine Seite?</b>',round:1,parts:[['s = ',' '+u,sv]],
+      sol:'h² = s² − (s/2)² = ¾ · s² → s = √('+cm(hh)+'² · 4 : 3) ≈ '+cm(sv)+' '+u,h:'Im halben Dreieck gilt s² = h² + (s/2)². Umgeformt: s² = h² · 4 : 3.'};}
+  const s=std?2*rnd(2,10):Math.round((rnd(4,20)+rnd(0,9)/10)*10)/10,h=Math.sqrt(s*s-s*s/4);
+  if(i%2===0)return {type:'nums',q:'Ein gleichseitiges Dreieck hat die Seitenlänge <b>'+cm(s)+' '+u+'</b>.<br><b>Berechne die Höhe.</b>',svg:isoSVG(s,s,['s = '+cm(s)+' '+u,'s = '+cm(s)+' '+u,'h = ?','s/2']),round:1,parts:[['h = ',' '+u,h]],
+    sol:'h = √('+cm(s)+'² − '+cm(s/2)+'²) ≈ '+cm(h)+' '+u,h:'Alle Seiten sind gleich lang. Die Höhe halbiert die Grundseite: h = √(s² − (s/2)²).'};
+  return {type:'nums',q:'Ein gleichseitiges Dreieck hat die Seitenlänge <b>'+cm(s)+' '+u+'</b>.<br><b>Berechne die Höhe und den Flächeninhalt.</b>',round:1,parts:[['h = ',' '+u,h],['A = ',' '+u+'²',s*R2(h)/2,.2]],
+    sol:'h ≈ '+cm(h)+' '+u+' · A = s · h : 2 ≈ '+cm(s*R2(h)/2)+' '+u+'²',h:'h = √(s² − (s/2)²), dann A = s · h : 2.'};}
+/* 5 Wo ist das rechtwinklige Dreieck? */
+const WO=[
+ {f:L=>rectSVG(6,3.5,['l','b',L?'d':''],L?true:false),q:'Was musst du im <b>Rechteck</b> einzeichnen, damit ein rechtwinkliges Dreieck entsteht, mit dem du die Diagonale berechnen kannst?',o:['eine Diagonale','die Mittellinie','einen Kreis','eine Höhe außerhalb'],hyp:['die Diagonale d','die Länge l','die Breite b']},
+ {f:L=>isoSVG(6,6,['a','c',L?'h':'',L?'c/2':''],L?true:false),q:'Was musst du im <b>gleichschenkligen Dreieck</b> einzeichnen, damit zwei rechtwinklige Dreiecke entstehen?',o:['die Höhe auf die Basis c','eine Parallele zur Basis','eine Diagonale','die Verlängerung eines Schenkels'],hyp:['der Schenkel a','die Höhe h','die halbe Basis c/2']},
+ {f:L=>sqSVG(['a',L?'d':''],L?true:false),q:'Was musst du im <b>Quadrat</b> einzeichnen, damit ein rechtwinkliges Dreieck entsteht?',o:['eine Diagonale','eine Seitenhalbierende','einen Inkreis','nichts – ein Quadrat ist schon ein Dreieck'],hyp:['die Diagonale d','die Seite a','die halbe Seite']},
+ {f:L=>isoSVG(6,6,['s','s',L?'h':'',L?'s/2':''],L?true:false),q:'Was musst du im <b>gleichseitigen Dreieck</b> einzeichnen, damit zwei rechtwinklige Dreiecke entstehen?',o:['eine Höhe','eine Parallele zu einer Seite','eine Diagonale','nichts – es ist schon rechtwinklig'],hyp:['die Seite s','die Höhe h','die halbe Seite s/2']}];
+function genWo(i,lvl){const W_=WO.filter(w=>!w.skip),it=W_[(i+rnd(0,W_.length-1))%W_.length];
+  if(i%2===0)return mix({type:'mc',q:it.q,svg:it.f(false),o:it.o.slice(),a:0,h:'Ein rechtwinkliges Dreieck braucht einen rechten Winkel. Im Rechteck und Quadrat entsteht er durch die Diagonale, im gleichschenkligen und gleichseitigen Dreieck durch die Höhe.'});
+  return mix({type:'mc',q:'Welche Seite ist im eingezeichneten rechtwinkligen Dreieck die <b>Hypotenuse</b>?',svg:it.f(true),o:it.hyp.slice(),a:0,h:'Die Hypotenuse liegt dem rechten Winkel gegenüber – sie ist die längste Seite des Teildreiecks.'});}
+/* 6 Sachaufgaben */
+function genSach2(i,lvl){const std=lvl==='std',k=i%6;
+  if(k===0){const l=std?rnd(40,100):rnd(60,110)+rnd(0,9)/10,b=std?rnd(20,60):rnd(40,70)+rnd(0,9)/10,d=Math.hypot(l,b);
+    return {type:'nums',q:'⚽ Ein Fußballfeld ist <b>'+cm(l)+' m</b> lang und <b>'+cm(b)+' m</b> breit. Ein Spieler läuft diagonal von Eckfahne zu Eckfahne.<br><b>Wie weit läuft er?</b>',round:1,parts:[['d = ',' m',d]],sol:'d = √('+cm(l)+'² + '+cm(b)+'²) ≈ '+cm(d)+' m',h:'Länge und Breite sind die Katheten, der Laufweg ist die Hypotenuse.'};}
+  if(k===1){const c=std?pick([8,10,12]):rnd(8,14),a=std?pick([6,7,8,9]):rnd(5,10)+rnd(0,9)/10;const aa=Math.max(a,c/2+1.5),h=Math.sqrt(aa*aa-c*c/4);
+    return {type:'nums',q:'🏠 Ein Hausgiebel hat die Form eines gleichschenkligen Dreiecks. Das Haus ist <b>'+c+' m</b> breit, die Dachschrägen sind je <b>'+cm(aa)+' m</b> lang.<br><b>Wie hoch ist der Giebel?</b>',round:1,parts:[['h = ',' m',h]],sol:'h = √('+cm(aa)+'² − '+cm(c/2)+'²) ≈ '+cm(h)+' m',h:'Die Höhe halbiert die Hausbreite. Die Dachschräge ist die Hypotenuse.'};}
+  if(k===2){const a=std?pick([15,20,25,30]):rnd(12,40),A=a*a,d=a*Math.SQRT2;
+    return {type:'nums',q:'🌳 Ein quadratischer Park ist <b>'+A+' m²</b> groß. Ein Weg führt diagonal hindurch.<br><b>Wie lang ist eine Seite, wie lang der Weg?</b>',round:1,parts:[['a = ',' m',a],['Weg = ',' m',d]],sol:'a = √'+A+' = '+a+' m · Weg = √('+a+'² + '+a+'²) ≈ '+cm(d)+' m',h:'Zuerst a = √A, dann die Diagonale d = √(a² + a²).'};}
+  if(k===3){const w=std?rnd(80,140):rnd(80,160),hh=std?rnd(150,210):rnd(160,240),d=Math.hypot(w,hh);
+    return {type:'nums',q:'🚪 Ein Gartentor ist <b>'+w+' cm</b> breit und <b>'+hh+' cm</b> hoch. Zur Verstärkung wird eine schräge Latte von Ecke zu Ecke angeschraubt.<br><b>Wie lang ist die Latte?</b>',round:1,parts:[['Latte = ',' cm',d]],sol:'√('+w+'² + '+hh+'²) ≈ '+cm(d)+' cm',h:'Breite und Höhe bilden den rechten Winkel – die Latte ist die Diagonale.'};}
+  if(k===4){const s=std?pick([4,6,8,10]):rnd(5,14),h=Math.sqrt(s*s*3/4);
+    return {type:'nums',q:'🚸 Ein Verkehrszeichen hat die Form eines gleichseitigen Dreiecks mit <b>'+s+' dm</b> Seitenlänge.<br><b>Wie hoch ist das Schild?</b>',round:1,parts:[['h = ',' dm',h]],sol:'h = √('+s+'² − '+cm(s/2)+'²) ≈ '+cm(h)+' dm',h:'Die Höhe halbiert die Grundseite: h = √(s² − (s/2)²).'};}
+  const l=std?rnd(120,200):rnd(150,260),b=std?rnd(60,100):rnd(70,140),d=Math.hypot(l,b),fits=d>=(std?180:220);const stick=std?180:220;
+  return {type:'mc',q:'🧳 Ein Koffer ist innen <b>'+l+' mm</b> lang und <b>'+b+' mm</b> breit. Passt ein <b>'+stick+' mm</b> langer Stab flach in den Koffer, wenn man ihn schräg hineinlegt?',o:['Ja – die Diagonale ist ca. '+cm(d)+' mm lang.','Nein – die Diagonale ist nur ca. '+cm(d)+' mm lang.'],a:fits?0:1,keep:1,h:'Berechne die Diagonale des Kofferbodens: √(Länge² + Breite²). Ist sie mindestens so lang wie der Stab?'};}
+const INFO={
+ re:'<p><b>Rechteck:</b> Die Diagonale teilt es in zwei rechtwinklige Dreiecke. d = √(l² + b²) · Seite gesucht: b = √(d² − l²)</p>',
+ sq:'<p><b>Quadrat:</b> d = √(a² + a²). Aus der Fläche: a = √A. Aus dem Umfang: a = u : 4.</p>',
+ is:'<p><b>Gleichschenkliges Dreieck:</b> Die Höhe halbiert die Basis. Schenkel = Hypotenuse: h = √(a² − (c/2)²). Fläche A = c · h : 2</p>',
+ eq:'<p><b>Gleichseitiges Dreieck:</b> Alle Seiten sind gleich lang, die Höhe halbiert die Grundseite: h = √(s² − (s/2)²).</p>',
+ wo:'<p>Rechteck, Quadrat → Diagonale einzeichnen. Gleichschenkliges und gleichseitiges Dreieck → Höhe einzeichnen. Die Hypotenuse liegt immer dem rechten Winkel gegenüber.</p>',
+ sa:'<p>Skizze machen · rechtwinkliges Dreieck markieren · Hypotenuse suchen · plus (Hypotenuse gesucht) oder minus (Kathete gesucht) · Einheit nicht vergessen.</p>'};
+const SECS0=lvl=>[
+ {title:'Wo steckt das rechtwinklige Dreieck?',name:'Rechtwinkliges Dreieck finden',info:INFO.wo,n:6,wide:true,type:PY(genWo)},
+ {title:'Rechteck: Diagonale und Seiten',name:'Rechteck',info:INFO.re,n:6,type:PY(genRect)},
+ {title:'Quadrat: Diagonale – auch aus Fläche und Umfang',name:'Quadrat',info:INFO.sq,n:8,type:PY(genSq)},
+ {title:'Gleichschenkliges Dreieck: Höhe, Schenkel, Fläche',name:'Gleichschenklig',info:INFO.is,n:6,type:PY(genIso)},
+ {title:'Gleichseitiges Dreieck',name:'Weitere Figuren',info:INFO.eq,n:6,type:PY(genEq)},
+ {title:'Sachaufgaben',name:'Sachaufgaben',info:INFO.sa,n:6,wide:true,type:PY(genSach2)}];
+const SECS={std:SECS0('std'),ahs:SECS0('ahs')};
+/* ================= Zufall (reproduzierbar) ================= */
+let RNG=Math.random;
+const rnd=(a,b)=>a+Math.floor(RNG()*(b-a+1));
+const pick=a=>a[rnd(0,a.length-1)];
+const sg=()=>RNG()<.5?1:-1;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=rnd(0,i);[a[i],a[j]]=[a[j],a[i]];}return a;}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const MINUS='−',LBL='abcdefghijkl';
+
+/* ================= Rationale Zahlen (exakt) ================= */
+const B=x=>BigInt(x);
+function gcd(a,b){a=a<0n?-a:a;b=b<0n?-b:b;while(b){[a,b]=[b,a%b];}return a;}
+function rat(n,d=1n){n=B(n);d=B(d);if(d<0n){n=-n;d=-d;}const g=gcd(n,d)||1n;return {n:n/g,d:d/g};}
+const R=(n,d=1)=>rat(n,d);
+const rneg=a=>({n:-a.n,d:a.d});
+const rabs=a=>({n:a.n<0n?-a.n:a.n,d:a.d});
+const radd=(a,b)=>rat(a.n*b.d+b.n*a.d,a.d*b.d);
+const rsub=(a,b)=>radd(a,rneg(b));
+const rmul=(a,b)=>rat(a.n*b.n,a.d*b.d);
+const rdiv=(a,b)=>rat(a.n*b.d,a.d*b.n);
+const req=(a,b)=>a.n*b.d===b.n*a.d;
+const rcmp=(a,b)=>{const x=a.n*b.d,y=b.n*a.d;return x<y?-1:x>y?1:0;};
+const rnum=a=>Number(a.n)/Number(a.d);
+const isInt=a=>a.d===1n;
+const isDecable=r=>{let d=r.d;while(d%2n===0n)d/=2n;while(d%5n===0n)d/=5n;return d===1n;};
+function decStr(r){let p=0;while(p<12&&(10n**B(p))%r.d!==0n)p++;const neg=r.n<0n;let s=((neg?-r.n:r.n)*(10n**B(p))/r.d).toString();
+  if(p>0){s=s.padStart(p+1,'0');s=s.slice(0,s.length-p)+','+s.slice(s.length-p);}return (neg?'-':'')+s;}
+const fracH=(n,d)=>'<span class="fr"><span>'+n+'</span><span>'+d+'</span></span>';
+/* Anzeige: mode 'dec' (Dezimalzahl), 'frac' (Bruch), 'mixed' (gemischte Zahl) */
+function rH(r,mode){
+  const neg=r.n<0n,a=rabs(r),sgn=neg?MINUS:'';
+  if(isInt(a))return sgn+a.n;
+  if(mode==='dec'&&isDecable(a))return sgn+decStr(a);
+  if(mode==='mixed'&&a.n>a.d)return sgn+(a.n/a.d)+'&#8202;'+fracH(a.n%a.d,a.d);
+  return sgn+fracH(a.n,a.d);
+}
+function rPlain(r,mode){if(isInt(r))return String(r.n);if(mode==='dec'&&isDecable(r))return decStr(r);return r.n+'/'+r.d;}
+/* Eingabe lesen: -3,5 · -3.5 · -7/2 · -1 3/4 */
+function readRat(str){
+  let s=String(str).replace(/[−–—]/g,'-').replace(/\u202F|\u00A0/g,' ').trim();
+  if(!s)return null;
+  let m=s.match(/^([+-]?)\s*(\d+)\s+(\d+)\s*\/\s*(\d+)$/);
+  if(m){if(+m[4]===0)return null;const w=B(m[2]),z=B(m[3]),n=B(m[4]);const r=rat(w*n+z,n);return {r:m[1]==='-'?rneg(r):r,frac:true,mixed:true,rn:z,rd:n};}
+  s=s.replace(/\s+/g,'');
+  m=s.match(/^([+-]?)(\d+)\/(\d+)$/);
+  if(m){if(+m[3]===0)return null;const r=rat(B(m[2]),B(m[3]));return {r:m[1]==='-'?rneg(r):r,frac:true,rn:B(m[2]),rd:B(m[3])};}
+  s=s.replace('.',',');
+  m=s.match(/^([+-]?)(\d*)(?:,(\d+))?$/);
+  if(!m||(!m[2]&&!m[3]))return null;
+  const f=m[3]||'';const r=rat(B((m[2]||'0')+f),10n**B(f.length));
+  return {r:m[1]==='-'?rneg(r):r,frac:false};
+}
+/* gemeinsame Hinweise für Zahl-Eingaben */
+function judgeNum(u,want,ctx){
+  if(!u)return 'Gib eine Zahl ein, z. B. −2,5 oder −3/4.';
+  if(req(u.r,want)){if(u.frac&&gcd(u.rn,u.rd)>1n)return 'Richtig – kürze den Bruch aber noch!';return true;}
+  if(req(u.r,rneg(want)))return 'Achte auf das Vorzeichen'+(ctx||'')+'.';
+  return false;
+}
+
+/* ================= Zahlengerade (SVG) ================= */
+/* o: {lo,hi,minor,label (Abstand der Beschriftungen),pts:[{v,label,cls}],click:true} */
+function nlSVG(o){
+  const W=360,H=78,x0=18,x1=W-18,y=40,lo=rnum(o.lo),hi=rnum(o.hi),mi=rnum(o.minor);
+  const X=v=>x0+(v-lo)/(hi-lo)*(x1-x0);
+  let h='<svg class="nl" viewBox="0 0 '+W+' '+H+'" data-lo="'+lo+'" data-hi="'+hi+'" data-x0="'+x0+'" data-x1="'+x1+'" role="img" aria-label="Zahlengerade von '+lo+' bis '+hi+'">';
+  h+='<line class="axis" x1="'+(x0-8)+'" y1="'+y+'" x2="'+(x1+10)+'" y2="'+y+'"/><path d="M'+(x1+10)+','+(y-5)+' L'+(x1+16)+','+y+' L'+(x1+10)+','+(y+5)+'" fill="none" stroke="currentColor" stroke-width="2"/>';
+  const n=Math.round((hi-lo)/mi);
+  const lab=o.label||1;
+  for(let k=0;k<=n;k++){
+    const v=lo+k*mi,isLab=Math.abs(v/lab-Math.round(v/lab))<1e-9,x=X(v);
+    h+='<line class="tk'+(isLab?'':' minor')+'" x1="'+x+'" y1="'+(y-(isLab?9:5))+'" x2="'+x+'" y2="'+(y+(isLab?9:5))+'"/>';
+    if(isLab){const t=Math.round(v*100)/100;h+='<text x="'+x+'" y="'+(y+26)+'" text-anchor="middle">'+(t<0?MINUS+(-t):String(t)).replace('.',',')+'</text>';}
+  }
+  (o.pts||[]).forEach(p=>{const x=X(rnum(p.v));h+='<circle class="'+(p.cls||'pt')+'" cx="'+x+'" cy="'+y+'" r="5.5"/>'+(p.label?'<text class="ptl" x="'+x+'" y="'+(y-14)+'" text-anchor="middle">'+p.label+'</text>':'');});
+  if(o.click)h+='<rect class="hitarea" data-nl="1" x="0" y="0" width="'+W+'" height="'+H+'"/>';
+  return h+'</svg>';
+}
+/* Klick auf die Zahlengerade → Wert auf den nächsten kleinen Strich gerundet */
+function nlValue(svg,ev,minor){
+  const b=svg.getBoundingClientRect(),W=360,px=(ev.clientX-b.left)/b.width*W;
+  const lo=+svg.dataset.lo,hi=+svg.dataset.hi,x0=+svg.dataset.x0,x1=+svg.dataset.x1;
+  let v=lo+(px-x0)/(x1-x0)*(hi-lo);v=Math.max(lo,Math.min(hi,v));
+  const steps=Math.round((v-lo)/rnum(minor));
+  return radd(rat(B(Math.round(lo*1000)),1000n),rmul(minor,R(steps)));
+}
+
+/* ================= Zustand ================= */
+const LEVELS={std:'Standard',ahs:'Standard AHS'};
+const G={};['std','ahs'].forEach(l=>{G[l]={seed:Math.floor(Math.random()*65536),rounds:SECS[l].map(()=>1),tasks:[],st:[]};});
+let level=location.hash==='#ahs'?'ahs':'std',PUPIL='',restoring=false,summaryRequested=false;
+function mixSeed(seed,lvl,sec,round){return (Math.imul(seed^0x9E3779B9,0x85EBCA6B)^Math.imul(lvl==='ahs'?2:1,0xC2B2AE35)^Math.imul(sec+1,0x165667B1)^Math.imul(round,0x27D4EB2F))>>>0;}
+function genSec(lvl,k){
+  const g=G[lvl],S=SECS[lvl][k],old=RNG;RNG=mulberry32(mixSeed(g.seed,lvl,k,g.rounds[k]));
+  try{const out=[],seen=new Set();for(let i=0;out.length<S.n&&i<400;i++){const t=S.type.gen(out.length,lvl);const key=JSON.stringify(t,(kk,v)=>typeof v==='bigint'?String(v):v);if(seen.has(key))continue;seen.add(key);out.push(t);}
+    g.tasks[k]=out;g.st[k]=out.map(()=>({v:{},res:null,tries:0,msg:null,errs:0}));}finally{RNG=old;}
+}
+function genAll(lvl){SECS[lvl].forEach((s,k)=>genSec(lvl,k));}
+const curG=()=>G[level];
+
+/* ================= Anzeige ================= */
+function taskInner(k,i){
+  const S=SECS[level][k],t=curG().tasks[k][i],s=curG().st[k][i];
+  let h='<div class="trow"><span class="lbl">'+LBL[i]+')</span></div>'+S.type.render(t,s,k,i);
+  if(s.msg)h+='<div class="sol '+s.msg.kind+'">'+s.msg.text+(s.msg.offer&&s.res!=='shown'&&s.res!==true?' <button type="button" class="mini" data-show="1">Lösung zeigen</button>':'')+'</div>';
+  return h;
+}
+function taskCls(s){return 'task'+(s.res===true?' ok':s.res==='shown'?' shown':s.res===false?' bad':'');}
+function renderTask(k,i,focusSel){
+  const el=document.querySelector('.task[data-k="'+k+'"][data-i="'+i+'"]');if(!el)return;
+  const s=curG().st[k][i];el.className=taskCls(s);el.innerHTML=taskInner(k,i);
+  if(window.padApply)window.padApply();
+  if(focusSel){const f=el.querySelector(focusSel);if(f)f.focus({preventScroll:true});}
+}
+function renderAll(){
+  const box=$('secs');
+  box.innerHTML=SECS[level].map((S,k)=>'<section class="sec" id="sec'+k+'"><div class="head"><span class="num">'+(k+1)+'</span><h2>'+S.title+'</h2></div>'+
+    (S.info?'<div class="info">'+S.info+'</div>':'')+(S.hint?'<p class="hint">'+S.hint+'</p>':'')+
+    '<div class="tasks'+(S.wide?' wide':'')+'">'+curG().tasks[k].map((t,i)=>'<div class="'+taskCls(curG().st[k][i])+'" data-k="'+k+'" data-i="'+i+'">'+taskInner(k,i)+'</div>').join('')+'</div>'+
+    '<div class="secactions"><button type="button" class="ghost" data-checkall="'+k+'">Alle überprüfen</button><button type="button" class="ghost" data-newround="'+k+'">Neue Runde</button><span class="res" id="res'+k+'"></span><span class="round" id="round'+k+'"></span></div></section>').join('');
+  if(window.padApply)window.padApply();
+  updateScores();
+}
+function updateScores(){
+  const g=curG();let ok=0,n=0;
+  SECS[level].forEach((S,k)=>{const st=g.st[k],o=st.filter(s=>s.res===true).length;ok+=o;n+=st.length;
+    const r=$('res'+k);if(r)r.textContent=o+' von '+st.length+' richtig'+(o===st.length?' – super!':'');
+    const rd=$('round'+k);if(rd)rd.textContent='Runde '+g.rounds[k];
+    const nb=document.querySelector('[data-newround="'+k+'"]');if(nb){const done=st.every(s=>s.res===true||s.res==='shown');nb.textContent=done?'Noch eine Runde üben':'Neue Runde';nb.classList.toggle('ready',done);}});
+  $('score').textContent=ok+' von '+n+' richtig';
+  updateSummary();saveProgress();
+}
+
+/* ================= Prüfen ================= */
+function checkTask(k,i,force){
+  const S=SECS[level][k],t=curG().tasks[k][i],s=curG().st[k][i],T=S.type;
+  if(s.res===true||s.res==='shown')return;
+  const complete=T.complete?T.complete(t,s):Object.keys(T.fields||{}).every(f=>(s.v[f]||'').toString().trim()!=='');
+  if(!complete){if(force)s.msg={kind:'bad',text:T.incomplete||'Bitte zuerst alles ausfüllen.'};renderTask(k,i);return;}  /* immer neu zeichnen, damit die gewählte Antwort sofort markiert ist */
+  const r=T.check(t,s);
+  if(r===true){s.res=true;s.msg={kind:'ok',text:'Richtig!'};}
+  else if(r&&r.soft){s.res=null;s.msg={kind:'bad',text:r.soft};}
+  else{s.res=false;s.tries++;s.errs++;const h=typeof r==='string'?r:null;
+    s.msg={kind:'bad',text:(h||(s.tries===1?'Leider falsch – versuch es nochmal!':'Noch nicht richtig.'))+(h&&s.tries===1?' Versuch es nochmal!':''),offer:s.tries>=2};}
+  renderTask(k,i);updateScores();
+}
+function showSolution(k,i){
+  const S=SECS[level][k],t=curG().tasks[k][i],s=curG().st[k][i];
+  S.type.solve(t,s);s.res='shown';s.msg={kind:'shown',text:'Lösung: '+S.type.solH(t)};renderTask(k,i);updateScores();
+}
+
+/* ================= Bedienung ================= */
+function taskOf(el){const tk=el.closest('.task');return tk?[+tk.dataset.k,+tk.dataset.i]:null;}
+$('secs').addEventListener('click',ev=>{
+  const ca=ev.target.closest('[data-checkall]');if(ca){const k=+ca.dataset.checkall;curG().tasks[k].forEach((t,i)=>checkTask(k,i,true));return;}
+  const nr=ev.target.closest('[data-newround]');if(nr){const k=+nr.dataset.newround,g=curG();
+    if(g.st[k].some(s=>s.res!==true&&s.res!=='shown')&&!confirm('Neue Runde für diese Übung? Offene Aufgaben werden durch neue ersetzt.'))return;
+    g.rounds[k]=g.rounds[k]>=31?1:g.rounds[k]+1;genSec(level,k);summaryRequested=false;renderAll();$('sec'+k).scrollIntoView({behavior:'smooth',block:'start'});return;}
+  const ti=taskOf(ev.target);if(!ti)return;const [k,i]=ti,S=SECS[level][k],t=curG().tasks[k][i],s=curG().st[k][i];
+  if(ev.target.closest('[data-show]')){showSolution(k,i);return;}
+  if(s.res===true||s.res==='shown')return;
+  const setb=ev.target.closest('[data-set]');
+  if(setb){s.v[setb.dataset.set]=setb.dataset.v;if(s.res===false)s.res=null;s.msg=null;
+    if(S.type.autoCheck)checkTask(k,i,false);else renderTask(k,i);return;}
+  const act=ev.target.closest('[data-act]');
+  if(act&&S.type.onAct){const r=S.type.onAct(t,s,act.dataset.act,act);if(s.res===false)s.res=null;if(r==='check')checkTask(k,i,true);else renderTask(k,i);return;}
+  const nl=ev.target.closest('[data-nl]');
+  if(nl&&S.type.onLine){S.type.onLine(t,s,nl.closest('svg'),ev);if(s.res===false)s.res=null;s.msg=null;renderTask(k,i);return;}
+});
+$('secs').addEventListener('input',ev=>{
+  const inp=ev.target;if(!inp.dataset.f)return;const ti=taskOf(inp);if(!ti)return;const [k,i]=ti,s=curG().st[k][i];
+  s.v[inp.dataset.f]=inp.value;if(s.res===false){s.res=null;const tk=inp.closest('.task');tk.className=taskCls(s);}
+});
+$('secs').addEventListener('keydown',ev=>{
+  if(ev.key!=='Enter'||ev.target.tagName!=='INPUT')return;ev.preventDefault();
+  const ti=taskOf(ev.target);if(!ti)return;const [k,i]=ti;
+  const own=[...ev.target.closest('.task').querySelectorAll('input')],nx=own.slice(own.indexOf(ev.target)+1).find(x=>!x.value.trim());
+  if(nx){nx.focus();return;}
+  checkTask(k,i,true);
+  if(curG().st[k][i].res===true){const n=document.querySelector('.task[data-k="'+k+'"][data-i="'+(i+1)+'"] input');if(n)n.focus();}
+});
+$('secs').addEventListener('focusout',ev=>{
+  const tk=ev.target.closest&&ev.target.closest('.task');if(!tk||ev.target.tagName!=='INPUT')return;
+  setTimeout(()=>{if(!tk.contains(document.activeElement)&&tk.isConnected)checkTask(+tk.dataset.k,+tk.dataset.i,false);},0);
+});
+
+/* ================= Auswertung ================= */
+function updateSummary(){
+  const g=curG(),sum=$('summary');
+  const all=g.st.every(st=>st.every(s=>s.res===true||s.res==='shown'));
+  if(all&&!summaryRequested&&!restoring)summaryRequested=true;
+  if(!summaryRequested){sum.hidden=true;return;}
+  let T={first:0,later:0,shown:0,open:0,n:0},rows='';
+  SECS[level].forEach((S,k)=>{const st=g.st[k];
+    const first=st.filter(s=>s.res===true&&!s.errs).length,later=st.filter(s=>s.res===true&&s.errs).length,shown=st.filter(s=>s.res==='shown').length,open=st.length-first-later-shown;
+    T.first+=first;T.later+=later;T.shown+=shown;T.open+=open;T.n+=st.length;
+    rows+='<tr><td>'+(k+1)+' '+S.name+(g.rounds[k]>1?' <span class="rnote">(Runde '+g.rounds[k]+')</span>':'')+'</td><td class="c">'+first+'</td><td class="c">'+later+'</td><td class="c">'+shown+'</td><td class="c">'+open+'</td></tr>';});
+  $('sumBody').innerHTML=rows;
+  $('sumFoot').innerHTML='<tr><td>Gesamt ('+T.n+' Aufgaben)</td><td class="c">'+T.first+'</td><td class="c">'+T.later+'</td><td class="c">'+T.shown+'</td><td class="c">'+T.open+'</td></tr>';
+  const ok=T.first+T.later;let msg;
+  if(T.first===T.n)msg='Perfekt! Alle Aufgaben beim ersten Versuch richtig.';
+  else if(ok===T.n)msg='Super, alle Aufgaben selbst gelöst!';
+  else if(ok/T.n>=.75)msg='Sehr gut gemacht!';
+  else if(ok/T.n>=.5)msg='Gut! Mit ein bisschen Übung klappt der Rest auch.';
+  else msg='Übe noch ein bisschen weiter – starte neue Runden und probier es nochmal.';
+  if(!all)msg='Noch nicht alles erledigt: '+T.open+' Aufgabe'+(T.open===1?' ist':'n sind')+' noch offen. '+msg;
+  $('sumTitle').textContent=(all?'Geschafft'+(PUPIL?', '+PUPIL:'')+'! Deine Auswertung':'Zwischenstand'+(PUPIL?' von '+PUPIL:''))+' ('+LEVELS[level]+')';
+  const now=new Date(),who=$('sumWho');
+  who.innerHTML='👤 <b></b> · '+now.toLocaleDateString('de-AT')+', '+now.toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'})+' Uhr · '+LEVELS[level];
+  who.querySelector('b').textContent=PUPIL||'(kein Name)';
+  $('sumMsg').textContent=msg;
+  const wasHidden=sum.hidden;sum.hidden=false;
+  if(wasHidden&&!restoring&&all)setTimeout(()=>sum.scrollIntoView({behavior:'smooth',block:'start'}),300);
+}
+$('showSum').addEventListener('click',()=>{summaryRequested=true;updateSummary();$('summary').scrollIntoView({behavior:'smooth',block:'start'});});
+$('newAll').addEventListener('click',()=>{const g=curG();if(!confirm('Alle Übungen mit neuen Aufgaben starten?'))return;
+  SECS[level].forEach((S,k)=>{g.rounds[k]=g.rounds[k]>=31?1:g.rounds[k]+1;genSec(level,k);});summaryRequested=false;renderAll();window.scrollTo({top:0,behavior:'smooth'});});
+function setLevel(l){
+  level=l;summaryRequested=false;
+  document.querySelectorAll('.levels button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.level===l?'true':'false'));
+  try{history.replaceState(null,'',l==='ahs'?'#ahs':'#standard');}catch(x){}
+  renderAll();
+}
+document.querySelectorAll('.levels button').forEach(b=>b.addEventListener('click',()=>setLevel(b.dataset.level)));
+
+/* ================= Fortschritt: speichern (gleiches Gerät) & Code (anderes Gerät) ================= */
+const ALPH='23456789ABCDEFGHJKMNPQRSTUVWXYZ',AL=B(ALPH.length);
+const normName=s=>s.trim().replace(/\s+/g,' ').toLowerCase();
+function nameHash(n){let h=2166136261;for(const ch of normName(n)){h^=ch.codePointAt(0);h=Math.imul(h,16777619);}return (h>>>0)%1024;}
+function checkChar(s){let c=0;for(let k=0;k<s.length;k++)c=(c+(k+1)*ALPH.indexOf(s[k]))%ALPH.length;return ALPH[c];}
+const stCode=s=>s.res===true?(s.errs?2:1):s.res==='shown'?3:0;
+function makeCode(lvl){
+  const g=G[lvl],F=[],f=(v,r)=>F.push([v,r]);
+  f(lvl==='ahs'?1:0,2);f(g.seed,65536);
+  SECS[lvl].forEach((S,k)=>{f(g.rounds[k]-1,32);g.st[k].forEach(s=>f(stCode(s),4));});
+  f(nameHash(PUPIL),1024);
+  let N=0n;for(let k=F.length-1;k>=0;k--)N=N*B(F[k][1])+B(F[k][0]);
+  let s='';do{s=ALPH[Number(N%AL)]+s;N/=AL;}while(N>0n);
+  s+=checkChar(s);return s.match(/.{1,4}/g).join('-');
+}
+function readCode(str){
+  const bad={err:'Dieser Code ist ungültig. Kontrolliere, ob du ihn richtig abgeschrieben hast.'};
+  const s=str.toUpperCase().replace(/[\s\-–—_.]/g,'');
+  if(s.length<3||[...s].some(ch=>!ALPH.includes(ch)))return bad;
+  const body=s.slice(0,-1);
+  if(checkChar(body)!==s.slice(-1))return {err:'Im Code ist ein Tippfehler. Kontrolliere ihn Zeichen für Zeichen.'};
+  let N=0n;for(const ch of body)N=N*AL+B(ALPH.indexOf(ch));
+  const g=r=>{const v=Number(N%B(r));N/=B(r);return v;};
+  const lvl=g(2)?'ahs':'std',seed=g(65536),secs=[];
+  for(const S of SECS[lvl]){const round=g(32)+1,st=[];for(let i=0;i<S.n;i++)st.push(g(4));secs.push({round,st});}
+  const nh=g(1024);if(N!==0n)return bad;
+  return {lvl,seed,secs,nh};
+}
+function applyCode(p){
+  const g=G[p.lvl];g.seed=p.seed;
+  p.secs.forEach((x,k)=>{g.rounds[k]=x.round;genSec(p.lvl,k);
+    x.st.forEach((c,i)=>{if(!c)return;const s=g.st[k][i],t=g.tasks[k][i],T=SECS[p.lvl][k].type;T.solve(t,s);
+      if(c===3){s.res='shown';s.msg={kind:'shown',text:'Lösung: '+T.solH(t)};}else{s.res=true;s.errs=c===2?1:0;s.msg={kind:'ok',text:'Richtig!'};}});});
+}
+function saveProgress(lvl){
+  lvl=lvl||level;if(!PUPIL||restoring)return;
+  const code=makeCode(lvl);
+  try{const k=STORE+normName(PUPIL),o=JSON.parse(localStorage.getItem(k)||'{}');o.last=level;o[lvl]=code;localStorage.setItem(k,JSON.stringify(o));}catch(x){}
+  if(lvl===level)$('codeShow').textContent=code;
+}
+function loadSaved(name){try{return JSON.parse(localStorage.getItem(STORE+normName(name))||'null');}catch(x){return null;}}
+
+/* ================= Name zu Beginn (danach nicht mehr änderbar) ================= */
+function setLocked(on){document.body.classList.toggle('locked',on);if(on)$('main').setAttribute('inert','');else $('main').removeAttribute('inert');}
+function startErr(msg,el){const err=$('pnameErr');err.textContent=msg;err.hidden=false;el.focus();}
+function startWithName(){
+  const inpEl=$('pname'),v=inpEl.value.trim().replace(/\s+/g,' '),codeInp=$('pcode');
+  if(v.length<2){startErr('Bitte gib deinen Namen ein.',inpEl);return;}
+  let p=null;
+  if(codeInp.value.trim()){p=readCode(codeInp.value);
+    if(p.err){$('codeAsk').open=true;startErr(p.err,codeInp);return;}
+    if(p.nh!==nameHash(v)){startErr('Dieser Code gehört zu einem anderen Namen. Schreib deinen Namen genau so wie auf dem anderen Gerät.',inpEl);return;}}
+  $('pnameErr').hidden=true;PUPIL=v;
+  const saved=loadSaved(v);let msg='';
+  restoring=true;
+  try{
+    if(saved){['std','ahs'].forEach(l=>{if(saved[l]&&!(p&&p.lvl===l)){const q=readCode(saved[l]);if(!q.err&&q.nh===nameHash(v))applyCode(q);}});
+      msg='Willkommen zurück! Du machst dort weiter, wo du auf diesem Gerät aufgehört hast.';}
+    if(p){applyCode(p);msg='Dein Fortschritt vom anderen Gerät wurde übernommen.';}
+  }finally{restoring=false;}
+  saveProgress('std');saveProgress('ahs');
+  $('pnameShow').textContent=v;$('startMsg').textContent=msg;
+  $('startAsk').hidden=true;$('startDone').hidden=false;
+  setLocked(false);setLevel(p?p.lvl:(saved&&saved.last)||level);
+}
+$('startBtn').addEventListener('click',startWithName);
+['pname','pcode'].forEach(k=>$(k).addEventListener('keydown',ev=>{if(ev.key==='Enter'){ev.preventDefault();startWithName();}}));
+$('codeBtn').addEventListener('click',ev=>{const box=$('codeBox'),open=box.hidden;saveProgress();box.hidden=!open;ev.currentTarget.setAttribute('aria-expanded',open?'true':'false');});
+$('codeCopy').addEventListener('click',ev=>{const b=ev.currentTarget,txt=$('codeShow').textContent;
+  try{navigator.clipboard.writeText(txt).then(()=>{b.textContent='Kopiert ✓';setTimeout(()=>{b.textContent='Kopieren';},1500);},()=>{});}catch(x){}});
+
+/* ================= Start ================= */
+genAll('std');genAll('ahs');
+setLevel(level);
+setLocked(true);
+$('pname').focus();
+
+/* ================= Eingabehilfe (Bildschirm-Tastatur) ================= */
+(function(){
+  const pad=$('pad'),sysBtn=$('padSys');
+  const touch=window.matchMedia&&matchMedia('(pointer: coarse)').matches;
+  let padOnly=touch,closed=false,cur=null;
+  try{const s=localStorage.getItem('padOnly');if(s!==null)padOnly=s==='1';}catch(x){}
+  function applyMode(){document.querySelectorAll('#secs input.pin').forEach(i=>{if(padOnly)i.setAttribute('inputmode','none');else i.setAttribute('inputmode','text');});
+    sysBtn.textContent=padOnly?'Handy-Tastatur einblenden':'Handy-Tastatur ausblenden';}
+  window.padApply=applyMode;applyMode();
+  function show(input){cur=input;if(closed)return;pad.hidden=false;document.body.classList.add('padon');
+    const r=input.getBoundingClientRect();if(r.bottom>window.innerHeight-pad.offsetHeight-10)input.scrollIntoView({block:'center',behavior:'smooth'});}
+  function hide(){pad.hidden=true;document.body.classList.remove('padon');}
+  document.addEventListener('focusin',ev=>{const t=ev.target;if(t.tagName==='INPUT'&&t.classList.contains('pin')&&!t.readOnly)show(t);});
+  document.addEventListener('focusout',()=>setTimeout(()=>{const a=document.activeElement;if(!(a&&a.tagName==='INPUT'&&a.classList.contains('pin')))hide();},150));
+  function insert(txt){if(!cur||!cur.isConnected)return;const s=cur.selectionStart??cur.value.length,e=cur.selectionEnd??cur.value.length;cur.setRangeText(txt,s,e,'end');cur.dispatchEvent(new Event('input',{bubbles:true}));}
+  /* nur pointerdown/mousedown abfangen – nie touchstart, sonst gehen die Tasten am Handy nicht */
+  pad.addEventListener('pointerdown',ev=>{if(ev.target.closest('button'))ev.preventDefault();});
+  pad.addEventListener('mousedown',ev=>{if(ev.target.closest('button'))ev.preventDefault();});
+  pad.addEventListener('click',ev=>{
+    const b=ev.target.closest('button');if(!b)return;
+    if(b.id==='padHide'){closed=true;hide();return;}
+    if(b.id==='padSys'){padOnly=!padOnly;try{localStorage.setItem('padOnly',padOnly?'1':'0');}catch(x){}applyMode();if(cur&&cur.isConnected){cur.blur();setTimeout(()=>cur.focus(),60);}return;}
+    if(!cur||!cur.isConnected)return;
+    if(b.dataset.ins!==undefined)insert(b.dataset.ins);
+    else if(b.dataset.act==='clr'){cur.value='';cur.dispatchEvent(new Event('input',{bubbles:true}));}
+    else if(b.dataset.act==='left'){const s=Math.max(0,(cur.selectionStart??cur.value.length)-1);cur.setSelectionRange(s,s);}
+    else if(b.dataset.act==='right'){const s=Math.min(cur.value.length,(cur.selectionEnd??cur.value.length)+1);cur.setSelectionRange(s,s);}
+    else if(b.dataset.act==='del'){const s=cur.selectionStart??cur.value.length,e2=cur.selectionEnd??s;if(s!==e2)cur.setRangeText('',s,e2,'end');else if(s>0)cur.setRangeText('',s-1,s,'end');cur.dispatchEvent(new Event('input',{bubbles:true}));}
+    else if(b.dataset.act==='ok'){cur.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));}
+    if(cur&&cur.isConnected)cur.focus({preventScroll:true});
+  });
+  document.addEventListener('click',ev=>{if(ev.target.closest('[data-newround],#newAll'))closed=false;});
+})();
+</script></body></html>
