@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+<script>/* Bestätigungsfenster: In manchen Apps (z. B. Vorschau am iPhone) werden sie blockiert und liefern sofort „Nein“ – dann trotzdem weitermachen */(function(){const n=window.confirm.bind(window);window.confirm=function(m){const t=Date.now();let r=false;try{r=n(m);}catch(x){return true;}return r||Date.now()-t<60;};})();</script>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Zahlenmengen, Quadratzahlen und Wurzeln – Schularbeitsvorbereitung</title>
@@ -306,7 +308,7 @@ button.ready{background:var(--ink);color:var(--paper)}
 </div>
 <script>
 /* ================= Zahlenmengen · Quadratzahlen · Wurzeln ================= */
-const STORE='zahlenmengen10:';
+const STORE='zahlenmengen10z:';
 const inpF=(f,val,label,ph,w)=>'<input class="pin" data-f="'+f+'" value="'+esc(val||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="'+label+'"'+(ph?' placeholder="'+ph+'"':'')+' style="width:'+(w||'5rem')+'">';
 const cm=x=>{let s=String(Math.round(x*1e6)/1e6);return s.replace('-','−').replace('.',',');};
 const FR=(a,b)=>'<span class="fr"><span>'+a+'</span><span>'+b+'</span></span>';
@@ -322,7 +324,7 @@ function num(s){s=String(s||'').replace(/[−–—]/g,'-').replace(/\s+/g,' ').
 const near=(a,b)=>Math.abs(a-b)<1e-9*Math.max(1,Math.abs(b));
 /* ---------- gemeinsamer Aufgabentyp ---------- */
 const ZM=(gen)=>({
-  complete(t,s){if(t.type==='pfz')return (s.v.z||'').trim()!==''&&(s.v.r||'').trim()!=='';if(t.type==='grid')return true;if(t.type==='vfrac')return (s.v.r||'').trim()!=='';if(t.type==='vroot')return (s.v.r||'').trim()!=='';if(t.type==='root')return (s.v.r||'').trim()!=='';if(t.type==='mc')return s.v.c!==undefined;if(t.type==='multi')return true;if(t.type==='rf')return t.items.every((_,k)=>s.v['r'+k]!==undefined);
+  complete(t,s){if(zwNeed(t)&&!(String(s.v.z1||'').trim()&&String(s.v.z2||'').trim()&&String(s.v.r||'').trim()))return false;if(t.type==='pfz')return (s.v.z||'').trim()!==''&&(s.v.r||'').trim()!=='';if(t.type==='grid')return true;if(t.type==='vfrac')return (s.v.r||'').trim()!=='';if(t.type==='vroot')return (s.v.r||'').trim()!=='';if(t.type==='root')return (s.v.r||'').trim()!=='';if(t.type==='mc')return s.v.c!==undefined;if(t.type==='multi')return true;if(t.type==='rf')return t.items.every((_,k)=>s.v['r'+k]!==undefined);
     return t.parts.every((_,k)=>(s.v['n'+k]||'').trim()!=='');},
   incomplete:'Beantworte zuerst alles.',autoCheck:true,gen,
   render(t,s){let h='<div class="zq">'+t.q+'</div>';
@@ -332,12 +334,13 @@ const ZM=(gen)=>({
     if(t.type==='pfz')h+='<div class="trow big">'+t.n+' = '+inpF('z',s.v.z,'Primfaktorzerlegung','z. B. 2·2·3','10rem')+'</div><div class="trow big">'+RT(t.n)+' = '+inpF('r',s.v.r,'Ergebnis','z. B. 2√3','6rem')+'</div>';
     if(t.type==='vfrac')h+='<div class="trow big">'+t.lhs+' = '+inpF('r',s.v.r,'Ergebnis als Bruch','z. B. x/5','7rem')+'</div>';
     if(t.type==='grid')h+='<div class="gridtab"><table><tr><th>Zahl</th>'+t.cols.map(c=>'<th>'+c+'</th>').join('')+'</tr>'+t.rows.map((r,k)=>'<tr><td class="gz">'+r+'</td>'+t.cols.map((c,j)=>'<td><button type="button" class="gx" data-act="x'+k+'_'+j+'" aria-pressed="'+(s.v['x'+k+'_'+j]==='1')+'" aria-label="'+c+'">'+(s.v['x'+k+'_'+j]==='1'?'✗':'')+'</button></td>').join('')+'</tr>').join('')+'</table></div><div class="trow"><button type="button" class="mini" data-act="chk">Prüfen</button></div>';
-    if(t.type==='vroot')h+='<div class="trow big">'+t.lhs+' = '+inpF('r',s.v.r,'Ergebnis','z. B. 2x√3','8rem')+'</div>';
-    if(t.type==='root')h+='<div class="trow big">'+t.lhs+' = '+inpF('r',s.v.r,'Ergebnis mit Wurzel','z. B. 2√7','7rem')+'</div>';
+    if(t.type==='vroot')h+=zwNeed(t)?'<div class="trow big">'+t.lhs+' = √( '+inpF('z1',s.v.z1,'Quadratzahl','Quadratz.','4.6rem')+' · '+inpF('z2',s.v.z2,'Rest','Rest','4.6rem')+' )</div><div class="trow big">= '+inpF('r',s.v.r,'Ergebnis','z. B. 2x√3','8rem')+'</div><p class="small">Zwischenschritt: zuerst die Quadratzahl herausschreiben, dann die Wurzel ziehen.</p>':'<div class="trow big">'+t.lhs+' = '+inpF('r',s.v.r,'Ergebnis','z. B. 2x√3','8rem')+'</div>';
+    if(t.type==='root')h+=zwNeed(t)?'<div class="trow big">'+t.lhs+' = √( '+inpF('z1',s.v.z1,'Quadratzahl','Quadratz.','4.6rem')+' · '+inpF('z2',s.v.z2,'Rest','Rest','4.6rem')+' )</div><div class="trow big">= '+inpF('r',s.v.r,'Ergebnis mit Wurzel','z. B. 4√3','7rem')+'</div><p class="small">Zwischenschritt: zuerst die Quadratzahl herausschreiben, dann die Wurzel ziehen.</p>':'<div class="trow big">'+t.lhs+' = '+inpF('r',s.v.r,'Ergebnis mit Wurzel','z. B. 2√7','7rem')+'</div>';
     if(t.type==='nums')h+='<div class="trow big">'+t.parts.map((p,k)=>p[0]+inpF('n'+k,s.v['n'+k],'Antwort '+(k+1),'',p[3]||'5rem')+(p[1]||'')).join(' ')+'</div>';
     return h;},
   onAct(t,s,a){if(a==='chk')return 'check';if(a[0]==='x'){s.v[a]=s.v[a]==='1'?'0':'1';s.msg=null;return null;}if(a[0]==='m'){s.v[a]=s.v[a]==='1'?'0':'1';s.msg=null;}return null;},
   check(t,s){
+    if(zwNeed(t)){const z=zwCheck(t,s);if(z!==true)return z;}
     if(t.type==='mc')return +s.v.c===t.a?true:t.h;
     if(t.type==='multi'){const got=t.o.map((_,k)=>s.v['m'+k]==='1');if(!got.some(Boolean))return {soft:'Tippe alle zutreffenden an.'};return got.every((g,k)=>g===t.a.includes(k))?true:t.h;}
     if(t.type==='pfz'){const f=readFactors(s.v.z);if(!f)return {soft:'Schreib die Primfaktoren mit Malpunkt, z. B. 2 · 2 · 3 · 3 · 5.'};
@@ -370,7 +373,7 @@ const ZM=(gen)=>({
     if(t.type==='rf'){const w=t.items.filter((_,k)=>+s.v['r'+k]!==t.a[k]).length;return w?(w===1?'Eine Zeile stimmt noch nicht. ':w+' Zeilen stimmen noch nicht. ')+t.h:true;}
     for(let k=0;k<t.parts.length;k++){const u=num(s.v['n'+k]);if(isNaN(u))return {soft:'Schreib eine Zahl, z. B. 12, 0,25 oder 3/4.'};if(!near(u,t.parts[k][2]))return (t.hk&&t.hk(k,u))||t.h;}
     return true;},
-  solve(t,s){if(t.type==='mc')s.v.c=String(t.a);if(t.type==='multi')t.o.forEach((_,k)=>s.v['m'+k]=t.a.includes(k)?'1':'0');
+  solve(t,s){if(zwNeed(t)){const P=zwParts(t);s.v.z1=monoP(P.sq.c,P.sq.v).replace(/\^(\d)/g,(m,d)=>({2:'²',3:'³',4:'⁴',6:'⁶'}[d]||m));s.v.z2=monoP(P.rest.c,P.rest.v).replace(/\^(\d)/g,(m,d)=>({2:'²',3:'³'}[d]||m));}if(t.type==='mc')s.v.c=String(t.a);if(t.type==='multi')t.o.forEach((_,k)=>s.v['m'+k]=t.a.includes(k)?'1':'0');
     if(t.type==='rf')t.items.forEach((_,k)=>s.v['r'+k]=String(t.a[k]));if(t.type==='root')s.v.r=(t.a===1?'':t.a)+'√'+t.b;if(t.type==='pfz'){s.v.z=t.f.join(' · ');s.v.r=t.a+'√'+t.b;}if(t.type==='vfrac')s.v.r=(t.nc===1?'':t.nc)+Object.keys(t.nv)[0]+'/'+t.d;if(t.type==='grid')t.rows.forEach((_,k)=>t.cols.forEach((_,j)=>s.v['x'+k+'_'+j]=t.a[k][j]?'1':'0'));if(t.type==='vroot')s.v.r=monoP(t.oc,t.ov).replace(/\^2/g,'²').replace(/\^3/g,'³')+(t.rc===1&&!Object.keys(t.rv).length?'':'√'+monoP(t.rc,t.rv));if(t.type==='nums')t.parts.forEach((p,k)=>s.v['n'+k]=p[4]||cm(p[2]));},
   solH(t){if(t.type==='pfz')return t.sol;if(t.type==='grid')return t.rows.map((r,k)=>r+': '+t.cols.filter((c,j)=>t.a[k][j]).join(', ')).join(' · ');if(t.type==='vfrac')return t.sol;if(t.type==='mc')return t.o[t.a];if(t.type==='multi')return t.a.map(k=>t.o[k]).join(', ');if(t.type==='rf')return t.items.map((it,k)=>it+': '+t.lab[t.a[k]]).join(' · ');
     return t.sol||t.parts.map(p=>p[0]+(p[4]||cm(p[2]))+(p[1]||'')).join(' ');}
@@ -590,6 +593,20 @@ const isPrime=n=>n>1&&primes(n).length===1;
 function genPfz(i,lvl){const [n,a,b]=pick(lvl==='std'?PFZ_STD:PFZ_AHS),f=primes(n);
   return {type:'pfz',q:'<b>Zerlege '+n+' in Primfaktoren</b> und zieh dann teilweise die Wurzel. Bilde Paare gleicher Primfaktoren – aus jedem Paar kommt <b>ein</b> Faktor vor die Wurzel.',
     n,a,b,f,sol:n+' = '+f.join(' · ')+' → √'+n+' = '+a+'√'+b,h:'Teile immer durch die kleinste Primzahl: '+n+' = '+f.join(' · ')+'. Paare: '+(()=>{const c={};f.forEach(p=>c[p]=(c[p]||0)+1);return Object.keys(c).map(p=>c[p]>=2?p+' · '+p+' → '+p+' vor die Wurzel'+(c[p]%2?', ein '+p+' bleibt':''):p+' bleibt unter der Wurzel').join('; ');})()+'.'};}
+/* Zwischenschritt beim teilweisen Wurzelziehen: √n = √(Quadratzahl · Rest) */
+function zwNeed(t){if(!t||String(t.lhs||'').includes('·'))return false;
+  if(t.type==='vroot')return (t.rc>1||Object.keys(t.rv||{}).length>0)&&(t.oc>1||Object.keys(t.ov||{}).length>0);
+  if(t.type==='root')return t.a>1&&t.b>1;return false;}
+function zwParts(t){if(t.type==='root')return {rad:{c:t.a*t.a*t.b,v:{}},sq:{c:t.a*t.a,v:{}},rest:{c:t.b,v:{}}};
+  const sv={};Object.keys(t.ov).forEach(n=>sv[n]=2*t.ov[n]);return {rad:{c:t.radC,v:t.radV},sq:{c:t.oc*t.oc,v:sv},rest:{c:t.rc,v:t.rv}};}
+const isSqMono=m=>{const r=Math.round(Math.sqrt(m.c));return r*r===m.c&&Object.values(m.v).every(e=>e%2===0)&&(m.c>1||Object.keys(m.v).length>0);};
+function zwCheck(t,s){const P=zwParts(t),a=readMono(String(s.v.z1||'').replace(/[·*]/g,'')),b=readMono(String(s.v.z2||'').replace(/[·*]/g,''));
+  if(!a||!b)return {soft:'Schreib in die Klammer zwei Faktoren, z. B. √48 = √(16 · 3).'};
+  const pc=a.c*b.c,pv={};[a,b].forEach(m=>Object.keys(m.v).forEach(n=>pv[n]=(pv[n]||0)+m.v[n]));
+  if(pc!==P.rad.c||!vEq(pv,P.rad.v))return 'Zwischenschritt: '+monoP(a.c,a.v)+' · '+monoP(b.c,b.v)+' ergibt nicht '+monoP(P.rad.c,P.rad.v)+'. Zerlege die Zahl unter der Wurzel in ein Produkt.';
+  if(!isSqMono(a)&&isSqMono(b))return 'Schreib die Quadratzahl zuerst: √(Quadratzahl · Rest).';
+  if(!isSqMono(a))return 'Der erste Faktor soll eine Quadratzahl sein (4, 9, 16, 25, 36 …)'+(Object.keys(P.rad.v).length?' – bei Variablen mit gerader Hochzahl, z. B. x².':'.');
+  return true;}
 /* 8 Nichtrationale Zahlen */
 function genIrr(i,lvl){
   if(i%2===0){const L=shuffle([[RT(2),1],['π',1],[RT(16),0],['0,5',0],[FR(1,3),0],[RT(3),1],[RT(49),0],['0,121221222…',1],['2,'+'<span style="text-decoration:overline">7</span>',0],[RT(10),1],['−'+RT(25),0]]).slice(0,6);
