@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rechnen mit rationalen Zahlen – 4. Klasse</title>
+<meta name="uebersicht-kapitel" content="Rationale Zahlen">
+<meta name="uebersicht-thema" content="Rechnen mit rationalen Zahlen – Wiederholung 4. Klasse mit vielen Klammer–Punkt–Strich-Aufgaben">
+<meta name="uebersicht-info" content="12 Beispiele pro Runde: ganze Zahlen, Brüche, Textaufgaben und 6 KaPuStri-Aufgaben (immer schwieriger, AHS mit verschachtelten Klammern) – Standard und Standard AHS">
+<meta name="uebersicht-gruppe" content="4. Klasse">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F9FC; --grid:#DCE6F2; --ink:#1B2F6B; --text:#1E2533; --muted:#5B6578;
+  --card:#FFFFFF; --line:#C9D5E6; --ok:#217A4B; --okbg:#E3F4EA; --bad:#B3261E; --badbg:#FBE7E5;
+  --mark:#FFE873; --field:#FFFFFF; --info:#EAF1FB; --accent:#147D92;
+  --c1:#D99A00; --c2:#1E73D6; --c3:#2E8B3A; --c4:#D81B60; --c5:#8E24AA; --c6:#E8590C;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111827; --grid:#1C2638; --ink:#A9C1FF; --text:#E6EAF2; --muted:#9AA4B8;
+    --card:#172033; --line:#2C3A55; --ok:#5FD08E; --okbg:#173326; --bad:#FF8A80; --badbg:#3A1C1C;
+    --mark:#6B5A12; --field:#0F1726; --info:#1A2740; --accent:#5CC8DC;
+    --c1:#FFD54F; --c2:#64B5F6; --c3:#81C784; --c4:#F48FB1; --c5:#CE93D8; --c6:#FFAB76; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111827; --grid:#1C2638; --ink:#A9C1FF; --text:#E6EAF2; --muted:#9AA4B8;
+  --card:#172033; --line:#2C3A55; --ok:#5FD08E; --okbg:#173326; --bad:#FF8A80; --badbg:#3A1C1C;
+  --mark:#6B5A12; --field:#0F1726; --info:#1A2740; --accent:#5CC8DC;
+  --c1:#FFD54F; --c2:#64B5F6; --c3:#81C784; --c4:#F48FB1; --c5:#CE93D8; --c6:#FFAB76; color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; color:var(--text); font-family:"Atkinson Hyperlegible",system-ui,"Segoe UI",Arial,sans-serif;
+  font-size:1.0625rem; line-height:1.5;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.wrap{max-width:60rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1rem;margin:1rem 0 2rem}
+h1{font-family:Fraunces,Georgia,serif;font-weight:800;color:var(--ink);font-size:clamp(2.1rem,6vw,3.5rem);line-height:1.02;margin:0;letter-spacing:-.01em}
+h1 .acc{color:var(--accent)}
+.sub{color:var(--muted);margin:.5rem 0 0;max-width:42rem}
+.top{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.score{font-weight:700;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:999px;padding:.35rem .9rem}
+button{font:inherit;cursor:pointer;border-radius:.5rem;border:2px solid var(--ink);background:var(--ink);color:var(--paper);padding:.45rem .9rem;font-weight:700}
+button.ghost{background:transparent;color:var(--ink)}
+button:disabled{cursor:default;opacity:.45}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+button.mini{font-size:.85rem;padding:.1rem .55rem;background:transparent;color:var(--ink);border-width:1.5px}
+section{background:var(--card);border:2px solid var(--line);border-radius:.75rem;padding:1.25rem 1.25rem 1rem;margin:0 0 1.5rem}
+.head{display:flex;gap:.8rem;align-items:baseline;flex-wrap:wrap}
+.num{font-family:Fraunces,Georgia,serif;font-weight:800;font-size:1.6rem;color:var(--ink);min-width:1.4em}
+h2{font-size:1.15rem;margin:0}
+h3{font-size:1.05rem;margin:0 0 .4rem;color:var(--ink)}
+sup{font-size:.68em;margin-left:.04em}
+.lvl{font-size:.9rem;font-weight:700;color:var(--accent)}
+input{font:inherit;font-size:1.15rem;color:var(--text);background:var(--field);border:2px solid var(--line);border-radius:.4rem;padding:.25rem .5rem}
+input.ok{border-color:var(--ok);background:var(--okbg)}
+input.bad{border-color:var(--bad);background:var(--badbg)}
+.actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.6rem}
+.hint{color:var(--muted);font-size:.95rem;margin:.4rem 0 0}
+.msg{margin:.6rem 0 0;font-size:.97rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.msg.ok{color:var(--ok);font-weight:700}.msg.bad{color:var(--bad)}.msg.shown{color:var(--muted)}
+.prev{color:var(--muted);font-size:1.1rem}
+.prev b{color:var(--text);font-weight:400}
+
+details.info{background:var(--info);border:0;border-left:6px solid var(--ink);border-radius:.5rem;padding:.7rem 1rem;margin:0 0 1.5rem}
+details.info summary{cursor:pointer;font-weight:700;color:var(--ink)}
+details.info p{margin:.5rem 0}
+.copy{background:var(--mark);color:var(--text);border-radius:.4rem;padding:.4rem .7rem;margin:.6rem 0!important}
+.rule{font-size:1.15rem}
+
+.nav{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.dots{display:flex;gap:.3rem;flex-wrap:wrap}
+.dot{width:2.2rem;height:2.2rem;border-radius:50%;padding:0;font-weight:700;font-size:.9rem;background:var(--field);color:var(--ink);border:2px solid var(--line)}
+.dot.started{background:var(--info)}
+.dot.done{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.dot.shown{border-style:dashed}
+.dot.cur{border-color:var(--ink);box-shadow:0 0 0 3px var(--mark)}
+.round{margin-left:auto;color:var(--muted);font-size:.9rem;border:1.5px solid var(--line);border-radius:999px;padding:.1rem .6rem}
+
+.taskline{font-size:1.6rem;margin:.9rem 0 .3rem;display:flex;flex-wrap:wrap;align-items:center;gap:.2rem}
+.tchip{font:inherit;font-size:1.6rem;font-weight:400;background:transparent;color:var(--text);border:0;border-bottom:5px solid transparent;border-radius:0;padding:0 .2rem .05rem;line-height:1.35;cursor:pointer}
+.tchip:hover{background:var(--info)}
+.tchip.k1{border-bottom-color:var(--c1)}.tchip.k2{border-bottom-color:var(--c2)}.tchip.k3{border-bottom-color:var(--c3)}.tchip.k4{border-bottom-color:var(--c4)}.tchip.k5{border-bottom-color:var(--c5)}.tchip.k6{border-bottom-color:var(--c6)}
+.gt{text-decoration:underline;text-decoration-thickness:4px;text-underline-offset:.3em}
+.g1{text-decoration-color:var(--c1)}.g2{text-decoration-color:var(--c2)}.g3{text-decoration-color:var(--c3)}.g4{text-decoration-color:var(--c4)}.g5{text-decoration-color:var(--c5)}.g6{text-decoration-color:var(--c6)}
+.palette{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin:.3rem 0}
+.pal{width:2.6rem;height:2.2rem;padding:0;background:var(--field);border:2px solid var(--line);border-radius:.4rem;position:relative}
+.pal::after{content:"";position:absolute;left:.45rem;right:.45rem;bottom:.55rem;height:5px;border-radius:3px;background:currentColor}
+.pal.u1{color:var(--c1)}.pal.u2{color:var(--c2)}.pal.u3{color:var(--c3)}.pal.u4{color:var(--c4)}.pal.u5{color:var(--c5)}.pal.u6{color:var(--c6)}
+.pal.sel{border-color:var(--ink);box-shadow:0 0 0 3px var(--mark)}
+.markmsg{font-size:.95rem;margin:.3rem 0 0}
+.markmsg.ok{color:var(--ok);font-weight:700}.markmsg.bad{color:var(--bad)}
+.stepcard{border:2px solid var(--ink);border-radius:.6rem;padding:.8rem 1rem;margin-top:1rem}
+.stepcard.done{border-color:var(--ok)}
+.donetxt{color:var(--ok);font-weight:700}
+.row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin:.5rem 0;font-size:1.3rem}
+.row input{width:18rem;max-width:100%}
+.donebox{margin-top:1rem;padding:.8rem 1rem;border-radius:.6rem;background:var(--okbg);border:2px solid var(--ok);display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+.donebox b{color:var(--ok)}
+
+.heft{overflow-x:auto;margin:1.2rem 0 .5rem;border:2px dashed var(--line);border-radius:.6rem;background:var(--paper);padding:.8rem 1rem}
+.heft .hefttitle{margin:0 0 .3rem;font-weight:700;color:var(--muted);font-size:.95rem}
+.heft .hl{font-size:1.35rem;color:var(--ink);margin:.3rem 0}
+.heft .fin{font-weight:700}
+.heft .small{font-size:1rem;color:var(--muted)}
+.heft .copy{font-size:1rem}
+
+.startcard{border-color:var(--ink);border-width:3px}
+.startcard h2{font-family:Fraunces,Georgia,serif;font-size:1.5rem;color:var(--ink)}
+#pname{width:16rem;max-width:100%;font-size:1.15rem}
+#startDone{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.who{font-weight:700;color:var(--ink);display:inline-flex;align-items:center;gap:.4rem;font-size:1.1rem}
+#codeAsk{margin-top:1rem}
+#codeAsk summary{cursor:pointer;color:var(--ink);font-weight:700}
+#pcode{width:17rem;max-width:100%;font-family:ui-monospace,Consolas,"Courier New",monospace;text-transform:uppercase;letter-spacing:.05em}
+#pnameErr{color:var(--bad);margin:.6rem 0 0}
+#startMsg{flex-basis:100%;margin:0;color:var(--ok);font-weight:700}
+#startMsg:empty{display:none}
+#codeBox{flex-basis:100%;background:var(--info);border-left:6px solid var(--ink);border-radius:.5rem;padding:.7rem 1rem}
+#codeBox p{margin:.3rem 0}
+.code{font-family:ui-monospace,Consolas,"Courier New",monospace;font-size:1.35rem;font-weight:700;letter-spacing:.06em;color:var(--ink);word-break:break-all}
+.finish{display:flex;justify-content:center;margin:0 0 1.5rem}
+#summary{border-color:var(--ink);border-width:3px}
+#summary .who{margin:.4rem 0 0;color:var(--muted)}
+#summary .who b{color:var(--text)}
+.summsg{font-size:1.2rem;font-weight:700;color:var(--ink);margin:.6rem 0 1rem}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:30rem}
+th,td{text-align:left;padding:.4rem .6rem;border-bottom:1px solid var(--line)}
+td.c,th.c{text-align:center}
+tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--ink)}
+body.locked #main{opacity:.35;filter:grayscale(.4);pointer-events:none;user-select:none}
+
+#pad{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:3px solid var(--ink);
+  padding:.5rem .6rem calc(.5rem + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 16px rgba(27,47,107,.15)}
+#pad .padtop{display:flex;align-items:center;gap:.5rem;max-width:34rem;margin:0 auto .4rem;color:var(--muted);font-size:.9rem}
+#pad .padtop span{margin-right:auto;font-weight:700;color:var(--ink)}
+#pad .keys{display:grid;grid-template-columns:repeat(7,1fr);gap:.3rem;max-width:34rem;margin:0 auto}
+#pad .keys button{padding:.55rem 0;font-size:1.15rem;font-weight:700;background:var(--field);color:var(--text);border:2px solid var(--line);border-radius:.45rem;touch-action:manipulation}
+#pad .keys button.var{font-style:italic;font-family:Georgia,serif}
+#pad .keys button.op{background:var(--info)}
+#pad .keys button.go{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+body.padon .wrap{padding-bottom:20rem}
+
+.levels{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden;margin-top:1rem}
+.levels button{border:0;border-radius:0;background:transparent;color:var(--ink);padding:.45rem 1.1rem}
+.levels button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.stepcard.active{border-color:var(--ink)}
+.stepcard:not(.active):not(.done){border-color:var(--line)}
+.stepcard p{margin:.3rem 0}
+.task-expr{font-size:1.6rem;margin:.8rem 0 .3rem;font-family:Georgia,"Times New Roman",serif;overflow-x:auto;white-space:nowrap}
+.trow{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;margin:.45rem 0;font-size:1.3rem}
+.trow .given{min-width:9.5rem;font-family:Georgia,serif;white-space:nowrap}
+.trow .arrow{color:var(--muted)}
+.trow input{width:8rem}
+.trow .rowmsg{flex-basis:100%;font-size:.92rem;color:var(--bad)}
+.trow .rowmsg:empty{display:none}
+.line{font-size:1.35rem;font-family:Georgia,serif;margin:.4rem 0;white-space:nowrap;overflow-x:auto}
+.neg{color:var(--bad)}
+.sumafter{margin-top:.8rem;padding:.6rem .9rem;border-radius:.5rem;background:var(--mark);color:var(--text)}
+.rtab{border-collapse:collapse;width:auto;min-width:0;margin:.3rem 0}
+.rtab td{padding:.2rem .8rem;border-bottom:1px solid var(--line);font-size:1.1rem;font-family:Georgia,serif}
+.calc{margin:.8rem 0 0;padding:.8rem 1rem;border:2px solid var(--ink);border-radius:.6rem;background:var(--card)}
+.cl{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;font-family:Georgia,"Times New Roman",serif;font-size:1.5rem;margin:.35rem 0;white-space:nowrap}
+.cl.task{font-size:1.6rem;overflow-x:auto}
+.cl.ok{color:var(--ok)}
+.cl .tick{font-family:"Atkinson Hyperlegible",sans-serif;font-size:1.1rem}
+.cl .eqs{min-width:1rem}
+.cl input.linein{font-family:Georgia,serif;font-size:1.35rem;width:min(26rem,100%);flex:0 1 26rem}
+.cl .lbl{font-family:"Atkinson Hyperlegible",sans-serif;font-size:.85rem;color:var(--muted)}
+.calc .msg{margin:.2rem 0 .4rem 1.5rem}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1;margin:0 .1em;font-size:.85em}
+.fr>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .2em}
+.fr>span:last-child{padding:0 .2em}
+.story{font-size:1.15rem;line-height:1.55;background:var(--info);border-left:6px solid var(--accent);border-radius:.5rem;padding:.7rem 1rem;margin:.6rem 0}
+.steplbl{font-family:"Atkinson Hyperlegible",sans-serif;font-size:.9rem;font-weight:700;color:var(--accent);margin:.7rem 0 0}
+.cl .pre{font-family:"Atkinson Hyperlegible",sans-serif;font-size:1.05rem;color:var(--text)}
+.cl.ok .pre{color:var(--ok)}
+.fbox{display:inline-flex;flex-direction:column;align-items:center;gap:.2rem}
+.fbox input{width:12rem;text-align:center;font-family:Georgia,serif;font-size:1.2rem}
+.fbox .fbar{display:block;width:100%;border-top:2.5px solid var(--text)}
+input.kin{width:3.5rem;text-align:center}
+.sgn{display:inline-flex;gap:.2rem}
+.sgn button,.choice button{font-size:1.2rem;background:var(--field);color:var(--text);border:2px solid var(--line);padding:.15rem .7rem}
+.sgn button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.choice{display:inline-flex;gap:.4rem;flex-wrap:wrap}
+.choice button{font-family:"Atkinson Hyperlegible",sans-serif;font-size:1rem}
+.seg{font:inherit}
+button.tapseg{font:inherit;font-size:1.6rem;font-family:Georgia,serif;background:transparent;color:var(--text);border:2px dashed var(--line);border-radius:.4rem;padding:0 .2rem;font-weight:400}
+button.tapseg:disabled{border-color:transparent;opacity:1;cursor:default}
+button.tapseg.chosen{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px;text-decoration-color:var(--accent);border-color:transparent}
+.cl.task{flex-wrap:wrap;white-space:normal}
+.cl u{text-decoration-thickness:3px;text-decoration-color:var(--accent);text-underline-offset:5px}
+/* Bruch-Schritte wie in „Brüche gemischt“ */
+.bigexpr{justify-content:flex-start;gap:.25em;font-size:1.8rem}
+.bigexpr .q{color:var(--accent)}
+.bcard{border:2px solid var(--ink);border-radius:.8rem;padding:.8rem 1rem;margin:.6rem 0;background:var(--card)}
+.bcard h3{margin:0 0 .3rem;font-size:1.1rem;color:var(--ink)}
+.bcard p{margin:0 0 .5rem}
+.opts{display:flex;flex-wrap:wrap;gap:.5rem}
+.opts.col{flex-direction:column;align-items:stretch}
+.opt{font:inherit;font-size:1rem;text-align:left;padding:.5rem .8rem;border:2px solid var(--ink);border-radius:.6rem;background:var(--card);color:var(--ink);font-weight:400}
+.opt:hover{background:var(--info)}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;font-family:Georgia,"Times New Roman",serif;font-size:1.4rem;margin:.3rem 0}
+.eqrow{margin-bottom:.5rem}
+input.n{font:inherit;font-family:Georgia,serif;font-size:1.25rem;width:5rem;padding:.1rem .4rem;border:2px solid var(--ink);border-radius:.45rem;background:var(--field);color:var(--text);text-align:center}
+input.n.sm{width:3.6rem}
+input.n.whole{width:3.4rem}
+.sfw{display:inline-flex;align-items:center;gap:.3rem}
+.fin{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;gap:3px}
+.fin .n{width:4.2rem}
+.fin .bar{width:4.6rem;border-top:3px solid var(--text)}
+.longfrac{display:inline-flex;flex-direction:column;align-items:center;gap:4px;vertical-align:middle}
+.longfrac .longnum,.longfrac .longden{display:flex;align-items:center;gap:4px;flex-wrap:wrap;justify-content:center;padding:2px 4px}
+.longfrac .longnum{border-bottom:3px solid var(--text);padding-bottom:6px}
+select.sg{font:inherit;font-size:1.2rem;font-weight:700;padding:.1rem .3rem;border:2px solid var(--line);border-radius:.45rem;background:var(--field);color:var(--ink);cursor:pointer}
+.ruletip{font-family:"Atkinson Hyperlegible",sans-serif;font-size:.85rem;color:var(--muted)}
+.checkb{margin-top:.4rem}
+/* Kreuz + Klammer (3 Striche) */
+.xfig{display:block;width:min(100%,370px);height:auto;margin:.2rem 0;font-family:Georgia,"Times New Roman",serif}
+.xfig text{fill:var(--text)}
+.xfig .xt{cursor:pointer}
+.xfig .xt rect{fill:transparent;stroke:var(--line);stroke-width:2;stroke-dasharray:4 3;rx:6}
+.xfig .xt.sel rect{fill:var(--mark);stroke:var(--accent);stroke-dasharray:none}
+.xfig .xt:hover rect{fill:var(--info)}
+.xfig .halo{fill:var(--card)}
+#sumCross .halo{fill:var(--info)}
+.xfig .xop text{font-weight:700;fill:var(--ink)}
+.xfig .xsg text{fill:var(--muted)}
+.xs1{stroke:#2563eb}.xs2{stroke:#ea580c}.xs3{stroke:#16a34a}
+.xcount{font-family:"Atkinson Hyperlegible",sans-serif;font-size:.95rem;color:var(--muted);margin:.2rem 0}
+input.n.k1{border-color:#2563eb;border-width:3px}input.n.k2{border-color:#ea580c;border-width:3px}input.n.k3{border-color:#16a34a;border-width:3px}
+.cl.ok.qa{font-size:1rem;margin:.1rem 0}
+.longfrac .longnum{flex-wrap:nowrap}
+@media (max-width:520px){.longfrac input.n.sm{width:2.5rem;font-size:1.05rem;padding:.1rem .15rem}.eq{font-size:1.2rem;gap:.25rem}.longfrac .longnum,.longfrac .longden{gap:2px;padding:2px 1px}}
+.cl.ok.qa .pre{font-size:.95rem;color:var(--muted)}
+/* KaPuStri */
+.kps .khint{font-size:.95rem;color:var(--muted);margin:.4rem 0}
+.kq{gap:.1rem}
+.kq .part{font:inherit;font-family:Georgia,serif;font-size:1.5rem;border:0;background:transparent;color:var(--text);padding:.15rem .15rem;font-weight:400;border-radius:.3rem}
+.kq .part:hover{background:var(--info)}
+.kq .part.selected,.kps u{text-decoration:underline;text-decoration-color:#17834c;text-decoration-thickness:3px;text-underline-offset:7px}
+.kq .part.selected{background:#e7f6e9;color:#14532d}
+.kps .past{color:var(--muted);border-bottom:1px solid var(--line)}
+.kps .kres{margin:.1rem 0 .5rem;font-size:.95rem;color:var(--ok);font-weight:700}
+.kps .stage{background:var(--info);border-radius:.6rem;padding:.6rem .8rem;margin:.5rem 0}
+.kps .stage label{display:block;font-size:.95rem;margin:.2rem 0}
+.kps .gapline{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem}
+.kps input.gapin{width:5rem;text-align:center;font-size:1.2rem}
+.kps input.gapin.ok{border-color:var(--ok);background:var(--okbg)}.kps input.gapin.bad{border-color:var(--bad);background:var(--badbg)}
+.kps .opbtn{font:700 1.35rem Georgia,serif;min-width:2.6rem;padding:.1rem .5rem;border:2px dashed var(--ink);border-radius:.45rem;background:var(--field);color:var(--ink)}
+.kps .palette{display:flex;flex-wrap:wrap;gap:.45rem;margin:.6rem 0;padding:.5rem;border:2px dashed var(--line);border-radius:.6rem;background:var(--field)}
+.kps .tile{font:1.15rem Georgia,serif;padding:.3rem .55rem;border:2px solid var(--ink);border-radius:.45rem;background:var(--paper);color:var(--ink);min-width:2.3rem}
+.kps .tile.restile{background:#fff7d6;border-color:#b07b00;font-size:.95rem}
+.kps .tile:disabled{opacity:.25}
+.kps .gapline.built{min-height:2.8rem;padding:.3rem .4rem;border-bottom:2px solid var(--ink)}
+.kps .bempty{color:var(--muted);font-size:.95rem}.kps .resw{white-space:nowrap}
+.kps .bctl{display:flex;gap:.5rem;margin:.3rem 0}
+.kps .opbtn.set{border-style:solid;background:var(--info)}
+</style></head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Rechnen mit <span class="acc">rationalen Zahlen</span> – 4. Klasse</h1>
+      <p class="sub">Wiederholung für die 4. Klasse: zuerst ganze Zahlen, Brüche und Textaufgaben, dann <b>sechs Aufgaben Klammer – Punkt – Strich</b>, die immer schwieriger werden. Mit ◀ ▶ oder den Nummern springst du zwischen den Beispielen.</p>
+      <div class="levels" role="group" aria-label="Niveau">
+        <button type="button" data-level="std" aria-pressed="true">Standard</button>
+        <button type="button" data-level="ahs" aria-pressed="false">Standard AHS</button>
+      </div>
+    </div>
+    <div class="top"><span class="score" id="score">0 von 8 fertig</span></div>
+  </header>
+
+  <section id="start" class="startcard">
+    <div id="startAsk">
+      <h2>Wie heißt du?</h2>
+      <p class="hint">Gib zuerst deinen Namen ein. Er steht am Ende in deiner Auswertung und kann danach nicht mehr geändert werden. Hast du auf diesem Gerät schon geübt, machst du automatisch dort weiter, wo du aufgehört hast.</p>
+      <div class="actions"><input id="pname" placeholder="Vor- und Nachname" autocomplete="name" aria-label="Dein Name"><button id="startBtn" type="button">Los geht’s</button></div>
+      <details id="codeAsk">
+        <summary>Auf einem anderen Gerät angefangen? Code eingeben</summary>
+        <p class="hint">Schreib oben deinen Namen genau wie auf dem anderen Gerät und tippe hier den Code ein.</p>
+        <div class="actions"><input id="pcode" placeholder="z. B. K7MP-2XQ9" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Code vom anderen Gerät"></div>
+      </details>
+      <p id="pnameErr" hidden></p>
+    </div>
+    <div id="startDone" hidden>
+      <span class="who">👤 <b id="pnameShow"></b></span>
+      <button type="button" class="mini" id="codeBtn" aria-expanded="false">Auf anderem Gerät weitermachen</button>
+      <p id="startMsg" aria-live="polite"></p>
+      <div id="codeBox" hidden>
+        <p>Dein Code: <span class="code" id="codeShow"></span> <button type="button" class="mini" id="codeCopy">Kopieren</button></p>
+        <p class="hint">Öffne die Übung auf dem anderen Gerät, gib <b>genau denselben Namen</b> ein und tippe diesen Code ein. Der Code ändert sich, während du weiterarbeitest – schreib ihn dir erst auf, wenn du hier aufhörst.</p>
+      </div>
+    </div>
+  </section>
+
+  <div id="main">
+    <section id="exCard"></section>
+
+    <details class="info" id="howto" open>
+      <summary>Zusammenfassung – schreib sie in dein Heft!</summary>
+      <p class="copy">✏️ <b>Schreib diese Zusammenfassung mit den Beispielen ordentlich in dein Heft ab.</b></p>
+      <p><b>1. Klammern auflösen (+ und −):</b> gleiche Zeichen → +, verschiedene Zeichen → − &nbsp;·&nbsp; (−7) − (−3) = −7 + 3 = −4</p>
+      <p><b>2. Mal und durch:</b> Minuszeichen zählen – gerade Anzahl → +, ungerade → −, dann gleich ausrechnen &nbsp;·&nbsp; (−6) · (−4) = 24 &nbsp;·&nbsp; (+36) : (−9) = −4</p>
+      <p><b>3. Brüche:</b> Zuerst überlegen: <b>Welche Regel brauchst du?</b> Gemischte Zahlen in unechte Brüche umwandeln (Ganze · Nenner + Zähler).</p>
+      <p><b>Plus und minus – über Kreuz:</b> Strichrechnung → <b>3 Striche</b> zeichnen: das Kreuz (Zähler mal Nenner vom anderen Bruch) und die Klammer unter den Nennern (Nenner mal Nenner).</p>
+      <div id="sumCross"></div>
+      <p class="rule">(−3/4) + (+5/6) = [(−3 · 6) + (+5 · 4)] / (4 · 6) = (−18 + 20) / 24 = 2/24 = 1/12 &nbsp;(Kann man kürzen? Ja – durch 2)</p>
+      <p><b>Mal und durch – langer Bruchstrich</b> (bei : mit dem <b>Kehrwert</b>):</p>
+      <p class="rule">(−2/3) : (+4/9) = − (2 · 9)/(3 · 4) = gekürzt durch 3: − (2 · 3)/(1 · 4) = −6/4 = gekürzt durch 2: −3/2 = −1 1/2</p>
+      <p><b>4. Klammer – Punkt – Strich:</b> Unterstreiche die Rechenteile, mit denen du beginnst (Klammer vor Punkt vor Strich). Bei + und − zuerst die Vorzeichen auflösen, dann ausrechnen, dann die <b>ganze nächste Zeile</b> anschreiben.</p>
+      <p class="rule">(+20) − <u>(−3) · (+4)</u> &nbsp;→ −12 &nbsp;&nbsp; = (+20) − (−12) &nbsp;→ 20 + 12 = 32</p>
+      <p><b>Textaufgaben:</b> unter dem Meeresspiegel, unter dem Erdgeschoss, Schulden → negativ. Rechnung anschreiben, ausrechnen, Antwortsatz.</p>
+      <p class="hint">Eingabe: Bruch mit / (z. B. -3/4), gemischte Zahl mit Leerzeichen (-1 1/2), mal mit ·, durch mit :.</p>
+    </details>
+
+    <div class="finish"><button class="ghost" id="showSum" type="button">Auswertung anzeigen</button></div>
+
+    <section id="summary" hidden>
+      <div class="head"><h2 id="sumTitle">Auswertung</h2></div>
+      <p id="sumWho" class="who"></p>
+      <p id="sumMsg" class="summsg"></p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Beispiel</th><th>Ergebnis</th><th>Bewertung</th><th class="c">Fehlversuche</th></tr></thead>
+        <tbody id="sumBody"></tbody>
+        <tfoot id="sumFoot"></tfoot>
+      </table></div>
+      <div class="actions" style="margin-top:1rem"><button type="button" id="newRound2">Neue Runde mit neuen Beispielen</button></div>
+    </section>
+  </div>
+</div>
+
+<div id="pad" hidden role="group" aria-label="Eingabehilfe">
+  <div class="padtop"><span>Eingabehilfe</span>
+    <button type="button" class="mini" id="padSys">Handy-Tastatur einblenden</button>
+    <button type="button" class="mini" id="padHide" aria-label="Eingabehilfe schließen">✕</button>
+  </div>
+  <div class="keys">
+    <button type="button" data-ins="7">7</button><button type="button" data-ins="8">8</button><button type="button" data-ins="9">9</button><button type="button" class="op" data-ins="+">+</button><button type="button" class="op" data-ins="-" aria-label="minus">−</button><button type="button" class="op" data-act="del" aria-label="Löschen">⌫</button><button type="button" class="op" data-act="clr" aria-label="Feld leeren">C</button>
+    <button type="button" data-ins="4">4</button><button type="button" data-ins="5">5</button><button type="button" data-ins="6">6</button><button type="button" class="op" data-ins="·" aria-label="mal">·</button><button type="button" class="op" data-ins=":" aria-label="geteilt">:</button><button type="button" class="op" data-ins="/" aria-label="Bruchstrich">/</button><button type="button" class="op" data-act="pm" aria-label="Plus oder Minus">±</button>
+    <button type="button" data-ins="1">1</button><button type="button" data-ins="2">2</button><button type="button" data-ins="3">3</button><button type="button" class="op" data-ins="(">(</button><button type="button" class="op" data-ins=")">)</button><button type="button" class="op" data-act="left" aria-label="Cursor nach links">◀</button><button type="button" class="op" data-act="right" aria-label="Cursor nach rechts">▶</button>
+    <button type="button" data-ins="0" style="grid-column:span 2">0</button><button type="button" class="op" data-ins="," aria-label="Komma">,</button><button type="button" class="go" data-act="ok" style="grid-column:span 4">✓ fertig</button>
+  </div>
+</div>
+
+<script>
+/* ================= Hilfsfunktionen ================= */
+let RNG=Math.random;
+const rnd=(a,b)=>a+Math.floor(RNG()*(b-a+1));
+const pick=a=>a[rnd(0,a.length-1)];
+const sg=()=>RNG()<.5?1:-1;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=rnd(0,i);[a[i],a[j]]=[a[j],a[i]];}return a;}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const MINUS='−';
+const gcdN=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b)[a,b]=[b,a%b];return a;};
+
+/* ================= Rationale Zahlen (exakt) ================= */
+const B=x=>BigInt(x);
+function gcd(a,b){a=a<0n?-a:a;b=b<0n?-b:b;while(b){[a,b]=[b,a%b];}return a;}
+function rat(n,d=1n){n=B(n);d=B(d);if(d<0n){n=-n;d=-d;}const g=gcd(n,d)||1n;return {n:n/g,d:d/g};}
+const R=(n,d=1)=>rat(n,d);
+const rneg=a=>({n:-a.n,d:a.d});
+const rabs=a=>({n:a.n<0n?-a.n:a.n,d:a.d});
+const radd=(a,b)=>rat(a.n*b.d+b.n*a.d,a.d*b.d);
+const rsub=(a,b)=>radd(a,rneg(b));
+const rmul=(a,b)=>rat(a.n*b.n,a.d*b.d);
+const rdiv=(a,b)=>rat(a.n*b.d,a.d*b.n);
+const req=(a,b)=>a.n*b.d===b.n*a.d;
+const isInt=a=>a.d===1n;
+const fracH=(n,d)=>'<span class="fr"><span>'+n+'</span><span>'+d+'</span></span>';
+/* Zahl als HTML: Bruch, gemischte Zahl oder ganze Zahl; dec: Dezimalzahl */
+function decStr(r){let p=0;while(p<12&&(10n**B(p))%r.d!==0n)p++;const neg=r.n<0n;let s=((neg?-r.n:r.n)*(10n**B(p))/r.d).toString();
+  if(p>0){s=s.padStart(p+1,'0');s=s.slice(0,s.length-p)+','+s.slice(s.length-p);}return (neg?'-':'')+s;}
+function rH(r,mode){const neg=r.n<0n,a=rabs(r),s=neg?MINUS:'';
+  if(isInt(a))return s+a.n;
+  if(mode==='dec')return s+decStr(a);
+  if(mode==='mixed'&&a.n>a.d)return s+(a.n/a.d)+'&#8202;'+fracH(a.n%a.d,a.d);
+  return s+fracH(a.n,a.d);}
+function rPlain(r,mode){const neg=r.n<0n,a=rabs(r),s=neg?'-':'';if(isInt(a))return s+a.n;if(mode==='dec')return s+decStr(a);if(mode==='mixed'&&a.n>a.d)return s+(a.n/a.d)+' '+(a.n%a.d)+'/'+a.d;return s+a.n+'/'+a.d;}
+/* Zahl mit Klammer und Vorzeichen, wie in der Angabe: (−3/4), (+5) */
+const brH=(r,mode)=>'('+(r.n<0n?'':'+')+rH(r,mode)+')';
+/* Eingabe einer einzelnen Zahl: -3,5 · -7/2 · -1 3/4 */
+function readRat(str){
+  let s=String(str).replace(/[−–—]/g,'-').replace(/\u202F|\u00A0/g,' ').trim();if(!s)return null;
+  let m=s.match(/^([+-]?)\s*(\d+)\s+(\d+)\s*\/\s*(\d+)$/);
+  if(m){if(+m[4]===0)return null;const r=rat(B(m[2])*B(m[4])+B(m[3]),B(m[4]));return {r:m[1]==='-'?rneg(r):r,mixed:true,frac:true,rn:B(m[3]),rd:B(m[4])};}
+  s=s.replace(/\s+/g,'');
+  m=s.match(/^([+-]?)(\d+)\/(\d+)$/);
+  if(m){if(+m[3]===0)return null;const r=rat(B(m[2]),B(m[3]));return {r:m[1]==='-'?rneg(r):r,frac:true,rn:B(m[2]),rd:B(m[3])};}
+  m=s.replace('.',',').match(/^([+-]?)(\d*)(?:,(\d+))?$/);if(!m||(!m[2]&&!m[3]))return null;
+  const f=m[3]||'';const r=rat(B((m[2]||'0')+f),10n**B(f.length));return {r:m[1]==='-'?rneg(r):r,frac:false,dec:!!f};
+}
+
+/* ================= Rechenausdrücke lesen ================= */
+/* Zahlen: 5 · 2,5 · 3/4 (Bruch) · Rechenzeichen + − · : · Klammern ( ) [ ] */
+function parseExpr(str){
+  const s=String(str).replace(/[−–—]/g,'-').replace(/[*×xX]/g,'·').replace(/\s+/g,'').replace(/\./g,',');
+  if(!s)return {err:'Schreib etwas in die Zeile.'};
+  const bad=s.match(/[^0-9,+\-·:\/()\[\]]/);if(bad)return {err:'Das Zeichen „'+bad[0]+'“ kann ich nicht lesen.'};
+  let i=0,ops=0;const peek=()=>s[i];
+  function expr(){let l=term();while(peek()==='+'||peek()==='-'){const o=s[i++];ops++;const r=term();l={t:'bin',op:o,l,r,v:o==='+'?radd(l.v,r.v):rsub(l.v,r.v)};}return l;}
+  function term(){let l=fac();while(peek()==='·'||peek()===':'){const o=s[i++];ops++;const r=fac();if(o===':'&&r.v.n===0n)throw 'Durch 0 kann man nicht dividieren.';l={t:'bin',op:o,l,r,v:o==='·'?rmul(l.v,r.v):rdiv(l.v,r.v)};}return l;}
+  function fac(){const c=peek();
+    if(c==='+'||c==='-'){i++;const e=fac();return {t:'neg',sign:c==='-'?-1:1,e,v:c==='-'?rneg(e.v):e.v};}
+    if(c==='('||c==='['){i++;const e=expr();const cl=c==='('?')':']';if(peek()!==cl)throw 'Eine Klammer ist nicht geschlossen.';i++;return {t:'par',e,v:e.v};}
+    const m=s.slice(i).match(/^(\d+)(?:,(\d+))?(?:\/(\d+))?/);if(!m||!m[0])throw 'Da fehlt eine Zahl.';
+    i+=m[0].length;if(m[3]!==undefined&&+m[3]===0)throw 'Ein Nenner darf nicht 0 sein.';
+    const f=m[2]||'';let v=rat(B(m[1]+f),10n**B(f.length));if(m[3])v=rdiv(v,R(+m[3]));
+    return {t:'num',v,frac:!!m[3],z:+m[1],n:m[3]?+m[3]:1};}
+  try{const e=expr();if(i!==s.length)throw 'Prüfe die Rechenzeichen und Klammern.';return {e,v:e.v,ops,src:s};}
+  catch(m){return {err:typeof m==='string'?m:'Das kann ich nicht lesen.'};}
+}
+/* oberste Ebene: Liste von Gliedern mit Vorzeichen */
+function topTerms(e){const out=[];(function walk(n,sgn){if(n.t==='bin'&&(n.op==='+'||n.op==='-')){walk(n.l,sgn);walk(n.r,n.op==='-'?-sgn:sgn);}else out.push({sign:sgn,n});})(e,1);
+  /* führendes Minus in das erste Glied ziehen */
+  const signOf=n=>n.t==='neg'?n.sign*signOf(n.e):n.t==='par'?signOf(n.e):n.t==='bin'&&(n.op==='·'||n.op===':')?signOf(n.l)*signOf(n.r):1;
+  const strip=n=>n.t==='neg'?strip(n.e):n;
+  return out.map(x=>({sign:x.sign*signOf(x.n),n:strip(x.n)}));}
+/* Faktoren eines Produkts (Beträge, ohne Vorzeichen) */
+function factors(n){if(n.t==='neg')return factors(n.e);if(n.t==='par')return factors(n.e);if(n.t==='bin'&&n.op==='·')return factors(n.l).concat(factors(n.r));return n.t==='num'?[n.v]:null;}
+const sameMulti=(a,b)=>a&&b&&a.length===b.length&&(()=>{const bb=b.slice();return a.every(x=>{const k=bb.findIndex(y=>req(x,y));if(k<0)return false;bb.splice(k,1);return true;});})();
+const hasBracket=s=>/[()\[\]]/.test(s);
+
+/* ================= Schritte ================= */
+/* line: eine Eingabezeile · frac: Bruch mit Zähler/Nenner (optional Vorzeichen, Kürzzahl) · yn: Ja/Nein · tap: Startpunkt antippen */
+function stLine(label,ph,done,check,sol,o={}){return Object.assign({kind:'line',label,ph,done,check,sol},o);}
+function stFrac(label,done,check,sol,o={}){return Object.assign({kind:'frac',label,done,check,sol},o);}
+function stYN(q,yes,done,hintYes,hintNo){return {kind:'yn',label:q,done,check:v=>v===(yes?'ja':'nein')?true:(yes?hintYes:hintNo),sol:yes?'ja':'nein'};}
+function stTap(parts,right,hint){return {kind:'tap',label:'Womit beginnst du? Tippe es an.',parts,right,done:'',check:v=>+v===right?true:hint,sol:String(right)};}
+/* Zahl prüfen: richtig, aber nicht gekürzt? */
+function numCheck(str,want,o={}){
+  const u=readRat(str);if(!u)return 'Schreib eine Zahl, z. B. −3/4'+(o.mixedOk?' oder −1 1/2':'')+'.';
+  if(!req(u.r,want))return req(u.r,rneg(want))?'Kontrolliere das Vorzeichen.':(o.wrong||'Rechne nochmal nach.');
+  if(u.frac&&gcd(u.rn,u.rd)>1n)return {soft:'Richtig – aber kürze noch vollständig!'};
+  if(o.mixed&&!u.mixed&&!isInt(want)&&rabs(want).n>rabs(want).d)return {soft:'Richtig – schreib das Ergebnis noch als gemischte Zahl.'};
+  return true;
+}
+
+/* ---- Brüche wie in „Brüche gemischt“ ---- */
+const SG=n=>n<0?'−':'+';
+const sgnOf=n=>n<0?'-':'+';
+const sfrS=(n,d)=>d===1?SG(n)+Math.abs(n):SG(n)+fracH(Math.abs(n),d);
+function divisors(n){const o=[];for(let k=2;k<=n;k++)if(n%k===0)o.push(k);return o;}
+function pOptions(top,bot){const [x1,x2]=top,[y1,y2]=bot,out=[];
+  for(const [a,c] of [[x1,x2],[x2,x1]])for(const [b,d] of [[y1,y2],[y2,y1]]){const o=[a,c,b,d];out.push({g:1,v:o});
+    for(const [ti,bi] of [[0,2],[0,3],[1,2],[1,3]])for(const g of divisors(gcdN(o[ti],o[bi]))){const v=[...o];v[ti]/=g;v[bi]/=g;out.push({g,v});}}
+  return out;}
+function pBest(top,bot){const o=pOptions(top,bot);return o.filter(x=>x.g>1).sort((p,q)=>q.g-p.g)[0]||o[0];}
+const pair=(x,y,A,B)=>(x===A&&y===B)||(x===B&&y===A);
+const iv=s=>{const t=String(s==null?'':s).replace(/[−–—]/g,'-').replace(/\s+/g,'');return /^[+-]?\d+$/.test(t)?parseInt(t,10):null;};
+function sumParse(v){const t=String(v==null?'':v).replace(/[−–—]/g,'-').replace(/\s+/g,'');if(!/^[+-]?\d+(?:[+-]\d+)*$/.test(t))return null;return t.match(/[+-]?\d+/g).reduce((s,x)=>s+Number(x),0);}
+const SEL=(v,k,lab)=>'<select class="sg" data-f="'+k+'" aria-label="'+(lab||'Vorzeichen')+'"><option value="">?</option><option value="+"'+(v[k]==='+'?' selected':'')+'>+</option><option value="-"'+(v[k]==='-'?' selected':'')+'>−</option></select>';
+const BOX=(v,k,lab,cls)=>'<input class="pin n'+(cls?' '+cls:'')+'" data-f="'+k+'" value="'+esc(v[k]||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="'+lab+'">';
+const FF=(v,k)=>'<span class="sfw">'+SEL(v,k+'s')+'<span class="fin">'+BOX(v,k+'z','Zähler')+'<span class="bar"></span>'+BOX(v,k+'n','Nenner')+'</span></span>';
+const LONG=(v,k)=>'<span class="sfw">'+SEL(v,k+'s')+'<span class="longfrac"><span class="longnum">'+BOX(v,k+'a','Erster Faktor im Zähler','sm')+'<span>·</span>'+BOX(v,k+'c','Zweiter Faktor im Zähler','sm')+'</span><span class="longden">'+BOX(v,k+'b','Erster Faktor im Nenner','sm')+'<span>·</span>'+BOX(v,k+'d','Zweiter Faktor im Nenner','sm')+'</span></span></span>';
+const longTxt=(s,t,b)=>s+fracH(t[0]+' · '+t[1],b[0]+' · '+b[1]);
+const readFF=(v,k)=>({s:v[k+'s'],z:iv(v[k+'z']),n:iv(v[k+'n'])});
+const fillFF=(o,k,n,d)=>{o[k+'s']=sgnOf(n);o[k+'z']=String(Math.abs(n));o[k+'n']=String(d);return o;};
+const orig=o=>'('+SG(o.n)+(o.mixed?o.w+fracH(o.z,o.d):fracH(o.z,o.d))+')';
+const impP=o=>'('+sfrS(o.n,o.d)+')';
+const OPNAME={'+':'Addition','−':'Subtraktion','·':'Multiplikation',':':'Division'};
+const RULES={add:'Über Kreuz multiplizieren (gemeinsamer Nenner), dann die Zähler zusammenfassen',
+  mul:'Zähler mal Zähler und Nenner mal Nenner (langer Bruchstrich)',div:'Mit dem Kehrwert der zweiten Zahl multiplizieren',bad:'Zähler plus Zähler und Nenner plus Nenner'};
+const RULESHORT={add:'Strichrechnung – über Kreuz',mul:'Punktrechnung – langer Bruchstrich',div:'Punktrechnung – mal Kehrwert'};
+const NOTE=m=>({note:m});
+function resHTML(n,d){if(d===1)return (n<0?'−':'')+Math.abs(n);const s=n<0?'−':'',a=Math.abs(n);return a>d?s+Math.floor(a/d)+fracH(a%d,d):s+fracH(a,d);}
+
+/* Kreuz-Grafik: n1 = erster Zähler, d1 = erster Nenner, n2/d2 = zweiter Bruch
+   l1: n1–d2 (blau), l2: n2–d1 (orange), l3: Klammer unter den Nennern (grün) */
+function crossFig(t,v,live){
+  v=v||{};const A=Math.abs(t.a.n),Bd=t.a.d,C=Math.abs(t.b.n),D=t.b.d;
+  const x1=95,x2=275,ny=46,dy=108,by=76,mid=(x1+x2)/2;
+  const T=(x,y,txt,sz,an)=>'<text x="'+x+'" y="'+y+'" font-size="'+(sz||28)+'" text-anchor="'+(an||'middle')+'">'+txt+'</text>';
+  const tgt=(k,x,y,txt)=>{const w=Math.max(34,String(txt).length*17+16);
+    return live?'<g class="xt'+(v.sel===k?' sel':'')+'" data-xt="'+k+'" role="button" aria-label="'+(k[0]==='n'?'Zähler ':'Nenner ')+txt+'"><rect x="'+(x-w/2)+'" y="'+(y-26)+'" width="'+w+'" height="34" rx="6"/>'+T(x,y,txt)+'</g>':T(x,y,txt);};
+  let h='<svg class="xfig" viewBox="0 0 370 165" role="img" aria-label="Über Kreuz: Zähler mal Nenner vom anderen Bruch, Nenner mal Nenner">';
+  h+='<line x1="'+(x1-24)+'" y1="'+by+'" x2="'+(x1+24)+'" y2="'+by+'" stroke="currentColor" stroke-width="2.5" style="stroke:var(--text)"/>';
+  h+='<line x1="'+(x2-24)+'" y1="'+by+'" x2="'+(x2+24)+'" y2="'+by+'" stroke="currentColor" stroke-width="2.5" style="stroke:var(--text)"/>';
+  h+='<g class="xsg">'+T(x1-38,by+8,SG(t.a.n),24)+T(x2-38,by+8,SG(t.b.n),24)+'</g>';
+  if(v.l1)h+='<line class="xs1" x1="'+(x1+22)+'" y1="'+(ny-6)+'" x2="'+(x2-24)+'" y2="'+(dy-8)+'" stroke-width="4" stroke-linecap="round"/>';
+  if(v.l2)h+='<line class="xs2" x1="'+(x2-24)+'" y1="'+(ny-6)+'" x2="'+(x1+22)+'" y2="'+(dy-8)+'" stroke-width="4" stroke-linecap="round"/>';
+  if(v.l3)h+='<path class="xs3" d="M'+x1+' '+(dy+10)+' V'+(dy+34)+' H'+x2+' V'+(dy+10)+'" fill="none" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>'+
+    '<circle class="halo" cx="'+mid+'" cy="'+(dy+36)+'" r="11"/>'+T(mid,dy+45,'·',30);
+  h+='<circle class="halo" cx="'+mid+'" cy="'+(by-1)+'" r="17"/><g class="xop">'+T(mid,by+11,t.op,36)+'</g>';
+  h+=tgt('n1',x1,ny,A)+tgt('d1',x1,dy,Bd)+tgt('n2',x2,ny,C)+tgt('d2',x2,dy,D);
+  return h+'</svg>';}
+const XPAIR={'d2-n1':'l1','d1-n2':'l2','d1-d2':'l3'};
+function fracSteps(t){
+  const st=[],want=t.kind==='S'?'add':t.op==='·'?'mul':'div';
+  /* 1 Welche Regel? */
+  st.push({kind:'opts',title:'Welche Regel brauchst du?',text:'Schau dir das Rechenzeichen zwischen den Klammern genau an. Welche Regel passt?',
+    opts:shuffle(['add','mul','div','bad']).map(k=>({v:k,label:RULES[k]})),
+    check:v=>{if(v===want)return true;
+      if(v==='bad')return 'Achtung: Nenner werden nie einfach addiert! Diese Regel gibt es nicht.';
+      if(v==='add')return 'Über Kreuz zum gemeinsamen Nenner rechnest du nur beim Addieren (+) und Subtrahieren (−).';
+      if(v==='mul')return t.op===':'?'Beim Dividieren musst du zuerst den Kehrwert der zweiten Zahl bilden.':'Beim Addieren und Subtrahieren werden nicht einfach Zähler mal Zähler gerechnet – du brauchst zuerst einen gemeinsamen Nenner.';
+      return 'Den Kehrwert brauchst du nur beim Dividieren (:).';},
+    sol:()=>want,done:()=>t.exprHTML+' <span class="ruletip">('+RULESHORT[want]+')</span>'});
+  /* 2 gemischte Zahlen umwandeln + Rechnung mit unechten Brüchen */
+  const list=[['a',t.a],['b',t.b]].filter(([,o])=>o.mixed);
+  if(list.length){
+    const one=!(t.a.mixed&&t.b.mixed),both=!one;
+    st.push({kind:'card',title:'Nächste Zeile: gemischte Zahl → unechter Bruch',
+      text:'Schreib die Zeile darunter an. Gemischte Zahl umwandeln: <b>Ganze · Nenner + Zähler</b>. Nenner und Vorzeichen bleiben gleich.'+(one?' Der andere Bruch bleibt, wie er ist.':''),
+      html:v=>'<div class="eq"><span>=</span> ('+(t.a.mixed?FF(v,'ca'):sfrS(t.a.n,t.a.d))+') <span>'+t.op+'</span> ('+(t.b.mixed?FF(v,'cb'):sfrS(t.b.n,t.b.d))+')</div>',
+      check:v=>{const r=list.map(([k])=>readFF(v,'c'+k));
+        if(r.some(x=>!x.s||x.z===null||x.n===null))return NOTE('Bitte bei '+(both?'beiden gemischten Zahlen':'der gemischten Zahl')+' Vorzeichen, Zähler und Nenner eintragen.');
+        const bad=list.findIndex(([,o],i)=>r[i].s!==sgnOf(o.n)||Math.abs(r[i].z)!==Math.abs(o.n)||r[i].n!==o.d);
+        if(bad<0)return true;const o=list[bad][1],x=r[bad],vv=Math.abs(x.z),pre=both?(bad?'Zweiter Bruch: ':'Erster Bruch: '):'';
+        if(vv===Math.abs(o.n)&&x.n===o.d)return pre+'Die Zahl stimmt – aber das Vorzeichen bleibt beim Umwandeln gleich.';
+        if(x.n!==o.d)return pre+'Der Nenner bleibt gleich: '+o.d+'.';
+        if(vv===o.w*o.d)return pre+'Fast! Du hast den Zähler '+o.z+' vergessen: '+o.w+' · '+o.d+' + '+o.z+'.';
+        if(vv===o.w+o.z)return pre+'Zuerst die Ganzen mal den Nenner: '+o.w+' · '+o.d+', dann + '+o.z+'.';
+        return pre+'Rechne Ganze Zahl · Nenner + Zähler: '+o.w+' · '+o.d+' + '+o.z+'.';},
+      sol:()=>{const v={};list.forEach(([k,o])=>fillFF(v,'c'+k,o.n,o.d));return v;},
+      done:()=>'= '+impP(t.a)+' '+t.op+' '+impP(t.b)});
+  }
+  if(t.kind==='S'){
+    const A=Math.abs(t.a.n),Bd=t.a.d,C=Math.abs(t.b.n),D=t.b.d,p1=t.p1,p2=t.p2,BD=t.BD,N=t.N;
+    st.push({kind:'card',cross:true,noCheck:true,title:'Strichrechnung – zeichne die 3 Striche',
+      text:'Tippe immer <b>zwei Zahlen</b> an, die du verbinden willst:<br>✗ <b>Kreuz</b>: Zähler mit dem Nenner vom <b>anderen</b> Bruch (2 Striche)<br>⊔ <b>Klammer</b> unten: Nenner mit Nenner (1 Strich)',
+      html:v=>crossFig(t,v,true)+'<p class="xcount">Striche: '+((v.l1?1:0)+(v.l2?1:0)+(v.l3?1:0))+' von 3'+(v.sel?' – jetzt die zweite Zahl antippen':'')+'</p>',
+      check:v=>v.l1&&v.l2&&v.l3?true:NOTE('Zeichne zuerst alle 3 Striche.'),
+      sol:()=>({l1:'1',l2:'1',l3:'1',sel:''}),
+      done:()=>crossFig(t,{l1:1,l2:1,l3:1},false)});
+    st.push({kind:'card',title:'Kreuzprodukte mit Vorzeichen',text:'Schreib an, was deine Striche verbinden – die Farben passen zu den Strichen. Vorzeichen, Klammern und Malzeichen sind schon da.',
+      html:v=>'<div class="eq"><span>=</span><span class="longfrac"><span class="longnum">('+SG(t.a.n)+' '+BOX(v,'ca','Erster Zähler','sm k1')+' · '+BOX(v,'cd','Zweiter Nenner','sm k1')+') <span>'+t.op+'</span> ('+SG(t.b.n)+' '+BOX(v,'cc','Zweiter Zähler','sm k2')+' · '+BOX(v,'cb','Erster Nenner','sm k2')+')</span><span class="longden">'+BOX(v,'db','Erster Nenner','sm k3')+' · '+BOX(v,'dd','Zweiter Nenner','sm k3')+'</span></span></div>',
+      check:v=>{const x=['ca','cd','cc','cb','db','dd'].map(k=>iv(v[k]));if(x.some(y=>y===null))return NOTE('Bitte alle sechs Felder ausfüllen.');
+        const [ca,cd,cc,cb,db,dd]=x.map(Math.abs),ok1=pair(ca,cd,A,D),ok2=pair(cc,cb,C,Bd),ok3=pair(db,dd,Bd,D);
+        if(ok1&&ok2&&ok3)return true;
+        if((!ok1&&pair(ca,cd,A,Bd))||(!ok2&&pair(cc,cb,C,D)))return 'Über Kreuz rechnen: Zähler des ersten Bruchs mal Nenner des zweiten Bruchs – und Zähler des zweiten Bruchs mal Nenner des ersten.';
+        if(!ok1||!ok2)return 'Erste Klammer: erster Zähler mal zweiter Nenner. Zweite Klammer: zweiter Zähler mal erster Nenner.';
+        return 'Unten steht Nenner mal Nenner: '+Bd+' · '+D+'.';},
+      sol:()=>({ca:String(A),cd:String(D),cc:String(C),cb:String(Bd),db:String(Bd),dd:String(D)}),
+      done:()=>'= '+fracH('('+SG(t.a.n)+A+' · '+D+') '+t.op+' ('+SG(t.b.n)+C+' · '+Bd+')',Bd+' · '+D)});
+    st.push({kind:'card',title:'Vorzeichen lösen und ausmultiplizieren',text:'Rechne die Klammern aus. Gleiche Zeichen ergeben +, verschiedene Zeichen ergeben −.',
+      html:v=>'<div class="eq"><span class="longfrac"><span class="longnum">'+SEL(v,'ps')+BOX(v,'p1','Erstes Produkt','sm')+SEL(v,'po','Rechenzeichen')+BOX(v,'p2','Zweites Produkt','sm')+'</span><span class="longden">'+BOX(v,'pd','Gemeinsamer Nenner','sm')+'</span></span></div>',
+      check:v=>{const x=iv(v.p1),y=iv(v.p2),z=iv(v.pd);if(!v.ps||!v.po||x===null||y===null||z===null)return NOTE('Bitte beide Zeichen auswählen und alle Zahlen eintragen.');
+        if(v.ps===sgnOf(p1)&&v.po===sgnOf(p2)&&Math.abs(x)===Math.abs(p1)&&Math.abs(y)===Math.abs(p2)&&z===BD)return true;
+        if(Math.abs(x)!==Math.abs(p1)||Math.abs(y)!==Math.abs(p2))return 'Multipliziere die Zahlen in den beiden Klammern aus.';
+        if(v.ps!==sgnOf(p1))return 'Das erste Vorzeichen übernimmst du vom ersten Bruch.';
+        if(v.po!==sgnOf(p2))return 'Schau auf das Rechenzeichen „'+t.op+'“ und das Vorzeichen „'+SG(t.b.n)+'“ vor der zweiten Klammer: Gleiche Zeichen ergeben +, verschiedene Zeichen ergeben −.';
+        return 'Der Nenner ist '+t.a.d+' · '+t.b.d+'.';},
+      sol:()=>({ps:sgnOf(p1),p1:String(Math.abs(p1)),po:sgnOf(p2),p2:String(Math.abs(p2)),pd:String(BD)}),
+      done:()=>'= '+fracH(SG(p1)+Math.abs(p1)+' '+SG(p2)+' '+Math.abs(p2),BD)});
+    st.push({kind:'card',title:'Zusammenfassen',text:'Fasse den Zähler zu einer Zahl zusammen (mit Vorzeichen, z. B. −7). Der Nenner bleibt.',
+      html:v=>'<div class="eq"><span class="longfrac"><span class="longnum">'+BOX(v,'sum','Zähler','sm')+'</span><span class="longden">'+BOX(v,'sd','Nenner','sm')+'</span></span></div>',
+      check:v=>{const x=sumParse(v.sum),z=iv(v.sd);if(x===null||z===null)return NOTE('Bitte Zähler und Nenner eintragen.');
+        if(x===N&&z===BD)return true;if(x===N)return 'Der Nenner bleibt gleich: '+BD+'.';if(x===-N)return 'Die Zahl stimmt, aber das Vorzeichen nicht. Welche der beiden Zahlen ist größer?';
+        const a1=Math.abs(p1),a2=Math.abs(p2);if(Math.abs(x)===a1+a2||Math.abs(x)===Math.abs(a1-a2))return 'Gleiche Vorzeichen: addieren. Verschiedene Vorzeichen: subtrahieren und das Vorzeichen der größeren Zahl nehmen.';
+        return 'Rechne '+SG(p1)+a1+' '+SG(p2)+' '+a2+'.';},
+      sol:()=>({sum:String(N),sd:String(BD)}),done:()=>'= '+sfrS(N,BD)});
+    reduceSteps(st,t,()=>[N,BD],false);
+  }else{
+    const kw=t.op===':',S=sgnOf(t.sg),A=Math.abs(t.a.n),C=Math.abs(t.b.n);
+    st.push({kind:'card',title:'Langer Bruchstrich'+(kw?' (mit Kehrwert)':''),text:(kw?'Dividieren heißt: mit dem Kehrwert der zweiten Zahl multiplizieren. ':'')+'Zähler mal Zähler oben, Nenner mal Nenner unten. Wähle das Vorzeichen des Ergebnisses.',
+      html:v=>'<div class="eq">'+LONG(v,'l')+'</div>',
+      check:v=>{const x=['la','lc','lb','ld'].map(k=>iv(v[k]));if(!v.ls||x.some(y=>y===null))return NOTE('Bitte das Vorzeichen wählen und alle vier Zahlen eintragen.');
+        const [la,lc,lb,ld]=x.map(Math.abs),tOk=pair(la,lc,...t.top),bOk=pair(lb,ld,...t.bot);
+        if(tOk&&bOk&&v.ls===S)return true;
+        if(tOk&&bOk)return 'Die Zahlen stimmen. Vorzeichen: gleiche Vorzeichen ergeben +, verschiedene Vorzeichen ergeben −. Zähle die Minus-Zeichen!';
+        if(kw&&pair(la,lc,A,C)&&pair(lb,ld,t.a.d,t.b.d))return 'Du hast den Kehrwert vergessen: Beim Dividieren tauschen Zähler und Nenner der zweiten Zahl die Plätze.';
+        if(pair(la,lc,t.top[0],t.bot[1])||pair(lb,ld,t.bot[0],t.top[1]))return 'Nicht über Kreuz: Zähler mal Zähler oben, Nenner mal Nenner unten.';
+        return kw?'Bilde zuerst den Kehrwert der zweiten Zahl. Dann kommen oben die Zähler, unten die Nenner.':'Oben stehen die beiden Zähler, unten die beiden Nenner.';},
+      sol:()=>({ls:S,la:String(t.top[0]),lc:String(t.top[1]),lb:String(t.bot[0]),ld:String(t.bot[1])}),
+      done:()=>'= '+longTxt(SG(t.sg),t.top,t.bot)});
+    const canCut=pBest(t.top,t.bot).g>1;
+    st.push({kind:'opts',title:'Kann man kürzen?',text:'Vor dem Multiplizieren: Gibt es einen <b>Zähler</b> ('+t.top[0]+' oder '+t.top[1]+') und einen <b>Nenner</b> ('+t.bot[0]+' oder '+t.bot[1]+'), die man durch dieselbe Zahl (2 oder größer) teilen kann?',
+      opts:[{v:'1',label:'Ja, man kann kürzen'},{v:'0',label:'Nein, man kann nicht kürzen'}],
+      check:(v,e)=>{if((v==='1')===canCut){if(!canCut)e.ctx.base=[t.top[0],t.top[1],t.bot[0],t.bot[1]];return true;}
+        return canCut?'Schau genau: Ein Zähler und ein Nenner sind durch dieselbe Zahl teilbar. Prüfe jedes Paar – teste 2, 3, 5, 7 …':'Prüfe nochmal: Kein Zähler hat mit einem Nenner einen gemeinsamen Teiler (außer 1). Hier kann man nicht kürzen.';},
+      sol:(e)=>{if(!canCut)e.ctx.base=[t.top[0],t.top[1],t.bot[0],t.bot[1]];return canCut?'1':'0';},
+      done:()=>canCut?'Ja, man kann kürzen.':'(nichts zu kürzen)'});
+    if(canCut){
+      const opts=pOptions(t.top,t.bot),best=pBest(t.top,t.bot);
+      st.push({kind:'card',title:'Einmal kürzen – Kürzzahl notieren',text:'Teile genau einen Zähler und einen Nenner durch dieselbe Zahl (2 oder größer). Die anderen beiden Zahlen schreibst du ab.',
+        html:v=>'<div class="eq"><span>gekürzt durch</span>'+BOX(v,'kg','Kürzzahl','sm')+'</div><div class="eq">'+LONG(v,'k')+'</div>',
+        check:(v,e)=>{const kg=iv(v.kg),kv=['ka','kc','kb','kd'].map(k=>iv(v[k]));if(!v.ks||kg===null||kv.some(x=>x===null))return NOTE('Bitte Kürzzahl, Vorzeichen und alle vier Zahlen eintragen.');
+          const vv=kv.map(Math.abs),found=opts.find(o=>o.g===kg&&o.v.every((x,j)=>x===vv[j]));
+          if(found&&v.ks===S){if(found.g===1)return 'Die Kürzzahl muss 2 oder größer sein. Suche einen Zähler und einen Nenner, die durch dieselbe Zahl teilbar sind.';e.ctx.base=found.v;e.ctx.kg=found.g;return true;}
+          if(found)return 'Das Vorzeichen bleibt beim Kürzen gleich.';
+          if(kg>1&&!opts.some(o=>o.g===kg))return 'Durch '+kg+' kannst du hier keinen Zähler und keinen Nenner gemeinsam teilen.';
+          if(kg<2)return 'Die Kürzzahl muss 2 oder größer sein.';
+          return 'Teile einen Zähler und einen Nenner durch '+kg+' und schreib die anderen beiden Zahlen ab.';},
+        sol:(e)=>{e.ctx.base=best.v;e.ctx.kg=best.g;return {kg:String(best.g),ks:S,ka:String(best.v[0]),kc:String(best.v[1]),kb:String(best.v[2]),kd:String(best.v[3])};},
+        done:(e)=>'gekürzt durch '+e.ctx.kg+': '+longTxt(SG(t.sg),[e.ctx.base[0],e.ctx.base[1]],[e.ctx.base[2],e.ctx.base[3]])});
+    }
+    st.push({kind:'card',title:'Faktoren multiplizieren',text:'Multipliziere oben und unten die gekürzten Zahlen.',
+      html:v=>'<div class="eq">'+FF(v,'m')+'</div>',
+      check:(v,e)=>{const b=e.ctx.base,P1=b[0]*b[1],P2=b[2]*b[3],x=readFF(v,'m');if(!x.s||x.z===null||x.n===null)return NOTE('Bitte Vorzeichen, Zähler und Nenner eintragen.');
+        if(x.s===sgnOf(t.sg)&&Math.abs(x.z)===P1&&x.n===P2){e.ctx.P=[P1,P2];return true;}
+        if(Math.abs(x.z)===P1&&x.n===P2)return 'Die Zahlen stimmen, aber das Vorzeichen bleibt so wie im Schritt davor.';
+        if(Math.abs(x.z)===b[0]+b[1]||x.n===b[2]+b[3])return 'Hier wird multipliziert, nicht addiert.';
+        return 'Oben: '+b[0]+' · '+b[1]+', unten: '+b[2]+' · '+b[3]+'.';},
+      sol:(e)=>{const b=e.ctx.base;e.ctx.P=[b[0]*b[1],b[2]*b[3]];return fillFF({},'m',t.sg*e.ctx.P[0],e.ctx.P[1]);},
+      done:(e)=>'= '+sfrS(t.sg*e.ctx.P[0],e.ctx.P[1])});
+    reduceSteps(st,t,e=>[t.sg*e.ctx.P[0],e.ctx.P[1]],true);
+  }
+  /* gemischte Zahl */
+  const [rn,rd]=t.res,a=Math.abs(rn);
+  if(!(rd===1||a<rd)){const W=Math.floor(a/rd),Z=a%rd,S=sgnOf(rn);
+    st.push({kind:'card',title:'Als gemischte Zahl schreiben',text:'Wie oft passt '+rd+' ganz in '+a+'? Das sind die Ganzen. Der Rest kommt in den Zähler, der Nenner bleibt gleich.',
+      html:v=>'<div class="eq"><span>=</span><span class="sfw">'+SEL(v,'gs')+BOX(v,'gw','Ganze Zahl','whole')+'<span class="fin">'+BOX(v,'gz','Zähler')+'<span class="bar"></span>'+BOX(v,'gn','Nenner')+'</span></span></div>',
+      check:v=>{const w=iv(v.gw),z=iv(v.gz),n=iv(v.gn);if(!v.gs||w===null||z===null||n===null)return NOTE('Bitte Vorzeichen, Ganze, Zähler und Nenner eintragen.');
+        const okN=Math.abs(w)===W&&Math.abs(z)===Z&&n===rd;if(okN&&v.gs===S)return true;
+        if(okN)return 'Die Zahlen stimmen, aber das Vorzeichen bleibt gleich.';if(n!==rd)return 'Der Nenner bleibt gleich: '+rd+'.';
+        if(Math.abs(w)===W)return 'Die Ganzen stimmen. Rest: '+a+' − '+W+' · '+rd+' = ?';
+        return 'Wie oft passt '+rd+' ganz in '+a+'? Probiere '+rd+' · 1, '+rd+' · 2, '+rd+' · 3 … Was übrig bleibt, kommt in den Zähler.';},
+      sol:()=>({gs:S,gw:String(W),gz:String(Z),gn:String(rd)}),done:()=>'= '+resHTML(rn,rd)});
+  }
+  return st;
+}
+/* „Kann man kürzen?“ + „Vollständig kürzen“ (hängt beim Multiplizieren vom eigenen Kürzen ab) */
+function reduceSteps(st,t,srcOf,withG){
+  const [rn,rd]=t.res,S=sgnOf(rn);
+  const can=e=>{const s=srcOf(e);return gcdN(s[0],s[1])>1;};
+  st.push({kind:'opts',dyn:true,title:withG?'Kann man das Ergebnis noch kürzen?':'Kann man kürzen?',
+    text:e=>{const s=srcOf(e);return 'Schau dir '+sfrS(s[0],s[1])+' an: Gibt es eine Zahl (2 oder größer), durch die man <b>Zähler und Nenner</b> teilen kann?';},
+    opts:[{v:'1',label:'Ja, man kann kürzen'},{v:'0',label:'Nein, man kann nicht kürzen'}],
+    check:(v,e)=>{const c=can(e),s=srcOf(e);if((v==='1')===c)return true;return c?'Schau genau: '+Math.abs(s[0])+' und '+s[1]+' haben einen gemeinsamen Teiler. Teste 2, 3, 5, 7 …':Math.abs(s[0])+' und '+s[1]+' haben keinen gemeinsamen Teiler (außer 1) – hier kann man nicht kürzen.';},
+    sol:e=>can(e)?'1':'0',done:e=>can(e)?'Ja, man kann kürzen.':'(nicht mehr kürzbar)'});
+  st.push({kind:'card',skip:e=>!can(e),title:'Vollständig kürzen',
+    text:e=>(withG?'Notiere die Kürzzahl. ':'')+'Teile Zähler und Nenner durch die größte Zahl, durch die beide teilbar sind. Wird der Nenner 1, schreib 1 in den Nenner.',
+    html:(v,e)=>{const s=srcOf(e);return (withG?'<div class="eq"><span>gekürzt durch</span>'+BOX(v,'fg','Kürzzahl','sm')+'</div>':'')+'<div class="eq"><span>'+sfrS(s[0],s[1])+' =</span>'+FF(v,'r')+'</div>';},
+    check:(v,e)=>{const s=srcOf(e),g2=gcdN(s[0],s[1]),x=readFF(v,'r'),fg=withG?iv(v.fg):0;
+      if(!x.s||x.z===null||x.n===null||x.n===0||fg===null)return NOTE('Bitte '+(withG?'Kürzzahl, ':'')+'Vorzeichen, Zähler und Nenner eintragen.');
+      const z=Math.abs(x.z),same=z*rd===Math.abs(rn)*x.n;
+      if(x.s===S&&z===Math.abs(rn)&&x.n===rd&&(!withG||fg===g2))return true;
+      if(withG&&fg!==g2)return fg>1&&g2%fg===0?'Durch '+fg+' kann man kürzen – aber es geht noch mehr. Suche die größte Zahl, durch die '+Math.abs(s[0])+' und '+s[1]+' teilbar sind.':'Suche den größten gemeinsamen Teiler von '+Math.abs(s[0])+' und '+s[1]+'.';
+      if(same&&x.n!==rd)return 'Der Wert stimmt, aber du kannst noch weiter kürzen.';
+      if(same)return 'Die Zahlen stimmen, aber das Vorzeichen bleibt beim Kürzen gleich.';
+      return withG?'Teile Zähler und Nenner durch die Kürzzahl '+g2+'.':'Suche den größten gemeinsamen Teiler von '+Math.abs(s[0])+' und '+s[1]+' und teile Zähler und Nenner dadurch.';},
+    sol:e=>{const s=srcOf(e),v=fillFF({},'r',rn,rd);if(withG)v.fg=String(gcdN(s[0],s[1]));return v;},
+    done:e=>{const s=srcOf(e);return 'gekürzt durch '+gcdN(s[0],s[1])+': '+sfrS(rn,rd);}});
+}
+function mkOp(lvl,mixedP){const std=lvl==='std';const d=pick(std?[2,3,4,5,6,8]:[2,3,4,5,6,7,8,9,10,12]);let z;do{z=rnd(1,d-1);}while(gcdN(z,d)!==1);
+  const neg=RNG()<.5,mixed=RNG()<mixedP,w=mixed?rnd(1,std?2:3):0;return {n:(w*d+z)*(neg?-1:1),d,w,z,neg,mixed};}
+function T_frac(lvl,kind){
+  const std=lvl==='std';
+  for(let g=0;g<2000;g++){
+    const a=mkOp(lvl,std?.35:.55),b=mkOp(lvl,std?.35:.55);if(!a.neg&&!b.neg)continue;
+    const op=kind==='S'?pick(['+','−']):pick(['·',':']);const t={a,b,op,kind};
+    t.exprHTML=orig(a)+' '+op+' '+orig(b);
+    if(kind==='S'){if(a.d===b.d)continue;const B_=a.d,D=b.d;t.p1=a.n*D;t.p2=(op==='+'?1:-1)*b.n*B_;t.N=t.p1+t.p2;t.BD=B_*D;
+      if(t.N===0||t.BD>(std?40:96)||Math.abs(t.N)>(std?120:300))continue;const gg=gcdN(t.N,t.BD);t.res=[t.N/gg,t.BD/gg];}
+    else{t.sg=Math.sign(a.n)*Math.sign(b.n);const A=Math.abs(a.n),C=Math.abs(b.n);
+      if(op==='·'){t.top=[A,C];t.bot=[a.d,b.d];}else{t.top=[A,b.d];t.bot=[a.d,C];}
+      if(t.top[0]*t.top[1]>(std?150:400)||t.bot[0]*t.bot[1]>(std?150:400))continue;
+      if(pBest(t.top,t.bot).g===1&&RNG()<.75)continue;
+      const P=t.top[0]*t.top[1],Q=t.bot[0]*t.bot[1],gg=gcdN(P,Q);t.res=[t.sg*P/gg,Q/gg];}
+    return {kind:'frac',head:kind==='S'?'Brüche: plus und minus':'Brüche: mal und durch',taskH:t.exprHTML,ft:t,st:fracSteps(t),res:rat(t.res[0],t.res[1])};
+  }
+}
+const T_fracAdd=lvl=>T_frac(lvl,'S'),T_fracMul=lvl=>T_frac(lvl,'P');
+try{document.getElementById('sumCross').innerHTML=crossFig({a:{n:-3,d:4},b:{n:5,d:6},op:'+'},{l1:1,l2:1,l3:1},false);}catch(x){}
+
+/* ---- ganze Zahlen (wie in „Ganze Zahlen gemischt“) ---- */
+function intSumSteps(vals,ops){ /* vals: Zahlen mit Vorzeichen in der Klammer, ops: Rechenzeichen davor (+1/−1) */
+  const terms=vals.map((v,i)=>i?ops[i]*v:v),res=terms.reduce((a,b)=>a+b,0);
+  const lineH=terms.map((t,i)=>i?(t<0?' − ':' + ')+Math.abs(t):(t<0?'−':'')+Math.abs(t)).join('');
+  return {res:R(res),st:[
+    stLine('Klammern auflösen','z. B. -8 + 15','= '+lineH,str=>{const p=parseExpr(str);if(p.err)return p.err;if(hasBracket(str))return 'Lass die Klammern weg.';
+      const T=topTerms(p.e);if(T.length!==terms.length)return 'Jede Zahl aus der Angabe kommt genau einmal vor.';
+      for(let i=0;i<T.length;i++){const v=T[i].sign*Number(T[i].n.v.n);if(T[i].n.t!=='num')return 'Hier stehen nur Zahlen mit + oder −.';
+        if(Math.abs(v)!==Math.abs(terms[i]))return 'Die Zahlen bleiben gleich – nur die Klammern verschwinden.';
+        if(v!==terms[i])return i===0?'Die erste Zahl behält ihr Vorzeichen.':'Beim '+(i+1)+'. Glied: Gleiche Zeichen → +, verschiedene Zeichen → −.';}
+      return true;},lineH.replace(/−/g,'-').replace(/\s/g,'')),
+    stLine('Ergebnis','z. B. -17','= '+res.toString().replace('-','−'),str=>{const u=readRat(str);if(!u)return 'Schreib eine Zahl.';if(!req(u.r,R(res)))return req(u.r,R(-res))?'Kontrolliere das Vorzeichen.':'Tipp: Alle Plus-Zahlen zusammenzählen, alle Minus-Zahlen zusammenzählen, dann die Differenz.';return true;},String(res))]};
+}
+function intPunktStep(res,count){return stLine('Vorzeichen bestimmen und ausrechnen','z. B. -24','= '+String(res).replace('-','−'),
+  str=>{const u=readRat(str);if(!u)return 'Schreib eine Zahl.';if(!req(u.r,R(res)))return req(u.r,R(-res))?'Zähle die Minuszeichen: '+count+' Stück – '+(count%2?'ungerade → −':'gerade → +')+'.':'Rechne von links nach rechts nochmal nach.';return true;},String(res));}
+
+/* ================= Aufgaben erzeugen ================= */
+const N_EX=12;
+function fr(lvl,improperOk){const d=lvl==='std'?pick([2,3,4,5,6]):pick([2,3,4,5,6,8,9,10,12]);let n;do{n=rnd(1,improperOk?2*d+3:d-1);}while(gcdN(n,d)!==1||n%d===0);return rat(sg()*n,d);}
+function mixedFr(){const d=pick([2,3,4,5]);let n;do{n=rnd(1,d-1);}while(gcdN(n,d)!==1);const w=rnd(1,3);return rat(sg()*(w*d+n),d);}
+function T_intSum(lvl){for(;;){const k=lvl==='std'?2:3,M=lvl==='std'?20:40;const vals=Array.from({length:k},()=>sg()*rnd(1,M)),ops=vals.map((v,i)=>i?sg():1);
+  if(!vals.some(v=>v<0)||!ops.slice(1).some(o=>o<0))continue;const {st,res}=intSumSteps(vals,ops);if(Math.abs(Number(res.n))>100)continue;
+  return {kind:'int',head:'Berechne!',taskH:vals.map((v,i)=>(i?(ops[i]<0?' − ':' + '):'')+'('+(v<0?'−':'+')+Math.abs(v)+')').join(''),st,res};}}
+function T_intPunkt(lvl){for(;;){const n=lvl==='std'?1:2;let acc=rnd(2,lvl==='std'?10:12)*(RNG()<.5?rnd(2,6):1);const nums=[acc],ops=[];
+  for(let k=0;k<n;k++){const o=RNG()<.5?'·':':';if(o==='·'){const b=rnd(2,9);if(acc*b>100)continue;acc*=b;nums.push(b);}else{const ds=[2,3,4,5,6,7,8,9].filter(b=>acc%b===0&&acc/b>=2);if(!ds.length)continue;const b=pick(ds);acc/=b;nums.push(b);}ops.push(o);}
+  if(ops.length!==n)continue;const sg_=nums.map(()=>sg());if(!sg_.some(x=>x<0))continue;
+  const res=acc*sg_.reduce((a,b)=>a*b,1),cnt=sg_.filter(x=>x<0).length;
+  return {kind:'int',head:'Berechne!',taskH:nums.map((x,k)=>(k?' '+ops[k-1]+' ':'')+'('+(sg_[k]<0?'−':'+')+x+')').join(''),st:[intPunktStep(res,cnt)],res:R(res)};}}
+/* Textaufgaben */
+function textSteps(expr,res0,answer){
+  const res=typeof res0==='number'?R(res0):res0,resTxt=rPlain(res,'dec').replace('-','−');
+  return [stLine('Schreib die Rechnung an','z. B. (-2) + (+7)','= '+expr.h,str=>{const p=parseExpr(str);if(p.err)return p.err;if(p.ops<1)return 'Schreib die <b>Rechnung</b> an, nicht nur das Ergebnis.';
+      if(!req(p.v,res))return expr.hint||'Überlege: Welche Zahlen kommen vor, und wird dazugezählt, abgezogen, mal- oder geteilt gerechnet?';return true;},expr.plain,{pre:'Rechnung:'}),
+    stLine('Rechne aus','z. B. 5','= '+resTxt,str=>{const u=readRat(str);if(!u)return 'Schreib eine Zahl.';if(!req(u.r,res))return req(u.r,rneg(res))?'Kontrolliere das Vorzeichen.':'Rechne nochmal nach.';return true;},rPlain(res,'dec')),
+    stLine('Antwort',answer.ph,answer.done,str=>{const u=readRat(str);if(!u)return 'Schreib eine Zahl in die Lücke.';return answer.ok(u.r)?true:answer.hint;},answer.sol,{pre:answer.pre,post:answer.post})];
+}
+function T_floor(lvl){
+  if(lvl==='std'){const s=-rnd(1,3),up=rnd(3,9),e=s+up;
+    return {kind:'text',icon:'🛗',head:'Stockwerke',story:'Ein Lift startet im Keller im Stockwerk '+s.toString().replace('-','−')+'. Er fährt '+up+' Stockwerke nach oben. In welchem Stockwerk hält er?',
+      st:textSteps({h:'('+MINUS+(-s)+') + (+'+up+')',plain:'('+s+')+(+'+up+')'},e,{ph:'z. B. 5',pre:'Der Lift hält im Stockwerk',post:'.',done:'Der Lift hält im Stockwerk '+e+'.',ok:r=>req(r,R(e)),hint:'Schau auf dein Ergebnis.',sol:String(e)}),res:R(e)};}
+  const s=rnd(1,6),d=rnd(4,9);let u;do{u=rnd(2,6);}while(u===d);const e=s-d+u;
+  return {kind:'text',icon:'🛗',head:'Stockwerke',story:'Ein Lift steht im Stockwerk '+s+'. Er fährt '+d+' Stockwerke nach unten und dann '+u+' Stockwerke nach oben. In welchem Stockwerk ist er jetzt?',
+    st:textSteps({h:'(+'+s+') − (+'+d+') + (+'+u+')',plain:'(+'+s+')-(+'+d+')+(+'+u+')'},e,{ph:'z. B. -1',pre:'Der Lift ist im Stockwerk',post:'.',done:'Der Lift ist im Stockwerk '+String(e).replace('-','−')+'.',ok:r=>req(r,R(e)),hint:'Schau auf dein Ergebnis.',sol:String(e)}),res:R(e)};
+}
+function T_sea(lvl){
+  if(lvl==='std'){const a=rnd(5,20),b=rnd(3,15),e=-(a+b);
+    return {kind:'text',icon:'🤿',head:'Meerestiefe',story:'Eine Taucherin ist '+a+' m unter dem Meeresspiegel ('+MINUS+a+' m). Sie taucht noch '+b+' m tiefer. In welcher Höhe ist sie jetzt?',
+      st:textSteps({h:'('+MINUS+a+') − (+'+b+')',plain:'(-'+a+')-(+'+b+')'},e,{ph:'z. B. -20',pre:'Sie ist in',post:'m (unter dem Meeresspiegel).',done:'Sie ist in '+MINUS+(-e)+' m.',ok:r=>req(r,R(e))||req(r,R(-e)),hint:'Schau auf dein Ergebnis.',sol:String(e)}),res:R(e)};}
+  const v=pick([1.5,2.5,0.5,1.25]),t=rnd(4,12),e=-v*t;const vs=String(v).replace('.',',');
+  return {kind:'text',icon:'🤿',head:'Meerestiefe',story:'Ein U-Boot taucht von der Wasseroberfläche (0 m) ab. Es sinkt pro Minute um '+vs+' m. Wo ist es nach '+t+' Minuten?',
+    st:textSteps({h:'('+MINUS+vs+') · '+t,plain:'(-'+vs+')·'+t,hint:'Sinken heißt: pro Minute '+MINUS+vs+' m. Das passiert '+t+'-mal.'},rat(Math.round(e*100),100),{ph:'z. B. -15',pre:'Das U-Boot ist in',post:'m Höhe.',done:'Das U-Boot ist in '+MINUS+String(-e).replace('.',',')+' m Höhe.',ok:r=>req(r,rat(Math.round(e*100),100)),hint:'Unter dem Meeresspiegel ist die Höhe negativ.',sol:String(e).replace('.',',')}),res:rat(Math.round(e*100),100)};
+}
+function T_debt(lvl){
+  if(lvl==='std'){const s=rnd(10,40),g=rnd(15,60),e=-s+g;
+    return {kind:'text',icon:'💶',head:'Schulden',story:'Tim hat '+s+' € Schulden (Kontostand '+MINUS+s+' €). Er bekommt '+g+' € Taschengeld auf sein Konto. Wie hoch ist der Kontostand jetzt?',
+      st:textSteps({h:'('+MINUS+s+') + (+'+g+')',plain:'(-'+s+')+(+'+g+')'},e,{ph:'z. B. 25',pre:'Der Kontostand ist',post:'€.',done:'Der Kontostand ist '+String(e).replace('-','−')+' €.',ok:r=>req(r,R(e)),hint:'Schau auf dein Ergebnis.',sol:String(e)}),res:R(e)};}
+  return T_debtAhs();
+}
+function T_debtAhs(){
+  const n=rnd(3,6),each=rnd(8,15),total=n*each;
+  return {kind:'text',icon:'💶',head:'Schulden',story:n+' Freunde haben zusammen '+total+' € Schulden (Kontostand '+MINUS+total+' €). Sie teilen die Schulden gerecht auf. Welchen Kontostand hat dann jeder?',
+    st:textSteps({h:'('+MINUS+total+') : '+n,plain:'(-'+total+'):'+n,hint:'Gerecht aufteilen heißt dividieren.'},-each,{ph:'z. B. -12',pre:'Jeder hat einen Kontostand von',post:'€.',done:'Jeder hat einen Kontostand von '+MINUS+each+' €.',ok:r=>req(r,R(-each)),hint:'Schulden bleiben Schulden – der Kontostand ist negativ.',sol:String(-each)}),res:R(-each)};
+}
+/* ---- Klammer – Punkt – Strich wie in „KaPuStri“ ---- */
+function kClean(s){return String(s).normalize('NFKC').replace(/[\u200B-\u200D\u2060\uFEFF]/g,'').replace(/[\s\u00A0\u202F]/g,'').replace(/[\u2010-\u2015\u2212\uFE63\uFF0D]/g,'-').replace(/[×·⋅∙.]/g,'*').replace(/[÷:∶]/g,'/');}
+function kCanonical(s){let x=kClean(s);x=x.replace(/\(([+-]?\d+)\)/g,(_,n)=>'#'+Number(n)+'#');x=x.replace(/(^|\[)([+-]?\d+)(?=$|[\]+*/-])/g,(_,p,n)=>p+'#'+Number(n)+'#');x=x.replace(/([+*/-])([+-]?\d+)(?=$|[\]+*/-])/g,(_,p,n)=>p+'#'+Number(n)+'#');let prev;do{prev=x;x=x.replace(/\[(#-?\d+#)\]/g,'$1');}while(x!==prev);return x;}
+const kSigned=n=>'('+(n>=0?'+':'−')+Math.abs(n)+')',kIsNum=t=>typeof t==='object'&&t!==null&&'n' in t,kNum=n=>({n});
+function kInitial(s){return (kClean(s).match(/\([+-]?\d+\)|\[|\]|[+*/-]/g)||[]).map(t=>/^\(/.test(t)?kNum(Number(t.slice(1,-1))):t);}
+function kFmt(t){return t.map(x=>kIsNum(x)?kSigned(x.n):x==='*'?'·':x==='/'?':':x==='-'?'−':x).join(' ').replace(/\[\s+/g,'[').replace(/\s+\]/g,']');}
+function kCompact(t){t=[...t];let ch=true;while(ch){ch=false;for(let j=0;j<t.length-2;j++)if(t[j]==='['&&kIsNum(t[j+1])&&t[j+2]===']'){t.splice(j,3,t[j+1]);ch=true;break;}}return t;}
+function kCount(t){return t.filter(x=>typeof x==='string'&&['+','-','*','/'].includes(x)).length;}
+function kOps(t){let depth=0,all=[];t.forEach((x,j)=>{if(x==='[')depth++;else if(x===']')depth--;else if(typeof x==='string'&&['+','-','*','/'].includes(x))all.push({j,depth,rank:['*','/'].includes(x)?1:0});});
+  if(!all.length)return [];let d=Math.max(...all.map(x=>x.depth)),r=Math.max(...all.filter(x=>x.depth===d).map(x=>x.rank));
+  return all.filter(x=>x.depth===d&&x.rank===r&&kIsNum(t[x.j-1])&&kIsNum(t[x.j+1])&&!all.some(p=>p.j===x.j-2&&p.depth===x.depth&&p.rank===x.rank)).map(o=>{const a=t[o.j-1].n,b=t[o.j+1].n,op=t[o.j],z=op==='+'?b:-b;
+    return {...o,start:o.j-1,end:o.j+1,result:op==='+'?a+b:op==='-'?a-b:op==='*'?a*b:a/b,simple:['+','-'].includes(op)?(a<0?'−':'')+Math.abs(a)+(z>=0?' + ':' − ')+Math.abs(z):null};});}
+function kReplaced(k){let t=[...k.t];[...k.queue].sort((a,b)=>b.start-a.start).forEach(o=>t.splice(o.start,3,kNum(o.result)));return t;}
+function kMarked(k){let out='',j=0;while(j<k.t.length){const o=k.queue.find(o=>o.start===j);if(o){out+='<u>'+esc(kFmt(k.t.slice(o.start,o.end+1)))+'</u> ';j=o.end+1;}else{out+=esc(kFmt([k.t[j]]))+' ';j++;}}return out;}
+function kFresh(E){return {E,t:kInitial(E),phase:'select',selected:[],queue:[],q:0,h:[],last:null};}
+function kBegin(k){k.queue=[...k.selected].sort((a,b)=>a.start-b.start);k.q=0;k.phase=kCount(k.t)===1?'final':'row';}
+function kAuto(k){if(k.phase==='select'&&kCount(k.t)===1){k.selected=[kOps(k.t)[0]];kBegin(k);}}
+/* Prüft, ob sich eine Rechnung ganz in ganzen Zahlen bis 100 lösen lässt */
+function kValid(E){let t=kInitial(E),guard=0;while(kCount(t)>0&&guard++<20){const ops=kOps(t);if(!ops.length)return false;
+  for(const o of ops){if(!Number.isInteger(o.result)||Math.abs(o.result)>100)return false;}
+  const k={t,queue:ops};t=kCompact(kReplaced(k));}return kCount(t)===0&&kIsNum(t[0]);}
+const kS=n=>'('+(n<0?'−':'+')+Math.abs(n)+')';
+/* 4. Klasse: noch längere Verbindungen */
+const KTPL4=[v=>'['+kS(v[0])+' · ['+kS(v[1])+' − '+kS(v[2])+']] : '+kS(v[3])+' − '+kS(v[4]),
+  v=>kS(v[0])+' − ['+kS(v[1])+' · '+kS(v[2])+' − '+kS(v[3]*v[4])+' : '+kS(v[4])+'] · '+kS(v[5]),
+  v=>'['+kS(v[0])+' + '+kS(v[1])+'] · ['+kS(v[2])+' − '+kS(v[3])+'] : '+kS(v[4]),
+  v=>kS(v[0]*v[1])+' : ['+kS(v[1])+' − '+kS(v[2])+' + '+kS(v[2])+'] − '+kS(v[3])+' · ['+kS(v[4])+' + '+kS(v[5])+']'];
+const KTPL={
+  std:[v=>kS(v[0])+' · '+kS(v[1])+' + '+kS(v[2]),v=>kS(v[0])+' − '+kS(v[1]*v[2])+' : '+kS(v[2]),v=>'['+kS(v[0])+' + '+kS(v[1])+'] : '+kS(v[2])+' + '+kS(v[3]),
+       v=>kS(v[0]*v[1])+' : '+kS(v[1])+' − '+kS(v[2])+' · '+kS(v[3]),v=>kS(v[0])+' · '+kS(v[1])+' + '+kS(v[2])+' − '+kS(v[3])],
+  ahs:[v=>kS(v[0])+' + '+kS(v[1])+' · '+kS(v[2])+' − '+kS(v[3]*v[4])+' : '+kS(v[4]),v=>'['+kS(v[0])+' + '+kS(v[1])+' · '+kS(v[2])+'] · '+kS(v[3])+' − '+kS(v[4]),
+       v=>'['+kS(v[0]*v[1])+' : '+kS(v[1])+' + '+kS(v[2])+'] − ['+kS(v[3])+' · '+kS(v[4])+' + '+kS(v[5])+']',v=>'['+kS(v[0])+' − ['+kS(v[1])+' + '+kS(v[2])+']] · '+kS(v[3])+' + '+kS(v[4]*v[5])+' : '+kS(v[5])]
+};
+function T_verb(lvl,set){
+  for(let g=0;g<3000;g++){const f=pick(set||KTPL[lvl]);const v=Array.from({length:6},()=>sg()*rnd(2,lvl==='std'?9:12));const E=f(v);if(!kValid(E))continue;
+    if(!(E.match(/−\d/g)||[]).length)continue;
+    const k=kFresh(E);let tt=kInitial(E),gd=0;while(kCount(tt)>0&&gd++<20){tt=kCompact(kReplaced({t:tt,queue:kOps(tt)}));}
+    return {kind:'kps',head:'Klammer – Punkt – Strich',E,res:R(tt[0].n),st:[]};}
+}
+
+/* 4. Klasse: kurze Wiederholung, dann sechs Klammer – Punkt – Strich, immer schwieriger */
+const KS=l=>T_verb('std',KTPL.std),KA=l=>T_verb('ahs',KTPL.ahs),K4=l=>T_verb('ahs',KTPL4);
+const PLAN={
+  std:[T_intSum,T_intPunkt,T_fracAdd,T_fracMul,T_sea,T_debt,KS,KS,KS,KA,KA,KA],
+  ahs:[T_intSum,T_intPunkt,T_fracAdd,T_fracMul,T_sea,T_debtAhs,KS,KA,KA,KA,K4,K4]
+};
+function mixSeed(seed,lvl,round){return (Math.imul(seed^0x9E3779B9,0x85EBCA6B)^Math.imul(lvl==='ahs'?2:1,0xC2B2AE35)^Math.imul(round,0x27D4EB2F))>>>0;}
+function genRound(lvl,seed,round){const old=RNG;RNG=mulberry32(mixSeed(seed,lvl,round));try{return PLAN[lvl].map(f=>f(lvl));}finally{RNG=old;}}
+function newEx(t){return {t,step:0,err:0,shown:false,msg:{},tries:t.st.map(()=>0),lv:t.st.map(()=>({})),ctx:{},k:t.kind==='kps'?kFresh(t.E):null,kmsg:null,kv:{}};}
+const DONEOF=e=>e.t.kind==='kps'?1:e.t.st.length;
+const val=(f,e)=>typeof f==='function'?f(e):f;
+function skipAhead(e){while(e.step<e.t.st.length&&e.t.st[e.step].skip&&e.t.st[e.step].skip(e))e.step++;}
+
+/* ================= Zustand ================= */
+const LEVELS={std:'Standard',ahs:'Standard AHS'};
+const G={std:{seed:Math.floor(Math.random()*65536),round:1,cur:0,ex:[]},ahs:{seed:Math.floor(Math.random()*65536),round:1,cur:0,ex:[]}};
+let level=location.hash==='#ahs'?'ahs':'std',PUPIL='',restoring=false,summaryRequested=false;
+function makeRound(lvl){const g=G[lvl];g.ex=genRound(lvl,g.seed,g.round).map(newEx);g.cur=0;}
+const curG=()=>G[level],curEx=()=>curG().ex[curG().cur];
+
+/* ================= Prüfen ================= */
+function runCheck(){
+  const e=curEx(),s=e.step,S=e.t.st[s];if(!S)return;
+  const v=e.lv[s];let r;
+  if(S.kind==='card'){r=S.check(v,e);if(r&&r.note){e.msg[s]={kind:'bad',text:r.note,offer:e.tries[s]>=2};renderEx(true);return;}}
+  else if(S.kind==='opts')r=S.check(v.v,e);
+  else if(S.kind==='line')r=(v.v||'').trim()?S.check(v.v):'Schreib etwas in die Zeile.';
+  else if(S.kind==='frac'){if(S.withSign&&!v.s)r='Wähle zuerst das Vorzeichen: + oder −.';else if(!(v.z||'').trim()||!(v.n||'').trim()||(S.withK&&!(v.k||'').trim()))r='Fülle alle Felder aus.';else r=S.check(v);}
+  else r=S.check(v.v);
+  if(r===true){e.msg[s]=null;e.step++;skipAhead(e);}
+  else if(r&&r.soft){e.msg[s]={kind:'bad',text:r.soft};}
+  else{e.err++;e.tries[s]++;e.msg[s]={kind:'bad',text:(r||'Leider falsch.')+(e.tries[s]===1?' Versuch es nochmal!':''),offer:e.tries[s]>=2};}
+  renderEx(true);
+}
+function applySol(e,s){const S=e.t.st[s],v=e.lv[s];
+  if(S.kind==='card')Object.assign(v,S.sol(e));else if(S.kind==='opts')v.v=S.sol(e);else if(S.kind==='frac')Object.assign(v,S.sol);else v.v=S.sol;}
+function showSolution(){const e=curEx(),s=e.step;applySol(e,s);e.shown=true;e.msg[s]=null;e.step++;skipAhead(e);renderEx(true);}
+
+/* ================= Anzeige ================= */
+const inp=(attr,val,cls,label,ph)=>'<input class="pin'+(cls?' '+cls:'')+'" '+attr+' value="'+esc(val||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="'+label+'"'+(ph?' placeholder="'+ph+'"':'')+'>';
+function exStatus(e){const D=DONEOF(e);return e.step>=D?(e.shown?'done shown':'done'):(e.step>0?'started':'');}
+function taskLineH(e){const t=e.t;
+  if(t.kind==='verb'){const tapS=t.st[0],chosen=e.step>0?tapS.right:(e.lv[0].v!==undefined?+e.lv[0].v:-1);
+    return t.parts.map((p,k)=>p.op?'<span class="seg">'+p.h+'</span>':
+      '<button type="button" class="seg tapseg'+(k===chosen?' chosen':'')+'" data-part="'+k+'"'+(e.step>0?' disabled':'')+'>'+p.h+'</button>').join('');}
+  return t.taskH||'';}
+function stepActiveH(e,s){
+  const S=e.t.st[s],v=e.lv[s];
+  if(S.kind==='line')return '<div class="cl">'+(S.pre?'<span class="pre">'+S.pre+'</span>':'<span class="eqs">=</span>')+inp('data-f="v"',v.v,'linein','Eingabe: '+S.label,S.ph)+(S.post?'<span class="pre">'+S.post+'</span>':'')+'<button type="button" data-act="check">Prüfen</button></div>';
+  if(S.kind==='frac')return '<div class="cl"><span class="eqs">=</span>'+
+    (S.withSign?'<span class="sgn" role="group" aria-label="Vorzeichen"><button type="button" data-sign="+" aria-pressed="'+(v.s==='+')+'">+</button><button type="button" data-sign="-" aria-pressed="'+(v.s==='-')+'">−</button></span>':'')+
+    (S.withK?'<span class="pre">Kürzzahl</span>'+inp('data-f="k"',v.k,'kin','Kürzzahl','')+'<span class="pre">→</span>':'')+
+    '<span class="fbox">'+inp('data-f="z"',v.z,'fz','Zähler','Zähler')+'<span class="fbar"></span>'+inp('data-f="n"',v.n,'fn','Nenner','Nenner')+'</span>'+
+    '<button type="button" data-act="check">Prüfen</button></div>';
+  if(S.kind==='card')return '<div class="bcard"><h3>'+S.title+'</h3><p>'+val(S.text,e)+'</p>'+S.html(v,e)+(S.noCheck?'':'<button type="button" data-act="check" class="checkb">Prüfen</button>')+'</div>';
+  if(S.kind==='opts')return '<div class="bcard"><h3>'+S.title+'</h3><p>'+val(S.text,e)+'</p><div class="opts'+(S.opts.length>2?' col':'')+'">'+S.opts.map(o=>'<button type="button" class="opt" data-opt="'+o.v+'">'+o.label+'</button>').join('')+'</div></div>';
+  if(S.kind==='yn')return '<div class="cl"><span class="pre">'+S.label+'</span><span class="choice"><button type="button" data-yn="ja">Ja, man kann kürzen</button><button type="button" data-yn="nein">Nein, man kann nicht kürzen</button></span></div>';
+  if(S.kind==='tap')return '<div class="cl"><span class="pre">👆 Tippe in der Rechnung oben den Teil an, mit dem du beginnst.</span></div>';
+  return '';
+}
+function kpsH(e){
+  const k=e.k;kAuto(k);let h='<div class="kps">'+k.h.join('');
+  if(k.phase==='done')h+='<div class="cl ok"><b>Endergebnis: '+String(k.last).replace('-','−')+'</b> <span class="tick">✓</span></div>';
+  else{
+    const single=kCount(k.t)===1,groups=k.phase==='select'?k.selected:k.queue,cand=kOps(k.t);
+    h+='<p class="khint">'+(single?'Eine Rechnung übrig: ohne Unterstreichen fertig rechnen.':k.phase==='select'?'👆 Tippe die Rechenteile an, mit denen du beginnst (Klammer vor Punkt vor Strich). Gleichrangige, unabhängige Teile darfst du gemeinsam auswählen. Dann „Auswahl fertig“.':'Die ausgewählten Teile sind grün unterstrichen.')+'</p><div class="cl task kq">';
+    for(let j=0;j<k.t.length;){const g=groups.find(o=>o.start===j);
+      if(g){h+='<button type="button" class="part'+(single?'':' selected')+'" data-kunsel="'+g.j+'">'+esc(kFmt(k.t.slice(g.start,g.end+1)))+'</button>';j=g.end+1;}
+      else{h+='<button type="button" class="part" data-kp="'+j+'"'+(k.phase!=='select'?' tabindex="-1"':'')+'>'+esc(kFmt([k.t[j]]))+'</button>';j++;}}
+    h+='</div>';
+    const kv=e.kv||(e.kv={});
+    if(k.phase==='select')h+='<div class="stage"><button type="button" data-act="kchoose" class="checkb">Auswahl fertig</button></div>';
+    if(k.phase==='row'){if(!kv.pal)kSetup(e);
+      let row='';if(!kv.build.length)row='<span class="bempty">Tippe unten die Bausteine an …</span>';
+      kv.build.forEach(id=>{const x=kv.pal.find(p=>p.id===id);
+        if(x.res!==undefined)row+='<span class="resw">(<input class="pin gapin '+(kv['gm'+x.res]||'')+'" data-kin="g'+x.res+'" value="'+esc(kv['g'+x.res]||'')+'" autocomplete="off" aria-label="'+esc(kTileLab(k,x))+'">)</span>';
+        else row+='<span class="gtok">'+esc(x.tok)+'</span>';});
+      h+='<div class="stage"><label>Bau die nächste Zeile: Tippe die Bausteine in der richtigen Reihenfolge an. Bei „☐ Ergebnis“ trägst du das Ergebnis des unterstrichenen Teils ein.</label><div class="cl gapline built">= '+row+'</div>'+
+        '<div class="bctl"><button type="button" class="mini" data-act="kback">⌫ zurück</button><button type="button" class="mini" data-act="kclear">neu anfangen</button></div>'+
+        '<div class="palette">'+kv.pal.map(x=>'<button type="button" class="tile'+(x.res!==undefined?' restile':'')+'" data-act="ktile" data-tile="'+x.id+'"'+(kv.build.includes(x.id)?' disabled':'')+'>'+esc(kTileLab(k,x))+'</button>').join('')+'</div>'+
+        '<button type="button" data-act="krow" class="checkb">Zeile prüfen</button><p class="khint">Negative Zahl mit − oder der Taste ±, z. B. −24. Die Klammer kommt automatisch dazu.</p></div>';}
+    if(k.phase==='final'){const o=k.queue[0],strich=o.simple!==null;
+      if(strich){const a=k.t[o.start].n,b=k.t[o.end].n,op=kv.op||'?';
+        h+='<div class="stage"><label>Vorzeichen auflösen und ausrechnen: Tippe auf das Zeichen in der Mitte, bis es stimmt.</label><div class="cl gapline">= <span class="gtok">'+String(a).replace('-','−')+'</span><button type="button" class="opbtn'+(op==='?'?'':' set')+'" data-act="kop" aria-label="Rechenzeichen wählen">'+op+'</button><span class="gtok">'+Math.abs(b)+'</span> = <input class="pin gapin" data-kin="fin" value="'+esc(kv.fin||'')+'" autocomplete="off" aria-label="Endergebnis"></div><button type="button" data-act="kfin" class="checkb">Prüfen</button><p class="khint">Gleiche Zeichen → +, verschiedene Zeichen → −.</p></div>';}
+      else h+='<div class="stage"><label>Ausrechnen – Vorzeichen: gleiche Zeichen → +, verschiedene → −</label><div class="cl gapline">= <input class="pin gapin" data-kin="fin" value="'+esc(kv.fin||'')+'" autocomplete="off" aria-label="Endergebnis"></div><button type="button" data-act="kfin" class="checkb">Prüfen</button></div>';}
+    h+='<div class="cl"><button type="button" class="mini" data-act="khint">Tipp</button></div>';
+  }
+  if(e.kmsg)h+='<p class="msg '+e.kmsg.kind+'">'+e.kmsg.text+'</p>';
+  return h+'</div>';
+}
+const kpsCur=k=>{const o=k.queue[k.q];return '<u>'+esc(kFmt(k.t.slice(o.start,o.end+1)))+'</u>';};
+function kSave(k){k.h.push('<div class="cl past">'+(k.h.length?'= ':'')+kMarked(k)+'</div><p class="small good kres">'+k.queue.map(o=>(o.simple!==null?esc(o.simple.replace(/-/g,'−'))+' = ':'')+String(o.result).replace('-','−')).join(' ; ')+'</p>');}
+/* nächste Zeile als Bausteine */
+function kTarget(k){const it=[];let j=0;while(j<k.t.length){const qi=k.queue.findIndex(o=>o.start===j);if(qi>=0){it.push({res:qi});j=k.queue[qi].end+1;}else{it.push({tok:kFmt([k.t[j]])});j++;}}
+  let ch=true;while(ch){ch=false;for(let m=0;m<it.length-2;m++)if(it[m].tok==='['&&it[m+2].tok===']'&&(it[m+1].res!==undefined||/^\(/.test(it[m+1].tok||''))){it.splice(m,3,it[m+1]);ch=true;break;}}return it;}
+const kTileLab=(k,x)=>x.res!==undefined?'☐ Ergebnis von '+kFmt(k.t.slice(k.queue[x.res].start,k.queue[x.res].end+1)):x.tok;
+function kSetup(e){const k=e.k;e.kv=e.kv||{};const tg=kTarget(k);e.kv.pal=tg.map((x,n)=>({...x,id:n})).sort(()=>Math.random()-.5);e.kv.build=[];}
+function kpsAct(a,arg){
+  const e=curEx(),k=e.k;e.kv=e.kv||{};const bad=t=>{e.err++;e.kmsg={kind:'bad',text:t};},good=t=>{e.kmsg={kind:'ok',text:t};};
+  if(a==='pick'){if(k.phase!=='select')return;const pos=arg,o=kOps(k.t).find(o=>pos>=o.start&&pos<=o.end&&!k.selected.some(g=>!(o.end<g.start||o.start>g.end)));
+    if(!o){bad('Nicht jetzt auswählbar. Prüfe: zuerst Klammern, dann Punkt vor Strich, gleichrangige Teile von links nach rechts.');return;}k.selected.push(o);e.kmsg=null;return;}
+  if(a==='unsel'){if(k.phase==='select'){k.selected=k.selected.filter(o=>o.j!==arg);e.kmsg=null;}return;}
+  if(a==='kchoose'){if(!k.selected.length){e.kmsg={kind:'bad',text:'Wähle mindestens einen Rechenteil aus.'};return;}kBegin(k);e.kmsg=null;return;}
+  const readI=v=>{v=kClean(v||'');if(/^\([+-]?\d+\)$/.test(v))v=v.slice(1,-1);return /^[+-]?\d+$/.test(v)?Number(v):NaN;};
+  if(a==='ktile'){if(k.phase!=='row')return;if(!e.kv.build.includes(arg))e.kv.build.push(arg);e.kmsg=null;return;}
+  if(a==='kback'){if(k.phase!=='row'||!e.kv.build.length)return;const id=e.kv.build.pop(),x=e.kv.pal.find(p=>p.id===id);if(x.res!==undefined){delete e.kv['g'+x.res];delete e.kv['gm'+x.res];}e.kmsg=null;return;}
+  if(a==='kclear'){if(k.phase!=='row')return;const p=e.kv.pal;e.kv={pal:p,build:[]};e.kmsg=null;return;}
+  if(a==='krow'){const tg=kTarget(k),bt=e.kv.build.map(id=>e.kv.pal.find(p=>p.id===id)),same=(x,y)=>x.res!==undefined?y.res===x.res:y.tok===x.tok;
+    const bi=bt.findIndex((x,n)=>!same(tg[n],x));
+    if(bi>=0){bad('Die Reihenfolge stimmt ab dem '+(bi+1)+'. Baustein noch nicht. Schreib die Zeile so an wie die Angabe – nur statt jedes unterstrichenen Teils kommt sein Ergebnis.');return;}
+    if(bt.length<tg.length){e.kmsg={kind:'bad',text:'Bis hierher stimmt die Reihenfolge – es fehlen noch Bausteine.'};return;}
+    let empty=false,sign=false,wrong=false;
+    k.queue.forEach((o,qi)=>{const raw=e.kv['g'+qi]||'',v=readI(raw);if(!raw.trim()){empty=true;e.kv['gm'+qi]='';return;}
+      if(v===o.result){e.kv['gm'+qi]='ok';return;}e.kv['gm'+qi]='bad';if(Math.abs(v)===Math.abs(o.result))sign=true;else wrong=true;});
+    if(empty){e.kmsg={kind:'bad',text:'Die Reihenfolge stimmt! Trag jetzt in jedes Kästchen das Ergebnis ein.'};return;}
+    if(sign&&!wrong){bad('Die Zahl stimmt, aber das Vorzeichen nicht: gleiche Zeichen → +, verschiedene → −.');return;}
+    if(wrong){bad('Ein Ergebnis stimmt noch nicht – rechne den unterstrichenen Teil nochmal.');return;}
+    kSave(k);k.t=kCompact(kReplaced(k));k.phase='select';k.selected=[];k.queue=[];k.q=0;e.kv={};
+    good(kCount(k.t)===1?'Richtig! Jetzt ist nur noch eine Rechnung übrig: Vorzeichen auflösen und ausrechnen.':'Richtig! Unterstreiche die nächste Rechnung.');return;}
+  if(a==='kop'){e.kv.op=e.kv.op==='+'?'−':'+';e.kmsg=null;return;}
+  if(a==='kfin'){const o=k.queue[0];
+    if(o.simple!==null){const want=o.simple.includes(' − ')?'−':'+';if(!e.kv.op){e.kmsg={kind:'bad',text:'Tippe zuerst auf das Zeichen in der Mitte und wähle + oder −.'};return;}
+      if(e.kv.op!==want){bad('Das Rechenzeichen stimmt noch nicht: gleiche Zeichen → +, verschiedene Zeichen → −.');return;}}
+    const v=readI(e.kv.fin);if(isNaN(v)||v!==o.result){bad(Math.abs(v)===Math.abs(o.result)?'Fast – kontrolliere das Vorzeichen des Ergebnisses.':'Ergebnis noch nicht richtig. Prüfe Rechnung und Vorzeichen.');return;}
+    k.h.push('<div class="cl past">= '+esc(kFmt(k.t))+'</div>'+(o.simple!==null?'<div class="cl past">= '+esc(o.simple.replace(/-/g,'−'))+'</div>':''));
+    k.t=[kNum(o.result)];k.last=o.result;k.phase='done';e.step=1;e.kv={};e.kmsg=null;return;}
+  if(a==='khint'){e.shown=true;
+    if(k.phase==='select')good('Mögliche Teile: '+kOps(k.t).map(o=>kFmt(k.t.slice(o.start,o.end+1))).join(' ; '));
+    else if(k.phase==='final')good(k.queue[0].simple!==null?'Vorzeichen aufgelöst: '+k.queue[0].simple.replace(/-/g,'−'):'Mal und durch: gleiche Vorzeichen → +, verschiedene → −.');
+    else good('Ergebnisse: '+k.queue.map(o=>kFmt(k.t.slice(o.start,o.end+1))+' = '+String(o.result).replace('-','−')).join(' ; '));}
+}
+function renderEx(focus){
+  const g=curG(),e=curEx(),t=e.t,cur=g.cur,D=DONEOF(e),allDone=g.ex.every(x=>x.step>=DONEOF(x));
+  let h='<div class="nav"><button type="button" class="ghost" data-act="prev" aria-label="Vorheriges Beispiel"'+(cur===0?' disabled':'')+'>◀</button>'+
+    '<div class="dots" role="group" aria-label="Beispiele">'+g.ex.map((x,k)=>'<button type="button" class="dot '+exStatus(x)+(k===cur?' cur':'')+'" data-go="'+k+'" aria-label="Beispiel '+(k+1)+'"'+(k===cur?' aria-current="true"':'')+'>'+(k+1)+'</button>').join('')+'</div>'+
+    '<button type="button" class="ghost" data-act="next" aria-label="Nächstes Beispiel"'+(cur===N_EX-1?' disabled':'')+'>▶</button>'+
+    '<span class="round">Runde '+g.round+'</span><button type="button" class="mini" data-act="newround">Neue Runde</button></div>';
+  h+='<div class="head"><span class="num">'+(cur+1)+'</span><h2>'+(t.icon?t.icon+' ':'')+t.head+'</h2></div>';
+  if(t.story)h+='<p class="story">'+t.story+'</p>';
+  h+='<div class="calc">';
+  if(t.kind==='kps'){h+=kpsH(e)+'</div>';}
+  else{
+  if(t.kind!=='text'&&t.kind!=='frac')h+='<div class="cl task">'+taskLineH(e)+'</div>';
+  if(t.kind==='frac')h+='<div class="cl task bigexpr">'+t.taskH+' <span>=</span> <span class="q">?</span></div><p class="hint" style="margin:.2rem 0 .4rem">Berechne Schritt für Schritt. Schreib das Ergebnis vollständig gekürzt und – wenn möglich – als gemischte Zahl.</p>';
+  t.st.forEach((S,s)=>{
+    if(s>e.step)return;
+    if(s<e.step){if(S.kind==='tap'||(S.skip&&S.skip(e)))return;const dn=val(S.done,e),qa=(S.kind==='yn'||S.kind==='opts')&&!/=/.test(dn);h+='<div class="cl ok'+(qa?' qa':'')+'">'+(S.kind==='yn'||S.kind==='opts'&&!/^</.test(dn)&&!/=/.test(dn)?'<span class="pre">'+dn+'</span>':S.kind==='line'&&S.pre&&S.post?'<span class="pre">'+dn+'</span>':dn)+' <span class="tick">✓</span></div>';return;}
+    if(s<D){if(S.label)h+='<div class="steplbl">'+S.label+'</div>';h+=stepActiveH(e,s);
+      const m=e.msg[s];if(m)h+='<p class="msg '+m.kind+'">'+m.text+(m.offer?' <button type="button" class="mini" data-act="show">Lösung zeigen</button>':'')+'</p>';}
+  });
+  h+='</div>';}
+  if(e.step>=D){
+    const nextOpen=g.ex.findIndex((x,k)=>k>cur&&x.step<DONEOF(x)),anyOpen=g.ex.findIndex(x=>x.step<DONEOF(x));
+    h+='<div class="donebox"><b>Beispiel '+(cur+1)+' geschafft!</b>'+
+      (nextOpen>=0?'<button type="button" data-act="go" data-to="'+nextOpen+'">Weiter zu Beispiel '+(nextOpen+1)+' ▶</button>'
+      :anyOpen>=0?'<button type="button" data-act="go" data-to="'+anyOpen+'">Noch offen: Beispiel '+(anyOpen+1)+' ▶</button>'
+      :'<button type="button" data-act="sum">Zur Auswertung</button>')+'</div>';
+    h+='<p class="copy">✏️ <b>Schreib die Rechnung Zeile für Zeile in dein Heft ab'+(t.kind==='text'?' – mit Antwortsatz':'')+'.</b></p>';
+    if(cur===0)h+='<p class="sumafter">✏️ <b>Schreib jetzt die Zusammenfassung unten auf der Seite in dein Heft ab</b> – dann geht es mit Beispiel 2 weiter.</p>';
+  }
+  $('exCard').innerHTML=h;
+  $('score').textContent=g.ex.filter(x=>x.step>=DONEOF(x)).length+' von '+N_EX+' fertig';
+  if(window.padApply)window.padApply();
+  if(focus){const all=[...document.querySelectorAll('#exCard .calc input, #exCard .calc select')],f=all.find(i=>!i.value.trim())||all[0];if(f)f.focus({preventScroll:true});}
+  if(allDone&&!summaryRequested&&!restoring)summaryRequested=true;
+  updateSummary();saveProgress();
+}
+
+/* ================= Auswertung ================= */
+function updateSummary(){
+  const g=curG(),sum=$('summary'),allDone=g.ex.every(e=>e.step>=DONEOF(e));
+  if(!summaryRequested){sum.hidden=true;return;}
+  let T={done:0,first:0,shown:0,open:0,err:0},rows='';
+  g.ex.forEach((e,k)=>{let st;const t=e.t;
+    if(e.step<DONEOF(e)){st='offen';T.open++;}
+    else{T.done++;if(e.shown){st='Lösung angesehen';T.shown++;}else if(!e.err){st='✓ beim 1. Versuch';T.first++;}else st='✓ richtig';}
+    T.err+=e.err;
+    rows+='<tr><td>'+(k+1)+') '+(t.icon?t.icon+' '+t.head:t.kind==='kps'?t.E:t.taskH)+'</td><td>'+(e.step>=DONEOF(e)?rH(t.res,'frac'):'–')+'</td><td>'+st+'</td><td class="c">'+e.err+'</td></tr>';});
+  $('sumBody').innerHTML=rows;
+  $('sumFoot').innerHTML='<tr><td>Gesamt: '+T.done+' von '+N_EX+' fertig</td><td></td><td>'+T.first+' beim 1. Versuch, '+T.shown+' mit Lösung</td><td class="c">'+T.err+'</td></tr>';
+  const ok=T.done-T.shown;let msg;
+  if(T.first===N_EX)msg='Perfekt! Alle Beispiele beim ersten Versuch richtig.';
+  else if(ok===N_EX)msg='Super, alle Beispiele selbst gelöst!';
+  else if(ok/N_EX>=.75)msg='Sehr gut gemacht!';
+  else if(ok/N_EX>=.5)msg='Gut! Mit ein bisschen Übung klappt der Rest auch.';
+  else msg='Übe noch ein bisschen weiter – starte eine neue Runde und probier es nochmal.';
+  if(!allDone)msg='Noch nicht alles erledigt: '+T.open+' Beispiel'+(T.open===1?' ist':'e sind')+' noch offen. '+msg;
+  $('sumTitle').textContent=(allDone?'Geschafft'+(PUPIL?', '+PUPIL:'')+'! Deine Auswertung':'Zwischenstand'+(PUPIL?' von '+PUPIL:''))+' ('+LEVELS[level]+', Runde '+g.round+')';
+  const now=new Date(),who=$('sumWho');
+  who.innerHTML='👤 <b></b> · '+now.toLocaleDateString('de-AT')+', '+now.toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'})+' Uhr · '+LEVELS[level];
+  who.querySelector('b').textContent=PUPIL||'(kein Name)';
+  $('sumMsg').textContent=msg;
+  const wasHidden=sum.hidden;sum.hidden=false;
+  if(wasHidden&&!restoring&&allDone)setTimeout(()=>sum.scrollIntoView({behavior:'smooth',block:'start'}),300);
+}
+
+/* ================= Bedienung ================= */
+function goTo(k){const g=curG();g.cur=Math.max(0,Math.min(N_EX-1,k));renderEx();$('exCard').scrollIntoView({behavior:'smooth',block:'start'});}
+function newRound(){
+  const g=curG();
+  if(g.ex.some(e=>e.step<DONEOF(e))&&!confirm('Neue Runde starten? Die offenen Beispiele werden durch neue ersetzt.'))return;
+  g.round=g.round>=100?1:g.round+1;makeRound(level);summaryRequested=false;renderEx();
+  $('exCard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+$('exCard').addEventListener('click',ev=>{
+  const xt=ev.target.closest('[data-xt]');
+  if(xt){const e=curEx(),s=e.step,S=e.t.st[s];if(!S||!S.cross)return;const v=e.lv[s],k=xt.getAttribute('data-xt');
+    if(!v.sel||v.sel===k){v.sel=v.sel===k?'':k;e.msg[s]=null;renderEx();return;}
+    const p=[v.sel,k].sort().join('-'),l=XPAIR[p];v.sel='';
+    if(l){v[l]='1';e.msg[s]=null;if(v.l1&&v.l2&&v.l3){runCheck();return;}renderEx();return;}
+    e.err++;e.tries[s]++;
+    const txt=p==='n1-n2'?'Zähler mal Zähler gibt es nur bei der Punktrechnung. Bei + und − gehst du über Kreuz: Zähler mit dem Nenner vom anderen Bruch.'
+      :'Das ist Zähler und Nenner vom selben Bruch. Über Kreuz heißt: hinüber zum anderen Bruch!';
+    e.msg[s]={kind:'bad',text:txt,offer:e.tries[s]>=2};renderEx();return;}
+  const b=ev.target.closest('button');if(!b)return;const e=curEx(),s=e.step,S=e.t.st[s];
+  if(b.dataset.go!==undefined){goTo(+b.dataset.go);return;}
+  if(e.t.kind==='kps'&&(b.dataset.kp!==undefined||b.dataset.kunsel!==undefined||/^k/.test(b.dataset.act||''))){
+    if(b.dataset.kp!==undefined)kpsAct('pick',+b.dataset.kp);else if(b.dataset.kunsel!==undefined)kpsAct('unsel',+b.dataset.kunsel);else if(b.dataset.tile!==undefined)kpsAct('ktile',+b.dataset.tile);else kpsAct(b.dataset.act);
+    renderEx(!!b.dataset.act&&b.dataset.act!=='khint'&&b.dataset.act!=='ktile');
+    if(window.padTarget&&curEx().k&&curEx().k.phase==='row'){const g=[...document.querySelectorAll('#exCard [data-kin^="g"]')].find(x=>!x.value.trim());if(g)window.padTarget(g);}
+    return;}
+  if(b.dataset.opt!==undefined&&S&&S.kind==='opts'){e.lv[s].v=b.dataset.opt;runCheck();return;}
+  if(b.dataset.part!==undefined&&S&&S.kind==='tap'){e.lv[s].v=b.dataset.part;runCheck();return;}
+  if(b.dataset.yn&&S&&S.kind==='yn'){e.lv[s].v=b.dataset.yn;runCheck();return;}
+  if(b.dataset.sign&&S&&S.kind==='frac'){e.lv[s].s=b.dataset.sign;e.msg[s]=null;renderEx();const z=document.querySelector('#exCard [data-f="z"]');if(z)z.focus();return;}
+  const a=b.dataset.act;
+  if(a==='prev')goTo(curG().cur-1);
+  else if(a==='next')goTo(curG().cur+1);
+  else if(a==='go')goTo(+b.dataset.to);
+  else if(a==='newround')newRound();
+  else if(a==='sum'){summaryRequested=true;updateSummary();$('summary').scrollIntoView({behavior:'smooth',block:'start'});}
+  else if(a==='check')runCheck();
+  else if(a==='show')showSolution();
+});
+function onField(ev){const t=ev.target,e=curEx();if(t.dataset.kin){e.kv=e.kv||{};e.kv[t.dataset.kin]=t.value;return;}if(!t.dataset.f)return;e.lv[e.step][t.dataset.f]=t.value;}
+$('exCard').addEventListener('input',onField);$('exCard').addEventListener('change',onField);
+$('exCard').addEventListener('keydown',ev=>{
+  if(ev.key!=='Enter'||ev.target.tagName!=='INPUT')return;ev.preventDefault();
+  if(ev.target.dataset.kin){const ki=ev.target.dataset.kin;if(ki[0]==='g'){const all=[...document.querySelectorAll('#exCard [data-kin^="g"]')],nx=all.slice(all.indexOf(ev.target)+1).find(x=>!x.value.trim());if(nx){nx.focus();return;}kpsAct('krow');}else kpsAct('kfin');renderEx(true);return;}
+  const all=[...document.querySelectorAll('#exCard .calc input')],nx=all.slice(all.indexOf(ev.target)+1).find(i=>!i.value.trim());
+  if(nx){nx.focus();return;}runCheck();
+});
+$('showSum').addEventListener('click',()=>{summaryRequested=true;updateSummary();$('summary').scrollIntoView({behavior:'smooth',block:'start'});});
+$('newRound2').addEventListener('click',newRound);
+function setLevel(l){
+  level=l;summaryRequested=curG().ex.every(e=>e.step>=DONEOF(e));
+  document.querySelectorAll('.levels button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.level===l?'true':'false'));
+  try{history.replaceState(null,'',l==='ahs'?'#ahs':'#standard');}catch(x){}
+  renderEx();
+}
+document.querySelectorAll('.levels button').forEach(b=>b.addEventListener('click',()=>setLevel(b.dataset.level)));
+
+/* ================= Fortschritt: speichern (gleiches Gerät) & Code (anderes Gerät) ================= */
+const STORE='rationale4kl:',ALPH='23456789ABCDEFGHJKMNPQRSTUVWXYZ',AL=B(ALPH.length);
+const normName=s=>s.trim().replace(/\s+/g,' ').toLowerCase();
+function nameHash(n){let h=2166136261;for(const ch of normName(n)){h^=ch.codePointAt(0);h=Math.imul(h,16777619);}return (h>>>0)%1024;}
+function checkChar(s){let c=0;for(let k=0;k<s.length;k++)c=(c+(k+1)*ALPH.indexOf(s[k]))%ALPH.length;return ALPH[c];}
+function makeCode(lvl){
+  const g=G[lvl],F=[],f=(v,r)=>F.push([v,r]);
+  f(lvl==='ahs'?1:0,2);f(g.seed,65536);f(g.round-1,100);f(g.cur,N_EX);
+  g.ex.forEach(e=>f(Math.min(e.step,15)*8+Math.min(e.err,3)*2+(e.shown?1:0),128));
+  f(nameHash(PUPIL),1024);
+  let N=0n;for(let k=F.length-1;k>=0;k--)N=N*B(F[k][1])+B(F[k][0]);
+  let s='';do{s=ALPH[Number(N%AL)]+s;N/=AL;}while(N>0n);
+  s+=checkChar(s);return s.match(/.{1,4}/g).join('-');
+}
+function readCode(str){
+  const bad={err:'Dieser Code ist ungültig. Kontrolliere, ob du ihn richtig abgeschrieben hast.'};
+  const s=str.toUpperCase().replace(/[\s\-–—_.]/g,'');
+  if(s.length<3||[...s].some(ch=>!ALPH.includes(ch)))return bad;
+  const body=s.slice(0,-1);
+  if(checkChar(body)!==s.slice(-1))return {err:'Im Code ist ein Tippfehler. Kontrolliere ihn Zeichen für Zeichen.'};
+  let N=0n;for(const ch of body)N=N*AL+B(ALPH.indexOf(ch));
+  const g=r=>{const v=Number(N%B(r));N/=B(r);return v;};
+  const lvl=g(2)?'ahs':'std',seed=g(65536),round=g(100)+1,cur=g(N_EX),ex=[];
+  for(let k=0;k<N_EX;k++){const v=g(128);ex.push({step:v>>3,err:(v>>1)&3,shown:!!(v&1)});}
+  const nh=g(1024);if(N!==0n)return bad;
+  return {lvl,seed,round,cur,ex,nh};
+}
+function applyCode(p){
+  const g=G[p.lvl];g.seed=p.seed;g.round=p.round;makeRound(p.lvl);g.cur=p.cur;
+  p.ex.forEach((s,k)=>{const e=g.ex[k];const n=Math.min(s.step,DONEOF(e));
+    if(e.t.kind==='kps'){if(n>=1){e.k.phase='done';e.k.last=Number(e.t.res.n);e.k.h=['<div class="cl past first">'+esc(e.t.E)+'</div>'];e.step=1;}}
+    else{for(let st=0;st<n;st++){const S=e.t.st[st];if(S.skip&&S.skip(e))continue;applySol(e,st);}e.step=n;skipAhead(e);}
+    e.err=s.err;e.shown=s.shown;e.msg={};});
+}
+function saveProgress(lvl){
+  lvl=lvl||level;if(!PUPIL||restoring)return;
+  const code=makeCode(lvl);
+  try{const k=STORE+normName(PUPIL),o=JSON.parse(localStorage.getItem(k)||'{}');o.last=level;o[lvl]=code;localStorage.setItem(k,JSON.stringify(o));}catch(x){}
+  if(lvl===level)$('codeShow').textContent=code;
+}
+function loadSaved(name){try{return JSON.parse(localStorage.getItem(STORE+normName(name))||'null');}catch(x){return null;}}
+
+/* ================= Name zu Beginn (danach nicht mehr änderbar) ================= */
+function setLocked(on){document.body.classList.toggle('locked',on);if(on)$('main').setAttribute('inert','');else $('main').removeAttribute('inert');}
+function startErr(msg,el){const err=$('pnameErr');err.textContent=msg;err.hidden=false;el.focus();}
+function startWithName(){
+  const inpEl=$('pname'),v=inpEl.value.trim().replace(/\s+/g,' '),codeInp=$('pcode');
+  if(v.length<2){startErr('Bitte gib deinen Namen ein.',inpEl);return;}
+  let p=null;
+  if(codeInp.value.trim()){p=readCode(codeInp.value);
+    if(p.err){$('codeAsk').open=true;startErr(p.err,codeInp);return;}
+    if(p.nh!==nameHash(v)){startErr('Dieser Code gehört zu einem anderen Namen. Schreib deinen Namen genau so wie auf dem anderen Gerät.',inpEl);return;}}
+  $('pnameErr').hidden=true;PUPIL=v;
+  const saved=loadSaved(v);let msg='';
+  restoring=true;
+  try{
+    if(saved){['std','ahs'].forEach(l=>{if(saved[l]&&!(p&&p.lvl===l)){const q=readCode(saved[l]);if(!q.err&&q.nh===nameHash(v))applyCode(q);}});
+      msg='Willkommen zurück! Du machst dort weiter, wo du auf diesem Gerät aufgehört hast.';}
+    if(p){applyCode(p);msg='Dein Fortschritt vom anderen Gerät wurde übernommen.';}
+  }finally{restoring=false;}
+  saveProgress('std');saveProgress('ahs');
+  $('pnameShow').textContent=v;$('startMsg').textContent=msg;
+  $('startAsk').hidden=true;$('startDone').hidden=false;
+  setLocked(false);setLevel(p?p.lvl:(saved&&saved.last)||level);
+}
+$('startBtn').addEventListener('click',startWithName);
+['pname','pcode'].forEach(k=>$(k).addEventListener('keydown',ev=>{if(ev.key==='Enter'){ev.preventDefault();startWithName();}}));
+$('codeBtn').addEventListener('click',ev=>{const box=$('codeBox'),open=box.hidden;saveProgress();box.hidden=!open;ev.currentTarget.setAttribute('aria-expanded',open?'true':'false');});
+$('codeCopy').addEventListener('click',ev=>{const b=ev.currentTarget,txt=$('codeShow').textContent;
+  try{navigator.clipboard.writeText(txt).then(()=>{b.textContent='Kopiert ✓';setTimeout(()=>{b.textContent='Kopieren';},1500);},()=>{});}catch(x){}});
+
+/* ================= Start ================= */
+makeRound('std');makeRound('ahs');
+setLevel(level);
+setLocked(true);
+$('pname').focus();
+
+/* ================= Eingabehilfe (Bildschirm-Tastatur) ================= */
+(function(){
+  const pad=$('pad'),sysBtn=$('padSys');
+  const touch=window.matchMedia&&matchMedia('(pointer: coarse)').matches;
+  let padOnly=touch,closed=false,cur=null;
+  try{const s=localStorage.getItem('padOnly');if(s!==null)padOnly=s==='1';}catch(x){}
+  function applyMode(){document.querySelectorAll('#exCard input.pin').forEach(i=>{if(padOnly)i.setAttribute('inputmode','none');else i.setAttribute('inputmode','text');});
+    sysBtn.textContent=padOnly?'Handy-Tastatur einblenden':'Handy-Tastatur ausblenden';}
+  window.padApply=applyMode;applyMode();
+  function show(input){cur=input;if(closed)return;pad.hidden=false;document.body.classList.add('padon');
+    const r=input.getBoundingClientRect();if(r.bottom>window.innerHeight-pad.offsetHeight-10)input.scrollIntoView({block:'center',behavior:'smooth'});}
+  function hide(){pad.hidden=true;document.body.classList.remove('padon');}
+  document.addEventListener('focusin',ev=>{const t=ev.target;if(t.tagName==='INPUT'&&t.classList.contains('pin')&&!t.readOnly)show(t);});
+  document.addEventListener('focusout',()=>setTimeout(()=>{const a=document.activeElement;if(!(a&&a.tagName==='INPUT'&&a.classList.contains('pin'))&&!(cur&&cur.isConnected&&/^g/.test(cur.dataset.kin||'')))hide();},150));
+  /* Eingabehilfe für ein Kästchen öffnen, ohne Fokus (iPad erlaubt Fokus nur nach direktem Antippen) */
+  window.padTarget=inp=>{closed=false;cur=inp;pad.hidden=false;document.body.classList.add('padon');};  /* ohne Scrollen, damit die Bausteine nicht verrutschen */
+  function insert(txt){if(!cur||!cur.isConnected)return;const s=cur.selectionStart??cur.value.length,e=cur.selectionEnd??cur.value.length;cur.setRangeText(txt,s,e,'end');cur.dispatchEvent(new Event('input',{bubbles:true}));}
+  /* nur pointerdown/mousedown abfangen – nie touchstart, sonst gehen die Tasten am Handy nicht */
+  pad.addEventListener('pointerdown',ev=>{if(ev.target.closest('button'))ev.preventDefault();});
+  pad.addEventListener('mousedown',ev=>{if(ev.target.closest('button'))ev.preventDefault();});
+  pad.addEventListener('click',ev=>{
+    const b=ev.target.closest('button');if(!b)return;
+    if(b.id==='padHide'){closed=true;hide();return;}
+    if(b.id==='padSys'){padOnly=!padOnly;try{localStorage.setItem('padOnly',padOnly?'1':'0');}catch(x){}applyMode();if(cur&&cur.isConnected){cur.blur();setTimeout(()=>cur.focus(),60);}return;}
+    if(!cur||!cur.isConnected)return;
+    if(b.dataset.ins!==undefined)insert(b.dataset.ins);
+    else if(b.dataset.act==='clr'){cur.value='';cur.dispatchEvent(new Event('input',{bubbles:true}));}
+    else if(b.dataset.act==='pm'){const v=cur.value.trim();cur.value=/^[−-]/.test(v)?v.replace(/^[−-]/,''):'−'+v.replace(/^\+/,'');cur.dispatchEvent(new Event('input',{bubbles:true}));}
+    else if(b.dataset.act==='left'){const s=Math.max(0,(cur.selectionStart??cur.value.length)-1);cur.setSelectionRange(s,s);}
+    else if(b.dataset.act==='right'){const s=Math.min(cur.value.length,(cur.selectionEnd??cur.value.length)+1);cur.setSelectionRange(s,s);}
+    else if(b.dataset.act==='del'){const s=cur.selectionStart??cur.value.length,e2=cur.selectionEnd??s;if(s!==e2)cur.setRangeText('',s,e2,'end');else if(s>0)cur.setRangeText('',s-1,s,'end');cur.dispatchEvent(new Event('input',{bubbles:true}));}
+    else if(b.dataset.act==='ok'){cur.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));}
+    if(cur&&cur.isConnected)cur.focus({preventScroll:true});
+  });
+  document.addEventListener('click',ev=>{if(ev.target.closest('[data-go],[data-act="next"],[data-act="prev"],[data-act="newround"],#newRound2'))closed=false;});
+})();
+</script></body></html>
