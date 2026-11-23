@@ -275,7 +275,7 @@ button.ready{background:var(--ink);color:var(--paper)}
       <p><b>Brüche:</b> (2/3)² = 4/9 · (−3/5)² = 9/25, aber −(3/5)² = −9/25 · √(16/49) = 4/7 · zuerst kürzen: √(8/18) = √(4/9) = 2/3</p>
       <p><b>Wurzeln:</b> √144 = 12 · √0,09 = 0,3 · √1600 = 40 · √(9/16) = 3/4 · √(a · b) = √a · √b · √(a : b) = √a : √b · <b>Achtung:</b> √(a + b) ≠ √a + √b</p>
       <p><b>Wurzel aus einem Produkt:</b> √(4 · 7) = √4 · √7 = 2√7 · √(3 · 25) = 5√3 – aus der Quadratzahl die Wurzel ziehen, die andere Zahl bleibt unter der Wurzel.</p>
-      <p><b>Teilweises Wurzelziehen:</b> größte Quadratzahl suchen: √72 = √(36 · 2) = 6√2 · mit Primfaktoren: √180 = √(2 · 2 · 3 · 3 · 5) = 2 · 3 · √5 = 6√5</p>
+      <p><b>Teilweises Wurzelziehen:</b> größte Quadratzahl suchen: √72 = √(36 · 2) = 6√2 · <i>AHS auch mit Primfaktoren:</i> √180 = √(2 · 2 · 3 · 3 · 5) = 2 · 3 · √5 = 6√5</p>
       <p><b>Wurzeln mit Variablen</b> (Variablen positiv): Hochzahl halbieren: √(x²) = x · √(a⁴) = a² · √(25a²) = 5a · √(12x²) = √(4x² · 3) = 2x√3 · √(x³) = √(x² · x) = x√x</p>
       <p><b>Irrationale Zahlen:</b> √2, √3, √5, π, 0,1010010001… – aber √16 = 4 ist rational, 0,3̅ = 1/3 auch!</p>
       <p class="hint">Eingabe: Dezimalzahl mit Komma (0,25), Bruch mit / (3/4), Wurzel mit √ aus der Eingabehilfe (2√7).</p>
@@ -308,7 +308,7 @@ button.ready{background:var(--ink);color:var(--paper)}
 </div>
 <script>
 /* ================= Zahlenmengen · Quadratzahlen · Wurzeln ================= */
-const STORE='zahlenmengen10z:';
+const STORE='zahlenmengen11:';
 const inpF=(f,val,label,ph,w)=>'<input class="pin" data-f="'+f+'" value="'+esc(val||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="'+label+'"'+(ph?' placeholder="'+ph+'"':'')+' style="width:'+(w||'5rem')+'">';
 const cm=x=>{let s=String(Math.round(x*1e6)/1e6);return s.replace('-','−').replace('.',',');};
 const FR=(a,b)=>'<span class="fr"><span>'+a+'</span><span>'+b+'</span></span>';
@@ -475,7 +475,7 @@ const TW_STD=[[8,2,2],[12,2,3],[18,3,2],[20,2,5],[27,3,3],[28,2,7],[32,4,2],[45,
 const TW_AHS=TW_STD.concat([[108,6,3],[180,6,5],[243,9,3],[288,12,2],[300,10,3],[500,10,5],[392,14,2],[150,5,6],[252,6,7]]);
 function pfz(n){const f=[];let m=n,p=2;while(m>1){while(m%p===0){f.push(p);m/=p;}p++;}return f.join(' · ');}
 function genTeil(i,lvl){const [n,a,b]=pick(lvl==='std'?TW_STD:TW_AHS);
-  const pre=i%3===2?'Primfaktorzerlegung: '+n+' = '+pfz(n)+'<br>':'';
+  const pre=lvl!=='std'&&i%3===2?'Primfaktorzerlegung: '+n+' = '+pfz(n)+'<br>':'';
   return {type:'root',q:pre+'<b>Zieh teilweise die Wurzel.</b> Zerlege so, dass eine Quadratzahl dabei ist: √50 = √(25 · 2) = 5√2',
     lhs:RT(n),a,b,sol:RT(n)+' = √('+(a*a)+' · '+b+') = '+a+'√'+b,
     h:'Suche die größte Quadratzahl, die in '+n+' steckt: '+n+' = '+(a*a)+' · '+b+' → √'+n+' = '+a+'√'+b+'.'};}
@@ -650,7 +650,7 @@ const SECS_STD=[
  {title:'Wurzeln im Kopf – auch aus Brüchen',name:'Wurzeln im Kopf',info:INFO.wu,hint:'Brüche als Bruch eingeben, z. B. 3/4.',n:8,type:ZM(genWurzel)},
  {title:'Wurzel aus einem Produkt',name:'Wurzel aus Produkt',info:INFO.pr,hint:'Schreib das Ergebnis mit dem Wurzelzeichen √ aus der Eingabehilfe, z. B. 2√7.',n:8,type:ZM(genProd)},
  {title:'Wurzeln gemischt – auch etwas schwerer',name:'Wurzeln S',info:INFO.wu+INFO.tw+INFO.va,hint:'Wurzel mit √, Bruch mit /, Hochzahl mit ▢², z. B. 6√2, 3x/4, 2a√a.',n:8,type:ZM(genV2w)},
- {title:'Teilweises Wurzelziehen mit Primfaktorzerlegung',name:'Primfaktoren',info:'<p>180 = 2 · 2 · 3 · 3 · 5 → √180 = √(2 · 2 · 3 · 3 · 5) = 2 · 3 · √5 = 6√5. Aus jedem <b>Paar</b> gleicher Primfaktoren kommt ein Faktor vor die Wurzel, der Rest bleibt darunter.</p>',hint:'Primfaktoren mit Malpunkt · eingeben, z. B. 2·2·3·3·5. Ergebnis mit √.',n:8,type:ZM(genPfz)},
+ {title:'Teilweises Wurzelziehen',name:'Teilweise Wurzel',info:'<p>Zerlege die Zahl unter der Wurzel in eine <b>Quadratzahl</b> mal eine Zahl, die keine Quadratzahl ist: √48 = √(16 · 3) = 4√3. Nimm die <b>größte</b> Quadratzahl, die hineinpasst (4, 9, 16, 25, 36, 49, 64, 81, 100 …).</p>',hint:'Zuerst zerlegen: Quadratzahl · Rest, dann die Wurzel ziehen, z. B. 4√3.',n:8,type:ZM(genTeil)},
  {title:'Irrationale Zahlen',name:'Irrationale Zahlen',info:INFO.ir,n:4,wide:true,type:ZM(genIrr)},
  {title:'Denken und begründen',name:'Denken',info:INFO.ir,n:4,wide:true,type:ZM(genV2d)},
  {title:'Mehr Übung: Wurzeln mit Variablen',name:'Wurzeln mit Variablen',info:INFO.va,hint:'Variablen stehen für positive Zahlen. Hochzahl mit der Taste ², z. B. a².',n:8,type:ZM(genVar)}];
