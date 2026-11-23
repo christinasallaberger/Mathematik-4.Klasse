@@ -281,6 +281,15 @@ input.cbx{width:3.6rem!important;text-align:center}.cvar{font-family:Georgia,ser
 @media (max-width:520px){.zerl .mono input{width:2.5rem!important}.zerl td{padding:.15rem .2rem}.zerl .vchip{min-width:1.6rem;padding:.05rem .2rem}}
 input.tbx{width:5.2rem!important;text-align:center}
 .tline .par{font-family:Georgia,serif;font-size:1.4rem;white-space:nowrap}
+.ca{background:#F8C9C9;border-radius:.25rem;padding:0 .12rem}.cb{background:#C8EBCB;border-radius:.25rem;padding:0 .12rem}
+.bfc{font:inherit;border:2px dashed var(--line);border-radius:.35rem;background:var(--field);padding:0 .2rem;color:var(--ink)}
+.bfc.ca{background:#F8C9C9;border:2px solid #D9534F}.bfc.cb{background:#C8EBCB;border:2px solid #3C9A47}
+.sbox{display:inline-block;width:2.6rem;height:2rem;vertical-align:middle;border:2px dashed var(--line);border-radius:.35rem;background:var(--field)}
+.sbox.ca{background:#F8C9C9;border:2px solid #D9534F}.sbox.cb{background:#C8EBCB;border:2px solid #3C9A47}
+.fbx{display:inline-block;border-radius:.4rem;padding:.1rem}.fbx.ca{background:#F8C9C9;outline:2px solid #D9534F}.fbx.cb{background:#C8EBCB;outline:2px solid #3C9A47}
+.tline button.bfc{font-family:Georgia,serif;font-size:1.5rem;line-height:1.3;padding:.05rem .35rem;margin:0 .1rem;border:2px dashed #7A8699;border-radius:.4rem;background:var(--field);color:var(--text);cursor:pointer;min-width:2.4rem}
+.tline button.bfc.ca{background:#F8C9C9;border:2px solid #D9534F;color:#1B2F6B}.tline button.bfc.cb{background:#C8EBCB;border:2px solid #3C9A47;color:#1B2F6B}
+.tline span.bfc.ca,.tline span.ca,.tline span.cb{color:#1B2F6B}
 </style>
 </head>
 <body>
@@ -652,10 +661,25 @@ function simpleBody(e){const t=e.t,sv=e.sv||{},sub=e.sub||0;let h='<div class="t
   if(t.kind==='heraus'&&e.zdone)h=zerlTab(e,false);
   if(t.kind==='heraus'){const hs=e.hs||{};h+='<div class="tline"><span class="eqs">=</span>'+sIn('f',e,'5rem','z. B. 3x')+'<span class="par">&nbsp;· (</span>'+t.terms.map((m,k)=>'<span class="cbox">'+(k?'<span class="par">&nbsp;'+(m.c<0?'−':'+')+'&nbsp;</span>':(m.c<0?'<span class="par">−</span>':''))+sIn('b'+k,e,'4.8rem','z. B. 2x')+'</span>').join('')+'<span class="par">)</span>'+btn+'</div>';}
   if(t.kind==='heraus')h+='<p class="srule">Größten gemeinsamen Faktor (Zahl <b>und</b> Variable) vor die Klammer, in die Klammer kommt, was übrig bleibt. Probe: ausmultiplizieren.</p>';
-  if(t.kind==='binf'){
-    if(sub===0)h+='<div class="tline"><span class="ln">a =&nbsp;</span>'+monoIn(e,'a',varsOf(t))+'<span class="ln">&nbsp;&nbsp; b =&nbsp;</span>'+monoIn(e,'b',varsOf(t))+btn+'</div><p class="srule">Schreib heraus, was <b style="color:var(--c4)">a</b> und was <b style="color:var(--c2)">b</b> ist (ohne Vorzeichen). '+(t.k===1?'(a + b)² = a² + 2ab + b²':t.k===2?'(a − b)² = a² − 2ab + b²':'(a + b)(a − b) = a² − b²')+'</p>';
-    else{const A=monoH(t.A),B=monoH(t.B),P=m=>Object.keys(m.v).length&&m.c!==1?'('+monoH(m)+')':monoH(m);
-      h+='<div class="tline ok"><span class="eqs">=</span><span class="ln">'+(t.k===3?P(t.A)+'<sup>2</sup> − '+P(t.B)+'<sup>2</sup>':P(t.A)+'<sup>2</sup> '+(t.k===2?'−':'+')+' 2 · '+A+' · '+B+' + '+P(t.B)+'<sup>2</sup>')+'</span> <span class="tick">✓</span></div><div class="tline"><span class="eqs">=</span>'+coefUI(e,t.res,e.rm||'')+btn+'</div><p class="srule">Ausrechnen: Rechenzeichen antippen (±), dann das ganze Glied ins Kästchen, z. B. 9x².</p>';}}
+  if(t.kind==='binf'){const bc=e.bc||{},sc=e.sc||{},C=x=>x==='a'?' ca':x==='b'?' cb':'',AH=monoH(t.A),BH=monoH(t.B),op=t.k===2?'−':'+';
+    /* Schritt 0: in der Angabe a rot und b grün markieren */
+    const chip=(r,html,live)=>live?'<button type="button" class="bfc'+C(bc[r])+'" data-bc="'+r+'">'+html+'</button>':'<span class="bfc'+C(r==='A'?'a':'b')+'">'+html+'</span>';
+    const live0=sub===0,q=t.k===3?'('+chip('A',AH,live0)+' + '+chip('B',BH,live0)+') · ('+(live0?AH:chip('A',AH,false))+' − '+(live0?BH:chip('B',BH,false))+')':'('+chip('A',AH,live0)+' '+op+' '+chip('B',BH,live0)+')<sup>2</sup>';
+    h='<div class="tline"><span class="ln">'+q+'</span>'+(sub===0?btn:'')+'</div>';
+    if(sub===0){h+='<p class="srule">Tippe die Glieder in der Klammer an: 1× = <b class="ca">a</b> rot, 2× = <b class="cb">b</b> grün. '+(t.k===1?'(a + b)² = a² + 2ab + b²':t.k===2?'(a − b)² = a² − 2ab + b²':'(a + b)(a − b) = a² − b²')+'</p>';return h+msgHTML(e,0);}
+    /* Schritt 1–2: leere Formel – Kästchen färben, dann a und b einsetzen */
+    const SL=t.k===3?['a','b']:['a','a','b','b'];
+    const box=(i,sq)=>{const c=sub>=2?C(SL[i]):C(sc[i]);let inner;
+      if(sub===1)inner='<button type="button" class="sbox'+c+'" data-sc="'+i+'" aria-label="Kästchen färben">&nbsp;</button>';
+      else if(sub===2)inner='<span class="fbx'+c+'">'+sIn('f'+i,e,'4.2rem','')+'</span>';
+      else inner='<span class="'+c.trim()+'">'+(SL[i]==='a'?AH:BH)+'</span>';
+      return sq?'('+inner+')<sup>2</sup>':inner;};
+    const skel=t.k===3?box(0,1)+' − '+box(1,1):box(0,1)+' '+op+' 2 · '+box(1,0)+' · '+box(2,0)+' + '+box(3,1);
+    h+='<div class="tline'+(sub>2?' ok':'')+'"><span class="eqs">=</span><span class="ln">'+skel+'</span>'+(sub===1||sub===2?btn:' <span class="tick">✓</span>')+'</div>';
+    if(sub===1){h+='<p class="srule">Das ist die leere Formel. Tippe jedes Kästchen an: <b class="ca">rot</b> für a, <b class="cb">grün</b> für b.</p>';return h+msgHTML(e,0);}
+    if(sub===2){h+='<p class="srule">Setz ein: in die roten Kästchen a = '+AH+', in die grünen b = '+BH+' (ohne Vorzeichen).</p>';return h+msgHTML(e,0);}
+    /* Schritt 3: Ergebnis selbst anschreiben */
+    h+='<div class="tline"><span class="eqs">=</span>'+sIn('res',e,'14rem','z. B. 9x² − 30x + 25')+btn+'</div><p class="srule">Rechne aus und schreib das Ergebnis an – mit Rechenzeichen, Zahlen und Buchstaben. Hochzahl mit ▢², z. B. 9x² − 30x + 25.</p>';}
   if(t.kind==='rueck'){const f=e.form||0;
     if(sub===0)h+='<div class="tline">'+[1,2,3].map(k=>'<button type="button" class="fbtn'+(f===k?' set':'')+'" data-form="'+k+'">'+(k===1?'(a + b)²':k===2?'(a − b)²':'(a + b) · (a − b)')+'</button>').join(' ')+btn+'</div><p class="srule">Welche Formel steckt dahinter? Drei Glieder mit + in der Mitte → (a + b)², mit − in der Mitte → (a − b)², nur zwei Glieder mit − → (a + b)(a − b).</p>';
     else{const a=monoIn(e,'a',varsOf(t)),b=monoIn(e,'b',varsOf(t));
@@ -702,10 +726,17 @@ function simpleCheck(e){const t=e.t,sv=e.sv||{},sub=e.sub||0;e.svm={};
     if(!same)return bad('Mach die Probe: '+monoH(f.m)+' mal jedes Glied in der Klammer muss wieder '+polyH(t.terms)+' ergeben.');
     if(Math.abs(f.m.c)!==t.F.c||key(f.m.v)!==key(t.F.v))return bad('Die Probe stimmt – aber in der Klammer steckt noch ein gemeinsamer Faktor. Hebe den <b>größten</b> Faktor heraus.');
     return done('Richtig herausgehoben!');}
-  if(t.kind==='binf'){if(sub===0){const a=rdMono(e,'a',varsOf(t)),b=rdMono(e,'b',varsOf(t));if(a.err||b.err)return soft('Schreib a und b jeweils als ein Glied, z. B. 3x und 5.');
-      const ok=sameM(a.m,t.A)&&sameM(b.m,t.B)||(t.k===1&&sameM(a.m,t.B)&&sameM(b.m,t.A));
-      if(!ok)return bad('a ist das erste Glied in der Klammer, b das zweite – ohne Vorzeichen.');e.sub=1;e.msg[0]={kind:'ok',text:'Richtig! Jetzt setz in die Formel ein und rechne aus.'};return;}
-    if(res(coefCheck(e,t.res,t.res)))done('Richtig ausgerechnet!');return;}
+  if(t.kind==='binf'){const SL=t.k===3?['a','b']:['a','a','b','b'];
+    if(sub===0){const bc=e.bc||{};if(!bc.A||!bc.B)return soft('Markiere beide Glieder in der Klammer: a rot, b grün.');if(bc.A!=='a'||bc.B!=='b')return bad('a ist das erste Glied in der Klammer (rot), b das zweite (grün).');e.sub=1;e.sc={};e.msg[0]={kind:'ok',text:'Richtig markiert! Jetzt färbe die Kästchen der leeren Formel.'};return;}
+    if(sub===1){const sc=e.sc||{};if(SL.some((_,i)=>!sc[i]))return soft('Färbe jedes Kästchen: rot für a, grün für b.');const w=SL.findIndex((r,i)=>sc[i]!==r);if(w>=0)return bad(t.k===3?'Zuerst kommt a², dann b².':'Die Formel heißt a² '+(t.k===2?'−':'+')+' 2 · a · b + b² – vorne a, hinten b, in der Mitte zuerst a, dann b.');e.sub=2;e.msg[0]={kind:'ok',text:'Richtig! Jetzt setz a und b ein.'};return;}
+    if(sub===2){for(let i=0;i<SL.length;i++){const raw=String(sv['f'+i]||'').trim();if(!raw)return soft('Schreib in jedes Kästchen dein a bzw. b.');const u=oneMono(raw);if(u.err)return soft(u.err);if(!sameM(u.m,SL[i]==='a'?t.A:t.B))return bad('In die roten Kästchen kommt a = '+monoH(t.A)+', in die grünen b = '+monoH(t.B)+' – ohne Vorzeichen.');}
+      e.sub=3;e.msg[0]={kind:'ok',text:'Richtig eingesetzt! Jetzt rechne aus.'};return;}
+    const raw=String(sv.res||'').trim();if(!raw)return soft('Schreib das Ergebnis an.');const r=parseTerm(raw);if(r.err)return soft(r.err);
+    const n=normalize(r.ms),w=normalize(t.res);if(n.length===w.length&&n.every((m,i)=>sameM(m,w[i]))){if(r.ms.length>n.length)return soft('Fasse noch ganz zusammen.');return done('Richtig ausgerechnet!');}
+    const mid=t.res.find(m=>key(m.v)===key(mul(t.A,t.B).v));
+    if(t.k!==3&&mid&&!n.some(m=>key(m.v)===key(mid.v)))return bad('Das mittlere Glied 2 · a · b fehlt!');
+    const sqA=mul(t.A,t.A);if(!n.some(m=>sameM(m,sqA)))return bad('Rechne a² nochmal: ('+monoH(t.A)+')² = '+monoH(sqA)+' – die Zahl wird auch quadriert.');
+    return bad('Rechne jedes Glied der Formel genau aus: '+(t.k===3?'a² − b²':'a² '+(t.k===2?'−':'+')+' 2 · a · b + b²')+'.');}
   if(t.kind==='rueck'){if(sub===0){if(!e.form)return soft('Wähle zuerst eine Formel.');if(e.form!==t.k)return bad('Schau auf das mittlere Glied: + → (a + b)², − → (a − b)². Nur zwei Glieder mit Minus → (a + b)(a − b).');e.sub=1;e.msg[0]={kind:'ok',text:'Richtig! Jetzt finde a und b.'};return;}
     const a=rdMono(e,'a',varsOf(t)),b=rdMono(e,'b',varsOf(t));if(a.err||b.err)return soft('Schreib a und b jeweils als ein Glied, z. B. 3x und 5.');
     const ok=(sameM(a.m,t.A)&&sameM(b.m,t.B))||(t.k!==3&&sameM(a.m,t.B)&&sameM(b.m,t.A));
@@ -715,7 +746,7 @@ function simpleSolve(e){const t=e.t;e.sv={};e.rc={};
   const zcs=ms=>{const ks=[...new Set(ms.map(m=>key(m.v)))];return ms.map(m=>1+ks.indexOf(key(m.v))%5);};
   if(t.kind==='zus'){e.zc=zcs(t.terms);e.sub=1;fill(t.terms);}if(t.kind==='klam'){e.face=t.s<0?'☹️':'😊';e.ks=t.inner.map(m=>(t.s*m.c)<0?'−':'+');e.zc=zcs(t.prods);e.sub=3;fill(t.prods);}
   if(t.kind==='mm'){e.sv.r=plainT(t.r);e.ms=t.r.c<0?'−':'+';}if(t.kind==='heraus'){e.sub=1;e.zdone=1;e.sv.f=plainT(t.F);t.inner.forEach((m,k)=>{e.sv['b'+k]=plainT(m);});}
-  if(t.kind==='binf'){setMono(e,'a',t.A);setMono(e,'b',t.B);e.sub=1;fill(t.res);}
+  if(t.kind==='binf'){e.bc={A:'a',B:'b'};const SL=t.k===3?['a','b']:['a','a','b','b'];e.sc={};SL.forEach((r,i)=>{e.sc[i]=r;e.sv['f'+i]=plainT(r==='a'?t.A:t.B);});e.sv.res=polyPlain(t.res);e.sub=3;}
   if(t.kind==='rueck'){e.form=t.k;e.sub=1;setMono(e,'a',t.A);setMono(e,'b',t.B);}
   e.shown=true;e.msg[0]={kind:'shown',text:'Die Lösung ist jetzt eingetragen – schau sie dir genau an.'};e.step=DONE;}
 function simpleAnsH(t){if(t.kind==='mm')return monoH(t.r);if(t.kind==='heraus')return monoH(t.F)+' · ('+polyH(t.inner)+')';
@@ -1105,6 +1136,8 @@ $('exCard').addEventListener('click',ev=>{
   if(b.dataset.face!==undefined&&e.t.kind==='klam'&&!(e.sub)){e.face=e.face==='😊'?'☹️':'😊';e.msg[0]=null;renderEx();return;}
   if(b.dataset.pen!==undefined){const c=+b.dataset.pen;e.pen=e.pen===c?0:c;renderEx();return;}
   if(b.dataset.zc!==undefined&&e.t.kind){const k=+b.dataset.zc;e.zc=e.zc||[];e.zc[k]=paint(e,e.zc[k]||0,((e.zc[k]||0)%8)+1);e.msg[0]=null;renderEx();return;}
+  if(b.dataset.bc!==undefined&&e.t.kind==='binf'&&!e.sub){e.bc=e.bc||{};const r=b.dataset.bc;e.bc[r]=e.bc[r]==='a'?'b':'a';e.msg[0]=null;renderEx();return;}
+  if(b.dataset.sc!==undefined&&e.t.kind==='binf'&&e.sub===1){e.sc=e.sc||{};const i=b.dataset.sc;e.sc[i]=e.sc[i]==='a'?'b':'a';e.msg[0]=null;renderEx();return;}
   if(b.dataset.msg!==undefined&&e.t.kind==='mm'){e.ms=e.ms==='+'?'−':'+';e.msg[0]=null;renderEx();return;}
   if(b.dataset.hs!==undefined&&e.t.kind==='heraus'){e.hs=e.hs||{};const k=b.dataset.hs;e.hs[k]=e.hs[k]==='+'?'−':'+';e.msg[0]=null;renderEx();return;}
   if(b.dataset.act==='skipz'&&e.t.kind==='heraus'&&!(e.sub)){e.sub=1;e.msg[0]=null;renderEx('step');return;}
@@ -1157,7 +1190,7 @@ function setLevel(l){
 document.querySelectorAll('.levels button').forEach(b=>b.addEventListener('click',()=>setLevel(b.dataset.level)));
 
 /* ================= Fortschritt: speichern (gleiches Gerät) & Code (anderes Gerät) ================= */
-const STORE='termemix7:',ALPH='23456789ABCDEFGHJKMNPQRSTUVWXYZ',AL=BigInt(ALPH.length),B=x=>BigInt(x);
+const STORE='termemix8:',ALPH='23456789ABCDEFGHJKMNPQRSTUVWXYZ',AL=BigInt(ALPH.length),B=x=>BigInt(x);
 const normName=s=>s.trim().replace(/\s+/g,' ').toLowerCase();
 function nameHash(n){let h=2166136261;for(const ch of normName(n)){h^=ch.codePointAt(0);h=Math.imul(h,16777619);}return (h>>>0)%1024;}
 function checkChar(s){let c=0;for(let k=0;k<s.length;k++)c=(c+(k+1)*ALPH.indexOf(s[k]))%ALPH.length;return ALPH[c];}
