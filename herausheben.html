@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+<script>/* Bestätigungsfenster: In manchen Apps (z. B. Vorschau am iPhone) werden sie blockiert und liefern sofort „Nein“ – dann trotzdem weitermachen */(function(){const n=window.confirm.bind(window);window.confirm=function(m){const t=Date.now();let r=false;try{r=n(m);}catch(x){return true;}return r||Date.now()-t<60;};})();</script>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Herausheben – gemeinsame Faktoren finden</title>
@@ -164,6 +166,9 @@ body.locked #main{opacity:.35;filter:grayscale(.4);pointer-events:none;user-sele
 #pad .keys button.span2{grid-column:span 2}
 #pad .keys button.go{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 body.padon .wrap{padding-bottom:20rem}
+.zerl{overflow-x:auto;margin:.4rem 0}.zerl table{width:auto;min-width:0;border-collapse:collapse;font-family:Georgia,serif;font-size:1.35rem}
+.zerl td{padding:.2rem .35rem;text-align:center;vertical-align:top}.zerl td.zt{border-bottom:2px solid var(--line)}.zerl td.zs{color:var(--ink);font-weight:700}
+.zerl input.wide{width:9rem}@media (max-width:520px){.zerl input.wide{width:6.6rem;font-size:1rem}.zerl table{font-size:1.15rem}.zerl td{padding:.15rem .15rem}}.zerl input.opin{width:2.4rem;text-align:center;font-weight:700}.zerl .rowmsg{font:.85rem system-ui;color:var(--bad);max-width:10rem}
 </style>
 </head>
 <body>
@@ -447,7 +452,12 @@ function judgeDec(t,s){
   return {ok:true,dec:r};
 }
 function check0(e){
-  const rs=e.data.terms.map((t,k)=>judgeDec(t,e.decVals[k]));
+  e.opMarks=[];const ops=e.opVals||[];
+  for(let k=1;k<e.data.terms.length;k++){const want=e.data.terms[k].c.n<0n?'-':'+',got=String(ops[k]||'').trim().replace(/[−–—]/g,'-');
+    if(!got){hint(e,0,'Schreib zwischen den Produkten das Rechenzeichen hin – genau wie im ursprünglichen Term (+ oder −).');e.opMarks[k]='bad';return false;}
+    if(got!==want){e.opMarks[k]='bad';fail(e,0,'Das Rechenzeichen zwischen den Produkten stimmt nicht – schau im ursprünglichen Term nach.');return false;}e.opMarks[k]='ok';}
+  const vals=e.data.terms.map((t,k)=>{const v=String(e.decVals[k]||'').trim();return k&&t.c.n<0n&&v&&!/^[−-]/.test(v)?'−'+v:v;});
+  const rs=e.data.terms.map((t,k)=>judgeDec(t,vals[k]));
   const ok=rowCheck(e,0,rs,e.decMarks,e.decHints,'Richtig! In jedem Glied steckt jetzt derselbe Faktor.','Nicht alle Zerlegungen stimmen – schau dir die rot markierten an.');
   if(!ok)return false;
   const decs=rs.map(r=>r.dec),com=commonToks(decs),gc=Number(e.data.g.c.n),have=numProd(com);
@@ -523,7 +533,7 @@ function canonMarks(e){
 }
 function showSolution(e,s){
   const d=e.data;
-  if(s===0){e.decs=canonDecs(d);e.common=commonToks(e.decs);e.decVals=e.decs.map(decPlain);e.decMarks=e.decs.map(()=>'ok');e.decHints=e.decs.map(()=>'');
+  if(s===0){e.opVals=d.terms.map(t=>t.c.n<0n?'−':'+');e.opMarks=[];e.decs=canonDecs(d);e.common=commonToks(e.decs);e.decVals=e.decs.map(decPlain);e.decMarks=e.decs.map(()=>'ok');e.decHints=e.decs.map(()=>'');
     e.marks=e.decs.map(x=>x.toks.map(()=>false));e.msg[0]={kind:'shown',text:'Die Zerlegungen sind jetzt eingetragen – rechne sie nach.'};}
   if(s===1){e.marks=canonMarks(e);e.msg[1]={kind:'shown',text:'Die gleichen Faktoren sind jetzt markiert.'};}
   if(s===2){e.preVal=polyPlain([d.g]);e.innerVal=polyPlain(d.qs);e.preMark=e.innerMark='ok';
@@ -566,13 +576,13 @@ function renderEx(focus){
 
   /* Schritt 1 */
   h+='<div class="stepcard '+(e.step===0?'active':'done')+'"><h3>1. Zerlege jedes Glied in Faktoren</h3>';
-  if(e.step===0)h+='<p>Zerlege so, dass in jedem Glied <b>derselbe Faktor</b> vorkommt – nimm den größten: 36<i>x</i> + 8 = 4 · 9 · <i>x</i> + 4 · 2. Potenzen als einzelne Variablen: <i>x</i><sup>2</sup> = <i>x</i> · <i>x</i>. Ist das Glied negativ, schreib − davor.</p>';
-  d.terms.forEach((t,k)=>{
-    h+='<div class="row"><span class="badge">'+(k+1)+'</span>'+termH(t,true)+' = ';
-    if(e.step===0)h+=inp('data-di="'+k+'"',e.decVals[k],'wide'+(e.decMarks[k]?' '+e.decMarks[k]:''),'Zerlegung von Glied '+(k+1),'z. B. 4·9·x·x')+'<span class="rowmsg">'+esc(e.decHints[k])+'</span>';
-    else h+='<b>'+(e.decs[k].neg?MINUS:'')+e.decs[k].toks.map(tokH).join(' · ')+'</b>';
-    h+='</div>';
-  });
+  if(e.step===0)h+='<p>Zerlege so, dass in jedem Glied <b>derselbe Faktor</b> vorkommt – nimm den größten: 36<i>x</i> + 8 = 4 · 9 · <i>x</i> + 4 · 2. Potenzen als einzelne Variablen: <i>x</i><sup>2</sup> = <i>x</i> · <i>x</i>. Schreib das <b>Rechenzeichen</b> zwischen den Produkten selbst hin (+ oder −). Ist das erste Glied negativ, schreib − davor.</p>';
+  {const ops=e.opVals||[],c1=[],c2=[];
+    d.terms.forEach((t,k)=>{const neg=t.c.n<0n;
+      if(k){c1.push('<td class="zs">'+(neg?MINUS:'+')+'</td>');c2.push('<td class="zs">'+(e.step===0?inp('data-op="'+k+'"',ops[k]||'','opin'+((e.opMarks||[])[k]?' '+e.opMarks[k]:''),'Rechenzeichen vor Glied '+(k+1),'±'):(neg?MINUS:'+'))+'</td>');}
+      c1.push('<td class="zt">'+(k?termH(t,true).replace(/^\s*[−-]\s*/,''):termH(t,true))+'</td>');
+      c2.push('<td class="zi">'+(e.step===0?inp('data-di="'+k+'"',e.decVals[k],'wide'+(e.decMarks[k]?' '+e.decMarks[k]:''),'Zerlegung von Glied '+(k+1),k===0&&neg?'z. B. −2·3·x':'z. B. 4·9·x·x')+(e.decHints[k]?'<div class="rowmsg">'+esc(e.decHints[k])+'</div>':''):'<b>'+(k===0&&e.decs[k].neg?MINUS:'')+e.decs[k].toks.map(tokH).join(' · ')+'</b>')+'</td>');});
+    h+='<div class="zerl"><table><tr>'+c1.join('')+'</tr><tr>'+c2.join('')+'</tr></table></div>';}
   if(e.step===0)h+='<div class="actions"><button type="button" data-act="check0">Zerlegung prüfen</button></div>';
   h+=msgHTML(e,0)+'</div>';
 
@@ -699,6 +709,7 @@ $('exCard').addEventListener('input',ev=>{
   const t=ev.target,e=curEx();
   const clearRow=()=>{t.classList.remove('ok','bad');const rm=t.parentNode.querySelector('.rowmsg');if(rm)rm.textContent='';};
   if(t.dataset.di!==undefined){const k=+t.dataset.di;e.decVals[k]=t.value;e.decMarks[k]=null;e.decHints[k]='';clearRow();}
+  else if(t.dataset.op!==undefined){e.opVals=e.opVals||[];e.opVals[+t.dataset.op]=t.value;(e.opMarks||[])[+t.dataset.op]=null;t.classList.remove('ok','bad');}
   else if(t.hasAttribute('data-pre')){e.preVal=t.value;e.preMark=null;t.classList.remove('ok','bad');}
   else if(t.hasAttribute('data-inner')){e.innerVal=t.value;e.innerMark=null;t.classList.remove('ok','bad');}
   updatePrev(t);
@@ -723,7 +734,7 @@ function setLevel(l){
 document.querySelectorAll('.levels button').forEach(b=>b.addEventListener('click',()=>setLevel(b.dataset.level)));
 
 /* ================= Fortschritt: speichern (gleiches Gerät) & Code (anderes Gerät) ================= */
-const STORE='heraus3:',ALPH='23456789ABCDEFGHJKMNPQRSTUVWXYZ',AL=B(ALPH.length);
+const STORE='heraus3o:',ALPH='23456789ABCDEFGHJKMNPQRSTUVWXYZ',AL=B(ALPH.length);
 const normName=s=>s.trim().replace(/\s+/g,' ').toLowerCase();
 function nameHash(n){let h=2166136261;for(const ch of normName(n)){h^=ch.codePointAt(0);h=Math.imul(h,16777619);}return (h>>>0)%1024;}
 function checkChar(s){let c=0;for(let k=0;k<s.length;k++)c=(c+(k+1)*ALPH.indexOf(s[k]))%ALPH.length;return ALPH[c];}
