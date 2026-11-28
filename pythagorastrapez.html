@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pythagoras im gleichschenkeligen Trapez</title>
+<meta name="uebersicht-kapitel" content="Pythagoräischer Lehrsatz">
+<meta name="uebersicht-thema" content="Gleichschenkeliges Trapez">
+<meta name="uebersicht-info" content="Aufbau wie „Pythagoras im Rechteck und Quadrat“: Hypotenuse und Katheten antippen, Stück berechnen, Formel mit H und K, Formel mit den Buchstaben (abwechselnd selbst schreiben oder auswählen), Zahlen einsetzen, berechnen, Wurzel ziehen – Gleichschenkeliges Trapez">
+<meta name="uebersicht-gruppe" content="4. Klasse">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#fdfdf9; --grid:#d6e4f2; --ink:#1b2a4a; --pen:#1d4ed8; --muted:#5b6b85;
+  --red:#c62828; --red-soft:#fdecea; --green:#2e7d32; --green-soft:#e6f4e7;
+  --marker:#ffe36e; --tri:#eaf1fb; --card:#ffffff; --line:#c9d6e6; --btn:#1b2a4a; --btn-ink:#ffffff;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#151b26; --grid:#222d3e; --ink:#e6ecf5; --pen:#8fb1ff; --muted:#9aa8bf;
+    --red:#ff7a7a; --red-soft:#3a1e22; --green:#6fd17a; --green-soft:#17301c;
+    --marker:#7a6516; --tri:#1e2a3e; --card:#1b2231; --line:#33415a; --btn:#e6ecf5; --btn-ink:#151b26;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#151b26; --grid:#222d3e; --ink:#e6ecf5; --pen:#8fb1ff; --muted:#9aa8bf;
+  --red:#ff7a7a; --red-soft:#3a1e22; --green:#6fd17a; --green-soft:#17301c;
+  --marker:#7a6516; --tri:#1e2a3e; --card:#1b2231; --line:#33415a; --btn:#e6ecf5; --btn-ink:#151b26;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; color:var(--ink); background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;
+  font-family:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif; font-size:17px; line-height:1.5;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 18px 60px}
+header h1{font-family:"Patrick Hand","Comic Sans MS",cursive;font-weight:400;font-size:clamp(34px,6vw,52px);line-height:1.05;margin:0 0 6px;color:var(--pen)}
+header p{margin:0 0 20px;color:var(--muted);max-width:60ch}
+.controls{display:flex;flex-wrap:wrap;gap:14px 22px;margin-bottom:22px}
+.seg{display:inline-flex;border:2px solid var(--ink);border-radius:10px;overflow:hidden;background:var(--card)}
+.seg button{font:inherit;font-size:15px;border:0;background:transparent;color:var(--ink);padding:7px 14px;cursor:pointer}
+.seg button+button{border-left:2px solid var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper);font-weight:700}
+.ctl-label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.namein{font:inherit;font-size:16px;padding:7px 12px;border:2px solid var(--ink);border-radius:10px;background:var(--card);color:var(--ink);width:240px;max-width:100%}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:22px;align-items:start}
+@media (max-width:820px){.grid{grid-template-columns:1fr}}
+.sheet{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:18px}
+.task{font-size:20px;margin:0 0 8px}
+.task b{font-family:"Patrick Hand",cursive;font-size:26px;color:var(--pen);font-weight:400}
+svg{width:100%;height:auto;display:block}
+.side{stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+.side.hyp{stroke:var(--red);stroke-width:4}
+.side.unk{stroke-dasharray:8 6}
+.tri{fill:var(--tri)}
+.ra{fill:none;stroke:var(--ink);stroke-width:2}
+.dot{fill:var(--ink)}
+.lbl{font-family:"Patrick Hand",cursive;font-size:21px;fill:var(--ink)}
+.lbl.unk{fill:var(--pen)}
+.lbl.hypt{fill:var(--red)}
+.merke{margin-top:10px;font-size:15px;color:var(--muted)}
+.merke span{background:var(--marker);color:var(--ink);padding:1px 6px;border-radius:3px}
+.way-title{margin:18px 0 4px;font-size:15px;color:var(--muted)}
+.way{font-family:"Patrick Hand",cursive;font-size:25px;line-height:1.55;color:var(--pen);min-height:44px;border-left:3px solid var(--red);padding-left:14px}
+.way:empty::before{content:"Hier entsteht dein Rechenweg.";color:var(--muted);font-size:19px}
+.wline{animation:write .35s ease-out}
+@keyframes write{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+.wline.final{display:inline-block;border-bottom:3px double var(--pen);margin-top:2px}
+.steps{display:flex;flex-direction:column;gap:12px}
+.step{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px 16px}
+.step.solved{border-color:var(--green)}
+.step-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.num{flex:none;width:30px;height:30px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-weight:700;font-size:15px}
+.step.solved .num{background:var(--green);border-color:var(--green);color:var(--card)}
+.step h3{margin:0;font-size:18px}
+.step p{margin:0 0 8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{font:inherit;font-family:"Patrick Hand",cursive;font-size:23px;min-width:56px;padding:4px 14px;border:2px solid var(--ink);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer}
+.opt:hover:not(:disabled){background:var(--tri)}
+.opt.good{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.opt.wrongb{background:var(--red-soft);border-color:var(--red);color:var(--red);text-decoration:line-through}
+.opt:disabled{cursor:default}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:"Patrick Hand",cursive;font-size:25px}
+.eq sup{font-size:17px;margin-left:-4px;align-self:flex-start;margin-top:4px}
+.n{font:inherit;font-family:"Patrick Hand",cursive;font-size:24px;width:84px;padding:2px 8px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);color:var(--pen);text-align:center}
+.n.wide{width:110px}
+.n.word{width:150px}
+.n.opsel{width:64px;padding:2px 4px}
+.opt.word{font-size:22px}
+.n:disabled{border-color:var(--green);color:var(--green)}
+.check,.next{font:inherit;font-size:16px;font-weight:700;padding:8px 16px;border-radius:10px;border:0;background:var(--btn);color:var(--btn-ink);cursor:pointer;margin-left:6px}
+.check:disabled{opacity:.35;cursor:default}
+.fb{font-size:15px;margin-top:8px}
+.fb:empty{display:none}
+.fb.bad{color:var(--red);background:var(--red-soft);padding:8px 10px;border-radius:8px}
+.fb.ok{color:var(--green)}
+.link{font:inherit;font-size:15px;background:none;border:0;padding:0;color:var(--pen);text-decoration:underline;cursor:pointer;margin-left:6px}
+.done{background:var(--green-soft);border:2px solid var(--green);border-radius:14px;padding:16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.done[hidden]{display:none}
+.done p{margin:0;font-size:18px}
+.lbl .sub{font-size:16px;fill:var(--muted)}
+.score{font-size:15px;color:var(--muted);margin:0 0 12px}
+.namerow{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.namerow .next{margin-left:0}
+.namein.locked{border-color:var(--line);background:transparent;font-weight:700;cursor:default}
+[hidden]{display:none!important}
+.summary{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:20px}
+.summary h2{font-family:"Patrick Hand",cursive;font-weight:400;font-size:32px;line-height:1.1;color:var(--pen);margin:0 0 14px}
+.sumhead,.sumstats{display:flex;flex-wrap:wrap;gap:10px 28px;margin-bottom:16px}
+.sumhead span,.sumstats span{display:block;font-size:13px;color:var(--muted)}
+.sumhead b{font-size:18px}
+.sumstats{gap:10px}
+.sumstats div{border:2px solid var(--line);border-radius:12px;padding:10px 14px;min-width:120px}
+.sumstats b{font-size:26px}
+.tablewrap{overflow-x:auto;margin-bottom:14px}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:680px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:13px;color:var(--muted);font-weight:700}
+tr.okrow td:first-child{box-shadow:inset 4px 0 var(--green)}
+tr.errrow td:first-child{box-shadow:inset 4px 0 var(--red)}
+.sumnote{color:var(--muted);font-size:15px}
+.summary .next{margin-left:0}
+button:focus-visible,input:focus-visible{outline:3px solid var(--pen);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.wline{animation:none}}
+.rectbg{fill:none}
+.side2{stroke:var(--muted);stroke-width:2;stroke-linecap:round}
+.idrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px}
+.idl{font-family:"Patrick Hand",cursive;font-size:28px;min-width:30px;color:var(--pen)}
+.opt.sel{background:var(--tri);border-color:var(--pen);color:var(--pen)}
+.check.solo{margin-left:0;margin-top:4px}
+.hit{stroke:transparent;stroke-width:30;stroke-linecap:round;cursor:pointer;pointer-events:stroke;-webkit-tap-highlight-color:transparent}
+.lbl{pointer-events:none}
+.side.legok{stroke:var(--pen);stroke-width:4}
+.side.flash,.side2.flash{stroke:var(--red);stroke-width:5;stroke-dasharray:none}
+.tapnote{text-align:center;font-weight:700;color:var(--pen);margin:4px 0 0;font-size:16px}
+.n.letter{width:64px}
+.tag{font-size:14px;color:var(--muted)}
+#sumTime h3{margin:1.2rem 0 .3rem;font-size:1.05rem}.tnote{font-size:.95rem;color:var(--muted)}.tnote b{color:var(--bad,var(--red,#c62828))}
+.side.dash,.side2.dash{stroke-dasharray:6 5}
+.vlb{font:700 14px "Atkinson Hyperlegible",sans-serif;fill:var(--muted);pointer-events:none}
+.hitp,.hitall{fill:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.n.expr{width:104px}
+.navt{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 10px}
+.dotb,.navb{font:inherit;font-weight:700;width:38px;height:38px;border-radius:50%;border:2px solid var(--ink);background:var(--card);color:var(--ink);cursor:pointer;padding:0}
+.navb{border-radius:10px}
+.opt.sel{background:var(--marker);border-color:var(--ink)}
+#demoFinger{position:fixed;z-index:999;font-size:34px;pointer-events:none;transition:left .6s ease,top .6s ease,transform .2s;display:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
+#demoFinger.tap{transform:scale(.8)}
+ol.howto{margin:.3rem 0 .6rem 1.2rem;padding:0;line-height:1.5}
+.navlab{width:100%;font-weight:700;color:var(--ink);font-size:15px}.navb:disabled{opacity:.3;cursor:default}
+.dotb.started{background:var(--tri)}.dotb.ok{background:var(--green-soft);border-color:var(--green);color:var(--green)}.dotb.cur{box-shadow:0 0 0 3px var(--marker)}
+.quiz{max-width:680px}
+.qprog{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;font-size:15px;color:var(--muted)}
+.qbar{height:12px;border-radius:6px;background:var(--line);overflow:hidden}.qbar span{display:block;height:100%;background:var(--green)}
+.qstate{font-family:"Patrick Hand",cursive;font-size:26px;color:var(--pen);margin:6px 0 12px}.qyn .qopt{font-size:22px;padding:8px 18px}
+.qcard h3{font-size:19px}
+.lbl{font-size:20px}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.05;margin:0 .1em;font-size:.8em}
+.fr>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .15em}
+.task .fr{font-size:.75em}
+details.merkebox{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px 18px;margin-top:22px}
+details.merkebox summary{cursor:pointer;font-weight:700;font-size:18px}
+details.merkebox p{margin:.5rem 0;line-height:1.6}
+details.merkebox .copy{background:var(--marker);color:var(--ink);border-radius:6px;padding:6px 10px}
+details.merkebox .rule{font-size:18px}
+details.merkebox .hint{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Pythagoras im gleichschenkeligen Trapez</h1>
+    <p>Erkenne das rechtwinklige Dreieck, bestimme Hypotenuse und Katheten und berechne die gesuchte Strecke – Schritt für Schritt, wie im Heft.</p>
+  </header>
+
+  <div class="controls">
+    <div>
+      <label class="ctl-label" for="name">Dein Name</label>
+      <div class="namerow"><input id="name" class="namein" autocomplete="off" placeholder="Vor- und Nachname"><button class="next" id="nameOk">Los geht's</button></div>
+    </div>
+    <div><span class="ctl-label">Reiter</span><div class="seg" id="tabs"><button data-t="eig" aria-pressed="true">Eigenschaften</button><button data-t="auf" aria-pressed="false">Aufgaben</button><button data-t="txt" aria-pressed="false">Textaufgaben</button></div></div>
+    <div id="lvlbox"><span class="ctl-label">Niveau</span><div class="seg" id="lvl"><button data-l="std" aria-pressed="true">Standard</button><button data-l="ahs" aria-pressed="false">Standard AHS</button></div></div>
+  </div>
+
+  <p class="score" id="score">Gelöst: 0 von 4, davon ohne Fehler: 0</p>
+
+  <div class="grid">
+    <div class="sheet">
+      <div class="navt" id="nav"></div><p class="task" id="taskText"></p>
+      <div id="fig"></div>
+      <p class="way-title">Rechenweg</p>
+      <div class="way" id="way"></div>
+    </div>
+    <div>
+      <div class="steps" id="steps"></div>
+      <div class="done" id="done" hidden>
+        <p id="doneText"></p>
+        <button class="next" id="nextBtn">Nächste Aufgabe</button>
+      </div>
+    </div>
+  </div>
+<section class="quiz" id="quiz" hidden></section>
+<details class="merkebox">
+    <summary>Zusammenfassung – schreib sie in dein Heft!</summary>
+    <p class="copy">✏️ <b>Schreib diese Zusammenfassung mit den Beispielen ordentlich in dein Heft ab.</b></p>
+      <p>Die Höhe h schneidet links und rechts ein rechtwinkeliges Dreieck ab. Die Schenkel sind gleich lang: <b>d = b</b>. Das Stück unten heißt <b>x</b>: a = c + 2x.</p>
+      <p class="rule">x = (a − c) : 2 &nbsp;·&nbsp; b<sup>2</sup> = x<sup>2</sup> + h<sup>2</sup> &nbsp;·&nbsp; h<sup>2</sup> = b<sup>2</sup> − x<sup>2</sup> &nbsp;·&nbsp; x<sup>2</sup> = b<sup>2</sup> − h<sup>2</sup></p>
+      <p><b>Beispiel 1:</b> a = 33 m, c = 23 m, h = 12 m → x = (33 − 23) : 2 = 5 m → b = √(5<sup>2</sup> + 12<sup>2</sup>) = √169 = 13 m</p>
+      <p><b>Beispiel 2:</b> a = 24 m, b = 13 m, h = 12 m → x = √(13<sup>2</sup> − 12<sup>2</sup>) = 5 m → c = 24 − 2 · 5 = 14 m</p>
+      <p>A = (a + c) · h : 2 &nbsp;·&nbsp; u = a + 2b + c</p>
+  </details>
+<section class="summary" id="summary" hidden></section>
+</div>
+
+<script>
+const B=x=>BigInt(x);
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const LBL='abcdefghijkl';
+let RNG=Math.random;
+const rnd=(a,b)=>a+Math.floor(RNG()*(b-a+1));
+const pick=a=>a[rnd(0,a.length-1)];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=rnd(0,i);[a[i],a[j]]=[a[j],a[i]];}return a;}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
+function gcdN(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a;}
+/* Zahl lesen: 12 · 1,5 · 1.5 · 3/2 · 1 1/2 · 3:2 */
+function num(s){s=String(s||'').replace(/[−–—]/g,'-').replace(/\s+/g,' ').trim().replace(/\s*(cm|mm|m|km|l|kg|g|€|Teile|Teil)\s*$/i,'').trim();if(!s)return NaN;
+  let m=s.match(/^(-?)(\d+) (\d+)\/(\d+)$/);if(m)return (m[1]?-1:1)*(+m[2]+m[3]/m[4]);
+  s=s.replace(/\s+/g,'');
+  m=s.match(/^(-?\d+(?:[.,]\d+)?)[\/:](\d+(?:[.,]\d+)?)$/);if(m)return +m[1].replace(',','.')/+m[2].replace(',','.');
+  s=s.replace(',','.');return /^-?\d+(\.\d+)?$/.test(s)?+s:NaN;}
+const near=(a,b)=>Math.abs(a-b)<=1e-6*Math.max(1,Math.abs(b));
+/* schöne Anzeige: 1,5 · 0,25 */
+const cm=x=>{let s=String(Math.round(x*1000)/1000);return s.replace('-','−').replace('.',',');};
+/* Streckungsfaktor als Bruch, falls „schön“: 3/2 */
+function fracTxt(x){for(let d=1;d<=12;d++){const n=Math.round(x*d);if(Math.abs(n/d-x)<1e-9)return d===1?String(n):n/gcdN(n,d)+'/'+d/gcdN(n,d);}return cm(x);}
+const FR=(a,b)=>'<span class="fr"><span>'+a+'</span><span>'+b+'</span></span>';
+/* Eingabefeld */
+const inp=(s,f,lab,w,dn,cls)=>'<input class="pin'+(cls?' '+cls:'')+(s.fs&&s.fs[f]?' '+s.fs[f]:'')+'" data-f="'+f+'" value="'+esc(s.v[f]||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="'+lab+'" style="width:'+(w||'4.6rem')+'"'+(dn?' readonly':'')+'>';
+const done_=s=>s.res===true||s.res==='shown';
+/* Auswahlknöpfe (data-set) */
+const choiceH=(s,key,labels,dn)=>'<div class="choice">'+labels.map((l,j)=>'<button type="button" data-set="'+key+'" data-v="'+j+'" aria-pressed="'+(s.v[key]===String(j))+'"'+(dn?' disabled':'')+'>'+l+'</button>').join('')+'</div>';
+/* Felder der Reihe nach prüfen: list = [[feld, soll, hinweis]] */
+function checkFields(s,list){const fs=s.fs||{};s.fs=fs;let first=null;
+  for(const [f,want,hint] of list){const u=num(s.v[f]);
+    if(isNaN(u)){fs[f]='bad';if(!first)first={soft:'Schreib eine Zahl, z. B. 4,5 oder 3/2.'};continue;}
+    if(near(u,want))fs[f]='ok';else{fs[f]='bad';if(!first)first=typeof hint==='function'?hint(u):hint;}}
+  return first||true;}
+
+/* ================= Pythagoras-Werkzeug: markieren – Stück berechnen – Formel – Wurzel – rechnen ================= */
+/* Namen wie im Buch: e/2, h_a, d1, dR, a − x … */
+function nmH(n){if(/\/2$/.test(n))return FR(nmH(n.slice(0,-2)),'2');if(n==='dR')return 'd<sub>R</sub>';if(/^d[123]$/.test(n))return 'd<sub>'+n[1]+'</sub>';
+  if(/^h_[ab]$/.test(n))return 'h<sub>'+n[2]+'</sub>';return '<i>'+n+'</i>';}
+function nmS(n){const sub=(b,s)=>b+'<tspan baseline-shift="sub" font-size="72%">'+s+'</tspan>';if(/\/2$/.test(n))return nmS(n.slice(0,-2))+'/2';
+  if(n==='dR')return sub('d','R');if(/^d[123]$/.test(n))return sub('d',n[1]);if(/^h_[ab]$/.test(n))return sub('h',n[2]);return n;}
+const sqH=n=>(/[\/ ]/.test(n)?'('+nmH(n)+')':nmH(n))+'<sup>2</sup>';
+const nmT=n=>n.replace('dR','d_R');
+/* Punkte eines Körpers schräg darstellen (x nach rechts, y nach hinten, z nach oben) */
+const pr=(x,y,z)=>[x+0.6*y*Math.cos(0.7),z+0.6*y*Math.sin(0.7)];
+/* rechtwinkelige Dreiecke: Pythagoräische Tripel */
+const TRIP=[[3,4,5],[5,12,13],[8,15,17],[7,24,25],[20,21,29],[12,35,37],[28,45,53],[33,56,65],[48,55,73],[36,77,85],[39,80,89],[65,72,97],[6,8,10],[9,12,15]];
+/* Katheten k1, k2 und Hypotenuse h; nice = mit ganzzahligem Ergebnis */
+function tri(lvl,nice,max){max=max||90;for(let g=0;g<300;g++){
+  if(nice||RNG()<.45){const T=pick(TRIP),m=T[2]<=30?rnd(1,Math.max(1,Math.floor(max/T[2]))):1;let [k1,k2,h]=T.map(x=>x*m);if(lvl==='ahs'&&RNG()<.3){k1/=2;k2/=2;h/=2;}
+    if(h>max*1.3)continue;return RNG()<.5?{k1,k2,h}:{k1:k2,k2:k1,h};}
+  const k1=rnd(3,max*0.7|0),k2=rnd(3,max*0.7|0);if(k1===k2||Math.max(k1,k2)/Math.min(k1,k2)>3)continue;const h=Math.sqrt(k1*k1+k2*k2);if(Math.abs(h-Math.round(h))<1e-9)continue;return {k1,k2,h};}}
+const UNITS=['mm','cm','dm','m'];
+/* gerundetes Ergebnis akzeptieren (eine Dezimalstelle bzw. ganze Zahl bei großen Werten) */
+const okRound=(u,v)=>near(u,v)||Math.abs(u-v)<=0.0501+1e-9||(Math.abs(v)>=100&&Math.abs(u-v)<=0.5);
+const rd=v=>cm(Math.round(v*10)/10);
+
+/* ---------- Zeichnung ---------- */
+function drawFig(t,s,stage){const F=t.fig,P=F.P,W=340,Hh=280,m=30;const ks=Object.keys(P),xs=ks.map(k=>P[k][0]),ys=ks.map(k=>P[k][1]);
+  const minx=Math.min(...xs),maxx=Math.max(...xs),miny=Math.min(...ys),maxy=Math.max(...ys),k=Math.min((W-2*m)/((maxx-minx)||1),(Hh-2*m)/((maxy-miny)||1));
+  const T=p=>[m+(p[0]-minx)*k,m+(maxy-p[1])*k],Q={};ks.forEach(n=>Q[n]=T(P[n]));
+  const ctr=[(Math.min(...ks.map(n=>Q[n][0]))+Math.max(...ks.map(n=>Q[n][0])))/2,(Math.min(...ks.map(n=>Q[n][1]))+Math.max(...ks.map(n=>Q[n][1])))/2];
+  const [R,U,V]=F.tri,tc=[(Q[R][0]+Q[U][0]+Q[V][0])/3,(Q[R][1]+Q[U][1]+Q[V][1])/3];
+  let h='<svg class="pyf" viewBox="0 0 '+W+' '+(Math.ceil((maxy-miny)*k)+2*m)+'">';
+  h+='<polygon class="tri" points="'+[R,U,V].map(n=>Q[n].join(',')).join(' ')+'"/>';
+  F.edges.forEach(([p,q,d])=>{h+='<line class="'+(d?'eh':'ed')+'" x1="'+Q[p][0]+'" y1="'+Q[p][1]+'" x2="'+Q[q][0]+'" y2="'+Q[q][1]+'"/>';});
+  /* rechter Winkel */
+  const u1=[Q[U][0]-Q[R][0],Q[U][1]-Q[R][1]],u2=[Q[V][0]-Q[R][0],Q[V][1]-Q[R][1]],l1=Math.hypot(...u1),l2=Math.hypot(...u2),r=Math.min(11,l1/3,l2/3);
+  const a=[u1[0]/l1*r,u1[1]/l1*r],b=[u2[0]/l2*r,u2[1]/l2*r];
+  h+='<path class="ra" d="M'+(Q[R][0]+a[0])+' '+(Q[R][1]+a[1])+' L'+(Q[R][0]+a[0]+b[0])+' '+(Q[R][1]+a[1]+b[1])+' L'+(Q[R][0]+b[0])+' '+(Q[R][1]+b[1])+'"/><circle class="rad" cx="'+(Q[R][0]+(a[0]+b[0])*.5)+'" cy="'+(Q[R][1]+(a[1]+b[1])*.5)+'" r="1.4"/>';
+  /* Dreiecksseiten: markierbar */
+  const mk=s.v.mk||{},sides={K1:[R,U],K2:[R,V],H:[U,V]},showMk=stage==='mark'||!!t.markDone(s);
+  Object.keys(sides).forEach(sd=>{const [p,q]=sides[sd],c=showMk?(mk[sd]||''):'';h+='<line class="ts '+(c==='H'?'mH':c==='K'?'mK':'')+'" x1="'+Q[p][0]+'" y1="'+Q[p][1]+'" x2="'+Q[q][0]+'" y2="'+Q[q][1]+'"/>';});
+  /* Beschriftungen */
+  const lab=(p,q,txt,inTri,f)=>{f=f||.5;const mx=Q[p][0]+(Q[q][0]-Q[p][0])*f,my=Q[p][1]+(Q[q][1]-Q[p][1])*f,c=inTri?tc:ctr;let nx=-(Q[q][1]-Q[p][1]),ny=Q[q][0]-Q[p][0];const l=Math.hypot(nx,ny)||1;nx/=l;ny/=l;
+    if((mx-c[0])*nx+(my-c[1])*ny<0){nx=-nx;ny=-ny;}return '<text class="sl" text-anchor="middle" x="'+(mx+nx*13)+'" y="'+(my+ny*13+5)+'">'+nmS(txt)+'</text>';};
+  const triSeg=(p,q)=>[[R,U],[R,V],[U,V]].some(([x,y])=>(x===p&&y===q)||(x===q&&y===p));
+  (F.lab||[]).forEach(([p,q,txt,f])=>{h+=lab(p,q,txt,triSeg(p,q),f);});
+  (F.vl||[]).forEach(([n,txt])=>{const d=[Q[n][0]-ctr[0],Q[n][1]-ctr[1]],l=Math.hypot(...d)||1;h+='<text class="vtx" text-anchor="middle" x="'+(Q[n][0]+d[0]/l*12)+'" y="'+(Q[n][1]+d[1]/l*12+4)+'">'+txt+'</text>';});
+  /* Tippflächen: breite Streifen um die Seiten (an den Enden etwas kürzer, damit man die richtige Seite trifft) */
+  if(stage==='mark')['H','K1','K2'].forEach(sd=>{const [p,q]=sides[sd],dx=Q[q][0]-Q[p][0],dy=Q[q][1]-Q[p][1],l=Math.hypot(dx,dy)||1,nx=-dy/l*13,ny=dx/l*13,s0=Math.min(.18,9/l);
+    const A=[Q[p][0]+dx*s0,Q[p][1]+dy*s0],B2=[Q[q][0]-dx*s0,Q[q][1]-dy*s0];
+    h+='<polygon class="hitl" data-act="m'+sd+'" points="'+[[A[0]+nx,A[1]+ny],[B2[0]+nx,B2[1]+ny],[B2[0]-nx,B2[1]-ny],[A[0]-nx,A[1]-ny]].map(z=>z.join(',')).join(' ')+'"/>';});
+  return h+'</svg>';}
+
+/* ---------- Aufgabe aufbereiten ---------- */
+function mkTask(o){/* o: {fig, names:{H,K1,K2}, vals, sq, given, unk, pre, post, tiles, u, q, ident, sach} */
+  const t=Object.assign({type:'py'},o);t.st=[].concat(o.ident?['id']:[],['mark'],o.pre&&o.pre.length?['pre']:[],['gen','spec','root','calc'],o.sach?['cmp']:[]);
+  t.markDone=null;return t;}
+const NL=lvl=>lvl;
+const sqv=(t,n)=>t.sq&&t.sq[n]!==undefined?t.sq[n]:t.vals[n]*t.vals[n];
+function rootSol(t){const {H,K1,K2}=t.names;return t.unk===H?{sl:[K1,K2],op:'+'}:{sl:[H,t.unk===K1?K2:K1],op:'−'};}
+function resVal(t){const r=rootSol(t),a=sqv(t,r.sl[0]),b=sqv(t,r.sl[1]);return Math.sqrt(r.op==='+'?a+b:a-b);}
+/* ---------- Anzeige ---------- */
+const slotH=(s,j,sq,ph)=>{const v=(s.v.sl||[])[j];const bad=s.v.slBad&&s.v.slBad.includes(j);return '<button type="button" class="slot'+(v?' full':'')+(bad?' bad':'')+'" data-act="x'+j+'" aria-label="Kästchen '+(j+1)+'">'+(v?(sq?(v==='Hypotenuse'||v==='Kathete'?v+'<sup>2</sup>':sqH(v)):nmH(v)):(ph||'&nbsp;'))+'</button>';};
+const tilesH=(list,used)=>'<div class="tiles">'+list.map((n,j)=>'<button type="button" class="tile'+(used&&used.includes(j)?' used':'')+'" data-act="t'+j+'">'+(n==='Hypotenuse'||n==='Kathete'?n:nmH(n))+'</button>').join('')+'</div>';
+function stepLines(t,s,upto){const L=[],{H,K1,K2}=t.names,r=rootSol(t),dn=done_(s);
+  const has=x=>dn||t.st.indexOf(x)<upto;
+  if(t.ident&&has('id'))L.push('Die eingezeichnete Strecke ist '+nmH(H)+'.');
+  if(has('mark'))L.push('Hypotenuse: <b>'+nmH(H)+'</b> · Katheten: <b>'+nmH(K1)+'</b> und <b>'+nmH(K2)+'</b>');
+  if(t.pre&&has('pre'))t.pre.forEach(([n,l,v,u])=>L.push(n+' = '+l+' = '+(u==='sq'?cm(v):cm(v)+' '+t.u)));
+  if(has('gen'))L.push('Hypotenuse<sup>2</sup> = Kathete<sup>2</sup> + Kathete<sup>2</sup>');
+  if(has('spec'))L.push(sqH(H)+' = '+sqH(K1)+' + '+sqH(K2));
+  if(has('root'))L.push(nmH(t.unk)+' = √<span class="ov">'+sqH(r.sl[0])+' '+r.op+' '+sqH(r.sl[1])+'</span>');
+  return L.length?'<div class="done">'+L.map(x=>'<div>✓ '+x+'</div>').join('')+'</div>':'';}
+function renderPy(t,s){const dn=done_(s),si=dn?t.st.length:(s.v.si||0),stg=t.st[si],{H,K1,K2}=t.names;
+  t.markDone=s2=>t.st.indexOf('mark')<(done_(s2)?99:(s2.v.si||0));
+  if(dn){s.v.mk={H:'H',K1:'K',K2:'K'};}
+  let h='<div class="zq">'+t.q+'</div>'+drawFig(t,s,stg)+stepLines(t,s,si);
+  const n0=t.st.indexOf(stg)+1,num=['①','②','③','④','⑤','⑥','⑦','⑧'][n0-1]||'';
+  if(stg==='id')h+='<p class="small">'+num+' Welche Strecke ist im gelben Dreieck die längste Seite (rot gestrichelt gedacht)? Tippe ihren Namen an.</p>'+tilesH(t.ident);
+  if(stg==='mark')h+='<p class="small">'+num+' Markiere im gelben Dreieck: Wähle den Stift und tippe die Seiten an.</p><div class="pens"><button type="button" class="pen pH" data-act="pH" aria-pressed="'+((s.v.pen||'H')==='H')+'">Hypotenuse</button><button type="button" class="pen pK" data-act="pK" aria-pressed="'+(s.v.pen==='K')+'">Kathete</button></div><div class="trow"><button type="button" class="mini" data-act="mchk">Markierung prüfen</button><span class="small">Die Hypotenuse liegt gegenüber vom rechten Winkel.</span></div>';
+  if(stg==='pre')h+='<p class="small">'+num+' Berechne zuerst das Stück, das du im Dreieck brauchst:</p>'+t.pre.map(([n,l,v,u],j)=>'<div class="trow big">'+n+' = '+l+' = '+inp(s,'p'+j,'Stück '+(j+1),'5.4rem',dn)+' '+(u==='sq'?'':t.u)+'</div>').join('');
+  if(stg==='gen')h+='<p class="small">'+num+' Der Satz des Pythagoras allgemein – tippe die Bausteine in die Kästchen:</p><div class="frm">'+slotH(s,0,1)+' = '+slotH(s,1,1)+' + '+slotH(s,2,1)+'</div>'+tilesH(['Hypotenuse','Kathete']);
+  if(stg==='spec')h+='<p class="small">'+num+' Jetzt mit den Namen aus dem Dreieck:</p><div class="frm">'+slotH(s,0,1)+' = '+slotH(s,1,1)+' + '+slotH(s,2,1)+'</div>'+tilesH(t.tiles,s.v.sx);
+  if(stg==='root')h+='<p class="small">'+num+' Gesucht ist '+nmH(t.unk)+'. Stelle die Formel mit Wurzel auf'+(t.unk===H?'':' (eine Kathete ist gesucht!)')+':</p><div class="frm">'+nmH(t.unk)+' = √( '+slotH(s,0,1)+' <span class="ops"><button type="button" class="op'+(s.v.op==='+'?' on':'')+'" data-act="o+">+</button><button type="button" class="op'+(s.v.op==='−'?' on':'')+'" data-act="o-">−</button></span> '+slotH(s,1,1)+' )</div>'+tilesH(t.tiles,s.v.sx);
+  if(stg==='calc'||dn){const r=rootSol(t);h+='<p class="small">'+(dn?'':num+' ')+'Setze ein und rechne aus'+(t.round===false?'':' – runde auf eine Dezimalstelle')+':</p>'+
+      '<div class="trow big">'+nmH(t.unk)+' = √( '+inp(s,'q0',r.sl[0]+'²','5.2rem',dn)+' '+r.op+' '+inp(s,'q1',r.sl[1]+'²','5.2rem',dn)+' )</div><div class="trow big">'+nmH(t.unk)+' ≈ '+inp(s,'r','Ergebnis','5.2rem',dn)+' '+t.u+'</div>'+
+      (t.post?'<div class="trow big">'+nmH(t.post[0])+' = '+t.post[1]+' = '+inp(s,'pp',t.post[0],'5.2rem',dn)+' '+t.u+'</div>':'');
+    if(!dn)h+='<p class="small">In die Kästchen kommen die Zahlen zum Quadrat, z. B. 7<sup>2</sup> = 49.</p>';}
+  if(stg==='cmp'||(dn&&t.sach))h+='<p class="small">'+t.sach.q+'</p>'+choiceH(s,'y',['Ja','Nein'],dn);
+  return h;}
+/* ---------- Bedienung ---------- */
+function wrong(s,txt){s.msg={kind:'bad',text:txt,offer:(s.tries=(s.tries||0)+1)>=2};s.errs=(s.errs||0)+1;}
+function next(s,txt){s.v.si=(s.v.si||0)+1;s.v.sl=[];s.v.sx=[];s.v.slBad=null;s.msg={kind:'ok',text:'✓ '+txt};}
+function actPy(t,s,a){const stg=t.st[s.v.si||0],{H,K1,K2}=t.names;s.v.sl=s.v.sl||[];s.v.sx=s.v.sx||[];
+  if(stg==='id'&&a[0]==='t'){const n=t.ident[+a.slice(1)];if(n===H)next(s,'Richtig – das ist '+nmH(H)+'.');else wrong(s,'Schau, welche Fläche das Dreieck schneidet: Boden (d₁), vorne (d₂), Seite (d₃) – oder quer durch den Körper (d<sub>R</sub>)?');return null;}
+  if(stg==='mark'){if(a==='pH'||a==='pK'){s.v.pen=a[1];return null;}s.v.mk=s.v.mk||{};
+    if(a[0]==='m'&&a!=='mchk'){const sd=a.slice(1),pen=s.v.pen||'H';s.v.mk[sd]=s.v.mk[sd]===pen?'':pen;s.msg=null;return null;}
+    if(a==='mchk'){const m=s.v.mk;if(!m.H&&!m.K1&&!m.K2){s.msg={kind:'bad',text:'Markiere zuerst die drei Seiten des gelben Dreiecks.'};return null;}
+      if(m.H==='H'&&m.K1==='K'&&m.K2==='K'){next(s,'Richtig markiert!');return null;}
+      wrong(s,m.H!=='H'?'Die Hypotenuse ist die längste Seite – sie liegt <b>gegenüber</b> vom rechten Winkel.':'Die beiden Seiten am rechten Winkel sind die <b>Katheten</b>.');return null;}return null;}
+  if(stg==='gen'||stg==='spec'||stg==='root'){const tiles=stg==='gen'?['Hypotenuse','Kathete']:t.tiles,nSl=stg==='root'?2:3;
+    if(a[0]==='x'){const j=+a.slice(1);s.v.sl[j]=undefined;s.v.sx[j]=undefined;s.v.slBad=null;s.msg=null;return null;}
+    if(a==='o+'||a==='o-'){s.v.op=a==='o+'?'+':'−';}
+    if(a[0]==='t'){const ti=+a.slice(1),n=tiles[ti];if(stg!=='gen'&&s.v.sx.includes(ti))return null;let j=0;while(j<nSl&&s.v.sl[j])j++;if(j>=nSl)return null;s.v.sl[j]=n;s.v.sx[j]=ti;s.msg=null;}
+    const sl=s.v.sl;if([...Array(nSl).keys()].some(j=>!sl[j])||(stg==='root'&&!s.v.op))return null;
+    if(stg==='gen'){if(sl[0]==='Hypotenuse'&&sl[1]==='Kathete'&&sl[2]==='Kathete'){next(s,'Genau: Hypotenuse² = Kathete² + Kathete².');return null;}
+      s.v.slBad=[0,1,2].filter(j=>sl[j]!==(j?'Kathete':'Hypotenuse'));wrong(s,'Die Hypotenuse steht allein auf einer Seite, die beiden Katheten werden addiert. Tippe ein Kästchen an, um es zu leeren.');return null;}
+    if(stg==='spec'){const ok0=sl[0]===H,okK=[sl[1],sl[2]].sort().join()===[K1,K2].sort().join();
+      if(ok0&&okK){next(s,'Richtig: '+sqH(H)+' = '+sqH(K1)+' + '+sqH(K2)+'.');return null;}
+      s.v.slBad=[0,1,2].filter(j=>j?![K1,K2].includes(sl[j]):!ok0);wrong(s,!ok0?'Links steht die Hypotenuse – die Seite, die du rot markiert hast: '+nmH(H)+'.':'Rechts stehen die beiden Katheten aus dem gelben Dreieck.');return null;}
+    const r=rootSol(t),okOp=s.v.op===r.op,ok=r.op==='+'?[sl[0],sl[1]].sort().join()===r.sl.slice().sort().join():(sl[0]===r.sl[0]&&sl[1]===r.sl[1]);
+    if(okOp&&ok){s.v.rsl=sl.slice();next(s,'Richtig! Jetzt einsetzen.');return null;}
+    s.v.slBad=[0,1];wrong(s,t.unk===H?'Die Hypotenuse ist gesucht → die beiden Katheten<sup>2</sup> <b>addieren</b>.':'Eine Kathete ist gesucht → Hypotenuse<sup>2</sup> <b>minus</b> die andere Kathete<sup>2</sup>: '+nmH(t.unk)+' = √('+sqH(H)+' − …).');return null;}
+  return null;}
+function checkPy(t,s){const stg=t.st[s.v.si||0];
+  if(stg==='pre'){const r=checkFields(s,t.pre.map(([n,l,v],j)=>['p'+j,v,n+' = '+l+'.']));if(r!==true)return r;next(s,'Stück berechnet.');return {soft:s.msg.text,kind:'ok'};}
+  if(stg==='calc'){const r0=rootSol(t),sl=s.v.rsl||r0.sl;
+    let r=checkFields(s,[['q0',sqv(t,sl[0]),'In das erste Kästchen kommt '+sqH(sl[0])+(t.sq&&t.sq[sl[0]]!==undefined?' – das hast du oben schon ausgerechnet.':' = '+cm(t.vals[sl[0]])+' · '+cm(t.vals[sl[0]])+'.')],['q1',sqv(t,sl[1]),'In das zweite Kästchen kommt '+sqH(sl[1])+(t.sq&&t.sq[sl[1]]!==undefined?'.':' = '+cm(t.vals[sl[1]])+' · '+cm(t.vals[sl[1]])+'.')]]);if(r!==true)return r;
+    const v=resVal(t),u=num(s.v.r);if(isNaN(u)){s.fs.r='bad';return {soft:'Schreib das Ergebnis als Zahl.'};}
+    if(!okRound(u,v)){s.fs.r='bad';return 'Zieh die Wurzel: √'+cm(r0.op==='+'?sqv(t,sl[0])+sqv(t,sl[1]):sqv(t,sl[0])-sqv(t,sl[1]))+' ≈ ? (Taschenrechner, auf eine Dezimalstelle runden).';}s.fs.r='ok';
+    if(t.post){const p=num(s.v.pp);if(isNaN(p)||Math.abs(p-t.post[2](v))>0.11+1e-9){s.fs.pp='bad';return isNaN(p)?{soft:'Fülle noch die letzte Zeile aus.'}:'Letzte Zeile: '+nmH(t.post[0])+' = '+t.post[1]+'.';}s.fs.pp='ok';}
+    if(t.sach){s.v.si=(s.v.si||0)+1;s.msg=null;return {soft:'✓ Richtig gerechnet! Jetzt die Frage beantworten.',kind:'ok'};}
+    return true;}
+  if(stg==='cmp'){const want=t.sach.yes?0:1;return +s.v.y===want?true:t.sach.why;}
+  return {soft:'Mach zuerst die Schritte darüber fertig.'};}
+const PY={autoCheck:true,incomplete:'Mach zuerst alle Schritte fertig.',
+  complete(t,s){const stg=t.st[s.v.si||0];if(stg==='pre')return t.pre.every((_,j)=>(s.v['p'+j]||'').trim());if(stg==='calc')return ['q0','q1','r'].concat(t.post?['pp']:[]).every(f=>(s.v[f]||'').trim());if(stg==='cmp')return s.v.y!==undefined;return false;},
+  render:renderPy,onAct:actPy,check:checkPy,
+  solve(t,s){const r=rootSol(t);s.v.si=t.st.length;s.v.mk={H:'H',K1:'K',K2:'K'};s.v.rsl=r.sl;(t.pre||[]).forEach(([n,l,v],j)=>s.v['p'+j]=cm(v));s.v.q0=cm(sqv(t,r.sl[0]));s.v.q1=cm(sqv(t,r.sl[1]));
+    const v=resVal(t);s.v.r=rd(v);if(t.post)s.v.pp=rd(t.post[2](v));if(t.sach)s.v.y=String(t.sach.yes?0:1);s.fs={};},
+  solH(t){const r=rootSol(t),v=resVal(t);return nmH(t.unk)+' = √('+sqH(r.sl[0])+' '+r.op+' '+sqH(r.sl[1])+') = √('+cm(sqv(t,r.sl[0]))+' '+r.op+' '+cm(sqv(t,r.sl[1]))+') ≈ '+rd(v)+' '+t.u+(t.post?'; '+nmH(t.post[0])+' ≈ '+rd(t.post[2](v))+' '+t.u:'')+(t.sach?'; '+(t.sach.yes?'Ja':'Nein'):'');}};
+/* gemischte Übung: Aufgabenarten in jeder Runde neu gemischt */
+function mixGen(kinds){let order=[];return (i,lvl)=>{if(i===0||!order.length)order=shuffle(kinds.slice());return order[i%order.length](i,lvl);};}
+const TYP=gen=>Object.assign({gen},PY);
+var givenTxt=(t,list)=>list.map(n=>nmH(n)+' = '+cm(t.vals[n])+' '+t.u).join(', ');
+
+/* ================= Vierecke ================= */
+const V=n=>nmH(n);
+const ex=(...p)=>p.join(' ');   /* Rechenweg-Text */
+const tilesOf=(names,extra)=>shuffle(names.concat(extra).filter((x,j,A)=>A.indexOf(x)===j));
+const qTxt=(fig,t,given,target)=>'<b>'+fig+':</b> Gegeben: '+givenTxt(t,given)+'. Berechne <b>'+V(target)+'</b>!';
+/* ---------- Raute ---------- */
+function raute(kind){return (i,lvl)=>{const u=pick(UNITS),T=tri(lvl,kind!=='a');const e2=T.k1,f2=T.k2,a=T.h,c=1,sn=0;   /* e waagrecht, f senkrecht – passt zu „breit“ und „hoch“ */
+  const vals={a,e:2*e2,f:2*f2,'e/2':e2,'f/2':f2};
+  const fig={P:{A:[-e2*c,-e2*sn],C:[e2*c,e2*sn],B:[f2*sn,-f2*c],D:[-f2*sn,f2*c],M:[0,0]},edges:[['A','B'],['B','C'],['C','D'],['D','A'],['A','C'],['B','D']],tri:['M','A','B'],
+    lab:[['A','B','a'],['C','D','a'],['M','A','e/2'],['M','B','f/2'],['M','C','e/2'],['M','D','f/2']],vl:[['A','A'],['B','B'],['C','C'],['D','D']],full:{a:[['A','B'],['B','C'],['C','D'],['D','A']],e:[['A','C']],f:[['B','D']]}};
+  const o={fig,names:{H:'a',K1:'e/2',K2:'f/2'},vals,u,tiles:tilesOf(['a','e/2','f/2'],['e','f'])};
+  if(kind==='a'){Object.assign(o,{unk:'a',pre:[[V('e/2'),'e : 2 = '+cm(vals.e)+' : 2',e2],[V('f/2'),'f : 2 = '+cm(vals.f)+' : 2',f2]]});o.q=qTxt('Raute',{vals,u},['e','f'],'a');}
+  if(kind==='f'){Object.assign(o,{unk:'f/2',pre:[[V('e/2'),'e : 2 = '+cm(vals.e)+' : 2',e2]],post:['f','2 · '+V('f/2'),v=>2*v]});o.q=qTxt('Raute',{vals,u},['a','e'],'f');}
+  if(kind==='e'){Object.assign(o,{unk:'e/2',pre:[[V('f/2'),'f : 2 = '+cm(vals.f)+' : 2',f2]],post:['e','2 · '+V('e/2'),v=>2*v]});o.q=qTxt('Raute',{vals,u},['a','f'],'e');}
+  return mkTask(o);};}
+/* ---------- Parallelogramm ---------- */
+function parallelogramm(kind){return (i,lvl)=>{const u=pick(UNITS);let T,x,h,a;
+  if(kind==='b'||kind==='h'){T=tri(lvl,kind==='h',60);x=T.k1;h=T.k2;a=x+rnd(Math.max(3,x|0),Math.max(6,(x*2)|0));}
+  else if(kind==='f'){T=tri(lvl,false,70);h=T.k1;const ax=T.k2;x=rnd(2,Math.max(3,(ax*0.6)|0));a=ax+x;}
+  else{T=tri(lvl,false,80);h=T.k1;const apx=T.k2;x=rnd(2,Math.max(3,(apx*0.35)|0));a=apx-x;if(a<=x){a=apx-2;x=2;}}
+  const b=Math.hypot(x,h),vals={a,x,h,b,'a − x':a-x,'a + x':a+x};
+  const P={A:[0,0],B:[a,0],C:[a+x,h],D:[x,h],F:[x,0],E:[a+x,0]};
+  const edges=[['A','B'],['B','C'],['C','D'],['D','A'],['D','F',1]],lab=[['A','B','a'],['A','D','b'],['D','C','a'],['F','D','h'],['A','F','x']];
+  const o={u,vals};
+  if(kind==='b'||kind==='h'){Object.assign(o,{fig:{P,edges,tri:['F','A','D'],lab,vl:[['A','A'],['B','B'],['C','C'],['D','D']]},names:{H:'b',K1:'x',K2:'h'},tiles:tilesOf(['b','x','h'],['a','f'])});
+    if(kind==='b'){o.unk='b';o.q=qTxt('Parallelogramm',{vals,u},['x','h'],'b');}else{o.vals.b=T.h;o.unk='h';o.q=qTxt('Parallelogramm',{vals,u},['b','x'],'h');}}
+  if(kind==='f'){vals.f=Math.hypot(h,a-x);Object.assign(o,{fig:{P,edges:edges.concat([['D','B']]),tri:['F','D','B'],lab:lab.concat([['F','B','a − x'],['D','B','f']]),vl:[['A','A'],['B','B'],['C','C'],['D','D']]},
+    names:{H:'f',K1:'h',K2:'a − x'},tiles:tilesOf(['f','h','a − x'],['a','x','b']),unk:'f',pre:[['<i>a</i> − <i>x</i>',cm(a)+' − '+cm(x),a-x]]});o.q=qTxt('Parallelogramm',{vals,u},['a','x','h'],'f');}
+  if(kind==='e'){vals.e=Math.hypot(h,a+x);Object.assign(o,{fig:{P,edges:edges.concat([['A','C'],['B','E',1],['E','C',1]]),tri:['E','A','C'],lab:[['A','B','a'],['D','C','a'],['A','D','b'],['A','E','a + x'],['E','C','h'],['A','C','e'],['A','F','x']],vl:[['A','A'],['B','B'],['C','C'],['D','D']]},
+    names:{H:'e',K1:'a + x',K2:'h'},tiles:tilesOf(['e','h','a + x'],['a','x','b']),unk:'e',pre:[['<i>a</i> + <i>x</i>',cm(a)+' + '+cm(x),a+x]]});o.q=qTxt('Parallelogramm',{vals,u},['a','x','h'],'e');}
+  o.fig.full={a:[['A','B'],['D','C']],b:[['A','D'],['B','C']],h:[['D','F']],x:[['A','F']],f:[['D','B']],e:[['A','C']]};
+  return mkTask(o);};}
+/* ---------- Deltoid ---------- */
+function deltoid(kind){return (i,lvl)=>{const u=pick(UNITS),nice=['x','y','f','e'].includes(kind);let T=tri(lvl,nice,60),f2=T.k2,x,y,a,b;
+  if(kind==='a'||kind==='x'||kind==='f'||kind==='e'){x=T.k1;a=T.h;const T2=tri(lvl,kind==='e',60);y=Math.max(x*1.3,rnd((x*1.4)|0,(x*2.5)|0+2));b=Math.hypot(y,f2);if(kind==='e'){/* y aus Tripel mit gleichem f/2 nicht nötig */}}
+  else{y=T.k1;b=T.h;x=Math.max(2,rnd((y*0.35)|0||2,(y*0.7)|0||3));a=Math.hypot(x,f2);}
+  const vals={a,b,x,y,f:2*f2,'f/2':f2,e:x+y};
+  const P={T:[0,x],Bt:[0,-y],L:[-f2,0],R:[f2,0],M:[0,0]},edges=[['T','L'],['T','R'],['Bt','L'],['Bt','R'],['T','Bt'],['L','R']];
+  const lab=[['T','L','a'],['T','R','a'],['Bt','L','b'],['Bt','R','b'],['M','T','x'],['M','Bt','y'],['M','R','f/2'],['M','L','f/2']];
+  const top=['a','x','b'].includes(kind)?kind!=='b':true,bot=kind==='b'||kind==='y';
+  const o={u,vals,fig:{P,edges,tri:bot?['M','Bt','R']:['M','T','R'],lab}};
+  if(bot){o.names={H:'b',K1:'y',K2:'f/2'};o.tiles=tilesOf(['b','y','f/2'],['f','a','x']);}else{o.names={H:'a',K1:'x',K2:'f/2'};o.tiles=tilesOf(['a','x','f/2'],['f','b','y']);}
+  const preF=[[V('f/2'),'f : 2 = '+cm(vals.f)+' : 2',f2]];
+  if(kind==='a'){Object.assign(o,{unk:'a',pre:preF});o.q=qTxt('Deltoid',{vals,u},['x','f'],'a');}
+  if(kind==='b'){Object.assign(o,{unk:'b',pre:preF});o.q=qTxt('Deltoid',{vals,u},['y','f'],'b');}
+  if(kind==='x'){Object.assign(o,{unk:'x',pre:preF});o.q=qTxt('Deltoid',{vals,u},['a','f'],'x');}
+  if(kind==='y'){o.vals.b=T.h;Object.assign(o,{unk:'y',pre:preF});o.q=qTxt('Deltoid',{vals,u},['b','f'],'y');}
+  if(kind==='f'){Object.assign(o,{unk:'f/2',post:['f','2 · '+V('f/2'),v=>2*v]});o.q=qTxt('Deltoid',{vals,u},['a','x'],'f');}
+  if(kind==='e'){Object.assign(o,{unk:'x',pre:preF,post:['e','x + y = x + '+cm(y),v=>v+y]});o.q=qTxt('Deltoid',{vals,u},['a','f','y'],'e');}
+  o.fig.full={a:[['T','L'],['T','R']],b:[['Bt','L'],['Bt','R']],e:[['T','Bt']],f:[['L','R']],x:[['M','T']],y:[['M','Bt']]};
+  return mkTask(o);};}
+/* ---------- gleichschenkeliges Trapez ---------- */
+function trapez(kind){return (i,lvl)=>{const u=pick(UNITS),T=tri(lvl,['h','c','aa'].includes(kind),50),x=T.k1,h=T.k2,c=rnd(Math.max(3,(x*0.8)|0),Math.max(6,(x*2.5)|0)),a=c+2*x,b=T.h;
+  const vals={a,b,c,h,x,'a − x':a-x},P={A:[0,0],B:[a,0],C:[a-x,h],D:[x,h],F:[x,0],G:[a-x,0]};
+  const edges=[['A','B'],['B','C'],['C','D'],['D','A'],['D','F',1],['C','G',1]],lab=[['A','B','a'],['D','C','c'],['A','D','b'],['B','C','b'],['F','D','h'],['A','F','x'],['G','B','x']],vl=[['A','A'],['B','B'],['C','C'],['D','D']];
+  const o={u,vals,fig:{P,edges,tri:['F','A','D'],lab,vl},names:{H:'b',K1:'x',K2:'h'},tiles:tilesOf(['b','x','h'],['a','c'])};
+  const preX=[['<i>x</i>','(a − c) : 2 = ('+cm(a)+' − '+cm(c)+') : 2',x]];
+  if(kind==='b'){Object.assign(o,{unk:'b',pre:preX});o.q=qTxt('Gleichschenkeliges Trapez',{vals,u},['a','c','h'],'b');}
+  if(kind==='h'){Object.assign(o,{unk:'h',pre:preX});o.q=qTxt('Gleichschenkeliges Trapez',{vals,u},['a','c','b'],'h');}
+  if(kind==='c'){Object.assign(o,{unk:'x',post:['c','a − 2 · x = '+cm(a)+' − 2 · x',v=>a-2*v]});o.q=qTxt('Gleichschenkeliges Trapez',{vals,u},['a','b','h'],'c');}
+  if(kind==='aa'){Object.assign(o,{unk:'x',post:['a','c + 2 · x = '+cm(c)+' + 2 · x',v=>c+2*v]});o.q=qTxt('Gleichschenkeliges Trapez',{vals,u},['c','b','h'],'a');}
+  if(kind==='e'){vals.e=Math.hypot(h,a-x);Object.assign(o,{fig:{P,edges:edges.concat([['A','C']]),tri:['G','A','C'],lab:[['A','B','a'],['D','C','c'],['A','D','b'],['G','C','h'],['A','G','a − x'],['G','B','x'],['A','C','e']],vl},
+    names:{H:'e',K1:'a − x',K2:'h'},tiles:tilesOf(['e','h','a − x'],['a','c','x']),unk:'e',pre:preX.concat([['<i>a</i> − <i>x</i>',cm(a)+' − '+cm(x),a-x]])});o.q=qTxt('Gleichschenkeliges Trapez',{vals,u},['a','c','h'],'e');}
+  o.fig.full={a:[['A','B']],c:[['D','C']],b:[['A','D'],['B','C']],h:[['D','F'],['C','G']],x:[['A','F'],['G','B']],e:[['A','C']]};
+  return mkTask(o);};}
+
+
+const ROUND=4;
+const PLAN=[trapez('b'),trapez('h'),trapez('c'),trapez('e'),trapez('b')];
+const TPLAN=PLAN;
+const QUIZ=[{"s": "Die Seiten a und c sind parallel zueinander.", "t": true}, {"s": "Die Schenkel b und d sind gleich lang.", "t": true}, {"s": "Die Diagonalen sind gleich lang.", "t": true}, {"s": "Es hat eine Symmetrieachse.", "t": true}, {"s": "Die beiden Winkel an der Grundlinie a sind gleich groß.", "t": true}, {"s": "Alle vier Seiten sind gleich lang.", "t": false}, {"s": "Die Diagonalen halbieren einander.", "t": false}, {"s": "Die Diagonalen stehen im rechten Winkel aufeinander.", "t": false}, {"s": "Die Schenkel b und d sind parallel zueinander.", "t": false}, {"s": "Die Seiten a und c sind gleich lang.", "t": false}, {"s": "Flächeninhalt des Trapezes: A = (a + c) · h : 2", "t": true, "g": "Flächeninhalt des Trapezes", "f": "A = (a + c) · h : 2"}, {"s": "Umfang des gleichschenkeligen Trapezes: u = a + 2 · b + c", "t": true, "g": "Umfang des gleichschenkeligen Trapezes", "f": "u = a + 2 · b + c"}, {"s": "Flächeninhalt des Trapezes: A = (a + c) · h", "t": false, "g": "Flächeninhalt des Trapezes", "f": "A = (a + c) · h"}, {"s": "Flächeninhalt des Trapezes: A = a · c · h", "t": false, "g": "Flächeninhalt des Trapezes", "f": "A = a · c · h"}, {"s": "Umfang des gleichschenkeligen Trapezes: u = 2 · (a + c)", "t": false, "g": "Umfang des gleichschenkeligen Trapezes", "f": "u = 2 · (a + c)"}];
+const QART="das gleichschenkelige Trapez";
+const up=x=>Math.ceil(x-1e-9);
+const TEXTW={};
+const TEXTS=[
+ {t:['b'],u:'m',i:'Der Querschnitt eines Hochwasserdamms ist ein gleichschenkeliges Trapez.',d:{a:v=>'Unten ist der Damm '+v+' m breit,',c:v=>'oben auf der Dammkrone '+v+' m.',h:v=>'Der Damm ist '+v+' m hoch.'},
+  p:(t,r,f)=>{const b=r(),L=pick([100,150,200]),pr=pick([4,5,6]);return {q:'Er ist '+L+' m lang. Beide schrägen Böschungen bekommen Rollrasen, 1 m² kostet '+pr+' €. Wie viel kostet der Rasen?',ask:'Wie viel m² Rasen braucht man für beide Böschungen und was kostet er?',fields:[['Rasenfläche =',2*b*L,'m²','Jede Böschung ist ein Rechteck: schräge Länge mal Dammlänge.'],['Kosten =',2*b*L*pr,'€']]};}},
+ {t:['h'],u:'m',i:'Der Querschnitt eines Bewässerungskanals ist ein gleichschenkeliges Trapez.',d:{a:v=>'Am Wasserspiegel ist der Kanal '+v+' m breit,',c:v=>'am Boden '+v+' m.',b:v=>'Die schrägen Seitenwände sind je '+v+' m lang.'},
+  p:(t,r,f)=>{const h=r(),a=t.vals.a,c=t.vals.c,L=pick([10,20,50]);return {q:'Wie viele m³ Wasser sind in einem '+L+' m langen Stück des vollen Kanals?',ask:'Wie groß ist der Querschnitt und wie viel Wasser ist im Kanalstück?',fields:[['Querschnitt =',(a+c)*h/2,'m²','Flächeninhalt des Trapezes.'],['Wasser =',(a+c)*h/2*L,'m³']]};}},
+ {t:['c'],u:'m',i:'Die Giebelwand eines Mansarddachs hat die Form eines gleichschenkeligen Trapezes.',d:{a:v=>'Unten ist sie '+v+' m breit.',b:v=>'Die schrägen Dachkanten sind je '+v+' m lang.',h:v=>'Die Wand ist '+v+' m hoch.'},
+  p:(t,r,f)=>{const c=r(),a=t.vals.a,h=t.vals.h,q=pick([6,8,10]);return {q:'Sie bekommt zwei Anstriche. 1 Liter Farbe reicht für '+q+' m², ein Kübel enthält 2,5 Liter. Wie viele Kübel braucht man?',ask:'Wie groß ist die Wand, wie viele Liter braucht man für zwei Anstriche, und wie viele Kübel sind das?',fields:[['Wandfläche =',(a+c)*h/2,'m²','Für den Flächeninhalt brauchst du auch die obere Breite.'],['Farbe =',(a+c)*h/2*2/q,'Liter','Zwei Anstriche!'],['Kübel =',up((a+c)*h/2*2/q/2.5),'Stück','Angefangene Kübel zählen ganz.']]};}},
+ {t:['e'],u:'m',i:'Ein Brückengerüst hat die Form eines gleichschenkeligen Trapezes.',d:{a:v=>'Unten ist es '+v+' m breit,',c:v=>'oben '+v+' m.',h:v=>'Es ist '+v+' m hoch.'},
+  p:(t,r,f)=>{const e=r(),pr=pick([12,15,20]);return {q:'Zur Verstärkung kommen zwei Stahlträger, jeweils von einer unteren Ecke zur gegenüberliegenden oberen Ecke. 1 m kostet '+pr+' €. Wie viel kosten die Träger?',ask:'Wie lang sind beide Träger zusammen und was kosten sie?',fields:[['beide Träger =',2*e,'m'],['Kosten =',2*e*pr,'€']]};}}];
+
+window.KP_EXPR=['a','b','c','e','h','x'];
+/* ================= Ablauf wie „Pythagoras im Rechteck und Quadrat“ – mit Reitern, Standard/AHS und Durchklicken ================= */
+const $=s=>document.querySelector(s);
+let task=null,TAB='auf',LEVEL='std';const ROUNDS={};const NAME={locked:false,name:''};
+function fmt(x){return String(Math.round(x*100)/100).replace('.',',');}
+const parseNum=s=>num(s);
+let LASTGIVEN=[];const _givenTxt=givenTxt;givenTxt=function(t,list){LASTGIVEN=list.slice();return _givenTxt(t,list);};
+function canon(s){return String(s||'').replace(/\s+/g,'').replace(/[()]/g,'').replace(/[−–—]/g,'-').replace(/:/g,'/').replace(/ₐ/g,'a').replace(/₁/g,'1').replace(/₂/g,'2').replace(/₃/g,'3').replace(/_/g,'').toLowerCase();}
+const same=(a,b)=>canon(a)===canon(b);
+const nmP=n=>n.replace('dR','d_R');
+const nmW=n=>nmH(n);
+const sqW=n=>(/[\/ ]/.test(n)?'('+nmW(n)+')':nmW(n))+'²';
+/* ---------- Runden: je Reiter und Niveau eine eigene Runde mit ROUND Aufgaben ---------- */
+const rkey=()=>TAB+'_'+LEVEL;
+function makeTask(gen,i,k){LASTGIVEN=[];const t=gen(i,LEVEL);t.given=LASTGIVEN.slice();t.level=LEVEL;t.tab=TAB;
+  t.figName=t.q.replace(/^<b>(.*?):<\/b>.*/,'$1');if(TAB==='txt'&&!t.sach)textify(t);
+  t.mode4=(i+k)%2===0?'type':'pick';t.errors=0;t.shown=0;t.errSteps=new Set();t.stepNo=0;t.started=false;t.solved=false;
+  t.stepsEl=document.createElement('div');t.stepsEl.className='steps';t.wayEl=document.createElement('div');t.wayEl.className='way';return t;}
+function newRound(){const k=Math.random()<.5?0:1,plan=shuffle((TAB==='txt'?TPLAN:PLAN).slice()).slice(0,ROUND);
+  return {tasks:plan.map((g,i)=>makeTask(g,i,k)),cur:0};}
+const round=()=>ROUNDS[rkey()]||(ROUNDS[rkey()]=newRound());
+/* Textaufgaben: Sachsituation + gegebene Größen in Worten */
+function textify(t){const tg=t.post?t.post[0]:t.unk,list=TEXTS.filter(c=>c.t.includes(tg));t.sketch=true;
+  if(!list.length){const w=n=>TEXTW[n]?TEXTW[n]+' ':'';t.q='<b>'+t.figName+':</b> Bekannt: '+t.given.map(n=>w(n)+nmW(n)+' = '+fmt(t.vals[n])+' '+t.u).join(', ')+'. Berechne '+w(tg)+nmW(tg)+'!';return;}
+  const C=pick(list);t.u=C.u||t.u;const w=n=>TEXTW[n]?TEXTW[n]+' ':'';const res=()=>{const v=resVal(t);return t.post?t.post[2](v):v;};
+  const P=C.p(t,res,fmt);t.purpose=P.fields?P:null;if(P.sach)t.sach=P.sach;
+  const D=C.d||{};t.q='<b>'+t.figName+':</b> '+C.i+' '+t.given.map(n=>D[n]?D[n](fmt(t.vals[n])):w(n)+nmW(n)+' = '+fmt(t.vals[n])+' '+t.u+'.').join(' ')+' '+P.q;}
+/* ---------- Anzeige einer Aufgabe ---------- */
+function show(i){const r=round();r.cur=i;task=r.tasks[i];
+  $('#taskText').innerHTML='<span class="tag">Aufgabe '+(i+1)+' von '+ROUND+' · '+task.figName+(TAB==='txt'?' · Textaufgabe':'')+' · '+(LEVEL==='ahs'?'Standard AHS':'Standard')+'</span><br>'+task.q.replace(/^<b>.*?:<\/b>\s*/,'');
+  $('#steps').replaceChildren(task.stepsEl);$('#way').replaceWith(task.wayEl);task.wayEl.id='way';
+  draw();navDraw();updateScore();
+  if(!NAME.locked){task.stepsEl.innerHTML='<div class="step"><p>Gib oben zuerst deinen Namen ein und tippe auf „Los geht\'s“. Der Name kann danach nicht mehr geändert werden.</p></div>';task.waiting=true;}
+  else if(!task.started)startSteps();
+  if(task.solved)showDone();else $('#done').hidden=true;}
+function startSteps(){if(task.waiting){task.stepsEl.innerHTML='';task.waiting=false;}task.started=true;task.t0=Date.now();if(task.sketch)stepSketch();else if(task.ident)stepIdent();else stepIdentify();}
+function navDraw(){const r=round();$('#nav').innerHTML='<span class="navlab">Beispiele durchklicken:</span><button class="navb" id="navPrev" aria-label="vorige Aufgabe"'+(r.cur===0?' disabled':'')+'>◀</button>'+
+  r.tasks.map((t,j)=>'<button class="dotb'+(t.solved?' ok':t.started&&t.stepNo>1?' started':'')+(j===r.cur?' cur':'')+'" data-j="'+j+'" aria-label="Aufgabe '+(j+1)+'">'+(j+1)+'</button>').join('')+
+  '<button class="navb" id="navNext" aria-label="nächste Aufgabe"'+(r.cur===ROUND-1?' disabled':'')+'>▶</button>';
+  $('#nav').querySelectorAll('.dotb').forEach(b=>b.onclick=()=>show(+b.dataset.j));
+  $('#navPrev').onclick=()=>show(Math.max(0,r.cur-1));$('#navNext').onclick=()=>show(Math.min(ROUND-1,r.cur+1));}
+/* ---------- Zeichnung ---------- */
+function draw(){const t=task,F=t.fig,P=F.P,W=380,H=300,m=46;const ks=Object.keys(P),xs=ks.map(k=>P[k][0]),ys=ks.map(k=>P[k][1]);
+  const minx=Math.min(...xs),maxx=Math.max(...xs),miny=Math.min(...ys),maxy=Math.max(...ys),k=Math.min((W-2*m)/((maxx-minx)||1),(H-2*m)/((maxy-miny)||1));
+  const hh=(maxy-miny)*k+2*m,ox=(W-(maxx-minx)*k)/2;const Q={};ks.forEach(n=>Q[n]=[ox+(P[n][0]-minx)*k,m+(maxy-P[n][1])*k]);
+  const ctr=[W/2,hh/2],[R,U,V]=F.tri,tc=[(Q[R][0]+Q[U][0]+Q[V][0])/3,(Q[R][1]+Q[U][1]+Q[V][1])/3];
+  const id=t.id||{},hypOn=id.hyp||t.hypShown;
+  const tri={K1:[R,U],K2:[R,V],H:[U,V]};const isTri=(p,q)=>Object.values(tri).some(([x,y])=>(x===p&&y===q)||(x===q&&y===p));
+  const segs={};F.edges.forEach(([p,q,d],i)=>{if(!isTri(p,q))segs['e'+i]=[p,q,d];});Object.keys(tri).forEach(s=>segs[s]=tri[s].concat([0]));
+  const unkSide=Object.keys(tri).find(s=>t.names[s]===t.unk);
+  const sk=t.sketch&&!t.sketchDone;
+  if(sk){let h='<svg viewBox="0 0 '+W+' '+Math.ceil(hh)+'" role="img" aria-label="'+t.figName+'">';const S=sketchSegs(t);
+    S.forEach(([p,q,dsh],j)=>{const pl=(t.skPlaced||{})[j];h+='<line x1="'+Q[p][0]+'" y1="'+Q[p][1]+'" x2="'+Q[q][0]+'" y2="'+Q[q][1]+'" class="side2'+(dsh?' dash':'')+(id.flash==='z'+j?' flash':'')+'"'+(pl!==undefined?' style="stroke:'+skCol(t,pl)+';stroke-width:4.5"':'')+'/>';});
+    const used=[];const dseg=(x,y,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],L=dx*dx+dy*dy||1;let u=((x-a[0])*dx+(y-a[1])*dy)/L;u=Math.max(0,Math.min(1,u));return Math.hypot(x-(a[0]+u*dx),y-(a[1]+u*dy));};
+    S.forEach(([p,q],j)=>{const pl=(t.skPlaced||{})[j];if(pl===undefined)return;const tl=t.skTiles[pl],txt=nmS(tl.n)+(tl.unk?' = ?':' = '+fmt(t.vals[tl.n])),tw=(tl.unk?6:5+String(fmt(t.vals[tl.n])).length)*9;
+      /* Platz auf der eigenen Linie suchen, der möglichst weit von allen anderen Linien und Beschriftungen entfernt ist – damit klar ist, zu welcher Linie die Länge gehört */
+      let nx0=-(Q[q][1]-Q[p][1]),ny0=Q[q][0]-Q[p][0];const l=Math.hypot(nx0,ny0)||1;nx0/=l;ny0/=l;let best=null;
+      for(let fr=.15;fr<=.851;fr+=.05)for(const sg of [1,-1])for(const ex of [0,12,24]){const nx=nx0*sg,ny=ny0*sg,mx=Q[p][0]+(Q[q][0]-Q[p][0])*fr,my=Q[p][1]+(Q[q][1]-Q[p][1])*fr;
+        const anc=nx>.45?'start':nx<-.45?'end':'middle',lx=mx+nx*((anc==='middle'?0:11)+ex),ly=my+ny*((anc==='middle'?16:8)+ex);
+        const cx=anc==='start'?lx+tw/2:anc==='end'?lx-tw/2:lx;
+        const pts=[[cx-tw/2,ly],[cx,ly],[cx+tw/2,ly]];let sc=1e9;
+        S.forEach(([a,b],k)=>{if(k===j)return;pts.forEach(([x,y])=>sc=Math.min(sc,dseg(x,y,Q[a],Q[b])));});
+        sc=Math.min(sc,22)-ex*.5;   /* genug Abstand reicht, näher an der eigenen Linie ist besser */
+        if(used.some(u=>Math.abs(u.cx-cx)<(u.w+tw)/2+4&&Math.abs(u.y-ly)<22))sc-=1000;   /* keine Überlappung mit anderen Beschriftungen */
+        if(cx-tw/2<2||cx+tw/2>W-2||ly<10||ly>hh-6)sc-=500;
+        if(!best||sc>best.sc)best={sc,lx,ly,anc,cx};}
+      used.push({cx:best.cx,y:best.ly,w:tw});
+      h+='<text x="'+best.lx+'" y="'+best.ly+'" text-anchor="'+best.anc+'" dominant-baseline="middle" class="lbl" style="fill:'+skCol(t,pl)+';font-weight:700">'+txt+'</text>';});
+    (F.vl||[]).forEach(([n,txt])=>{const dd=[Q[n][0]-ctr[0],Q[n][1]-ctr[1]],l=Math.hypot(...dd)||1;h+='<text class="vlb" text-anchor="middle" dominant-baseline="middle" x="'+(Q[n][0]+dd[0]/l*14)+'" y="'+(Q[n][1]+dd[1]/l*14)+'">'+txt+'</text>';});
+    t._hits=S.map(([p,q],j)=>({k:'z'+j,p:Q[p],q:Q[q]}));h+='<rect class="hitall" x="0" y="0" width="'+W+'" height="'+Math.ceil(hh)+'"/>';
+    $('#fig').innerHTML=h+'</svg><p class="tapnote">✏️ Zuerst unten eine Länge antippen, dann hier die passende Linie.</p>';
+    bindHit(t,k=>t.onSketch&&t.onSketch(+k.slice(1)));return;}
+  let h='<svg viewBox="0 0 '+W+' '+Math.ceil(hh)+'" role="img" aria-label="'+t.figName+'"><polygon class="tri" points="'+[R,U,V].map(n=>Q[n].join(',')).join(' ')+'"/>';
+  Object.entries(segs).forEach(([key,[p,q,d]])=>{let c=tri[key]?'side':'side2';if(d)c+=' dash';if(key==='H'&&hypOn)c+=' hyp';if((key==='K1'||key==='K2')&&id.legs&&id.legs.has(key))c+=' legok';
+    if(key===unkSide)c+=' unk';if(id.flash===key)c+=' flash';h+='<line x1="'+Q[p][0]+'" y1="'+Q[p][1]+'" x2="'+Q[q][0]+'" y2="'+Q[q][1]+'" class="'+c+'"/>';});
+  /* rechter Winkel */
+  const u1=[Q[U][0]-Q[R][0],Q[U][1]-Q[R][1]],u2=[Q[V][0]-Q[R][0],Q[V][1]-Q[R][1]],l1=Math.hypot(...u1),l2=Math.hypot(...u2),r=Math.min(15,l1/3,l2/3),a=[u1[0]/l1*r,u1[1]/l1*r],b=[u2[0]/l2*r,u2[1]/l2*r];
+  h+='<path class="ra" d="M'+(Q[R][0]+a[0])+','+(Q[R][1]+a[1])+' L'+(Q[R][0]+a[0]+b[0])+','+(Q[R][1]+a[1]+b[1])+' L'+(Q[R][0]+b[0])+','+(Q[R][1]+b[1])+'"/><circle class="dot" cx="'+(Q[R][0]+(a[0]+b[0])/2)+'" cy="'+(Q[R][1]+(a[1]+b[1])/2)+'" r="2.2"/>';
+  /* Beschriftungen wie im Buch, gegebene Längen mit Zahl, gesuchte mit „?“ */
+  const onTri=new Set((F.lab||[]).filter(([p,q])=>isTri(p,q)).map(x=>x[2])),shownFull=new Set();
+  (F.lab||[]).forEach(([p,q,n,f])=>{f=f||.5;const mx=Q[p][0]+(Q[q][0]-Q[p][0])*f,my=Q[p][1]+(Q[q][1]-Q[p][1])*f,c=isTri(p,q)?tc:ctr;let nx=-(Q[q][1]-Q[p][1]),ny=Q[q][0]-Q[p][0];const l=Math.hypot(nx,ny)||1;nx/=l;ny/=l;
+    if((mx-c[0])*nx+(my-c[1])*ny<0){nx=-nx;ny=-ny;}
+    /* Zahl bzw. „?“ nur einmal: am Dreieck, sonst beim ersten Vorkommen */
+    const full=(isTri(p,q)||!onTri.has(n))&&!shownFull.has(n);if(full)shownFull.add(n);
+    const unk=n===t.unk&&full,gv=t.given.includes(n)&&full,hl=n===t.names.H&&hypOn&&isTri(p,q);
+    const txt=nmS(n)+(unk?' = ?':gv?' = '+fmt(t.vals[n]):''),anc=nx>.45?'start':nx<-.45?'end':'middle',off=anc==='middle'?14:8;
+    h+='<text x="'+(mx+nx*off)+'" y="'+(my+ny*(anc==='middle'?off:off+2))+'" text-anchor="'+anc+'" dominant-baseline="middle" class="lbl'+(unk?' unk':'')+(hl?' hypt':'')+'">'+txt+'</text>';});
+  (F.vl||[]).forEach(([n,txt])=>{const d=[Q[n][0]-ctr[0],Q[n][1]-ctr[1]],l=Math.hypot(...d)||1;h+='<text class="vlb" text-anchor="middle" dominant-baseline="middle" x="'+(Q[n][0]+d[0]/l*14)+'" y="'+(Q[n][1]+d[1]/l*14)+'">'+txt+'</text>';});
+  /* Tippflächen */
+  if(t.selecting){t._hits=Object.entries(segs).map(([key,[p,q]])=>({k:key,p:Q[p],q:Q[q]}));h+='<rect class="hitall" x="0" y="0" width="'+W+'" height="'+Math.ceil(hh)+'"/>';}
+  const note=t.selecting?'<p class="tapnote">👆 Tippe in der Zeichnung auf '+(id.phase==='hyp'?'die Hypotenuse':id.phase==='unk'?'die Strecke, die du berechnen musst':'die beiden Katheten')+'.</p>':'';
+  $('#fig').innerHTML=h+'</svg>'+note;
+  if(t.selecting)bindHit(t,k=>t.onSeg&&t.onSeg(k));}
+/* Tippen: die Strecke, die dem Finger am nächsten ist (auch wo sich Strecken kreuzen) */
+function bindHit(t,fn){const svg=document.querySelector('#fig svg'),r=svg&&svg.querySelector('.hitall');if(!r)return;
+  svg.style.cursor='pointer';let last=0;
+  /* iPad/iPhone: sowohl „pointerup“ als auch „click“ auswerten, doppelte Auslösung verhindern */
+  const handler=ev=>{const now=Date.now();if(now-last<450)return;last=now;hitAt(ev);};
+  svg.addEventListener('pointerup',handler);svg.addEventListener('click',handler);
+  const hitAt=ev=>{const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const m=svg.getScreenCTM();if(!m)return;const P=pt.matrixTransform(m.inverse());
+    let best=null,bd=1e9;(t._hits||[]).forEach(s=>{const dx=s.q[0]-s.p[0],dy=s.q[1]-s.p[1],L=dx*dx+dy*dy||1;let u=((P.x-s.p[0])*dx+(P.y-s.p[1])*dy)/L;u=Math.max(0,Math.min(1,u));
+      const d=Math.hypot(P.x-(s.p[0]+u*dx),P.y-(s.p[1]+u*dy));if(d<bd){bd=d;best=s.k;}});
+    /* liegt die gesuchte Strecke nah genug am Finger, zählt sie – auch wenn eine andere Strecke dort genauso nah ist */
+    const near=k=>{const s=(t._hits||[]).find(h=>h.k===k);if(!s)return 1e9;const dx=s.q[0]-s.p[0],dy=s.q[1]-s.p[1],L=dx*dx+dy*dy||1;let u=((P.x-s.p[0])*dx+(P.y-s.p[1])*dy)/L;u=Math.max(0,Math.min(1,u));return Math.hypot(P.x-(s.p[0]+u*dx),P.y-(s.p[1]+u*dy));};
+    const w=wantKeys(t).find(k=>near(k)<=30);if(w){fn(w);return;}
+    if(best!==null&&bd<=30)fn(best);};}
+function wantKeys(t){if(t.sketch&&!t.sketchDone){const tl=t.skTiles&&t.skTiles[t.skSel];if(!tl)return [];const S=sketchSegs(t);
+    return accOf(t,tl.n).map(([a,b])=>S.findIndex(([p,q])=>(p===a&&q===b)||(p===b&&q===a))).filter(j=>j>=0&&(t.skPlaced||{})[j]===undefined).map(j=>'z'+j);}
+  const id=t.id||{};if(id.phase==='hyp')return ['H'];if(id.phase==='legs')return ['K1','K2'].filter(k=>!(id.legs&&id.legs.has(k)));
+  if(id.phase==='unk'){const [R,U,V]=t.fig.tri,tri={K1:[R,U],K2:[R,V],H:[U,V]};return Object.keys(tri).filter(s=>t.names[s]===t.unk);}return [];}
+
+/* ---------- „Zeig mir, wie es geht“: ein Finger tippt einmal vor ---------- */
+function screenOf(t,k){const svg=document.querySelector('#fig svg'),s=(t._hits||[]).find(h=>h.k===k);if(!svg||!s)return null;const m=svg.getScreenCTM(),pt=svg.createSVGPoint();
+  pt.x=(s.p[0]+s.q[0])/2*0.6+s.p[0]*0.4*0+((s.p[0]+s.q[0])/2)*0.4;pt.y=(s.p[1]+s.q[1])/2;const P=pt.matrixTransform(m);return [P.x,P.y];}
+function finger(x,y,cb){let f=document.getElementById('demoFinger');if(!f){f=document.createElement('div');f.id='demoFinger';f.textContent='👆';document.body.appendChild(f);}
+  f.style.display='block';requestAnimationFrame(()=>{f.style.left=(x-14)+'px';f.style.top=(y-4)+'px';});setTimeout(()=>{f.classList.add('tap');setTimeout(()=>{f.classList.remove('tap');cb&&cb();},350);},700);}
+function hideFinger(){const f=document.getElementById('demoFinger');if(f)setTimeout(()=>f.style.display='none',600);}
+function runDemo(d){const t=task;t.shown++;
+  const tapSeg=k=>{document.getElementById('fig').scrollIntoView({block:'center',behavior:'smooth'});setTimeout(()=>{const p=screenOf(t,k);if(!p)return;finger(p[0],p[1],()=>{if(t.sketch&&!t.sketchDone)t.onSketch(+k.slice(1));else t.onSeg(k);hideFinger();});},450);};
+  if(t.sketch&&!t.sketchDone){const j=t.skTiles.findIndex((x,i)=>!Object.values(t.skPlaced).includes(i));if(j<0)return;const btn=d.querySelector('#sktiles .opt[data-j="'+j+'"]');
+    btn.scrollIntoView({block:'center',behavior:'smooth'});setTimeout(()=>{const r=btn.getBoundingClientRect();finger(r.left+r.width/2,r.top+r.height/2,()=>{btn.click();setTimeout(()=>{const k=wantKeys(t)[0];if(k)tapSeg(k);},300);});},450);return;}
+  const k=wantKeys(t)[0];if(k)tapSeg(k);}
+
+/* jede Länge bekommt ihre eigene Farbe: Linie und Beschriftung gleich gefärbt, damit klar ist, was zusammengehört */
+const SKC=['#1d4ed8','#15803d','#b45309','#7e22ce'];
+function skCol(t,i){const tl=t.skTiles[i];if(tl&&tl.unk)return '#c62828';let k=0;for(let j=0;j<i;j++)if(!t.skTiles[j].unk)k++;return SKC[k%SKC.length];}
+/* ---------- Bausteine wie bisher ---------- */
+function addStep(num,title,body){const d=document.createElement('section');d.className='step';
+  d.innerHTML='<div class="step-head"><span class="num">'+num+'</span><h3>'+title+'</h3></div><div class="body">'+body+'</div><div class="fb" aria-live="polite"></div>';
+  task.stepsEl.appendChild(d);const first=d.querySelector('input');if(first&&num>1)first.focus({preventScroll:true});
+  if(num>1)d.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'});return d;}
+function wrong(d,msg,solve){task.errors++;d.tries=(d.tries||0)+1;task.errSteps.add(d.querySelector('h3').textContent);
+  const fb=d.querySelector('.fb');fb.className='fb bad';fb.innerHTML=msg;
+  if(d.tries>=2){const b=document.createElement('button');b.className='link';b.textContent='Lösung zeigen';b.onclick=()=>{task.shown++;solve();};fb.appendChild(b);}}
+function note(d,msg){const fb=d.querySelector('.fb');fb.className='fb bad';fb.textContent=msg;}
+function right(d,msg){d.classList.add('solved');const fb=d.querySelector('.fb');fb.className='fb ok';fb.innerHTML='✓ '+msg;d.querySelectorAll('input,button,select').forEach(e=>e.disabled=true);}
+function addWay(html,cls){const el=document.createElement('div');el.className='wline'+(cls?' '+cls:'');el.innerHTML=html;task.wayEl.appendChild(el);}
+function bindCheck(d,fn){d.querySelector('.check').onclick=fn;d.querySelectorAll('input').forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter')fn()}));}
+const nextNo=()=>task.stepNo=(task.stepNo||0)+1;
+/* ---------- 1 Hypotenuse und Katheten erkennen ---------- */
+function flash(key){task.id.flash=key;draw();const t=task;setTimeout(()=>{if(t===task&&t.id.flash===key){t.id.flash=null;draw();}},700);}
+function stepIdentify(){task.id={phase:'hyp',legs:new Set(),flash:null,hyp:false};task.selecting=true;const {H,K1,K2}=task.names;
+  const d=addStep(nextNo(),'Hypotenuse und Katheten erkennen','<p class="idq">Tippe in der Zeichnung auf die <b>Hypotenuse</b> des eingefärbten Dreiecks.</p><p class="tag">So geht\'s: Tippe mit dem Finger direkt auf die Linie in der Zeichnung oben – sie wird dann rot (Hypotenuse) bzw. blau (Katheten).</p><button class="link demo">👀 Zeig mir, wie es geht</button>');
+  d.querySelector('.demo').onclick=()=>runDemo(d);
+  const finishId=()=>{if(!task.selecting)return;task.selecting=false;task.id.phase='done';task.hypShown=true;task.id.legs=new Set(['K1','K2']);draw();
+    d.querySelector('.idq').textContent='Hypotenuse und Katheten sind markiert.';
+    right(d,'Richtig: '+nmW(H)+' ist die Hypotenuse – sie liegt gegenüber vom rechten Winkel. '+nmW(K1)+' und '+nmW(K2)+' sind die Katheten.');(task.level==='ahs'?stepTapUnk:task.pre&&task.pre.length?stepPre:stepFind)();};
+  task.onSeg=key=>{const id=task.id;if(!task.selecting)return;const outside=key[0]==='e';
+    if(id.phase==='hyp'){if(key==='H'){id.hyp=true;id.phase='legs';d.querySelector('.idq').innerHTML='Richtig! Tippe jetzt auf die beiden <b>Katheten</b>.';const fb=d.querySelector('.fb');fb.className='fb';fb.innerHTML='';draw();}
+      else{flash(key);wrong(d,outside?'Diese Strecke gehört nicht zum eingefärbten Dreieck.':'Das ist eine Kathete – sie liegt am rechten Winkel. Die Hypotenuse liegt dem rechten Winkel gegenüber.',finishId);}}
+    else if(id.phase==='legs'){if(key==='K1'||key==='K2'){id.legs.add(key);draw();if(id.legs.size===2)finishId();}
+      else{flash(key);wrong(d,key==='H'?'Das ist die Hypotenuse. Die Katheten bilden den rechten Winkel.':'Diese Strecke gehört nicht zum eingefärbten Dreieck.',finishId);}}};
+  draw();}
+/* ---------- 0 Welche Diagonale? ---------- */
+function stepIdent(){const H=task.names.H;
+  const d=addStep(nextNo(),'Welche Diagonale ist das?','<p>Im eingefärbten Dreieck liegt eine Diagonale. Welche ist es?</p><div class="opts">'+['d1','d2','d3','dR'].map(n=>'<button class="opt" data-v="'+n+'">'+nmW(n)+'</button>').join('')+'</div><p class="tag">d₁ liegt im Boden, d₂ vorne, d₃ an der Seite, d<sub>R</sub> geht quer durch den Körper.</p>');
+  const solve=()=>{d.querySelector('[data-v="'+H+'"]').classList.add('good');right(d,'Richtig: Das ist '+nmW(H)+'.');stepIdentify();};
+  d.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(b.dataset.v===H)solve();else{b.classList.add('wrongb');b.disabled=true;wrong(d,'Schau, wo die Diagonale liegt: im Boden (d₁), in der Vorderfläche (d₂), in der Seitenfläche (d₃) – oder quer durch den Körper (d<sub>R</sub>)?',solve);}});}
+/* ---------- 2 Stück berechnen (e/2, x, a − x, a/2, d/2, d₁² …) ---------- */
+function stepPre(){const P=task.pre;
+  /* Rechnung selbst anschreiben: jede Zahl der Rechnung ist ein Kästchen (z. B. 18 : 2 = 9); man darf auch gleich nur das Ergebnis schreiben */
+  const rows=P.map(([n,l,v,u])=>{const parts=l.split(' = '),sym=parts.length>1?parts[0]:'',numx=(parts.length>1?parts.slice(1).join(' = '):l).replace(/<sup>2<\/sup>/g,'§');
+    const want=[];const html=numx.replace(/\d+(?:,\d+)?/g,m=>{want.push(parseNum(m));return '¤';}).replace(/§/g,'<sup>2</sup>');return {n,sym,html,want,v,u};});
+  const d=addStep(nextNo(),'Zuerst das Stück berechnen','<p>Dieses Stück brauchst du im Dreieck. Schreib die Rechnung mit Zahlen an – oder schreib gleich das Ergebnis hin.</p>'+rows.map((r,j)=>{let q=0;
+      return '<div class="eq">'+r.n+' = '+(r.sym?r.sym+' = ':'')+r.html.replace(/¤/g,()=>'<input class="n pre-op" data-r="'+j+'" data-q="'+(q++)+'" inputmode="decimal" aria-label="Zahl">')+' = <input class="n wide pre-res" data-r="'+j+'" inputmode="decimal" aria-label="Ergebnis"> '+(r.u==='sq'?'':task.u)+'</div>';}).join('')+'<button class="check solo">Prüfen</button>');
+  const solve=()=>{rows.forEach((r,j)=>{d.querySelectorAll('.pre-op[data-r="'+j+'"]').forEach((i,q)=>i.value=fmt(r.want[q]));d.querySelector('.pre-res[data-r="'+j+'"]').value=fmt(r.v);});
+    right(d,'Richtig berechnet!');P.forEach(([n,l,v,u])=>addWay(n+' = '+l+' = '+fmt(v)+(u==='sq'?'':' '+task.u)));stepFind();};
+  bindCheck(d,()=>{for(let j=0;j<rows.length;j++){const r=rows[j],res=parseNum(d.querySelector('.pre-res[data-r="'+j+'"]').value),ops=[...d.querySelectorAll('.pre-op[data-r="'+j+'"]')];
+      if(isNaN(res)){note(d,'Schreib noch das Ergebnis hin.');return;}
+      const badOp=ops.findIndex((i,q)=>i.value.trim()&&!near(parseNum(i.value),r.want[q]));
+      if(badOp>=0){wrong(d,'In der Rechnung für '+r.n+' stimmt eine Zahl nicht. Schau in der Angabe nach: '+r.n+' = '+(r.sym||'…')+'.',solve);return;}
+      if(!near(res,r.v)){wrong(d,'Rechne noch einmal: '+r.n+' = '+(r.sym?r.sym:'')+'.',solve);return;}}
+    solve();});
+  d.querySelector('input').focus({preventScroll:true});}
+/* ---------- 3 Was ist gesucht? ---------- */
+function stepFind(){const U=task.unk,isH=U===task.names.H;
+  const d=addStep(nextNo(),'Was ist gesucht?','<p>Ist die gesuchte Strecke '+nmW(U)+' eine Hypotenuse oder eine Kathete?</p><div class="opts"><button class="opt word" data-v="hyp">Hypotenuse</button><button class="opt word" data-v="leg">Kathete</button></div>');
+  const solve=()=>{d.querySelector('[data-v="'+(isH?'hyp':'leg')+'"]').classList.add('good');right(d,isH?'Richtig: '+nmW(U)+' ist die Hypotenuse.':'Richtig: '+nmW(U)+' ist eine Kathete.');stepWords();};
+  d.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if((b.dataset.v==='hyp')===isH)solve();else{b.classList.add('wrongb');b.disabled=true;
+    wrong(d,isH?nmW(U)+' liegt gegenüber vom rechten Winkel – also ist '+nmW(U)+' die Hypotenuse.':nmW(U)+' liegt direkt am rechten Winkel – die Hypotenuse ist '+nmW(task.names.H)+'.',solve);}});}
+/* ---------- 4 Erste Zeile mit H und K ---------- */
+function stepWords(){const inp=n=>'<input class="n letter" maxlength="12" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" aria-label="Feld '+n+'">';
+  const d=addStep(nextNo(),'Erste Zeile: Formel mit H und K','<p>Schreibe die Formel mit <b>H</b> für Hypotenuse und <b>K</b> für Kathete – passend dazu, was gesucht ist – und wähle das Rechenzeichen.</p><div class="eq">'+inp(1)+'<sup>2</sup><span>=</span>'+inp(2)+'<sup>2</sup><select class="n opsel" aria-label="Rechenzeichen"><option value="">?</option><option value="+">+</option><option value="−">−</option></select>'+inp(3)+'<sup>2</sup><button class="check">Prüfen</button></div>');
+  const ins=[...d.querySelectorAll('input')],isH=s=>/^(h|hypo?th?enuse)$/i.test(s.trim()),isK=s=>/^(k|kath?ete)$/i.test(s.trim());
+  const leg=task.unk!==task.names.H,sel=d.querySelector('select'),W=leg?['K','H','K']:['H','K','K'],OP=leg?'−':'+';
+  const solve=()=>{W.forEach((w,i)=>ins[i].value=w);sel.value=OP;right(d,'Richtig – das ist die erste Zeile!');addWay(W[0]+'² = '+W[1]+'² '+OP+' '+W[2]+'²');stepVars();};
+  bindCheck(d,()=>{const v=ins.map(i=>i.value);if(v.some(x=>!x.trim())){note(d,'Bitte alle drei Felder ausfüllen.');return;}if(!sel.value){note(d,'Wähle noch das Rechenzeichen (+ oder −).');return;}
+    const ok=leg?(isK(v[0])&&isH(v[1])&&isK(v[2])):(isH(v[0])&&isK(v[1])&&isK(v[2]));
+    if(ok&&sel.value===OP)solve();else if(ok)wrong(d,leg?'Die Wörter stimmen. Überlege noch einmal: Wird für eine Kathete addiert oder subtrahiert?':'Die Wörter stimmen. Überlege noch einmal: Wird für die Hypotenuse addiert oder subtrahiert?',solve);
+    else if(leg&&isH(v[0]))wrong(d,'Gesucht ist eine Kathete – also steht die Kathete allein links vom Ist-gleich.',solve);
+    else if(!leg&&isK(v[0]))wrong(d,'Gesucht ist die Hypotenuse – also steht sie allein links vom Ist-gleich.',solve);
+    else wrong(d,'Verwende H für Hypotenuse und K für Kathete. Links vom Ist-gleich steht die gesuchte Strecke.',solve);});}
+/* ---------- 5 Variablen aus der Skizze einsetzen: selbst schreiben oder auswählen ---------- */
+function formel(){const {H,K1,K2}=task.names,U=task.unk;if(U===H)return {l:H,r:[K1,K2],op:'+'};return {l:U,r:[H,U===K1?K2:K1],op:'−'};}
+function stepVars(){const f=formel(),corr=sqW(f.l)+' = '+sqW(f.r[0])+' '+f.op+' '+sqW(f.r[1]),hint=f.op==='+'?'Die Hypotenuse '+nmW(f.l)+' steht allein links, rechts die beiden Katheten.':'Für die Kathete gilt: '+nmW(f.l)+'² = Hypotenuse² − andere Kathete². Die Hypotenuse ist '+nmW(f.r[0])+'.';
+  const done=()=>{addWay(corr);stepNumbers();};
+  if(task.mode4==='pick'){const {H,K1,K2}=task.names;let opts=f.op==='+'?[corr,sqW(K1)+' = '+sqW(H)+' + '+sqW(K2),sqW(H)+' = '+sqW(K1)+' − '+sqW(K2)]:[corr,sqW(f.l)+' = '+sqW(f.r[0])+' + '+sqW(f.r[1]),sqW(f.l)+' = '+sqW(f.r[1])+' − '+sqW(f.r[0])];
+    opts=shuffle(opts);const d=addStep(nextNo(),'Variablen aus der Skizze einsetzen','<p>Welche Formel passt zur Skizze? Tippe sie an.</p><div class="opts">'+opts.map((o,j)=>'<button class="opt" data-j="'+j+'">'+o+'</button>').join('')+'</div>');
+    const solve=()=>{d.querySelectorAll('.opt').forEach(b=>{if(opts[+b.dataset.j]===corr)b.classList.add('good');});right(d,'Richtige Formel!');done();};
+    d.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(opts[+b.dataset.j]===corr)solve();else{b.classList.add('wrongb');b.disabled=true;wrong(d,hint,solve);}});return;}
+  const inp=n=>'<input class="n expr" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Variable '+n+'">';
+  const d=addStep(nextNo(),'Variablen aus der Skizze einsetzen','<p>Schreibe den Satz des Pythagoras jetzt <b>selbst</b> mit den Buchstaben aus der Skizze (z. B. '+(f.r.concat(f.l).some(n=>/\//.test(n))?'e/2':'a')+') und wähle das Rechenzeichen.</p><div class="eq">'+inp(1)+'<sup>2</sup><span>=</span>'+inp(2)+'<sup>2</sup><select class="n opsel" aria-label="Rechenzeichen"><option value="">?</option><option value="+">+</option><option value="−">−</option></select>'+inp(3)+'<sup>2</sup><button class="check">Prüfen</button></div>');
+  const ins=[...d.querySelectorAll('input')],sel=d.querySelector('select');
+  const solve=()=>{ins[0].value=nmP(f.l);ins[1].value=nmP(f.r[0]);ins[2].value=nmP(f.r[1]);sel.value=f.op;right(d,'Richtig – genau so schreibst du es ins Heft!');done();};
+  bindCheck(d,()=>{const v=ins.map(i=>i.value);if(v.some(x=>!x.trim())){note(d,'Bitte alle drei Felder ausfüllen.');return;}if(!sel.value){note(d,'Wähle noch das Rechenzeichen (+ oder −).');return;}
+    const names=[task.names.H,task.names.K1,task.names.K2];const known=x=>names.some(n=>same(n,x));
+    const lOk=same(v[0],f.l),rOk=f.op==='+'?([v[1],v[2]].map(canon).sort().join()===f.r.map(canon).sort().join()):(same(v[1],f.r[0])&&same(v[2],f.r[1]));
+    if(lOk&&rOk&&sel.value===f.op)solve();
+    else if(v.some(x=>!known(x)))wrong(d,'Verwende nur die Buchstaben der drei Dreiecksseiten: '+names.map(nmW).join(', ')+'.',solve);
+    else if(lOk&&rOk)wrong(d,f.op==='+'?'Für die Hypotenuse wird addiert.':'Für eine Kathete wird subtrahiert.',solve);
+    else wrong(d,hint,solve);});}
+/* ---------- 6 Zahlen einsetzen ---------- */
+const sqOf=n=>task.sq&&task.sq[n]!==undefined;
+const valOf=n=>sqOf(n)?task.sq[n]:task.vals[n];
+function stepNumbers(){const f=formel(),U=f.l;
+  const fld=(n,j)=>'<input class="n" inputmode="decimal" aria-label="'+(j+1)+'. Zahl">'+(sqOf(n)?'':'<sup>2</sup>');
+  const d=addStep(nextNo(),'Zahlen einsetzen','<p>Setze die Längen ein (ohne Einheit)'+(f.r.some(sqOf)?' – für '+nmW(f.r.find(sqOf))+'² setzt du das Ergebnis von oben ein':'')+'.</p><div class="eq"><span>'+nmW(U)+'² =</span>'+fld(f.r[0],0)+'<span>'+f.op+'</span>'+fld(f.r[1],1)+'<button class="check">Prüfen</button></div>');
+  const [i1,i2]=d.querySelectorAll('input'),e=f.r.map(valOf);
+  const ok=()=>{const a=parseNum(i1.value),b=parseNum(i2.value);return f.op==='+'?((near(a,e[0])&&near(b,e[1]))||(near(a,e[1])&&near(b,e[0]))):(near(a,e[0])&&near(b,e[1]));};
+  const solve=()=>{if(!ok()){i1.value=fmt(e[0]);i2.value=fmt(e[1]);}right(d,'Richtig eingesetzt!');const t2=n=>sqOf(n)?'':'²';
+    const a=parseNum(i1.value),b=parseNum(i2.value),na=near(a,e[0])?f.r[0]:f.r[1],nb=na===f.r[0]?f.r[1]:f.r[0];
+    addWay(nmW(U)+'² = '+fmt(a)+t2(na)+' '+f.op+' '+fmt(b)+t2(nb));stepCalc(a,b,na,nb);};
+  bindCheck(d,()=>{const a=parseNum(i1.value),b=parseNum(i2.value);if(isNaN(a)||isNaN(b)){note(d,'Bitte beide Felder ausfüllen.');return;}
+    if(ok())solve();else if(f.op==='−'&&near(a,e[1])&&near(b,e[0]))wrong(d,'Vorsicht, Reihenfolge! Bei der Kathete kommt zuerst die Hypotenuse, dann wird die andere Kathete abgezogen.',solve);
+    else wrong(d,'Setze für '+nmW(f.r[0])+' und '+nmW(f.r[1])+' die Längen ein'+(f.r.some(n=>/\//.test(n)||/ /.test(n)||n==='x')?' – die Stücke hast du oben schon ausgerechnet':'')+'.',solve);});}
+/* ---------- 7 Berechnen ---------- */
+function stepCalc(x,y,nx,ny){const U=formel().l,X=sqOf(nx)?x:x*x,Y=sqOf(ny)?y:y*y,op=formel().op,sq=op==='+'?X+Y:X-Y;task.sqRes=sq;
+  const d=addStep(nextNo(),'Berechnen','<p>Rechne die Quadrate aus und dann '+(op==='+'?'addiere':'subtrahiere')+' sie.</p><div class="eq"><span>'+nmW(U)+'² =</span><input class="n wide" inputmode="decimal" aria-label="Ergebnis"><button class="check">Prüfen</button></div>');
+  const [i1]=d.querySelectorAll('input');const solve=()=>{i1.value=fmt(sq);right(d,'Richtig gerechnet!');addWay(nmW(U)+'² = '+fmt(sq));stepRoot();};
+  bindCheck(d,()=>{const a=parseNum(i1.value);if(isNaN(a))return;if(Math.abs(a-sq)<1e-6)solve();
+    else if(Math.abs(a-(op==='+'?x+y:x-y))<1e-6)wrong(d,'Du hast die Zahlen noch nicht quadriert. Zum Beispiel: '+fmt(x)+'² = '+fmt(x)+' · '+fmt(x)+'.',solve);
+    else if(Math.abs(a-(op==='+'?X-Y:X+Y))<1e-6)wrong(d,'Achte auf das Rechenzeichen: hier wird '+(op==='+'?'addiert':'subtrahiert')+'.',solve);
+    else wrong(d,'Rechne zuerst die Quadrate aus, z. B. '+fmt(x)+'² = '+fmt(x)+' · '+fmt(x)+'.',solve);});}
+/* ---------- 8 Wurzel ziehen ---------- */
+function stepRoot(){const U=formel().l,sq=task.sqRes,ans=Math.sqrt(sq),exact=Math.abs(ans-Math.round(ans))<1e-9;task.ans=ans;
+  const d=addStep(nextNo(),'Wurzel ziehen','<p>'+(exact?'Ziehe die Wurzel aus '+nmW(U)+'² = '+fmt(sq)+'.':'Ziehe die Wurzel aus '+nmW(U)+'² = '+fmt(sq)+' und runde auf 2 Dezimalstellen.')+'</p><div class="eq"><span>'+nmW(U)+' =</span><input class="n wide" inputmode="decimal" aria-label="Ergebnis"><span>'+task.u+'</span><button class="check">Prüfen</button></div>');
+  const [i1]=d.querySelectorAll('input');
+  const solve=()=>{i1.value=fmt(ans);right(d,task.post?'Richtig! Jetzt noch ein letzter Schritt.':'Super, Aufgabe gelöst!');addWay('√'+nmW(U)+'² = √'+fmt(sq));addWay(nmW(U)+' '+(exact?'=':'≈')+' '+fmt(ans)+' '+task.u,task.post||task.sach||task.purpose?'':'final');if(task.post)stepPost();else afterMath();};
+  bindCheck(d,()=>{const a=parseNum(i1.value);if(isNaN(a))return;if(Math.abs(a-ans)<=(exact?1e-9:0.011))solve();
+    else if(Math.abs(a-sq)<1e-6)wrong(d,'Das ist noch '+nmW(U)+'². Du musst noch die Wurzel ziehen.',solve);
+    else if(Math.abs(a-sq/2)<1e-6)wrong(d,'Wurzel ziehen heißt nicht durch 2 teilen! Gesucht ist die Zahl, die mit sich selbst multipliziert das Ergebnis ergibt.',solve);
+    else wrong(d,exact?'Welche Zahl ergibt mal sich selbst '+fmt(sq)+'?':'Tippe √'+fmt(sq)+' in den Taschenrechner und runde auf 2 Dezimalstellen.',solve);});}
+/* ---------- 9 Letzter Schritt (f = 2 · f/2, c = a − 2 · x …) ---------- */
+function stepPost(){const [n,l,fn]=task.post,v=fn(Math.round(task.ans*100)/100);
+  const d=addStep(nextNo(),'Gesuchte Länge berechnen','<p>Du hast '+nmW(formel().l)+' – gesucht ist aber '+nmW(n)+'.</p><div class="eq"><span>'+nmW(n)+' = '+l+' =</span><input class="n wide" inputmode="decimal" aria-label="Ergebnis"><span>'+task.u+'</span><button class="check">Prüfen</button></div>');
+  const [i1]=d.querySelectorAll('input');const solve=()=>{i1.value=fmt(v);right(d,'Super, Aufgabe gelöst!');addWay(nmW(n)+' = '+l.replace(/<[^>]+>/g,'')+' ≈ '+fmt(v)+' '+task.u,task.purpose||task.sach?'':'final');afterMath();};
+  bindCheck(d,()=>{const a=parseNum(i1.value);if(isNaN(a))return;if(Math.abs(a-v)<=0.03)solve();else wrong(d,'Rechne: '+nmW(n)+' = '+l+' mit '+nmW(formel().l)+' = '+fmt(task.ans)+'.',solve);});}
+/* ---------- Sachfrage: Passt es? ---------- */
+function stepCmp(){const S=task.sach;const d=addStep(nextNo(),'Antwort','<p>'+S.q+'</p><div class="opts"><button class="opt word" data-v="0">Ja</button><button class="opt word" data-v="1">Nein</button></div>');
+  const want=S.yes?'0':'1',solve=()=>{d.querySelector('[data-v="'+want+'"]').classList.add('good');right(d,(S.yes?'Ja':'Nein')+' – richtig!');addWay('Antwort: '+(S.yes?'Ja, er passt.':'Nein, er passt nicht.'),'final');finish();};
+  d.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(b.dataset.v===want)solve();else{b.classList.add('wrongb');b.disabled=true;wrong(d,S.why,solve);}});}
+/* ---------- AHS: gesuchte Strecke antippen, dann nur das Ergebnis ---------- */
+function stepTapUnk(){const t=task,F=t.fig,[R,U,V]=F.tri,tri={K1:[R,U],K2:[R,V],H:[U,V]},side=Object.keys(tri).find(s=>t.names[s]===t.unk);
+  t.id.phase='unk';t.selecting=true;const fin=t.post?t.post[0]:t.unk;
+  const d=addStep(nextNo(),'Was musst du berechnen?','<p class="idq">Tippe in der Zeichnung auf die Strecke im eingefärbten Dreieck, die du '+(t.post?'zuerst ':'')+'berechnen musst.</p><button class="link demo">👀 Zeig mir, wie es geht</button>');
+  d.querySelector('.demo').onclick=()=>runDemo(d);
+  const solve=()=>{t.selecting=false;t.id.phase='done';draw();right(d,'Richtig: Du berechnest '+nmW(t.unk)+(t.post?' und daraus '+nmW(fin):'')+'.');stepResult();};
+  t.onSeg=key=>{if(!t.selecting)return;if(key===side)solve();else{flash(key);wrong(d,key[0]==='e'?'Diese Strecke gehört nicht zum eingefärbten Dreieck.':'Diese Länge kennst du schon (oder kannst sie leicht ausrechnen). Gesucht ist '+nmW(t.unk)+'.',solve);}};
+  draw();}
+function stepResult(){const t=task,f=formel(),ans=resVal(t),fin=t.post?t.post[0]:f.l,v=t.post?t.post[2](ans):ans,exact=Math.abs(v-Math.round(v))<1e-9;t.ans=ans;
+  const d=addStep(nextNo(),'Ergebnis','<p>Berechne '+nmW(fin)+'. '+(exact?'':'Runde auf 2 Dezimalstellen.')+'</p><div class="eq"><span>'+nmW(fin)+' =</span><input class="n wide" inputmode="decimal" aria-label="Ergebnis"><span>'+t.u+'</span><button class="check">Prüfen</button></div>');
+  const [i1]=d.querySelectorAll('input');
+  const solve=()=>{i1.value=fmt(v);right(d,'Super, Aufgabe gelöst!');(t.pre||[]).forEach(([n,l,pv,u])=>addWay(n+' = '+l+' = '+fmt(pv)+(u==='sq'?'':' '+t.u)));
+    addWay(sqW(f.l)+' = '+sqW(f.r[0])+' '+f.op+' '+sqW(f.r[1]));addWay(nmW(f.l)+' = √('+fmt(valOf(f.r[0]))+(sqOf(f.r[0])?'':'²')+' '+f.op+' '+fmt(valOf(f.r[1]))+(sqOf(f.r[1])?'':'²')+') ≈ '+fmt(ans)+' '+t.u,t.post||t.sach||t.purpose?'':'final');
+    if(t.post)addWay(nmW(fin)+' = '+t.post[1].replace(/<[^>]+>/g,'')+' ≈ '+fmt(v)+' '+t.u,t.sach||t.purpose?'':'final');afterMath();};
+  bindCheck(d,()=>{const a=parseNum(i1.value);if(isNaN(a))return;if(Math.abs(a-v)<=(exact?1e-9:t.post?0.025:0.011))solve();
+    else if(Math.abs(a-v*v)<1e-6||Math.abs(a-ans*ans)<1e-6)wrong(d,'Das ist noch das Quadrat – zieh noch die Wurzel.',solve);
+    else wrong(d,'Stell zuerst die Formel auf: '+sqW(f.l)+' = '+sqW(f.r[0])+' '+f.op+' '+sqW(f.r[1])+(t.pre?' – das Stück '+t.pre.map(p=>p[0]).join(', ')+' musst du vorher ausrechnen':'')+(t.post?'. Danach: '+nmW(fin)+' = '+t.post[1]:'')+'.',solve);});}
+/* ---------- Textaufgaben: Skizze selbst beschriften ---------- */
+function accOf(t,n){const F=t.fig,L=(F.full&&F.full[n])||[];return L.concat((F.lab||[]).filter(x=>x[2]===n).map(x=>[x[0],x[1]]));}
+function skInit(t){if(t.skTiles)return;const tg=t.post?t.post[0]:t.unk;t.skTiles=t.given.map(n=>({n})).concat([{n:tg,unk:true}]);t.skPlaced={};t._sk=null;}
+function sketchSegs(t){skInit(t);if(t._sk)return t._sk;const F=t.fig,S=[],has=(p,q)=>S.some(([a,b])=>(a===p&&b===q)||(a===q&&b===p));
+  F.edges.forEach(([p,q,d])=>{if(!has(p,q))S.push([p,q,d]);});t.skTiles.forEach(tl=>accOf(t,tl.n).forEach(([p,q])=>{if(!has(p,q))S.push([p,q,1]);}));return t._sk=S;}
+function stepSketch(){const t=task;skInit(t);t.id={phase:'sk'};
+  const d=addStep(nextNo(),'Skizze beschriften','<p>Lies den Text genau und beschrifte die Skizze selbst:</p><ol class="howto"><li>Tippe <b>unten</b> auf eine Länge – sie wird markiert.</li><li>Tippe dann <b>oben in der Zeichnung</b> auf die Linie, zu der sie gehört. Die Länge erscheint dort.</li><li>Zum Schluss: „? (gesuchte Länge)“ auf die Strecke, die du berechnen musst.</li></ol><div class="opts" id="sktiles"></div><button class="link demo">👀 Zeig mir, wie es geht</button>');
+  d.querySelector('.demo').onclick=()=>runDemo(d);
+  const tilesDraw=()=>{const box=d.querySelector('#sktiles');if(!box)return;box.innerHTML=t.skTiles.map((tl,j)=>{const used=Object.values(t.skPlaced).includes(j);return '<button class="opt'+(t.skSel===j?' sel':'')+(used?' good':'')+'" data-j="'+j+'"'+(used?' disabled style="border-color:'+skCol(t,j)+';color:'+skCol(t,j)+';border-width:3px"':'')+'>'+(tl.unk?'? (gesuchte Länge)':fmt(t.vals[tl.n])+' '+t.u)+'</button>';}).join('');
+    box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{t.skSel=+b.dataset.j;tilesDraw();});};
+  const done=()=>{if(t.sketchDone)return;t.sketchDone=true;right(d,'Die Skizze ist richtig beschriftet!');addWay('Skizze: '+t.skTiles.map(tl=>nmW(tl.n)+(tl.unk?' = ?':' = '+fmt(t.vals[tl.n])+' '+t.u)).join(', '));draw();stepIdentify();};
+  const solve=()=>{const S=sketchSegs(t);t.skTiles.forEach((tl,j)=>{if(Object.values(t.skPlaced).includes(j))return;const a=accOf(t,tl.n)[0],k=S.findIndex(([p,q])=>(p===a[0]&&q===a[1])||(p===a[1]&&q===a[0]));t.skPlaced[k]=j;});done();};
+  t.skSel=0;tilesDraw();
+  t.onSketch=j=>{if(t.sketchDone)return;const sel=t.skSel;if(sel===undefined||sel===null)return;const tl=t.skTiles[sel],[p,q]=sketchSegs(t)[j];
+    if(t.skPlaced[j]!==undefined)return;
+    if(accOf(t,tl.n).some(([a,b])=>(a===p&&b===q)||(a===q&&b===p))){t.skPlaced[j]=sel;const nx=t.skTiles.findIndex((x,i)=>!Object.values(t.skPlaced).includes(i));t.skSel=nx>=0?nx:null;const fb=d.querySelector('.fb');fb.className='fb';fb.innerHTML='';tilesDraw();draw();if(nx<0)done();}
+    else{t.id.flash='z'+j;draw();setTimeout(()=>{if(task===t&&!t.sketchDone){t.id.flash=null;draw();}},700);wrong(d,tl.unk?'Überlege: Welche Länge brauchst du für die Frage, und welche Strecke im Dreieck kennst du noch nicht?':'Diese Strecke passt nicht zu '+fmt(t.vals[tl.n])+' '+t.u+'. Lies im Text genau nach, welche Strecke gemeint ist.',solve);}};
+  draw();}
+/* ---------- Textaufgaben: die eigentliche Frage ---------- */
+function afterMath(){if(task.purpose)stepPurpose();else if(task.sach)stepCmp();else finish();}
+function stepPurpose(){const t=task,P=t.purpose;
+  const d=addStep(nextNo(),'Jetzt die eigentliche Frage','<p>'+P.ask+'</p>'+P.fields.map(([l,val,u],j)=>'<div class="eq"><span>'+l+'</span><input class="n wide" inputmode="decimal" aria-label="Feld '+(j+1)+'"><span>'+u+'</span></div>').join('')+'<button class="check solo">Prüfen</button>');
+  const ins=[...d.querySelectorAll('input')],W=P.fields.map(f=>f[1]),tol=w=>Math.max(0.06,Math.abs(w)*0.012);
+  const solve=()=>{ins.forEach((i,j)=>i.value=fmt(W[j]));right(d,'Super, Aufgabe gelöst!');P.fields.forEach(([l,val,u],j)=>addWay(l.replace(/<[^>]+>/g,'')+' '+fmt(val)+' '+u,j===P.fields.length-1?'final':''));finish();};
+  bindCheck(d,()=>{const a=ins.map(i=>parseNum(i.value));if(a.some(isNaN)){note(d,'Bitte alle Felder ausfüllen.');return;}const j=a.findIndex((x,q)=>Math.abs(x-W[q])>tol(W[q]));
+    if(j<0)solve();else wrong(d,P.fields[j][3]||'Rechne die Zeile „'+P.fields[j][0].replace(/<[^>]+>/g,'')+'“ noch einmal nach.',solve);});}
+/* ---------- Abschluss, Zusammenfassung ---------- */
+function updateScore(){const r=ROUNDS[rkey()];const n=NAME.name;if(!r||TAB==='eig'){$('#score').textContent=n?n:'';return;}const sv=r.tasks.filter(t=>t.solved),pf=sv.filter(t=>!t.errors);
+  $('#score').textContent=(n?n+': ':'')+'Gelöst: '+sv.length+' von '+ROUND+', davon ohne Fehler: '+pf.length;}
+function finish(){const t=task;t.solved=true;t.ms=Date.now()-(t.t0||Date.now());const res=t.post?t.post[0]:t.unk,rv=t.post?t.post[2](t.level==='ahs'?t.ans:Math.round(t.ans*100)/100):t.ans;
+  t.row={shape:t.figName,find:res,given:t.given.map(n=>nmW(n)+' = '+fmt(t.vals[n])+' '+t.u).join(', '),result:nmW(res)+' ≈ '+fmt(rv)+' '+t.u,errors:t.errors,shown:t.shown,errSteps:t.errSteps.size?[...t.errSteps].join(', '):'–',ms:t.ms};
+  navDraw();updateScore();showDone();}
+function showDone(){const r=round(),t=task,all=r.tasks.every(x=>x.solved);
+  $('#doneText').innerHTML=(t.errors===0?'Fehlerfrei gelöst – stark!':'Geschafft! ('+t.errors+' '+(t.errors===1?'Fehlversuch':'Fehlversuche')+')')+'<br><strong>✏️ Übertrage jetzt den ganzen Rechenweg in dein Hausübungsheft.</strong><br><span style="font-size:15px">Du findest ihn oben unter „Rechenweg“.</span>';
+  $('#nextBtn').textContent=all?'Zur Zusammenfassung':'Nächste Aufgabe';$('#done').hidden=false;}
+const fmtT=ms=>{const s=Math.max(0,Math.round(ms/1000));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
+function showSummary(){const r=round(),L=r.tasks.map(t=>t.row),name=NAME.name||'–';
+  const perfect=L.filter(x=>x.errors===0).length,errs=L.reduce((s,x)=>s+x.errors,0),shown=L.reduce((s,x)=>s+x.shown,0),tot=L.reduce((s,x)=>s+(x.ms||0),0),fast=L.filter(x=>x.ms<20000).length,now=new Date(),dt=now.toLocaleDateString('de-AT')+', '+now.toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'});
+  const rows=L.map((x,i)=>'<tr class="'+(x.errors===0?'okrow':x.shown?'errrow':'')+'"><td>'+(i+1)+'</td><td>'+x.shape+'</td><td>'+nmW(x.find)+'</td><td>'+x.given+'</td><td>'+x.result+'</td><td>'+x.errors+'</td><td>'+(x.shown?'ja ('+x.shown+'×)':'nein')+'</td><td>'+esc(x.errSteps)+'</td><td>'+fmtT(x.ms)+(x.ms<20000?' ⚡':'')+'</td></tr>').join('');
+  const s=$('#summary');
+  s.innerHTML='<h2>Zusammenfassung für die Lehrkraft</h2><div class="sumhead"><div><span>Name</span><b>'+esc(name)+'</b></div><div><span>Datum</span><b>'+dt+'</b></div><div><span>Übung</span><b>'+document.title+' – '+(TAB==='txt'?'Textaufgaben':'Aufgaben')+' ('+(LEVEL==='ahs'?'Standard AHS':'Standard')+')</b></div></div>'+
+    '<div class="sumstats"><div><b>'+perfect+' / '+L.length+'</b><span>ohne Fehler</span></div><div><b>'+errs+'</b><span>Fehlversuche gesamt</span></div><div><b>'+shown+'</b><span>Lösungen angezeigt</span></div><div><b>'+fmtT(tot)+'</b><span>Bearbeitungszeit gesamt</span></div></div>'+
+    '<div class="tablewrap"><table><thead><tr><th>Nr.</th><th>Figur</th><th>Gesucht</th><th>Gegeben</th><th>Ergebnis</th><th>Fehlversuche</th><th>Lösung gezeigt</th><th>Fehler bei Schritt</th><th>Zeit</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+    '<p class="tnote">Zeit = vom Start der Aufgabe bis zur Lösung. ⚡ = in unter 20 Sekunden gelöst.'+(L.length>=3&&fast/L.length>0.5?' <b>Auffällig: Mehr als die Hälfte der Aufgaben wurde in unter 20 Sekunden gelöst.</b>':'')+'</p>'+
+    '<p class="sumnote">Zeige diese Seite deiner Lehrkraft. Die Rechenwege stehen in deinem Hausübungsheft.</p><button class="next" id="newRound">Neue Runde starten</button> <button class="next" id="backRound">Zurück zu den Aufgaben</button>';
+  $('.grid').hidden=true;$('#score').hidden=true;s.hidden=false;window.scrollTo({top:0});
+  $('#backRound').onclick=()=>{s.hidden=true;$('.grid').hidden=false;$('#score').hidden=false;};
+  $('#newRound').onclick=()=>{if(!confirm('Neue Runde starten? Die Zusammenfassung wird dabei gelöscht.'))return;ROUNDS[rkey()]=newRound();s.hidden=true;$('.grid').hidden=false;$('#score').hidden=false;show(0);};}
+$('#nextBtn').onclick=()=>{const r=round(),j=r.tasks.findIndex((t,q)=>!t.solved&&q>r.cur),k=j>=0?j:r.tasks.findIndex(t=>!t.solved);if(k<0)showSummary();else show(k);};
+/* ---------- Eigenschaften: jede Frage so oft, bis sie zweimal richtig beantwortet wurde ---------- */
+/* ---------- Eigenschaften: Mehrfachauswahl – jede Frage so oft, bis sie zweimal richtig beantwortet wurde ---------- */
+const QZ={items:null,last:-1,errors:0,cur:-1,answered:false,opts:null,sel:null};
+const PROPS=QUIZ.filter(x=>!x.g),GROUPS={};QUIZ.filter(x=>x.g).forEach(x=>(GROUPS[x.g]=GROUPS[x.g]||[]).push(x));
+function quizInit(){QZ.items=[{k:'p'},{k:'p'},{k:'p'}].concat(Object.keys(GROUPS).map(g=>({k:'g',g}))).map(x=>Object.assign(x,{c:0}));QZ.errors=0;QZ.last=-1;quizNext();}
+function quizNext(){const open=QZ.items.map((x,j)=>x.c<2?j:-1).filter(j=>j>=0);
+  if(!open.length){quizDone();return;}let pool=open.filter(j=>j!==QZ.last);if(!pool.length)pool=open;QZ.cur=pick(pool);QZ.last=QZ.cur;QZ.answered=false;
+  const it=QZ.items[QZ.cur];
+  if(it.k==='p'){let o;do{o=shuffle(PROPS.slice()).slice(0,5);}while(!o.some(x=>x.t)||o.every(x=>x.t));QZ.opts=o;QZ.q='Welche Eigenschaften hat '+QART+'? Tippe <b>alle</b> an, die stimmen.';}
+  else{QZ.opts=shuffle(GROUPS[it.g].slice());QZ.q=it.g+': Welche Formel'+(QZ.opts.filter(x=>x.t).length>1?'n stimmen':' stimmt')+'? Tippe <b>alle</b> richtigen an.';}
+  QZ.sel=new Set();quizDraw();}
+function quizDraw(){const it=QZ.items[QZ.cur],done=QZ.items.filter(x=>x.c>=2).length,N=QZ.items.length;
+  $('#quiz').innerHTML='<div class="qprog"><div class="qbar"><span style="width:'+(done/N*100)+'%"></span></div><span>'+done+' von '+N+' Fragen geschafft · jede muss 2× richtig beantwortet werden</span></div>'+
+    '<div class="step qcard"><div class="step-head"><span class="num">'+(it.c?'1×':'?')+'</span><h3>'+QZ.q+'</h3></div><div class="opts qopts">'+QZ.opts.map((o,j)=>'<button class="opt qopt" data-j="'+j+'" aria-pressed="'+QZ.sel.has(j)+'">'+(o.f||o.s)+'</button>').join('')+'</div>'+
+    '<button class="check solo" id="qchk">Prüfen</button><div class="fb" id="qfb"></div></div>';
+  $('#quiz').querySelectorAll('.qopt').forEach(b=>b.onclick=()=>{if(QZ.answered)return;const j=+b.dataset.j;QZ.sel.has(j)?QZ.sel.delete(j):QZ.sel.add(j);b.setAttribute('aria-pressed',QZ.sel.has(j));b.classList.toggle('sel',QZ.sel.has(j));});
+  $('#qchk').onclick=()=>{if(QZ.answered)return;if(!NAME.locked){$('#qfb').className='fb bad';$('#qfb').textContent='Gib oben zuerst deinen Namen ein.';return;}
+    if(!QZ.sel.size){$('#qfb').className='fb bad';$('#qfb').textContent='Tippe zuerst an, was stimmt.';return;}
+    QZ.answered=true;let ok=true;$('#quiz').querySelectorAll('.qopt').forEach(b=>{const j=+b.dataset.j,o=QZ.opts[j],s=QZ.sel.has(j);b.disabled=true;
+      if(o.t&&s)b.classList.add('good');else if(!o.t&&s){b.classList.add('wrongb');ok=false;}else if(o.t&&!s){b.classList.add('missed');ok=false;}});
+    $('#qchk').disabled=true;
+    if(ok){it.c++;$('#qfb').className='fb ok';$('#qfb').innerHTML='✓ Alles richtig!'+(it.c<2?' Diese Frage kommt noch einmal.':' Geschafft!');}
+    else{QZ.errors++;$('#qfb').className='fb bad';$('#qfb').innerHTML='Noch nicht ganz: <b>Grün</b> umrandet ist, was stimmt. Rot hast du falsch angetippt, gestrichelt hast du vergessen. Die Frage kommt wieder.';}
+    $('#qfb').insertAdjacentHTML('beforeend','<div><button class="next" id="qnext">Weiter</button></div>');$('#qnext').onclick=quizNext;$('#qnext').focus({preventScroll:true});};}
+function quizDone(){$('#quiz').innerHTML='<div class="done"><p><b>Alle Eigenschaften geschafft!</b> '+(QZ.errors?'Du hattest '+QZ.errors+' '+(QZ.errors===1?'Fehler':'Fehler')+' auf dem Weg.':'Ohne einen einzigen Fehler – super!')+'<br>Weiter geht es mit dem Reiter „Aufgaben“.</p><button class="next" id="qagain">Nochmal üben</button></div>';$('#qagain').onclick=quizInit;}
+/* ---------- Reiter, Niveau, Name ---------- */
+function setTab(t){TAB=t;document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.t===t?'true':'false'));
+  const q=t==='eig';$('#quiz').hidden=!q;$('.grid').hidden=q;$('#summary').hidden=true;$('#lvlbox').hidden=q;$('#score').hidden=false;
+  if(q){if(!QZ.items)quizInit();updateScore();}else show(round().cur);}
+function setLevel(l){LEVEL=l;document.querySelectorAll('#lvl button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.l===l?'true':'false'));if(TAB!=='eig'){$('#summary').hidden=true;$('.grid').hidden=false;show(round().cur);}}
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>setTab(b.dataset.t));
+document.querySelectorAll('#lvl button').forEach(b=>b.onclick=()=>setLevel(b.dataset.l));
+function lockName(){const n=$('#name');if(NAME.locked)return;if(!n.value.trim()){n.focus();return;}
+  n.value=n.value.trim();NAME.name=n.value;n.readOnly=true;n.disabled=true;n.classList.add('locked');$('#nameOk').hidden=true;NAME.locked=true;updateScore();
+  if(TAB!=='eig'&&task&&!task.started)startSteps();if(TAB==='eig')quizDraw();}
+$('#nameOk').onclick=lockName;$('#name').addEventListener('keydown',e=>{if(e.key==='Enter')lockName();});
+setTab('eig');
+
+</script>
+<script>/* Bildschirm-Tastatur für die Mathe-Übungen
+   Einbinden: in der HTML-Datei direkt vor dem schließenden body-Tag die Zeile
+   [script src="tastatur.js"][/script] einfügen (mit spitzen statt eckigen Klammern).
+   Passt sich automatisch an das Eingabefeld an:
+   - Zahlenfelder:            Ziffern, Komma, Löschen, Cursor, nächstes Feld, Prüfen
+   - Felder für H / K:        H, K, + und −
+   - Felder für Wörter:       Hypotenuse, Kathete, + und −
+   - Felder für Ausdrücke:    Buchstaben, + − / ( ) und Ziffern (z. B. f/2 oder (a − c)/2) */
+(function(){
+  if(document.getElementById('kpad'))return;            /* Übung hat schon eine Tastatur */
+  const NAME_IDS=['name','nameIn','pname'];
+  const css=`
+#kpad{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--card,#fff);border-top:3px solid var(--ink,#1b2a4a);padding:8px 10px calc(10px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 18px rgba(0,0,0,.18);font-family:"Atkinson Hyperlegible",system-ui,sans-serif;color:var(--ink,#1b2a4a)}
+#kpad[hidden],#kpadToggle[hidden]{display:none!important}
+#kpad .kp-inner{max-width:440px;margin:0 auto}
+#kpad .kp-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;font-weight:700;font-size:15px}
+#kpad .kp-small{font:inherit;font-size:15px;padding:3px 12px;background:transparent;color:var(--ink,#1b2a4a);border:2px solid var(--ink,#1b2a4a);border-radius:8px;cursor:pointer}
+#kpad .kp-grid{display:grid;gap:6px}
+#kpad .kp-grid button{font:inherit;font-size:22px;font-weight:700;padding:7px 0;background:var(--paper,#fdfdf9);color:var(--ink,#1b2a4a);border:2px solid var(--line,#c9d6e6);border-radius:10px;cursor:pointer;touch-action:manipulation}
+#kpad .kp-grid button.op{border-color:var(--ink,#1b2a4a);font-size:20px}
+#kpad .kp-grid button.act{background:var(--btn,var(--ink,#1b2a4a));color:var(--btn-ink,var(--paper,#fff));border-color:var(--btn,var(--ink,#1b2a4a))}
+#kpad .kp-grid button.wide{grid-column:span 2;color:var(--pen,var(--ink,#1d4ed8));border-color:var(--pen,var(--ink,#1d4ed8))}
+#kpad .kp-grid button:active{transform:translateY(1px)}
+#kpadToggle{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:49;font:inherit;font-size:16px;font-weight:700;padding:9px 16px;border-radius:999px;border:0;background:var(--btn,var(--ink,#1b2a4a));color:var(--btn-ink,var(--paper,#fff));cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+body.kpad-on{padding-bottom:310px}`;
+  const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
+
+  const MODES={
+    num:{title:'Zahlen',cols:4,keys:['7','8','9','⌫','4','5','6',',','1','2','3','←','0','→','⇥','↵']},
+    hk:{title:'H und K',cols:4,keys:['H*','K*','+','−','⌫','⇥','↵']},
+    word:{title:'Wörter',cols:4,keys:['Hypotenuse*','Kathete*','+','−','⌫','⇥','↵']},
+    expr:{title:'Buchstaben',cols:6,keys:(window.KP_EXPR||['a','b','c','d','e','f','h','x']).concat(['−','/','2','(',')','⌫','←','→','⇥','↵'])}
+  };
+  const TITLE={'⌫':'Löschen','←':'Cursor nach links','→':'Cursor nach rechts','⇥':'Nächstes Feld','↵':'Prüfen','+':'plus','−':'minus','/':'geteilt (Bruchstrich)',',':'Komma'};
+  const WHOLE={H:1,K:1,Hypotenuse:1,Kathete:1};
+  const coarse=window.matchMedia&&matchMedia('(pointer: coarse)').matches;
+  let enabled=true,target=null,mode='',override=null;
+
+  const pad=document.createElement('div');pad.id='kpad';pad.hidden=true;pad.setAttribute('role','group');pad.setAttribute('aria-label','Bildschirm-Tastatur');
+  pad.innerHTML='<div class="kp-inner"><div class="kp-head"><span id="kpTitle">Tastatur</span><span><button type="button" class="kp-small" id="kpSwitch" hidden></button> <button type="button" class="kp-small" id="kpClose" title="Tastatur ausblenden">✕</button></span></div><div class="kp-grid"></div></div>';
+  const tog=document.createElement('button');tog.id='kpadToggle';tog.type='button';tog.textContent='⌨ Tastatur';tog.hidden=true;
+  document.body.append(pad,tog);
+  const grid=pad.querySelector('.kp-grid'),sw=document.getElementById('kpSwitch');
+
+  const eligible=el=>el&&el.tagName==='INPUT'&&!NAME_IDS.includes(el.id)&&!el.disabled&&!el.readOnly&&(el.type==='text'||el.type===''||!el.type);
+  function naturalMode(el){
+    if(el.classList.contains('word'))return 'word';
+    if(el.classList.contains('letter'))return 'hk';
+    if(el.classList.contains('expr'))return 'expr';
+    const im=(el.dataset.im!=null?el.dataset.im:el.getAttribute('inputmode'))||'';
+    return (im==='decimal'||im==='numeric')?'num':'expr';
+  }
+  function draw(m){
+    mode=m;const M=MODES[m];
+    grid.style.gridTemplateColumns='repeat('+M.cols+',1fr)';
+    grid.innerHTML=M.keys.map(k=>{const wide=k.endsWith('*'),key=wide?k.slice(0,-1):k;
+      const cls=key==='↵'?'act':wide?'wide':/^[0-9,a-zA-Z₁]+$/.test(key)&&key.length<=2?'':'op';
+      return '<button type="button" class="'+cls+'" data-key="'+key+'"'+(TITLE[key]?' title="'+TITLE[key]+'" aria-label="'+TITLE[key]+'"':'')+'>'+key+'</button>';}).join('');
+    document.getElementById('kpTitle').textContent=M.title;
+    const nat=target?naturalMode(target):m;
+    sw.hidden=!(nat==='num'||nat==='expr');
+    sw.textContent=m==='num'?'abc':'123';
+  }
+  function applyMode(el){
+    if(!('im' in el.dataset))el.dataset.im=el.getAttribute('inputmode')||'';
+    if(enabled&&coarse)el.setAttribute('inputmode','none');
+    else if(el.dataset.im)el.setAttribute('inputmode',el.dataset.im);else el.removeAttribute('inputmode');
+  }
+  const applyAll=()=>document.querySelectorAll('input').forEach(i=>{if(eligible(i))applyMode(i);});
+  let t0=null;new MutationObserver(()=>{clearTimeout(t0);t0=setTimeout(applyAll,30);}).observe(document.body,{childList:true,subtree:true});
+  function showPad(){pad.hidden=false;tog.hidden=true;document.body.classList.add('kpad-on');}
+  function hidePad(){pad.hidden=true;tog.hidden=false;document.body.classList.remove('kpad-on');}
+
+  document.addEventListener('focusin',e=>{
+    if(!eligible(e.target))return;
+    if(target!==e.target)override=null;
+    target=e.target;applyMode(target);draw(override||naturalMode(target));
+    if(enabled)showPad();else tog.hidden=false;
+  });
+  ['pointerdown','mousedown'].forEach(ev=>pad.addEventListener(ev,e=>e.preventDefault()));
+
+  const visibleInputs=()=>[...document.querySelectorAll('input')].filter(i=>eligible(i)&&i.offsetParent!==null);
+  function press(k){
+    if(!target||!document.body.contains(target)||target.disabled){const f=visibleInputs()[0];if(!f)return;f.focus();}
+    target.focus({preventScroll:true});
+    const v=target.value;let s=target.selectionStart,e=target.selectionEnd;if(s==null){s=e=v.length;}
+    const box=target.closest('.step')||target.closest('.task')||target.parentElement;
+    if(k==='↵'){target.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));return;}
+    if(k==='⇥'){const all=visibleInputs(),i=all.indexOf(target),n=all[i+1]||all[0];if(n)n.focus();return;}
+    if((k==='+'||k==='−')&&(mode==='hk'||mode==='word')){
+      const sel=box&&box.querySelector('select');
+      if(sel&&!sel.disabled){sel.value=k;sel.dispatchEvent(new Event('change',{bubbles:true}));}
+      return;}
+    if(WHOLE[k]){target.value=k;target.dispatchEvent(new Event('input',{bubbles:true}));
+      const all=visibleInputs(),n=all[all.indexOf(target)+1];if(n&&box&&box.contains(n)&&!n.value)n.focus();return;}
+    if(k==='←'){const p=Math.max(0,s-1);target.setSelectionRange(p,p);return;}
+    if(k==='→'){const p=Math.min(v.length,e+1);target.setSelectionRange(p,p);return;}
+    let nv,pos;
+    if(k==='⌫'){
+      if(mode==='hk'||mode==='word'){nv='';pos=0;}
+      else if(s!==e){nv=v.slice(0,s)+v.slice(e);pos=s;}
+      else if(s>0){nv=v.slice(0,s-1)+v.slice(s);pos=s-1;}else return;}
+    else{const ins=(k==='−'&&mode==='num')?'-':k;
+      if(target.maxLength>0&&v.length>=target.maxLength)return;
+      nv=v.slice(0,s)+ins+v.slice(e);pos=s+ins.length;}
+    target.value=nv;try{target.setSelectionRange(pos,pos);}catch(_){}
+    target.dispatchEvent(new Event('input',{bubbles:true}));
+  }
+  grid.addEventListener('click',e=>{const b=e.target.closest('[data-key]');if(b)press(b.dataset.key);});
+  sw.addEventListener('click',()=>{override=mode==='num'?'expr':'num';draw(override);});
+  document.getElementById('kpClose').addEventListener('click',()=>{enabled=false;applyAll();hidePad();});
+  tog.addEventListener('click',()=>{enabled=true;applyAll();showPad();
+    const f=(target&&document.body.contains(target)&&!target.disabled)?target:visibleInputs()[0];if(f)f.focus();});
+  draw('num');applyAll();
+})();
+</script>
+</body>
+</html>
